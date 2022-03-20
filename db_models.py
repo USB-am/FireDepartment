@@ -26,8 +26,8 @@ post_persons = db.Table('post_persons',
 class Tag(db.Model):
 	__tablename__ = 'Tag'
 	id = db.Column(db.Integer, primary_key=True)
-	title = db.Column(db.String(255), inuque=True, nullable=False)
-	post = db.relationship('Post', backref='tag')
+	title = db.Column(db.String(255), unique=True, nullable=False)
+	# post = db.relationship('Post', backref='tag')
 
 	def __str__(self):
 		return f'{self.id}. {self.title}'
@@ -37,7 +37,7 @@ class Rank(db.Model):
 	__tablename__ = 'Rank'
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), unique=True, nullable=False)
-	person = db.relationship('Person', backref='rank')
+	# person = db.relationship('Person', backref='rank', uselist=False)
 
 	def __str__(self):
 		return f'{self.id}. {self.title}'
@@ -47,7 +47,7 @@ class Position(db.Model):
 	__tablename__ = 'Position'
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), unique=True, nullable=False)
-	person = db.relationship('Person', backref='position')
+	# person = db.relationship('Person', backref='position', uselist=False)
 
 	def __str__(self):
 		return f'{self.id}. {self.title}'
