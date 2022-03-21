@@ -1,0 +1,110 @@
+#:import os os
+#:import Config config
+
+<EditPages>
+	BoxLayout:
+		orientation: 'vertical'
+
+		BoxLayout:
+			size_hint: (1, None)
+			size: (self.width, 70)
+			padding: 10
+			spacing: 10
+
+			Button:
+				size_hint: (None, None)
+				size: (50, 50)
+				on_press: app.root.current = 'settings'
+
+				Image:
+					source: os.path.join(Config.IMAGES_DIR, 'back_button.png')
+					size: self.parent.size
+					x: self.parent.x
+					y: self.parent.y + 5
+					allow_stretch: True
+
+			Label:
+				font_size: 30
+				text: 'Редактирование'
+
+			Label:
+				size_hint: (None, None)
+				size: (50, 50)
+
+		ScrollView:
+			GridLayout:
+				cols: 1
+				height: self.minimum_height
+				do_scroll_x: False
+				size_hint: (1, None)
+				padding: 10
+				spacing: 10
+				id: db_row_frame
+
+
+<EditDBRow>
+	size_hint: (1, None)
+	size: (self.width, 50)
+
+	Label:
+		font_size: 20
+		text_size: self.size
+		halign: 'left'
+		valign: 'middle'
+		text: str(self.parent.db_item)
+
+	Button:
+		size_hint: (None, None)
+		size: (40, 40)
+		valign: 'middle'
+		on_press:
+			app.root.current = self.parent.to_page
+			app.root.get_screen(app.root.current).get_item(self.parent.db_item)
+
+		Image:
+			source: os.path.join(Config.IMAGES_DIR, 'edit_button.png')
+			size: self.parent.size
+			x: self.parent.x
+			y: self.parent.y
+			allow_stretch: True
+
+
+<EditPage>
+	BoxLayout:
+		orientation: 'vertical'
+
+		BoxLayout:
+			size_hint: (1, None)
+			size: (self.width, 70)
+			padding: 10
+			spacing: 10
+
+			Button:
+				size_hint: (None, None)
+				size: (50, 50)
+				on_press: app.root.current = app.root.current + 's'
+
+				Image:
+					source: os.path.join(Config.IMAGES_DIR, 'back_button.png')
+					size: self.parent.size
+					x: self.parent.x
+					y: self.parent.y + 5
+					allow_stretch: True
+
+			Label:
+				font_size: 30
+				id: title
+
+			Label:
+				size_hint: (None, None)
+				size: (50, 50)
+
+		ScrollView:
+			GridLayout:
+				cols: 1
+				height: self.minimum_height
+				do_scroll_x: False
+				size_hint: (1, None)
+				padding: 10
+				spacing: 10
+				id: fields_frame

@@ -1,3 +1,6 @@
+#:import os os
+#:import Config config
+
 <Settings>
 	BoxLayout:
 		orientation: 'vertical'
@@ -12,10 +15,17 @@
 			Button:
 				size_hint: (None, None)
 				size: (50, 50)
-				text: 'Back'
 				on_press: app.root.current = 'main_page'
 
+				Image:
+					source: os.path.join(Config.IMAGES_DIR, 'back_button.png')
+					size: self.parent.size
+					x: self.parent.x
+					y: self.parent.y + 5
+					allow_stretch: True
+
 			Label:
+				font_size: 30
 				text: 'Настройки'
 
 			Label:
@@ -30,13 +40,52 @@
 				height: self.minimum_height
 				spacing: 20
 				padding: 10
+				id: settings_frame
 
 				Label:
 					size_hint: (1, None)
 					size: (self.width, 50)
-					text: '1'
+					font_size: 26
+					text_size: self.size
+					halign: 'left'
+					text: 'Работа с базой данных:'
 
-				Label:
-					size_hint: (1, None)
-					size: (self.width, 50)
-					text: '2'
+
+<EditRow>
+	size_hint: (1, None)
+	size: (self.width, 50)
+	spacing: 10
+	padding: [20, 0, 20, 0]
+
+	Label:
+		text_size: self.size
+		halign: 'left'
+		valign: 'middle'
+		font_size: 20
+		text: Config.LANG[self.parent.table.__tablename__]
+
+	Button:
+		size_hint: (None, None)
+		size: (40, 40)
+		id: create
+		on_press: app.root.current = self.parent.to_create
+
+		Image:
+			source: os.path.join(Config.IMAGES_DIR, 'add_button.png')
+			size: (30, 30)
+			x: self.parent.x + 5
+			y: self.parent.y + 5
+			allow_stretch: True
+
+	Button:
+		size_hint: (None, None)
+		size: (40, 40)
+		id: edit
+		on_press: app.root.current = self.parent.to_edit
+
+		Image:
+			source: os.path.join(Config.IMAGES_DIR, 'edit_button.png')
+			size: (30, 30)
+			x: self.parent.x + 5
+			y: self.parent.y + 5
+			allow_stretch: True
