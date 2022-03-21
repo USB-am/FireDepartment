@@ -1,0 +1,42 @@
+<Settings>
+	BoxLayout:
+		orientation: 'vertical'
+		spacing: 10
+
+		BoxLayout:
+			size_hint: (1, None)
+			size: (self.width, 70)
+			padding: 10
+			spacing: 10
+
+			Button:
+				size_hint: (None, None)
+				size: (50, 50)
+				text: 'Back'
+				on_press: app.root.current = 'main_page'
+
+			Label:
+				text: 'Настройки'
+
+			Label:
+				size_hint: (None, None)
+				size: (50, 50)
+
+		ScrollView:
+			GridLayout:
+				cols: 1
+				do_scroll_x: False
+				size_hint: (1, None)
+				height: self.minimum_height
+				spacing: 20
+				padding: 10
+
+				Label:
+					size_hint: (1, None)
+					size: (self.width, 50)
+					text: '1'
+
+				Label:
+					size_hint: (1, None)
+					size: (self.width, 50)
+					text: '2'

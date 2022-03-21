@@ -59,6 +59,9 @@ class Person(db.Model):
 	name = db.Column(db.String(255), nullable=False)
 	phone = db.Column(db.String(255), nullable=False)
 	add_phone = db.Column(db.String(255), nullable=True)
+	work_day = db.Column(db.DateTime(), nullable=True)
+	work_time = db.Column(db.Time(), nullable=True)
+	day_off_time = db.Column(db.Time(), nullable=True)
 	position = db.Column(db.Integer, db.ForeignKey('Position.id'), nullable=True)
 	rank = db.Column(db.Integer, db.ForeignKey('Rank.id'), nullable=True)
 

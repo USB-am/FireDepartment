@@ -1,0 +1,35 @@
+#:import os os
+#:import Config config
+
+<MainPage>
+	BoxLayout:
+		orientation: 'vertical'
+		spacing: 10
+
+		BoxLayout:
+			size_hint: (1, None)
+			size: (self.width, 70)
+			padding: 10
+			spacing: 10
+
+			Label:
+				size_hint: (None, None)
+				size: (50, 50)
+
+			Label:
+				text: 'Главная страница'
+
+			Button:
+				size_hint: (None, None)
+				size: (50, 50)
+				on_press: app.root.current = 'settings'
+
+				Image:
+					source: os.path.join(Config.IMAGES_DIR, 'settings.png')
+					size: (40, 40)
+					x: self.parent.x + 5
+					y: self.parent.y + 5
+					allow_stretch: True
+
+		Label:
+			text: 'Posts list'
