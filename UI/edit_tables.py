@@ -74,10 +74,29 @@ class StringField(BoxLayout):
 
 		super().__init__()
 
+	def get_value(self):
+		return self.ids.text_input.text
+
 
 class EditPage(Screen):
 	def __init__(self):
 		super().__init__()
+
+		self.ids.apply_changes_button.bind(on_press=self.apply_changes)
+
+	def apply_changes(self, instance) -> None:
+		values = self.get_fields_values()
+		print(values)
+		db.session.query(self.table).filter_by(id=self.item.id).update(values)
+		db.session.commit()
+
+	def get_fields_values(self) -> dict:
+		result = {}
+
+		for children in self.ids.fields_frame.children:
+			result[children.show_text.lower()] = children.get_value()
+
+		return result
 
 	def get_item(self, item) -> None:
 		self.item = item
@@ -120,7 +139,8 @@ class EditPage(Screen):
 
 	def create_calendar_field(self, column: dict) -> Calendar:
 		return Calendar(
-			
+			show_text=column['name'].title(),
+			now_set_date=self.item.work_day
 		)
 
 	def __get_columns_info(self) -> list:
