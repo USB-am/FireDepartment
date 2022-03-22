@@ -1,0 +1,26 @@
+<Calendar>
+	orientation: 'vertical'
+	size_hint: (1, None)
+	size: (self.width, 150)
+
+	Label:
+		size_hint: (1, None)
+		size: (self.width, 30)
+		text_size: self.size
+		halign: 'left'
+		valign: 'middle'
+		text: 'Calendar:'
+
+	GridLayout:
+		cols: 7
+		size_hint: (1, None)
+		id: calendar_table
+		spacing: 3
+
+
+<CalendarDayButton>
+	size_hint: (None, None)
+	size: (30, 30)
+	# background_color: (1, 0, 0, 1)
+	text: self.show_text
+	on_press: print(self.date.day)

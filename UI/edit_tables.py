@@ -5,9 +5,13 @@ import os
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
+from flask_sqlalchemy import sqlalchemy
+from sqlalchemy.sql.sqltypes import String, Integer, DateTime, Time
 
 import config as Config
-from db_models import Tag, Rank, Position, Person, Post
+from db_models import db, Tag, Rank, Position, Person, Post
+from UI.calendar_field import Calendar
 
 __all__ = ('EditTags', 'EditTag', )
 
@@ -43,6 +47,34 @@ class EditTags(EditPages):
 	table = Tag
 
 
+class EditRanks(EditPages):
+	name = 'edit_ranks'
+	table = Rank
+
+
+class EditPositions(EditPages):
+	name = 'edit_positions'
+	table = Position
+
+
+class EditPersons(EditPages):
+	name = 'edit_persons'
+	table = Person
+
+
+
+
+class StringField(BoxLayout):
+	def __init__(self, show_text: str, value: str):
+		self.show_text = show_text
+		if value is None:
+			self.value = ''
+		else:
+			self.value = value
+
+		super().__init__()
+
+
 class EditPage(Screen):
 	def __init__(self):
 		super().__init__()
@@ -56,13 +88,64 @@ class EditPage(Screen):
 		self.show_fields()
 
 	def update_title(self) -> None:
-		self.ids.title.text = str(self.item.title)
+		self.ids.title.text = str(self.item)
 
 	def show_fields(self) -> None:
-		print(dir(self.item))
-		print(dir(self.item.query))
-		print(self.item.query.column_descriptions)
+		container = self.ids.fields_frame
+		container.clear_widgets()
+		columns_info = self.__get_columns_info()
+
+		for column in columns_info:
+			if isinstance(column['type'], String):
+				widget = self.create_string_field(column)
+				container.add_widget(widget)
+
+			elif isinstance(column['type'], DateTime):
+				widget = self.create_calendar_field(column)
+				container.add_widget(widget)
+
+			elif isinstance(column['type'], Time):
+				# print(f'{column} is Time field!')
+				pass
+
+			elif isinstance(column['type'], Integer):
+				# print(f'{column} is Integer field!')
+				pass
+
+	def create_string_field(self, column) -> StringField:
+		return StringField(
+			show_text=column['name'].title(),
+			value=getattr(self.item, column['name'])
+		)
+
+	def create_calendar_field(self, column: dict) -> Calendar:
+		return Calendar(
+			
+		)
+
+	def __get_columns_info(self) -> list:
+		columns = self.item.__table__.columns.keys()[1:]
+		columns_obj = [getattr(self.table, column) for column in columns]
+		columns_info = db.session.query(*columns_obj).column_descriptions
+
+		return columns_info
 
 
 class EditTag(EditPage):
 	name = 'edit_tag'
+	table = Tag
+
+
+class EditRank(EditPage):
+	name = 'edit_rank'
+	table = Rank
+
+
+class EditPosition(EditPage):
+	name = 'edit_position'
+	table = Position
+
+
+class EditPerson(EditPage):
+	name = 'edit_person'
+	table = Person

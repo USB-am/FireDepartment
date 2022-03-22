@@ -108,3 +108,32 @@
 				padding: 10
 				spacing: 10
 				id: fields_frame
+
+		BoxLayout:
+			size_hint: (1, None)
+			size: (self.width, 110)
+			padding: 20
+
+			Button:
+				text: 'Изменить'
+				on_press: app.root.current = f'{app.root.current}s'
+
+
+<StringField>
+	size_hint: (1, None)
+	size: (self.width, 50)
+
+	Label:
+		size_hint: (.3, 1)
+		font_size: 20
+		text_size: self.size
+		halign: 'left'
+		valign: 'middle'
+		text: self.parent.show_text
+
+	TextInput:
+		size_hint: (.7, 1)
+		font_size: 20
+		multiline: False
+		padding_y: [self.height/2 - (self.line_height/2) * len(self._lines), 0]
+		text: self.parent.value
