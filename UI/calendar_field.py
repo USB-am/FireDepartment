@@ -67,6 +67,7 @@ class Calendar(BoxLayout):
 				))
 			else:
 				container.add_widget(CalendarDayButton(date=day))
+		container.add_widget(CalendarDayButton(date=day))
 
 	def get_value(self) -> datetime.date:
 		for children in self.ids.calendar_table.children:

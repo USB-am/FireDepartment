@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import os
+from datetime import datetime
+from datetime import time as DateTimeTime
 
 from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
@@ -78,6 +80,33 @@ class StringField(BoxLayout):
 		return self.ids.text_input.text
 
 
+class TimeField(BoxLayout):
+	def __init__(self, show_text: str, time: datetime.time):
+		self.show_text = show_text
+		self.time = time
+		self.show_time = self.__get_show_time()
+
+		super().__init__()
+
+	def __get_show_time(self) -> str:
+		if self.time is None:
+			return ''
+		else:
+			return str(self.time)
+
+	def get_value(self) -> datetime.time:
+		text = self.ids.text_input.text
+
+		if text == '':
+			return None
+
+		hour, minute, *_ = text.split(':')
+		hour *= 60 * 60	# Hours to seconds
+		minute *= 60	# Minutes to seconds
+
+		return DateTimeTime(hour=int(hour)-1, minute=int(minute))
+
+
 class EditPage(Screen):
 	def __init__(self):
 		super().__init__()
@@ -124,8 +153,8 @@ class EditPage(Screen):
 				container.add_widget(widget)
 
 			elif isinstance(column['type'], Time):
-				# print(f'{column} is Time field!')
-				pass
+				widget = self.create_time_field(column)
+				container.add_widget(widget)
 
 			elif isinstance(column['type'], Integer):
 				# print(f'{column} is Integer field!')
@@ -141,6 +170,12 @@ class EditPage(Screen):
 		return Calendar(
 			show_text=column['name'].title(),
 			now_set_date=self.item.work_day
+		)
+
+	def create_time_field(self, column: dict):
+		return TimeField(
+			show_text=column['name'].title(),
+			time=getattr(self.item, column['name'])
 		)
 
 	def __get_columns_info(self) -> list:
