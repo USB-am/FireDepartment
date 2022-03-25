@@ -28,7 +28,7 @@ class Manager(ScreenManager):
 		self.add_widget(EditPersons())
 		self.add_widget(EditPerson())
 
-		self.current='edit_persons'
+		self.current='main_page'
 
 
 class FireDepartment(App):

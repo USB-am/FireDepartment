@@ -15,3 +15,8 @@ LANG = {
 	'Person': 'Человек',
 	'Post': 'Пост'
 }
+BACKGROUND_COLOR = (1, 1, 1, 1)
+BACKGROUND_IMAGE = 'C:/Users/CupkoRI/Desktop/bg.png'
+
+if not os.path.exists(BACKGROUND_IMAGE):
+	BACKGROUND_IMAGE = None

@@ -1,0 +1,11 @@
+#:import Config config
+
+<CustomScreen>
+	canvas.before:
+		Color:
+			rgba: Config.BACKGROUND_COLOR
+
+		Rectangle:
+			pos: self.pos
+			size: self.size
+			source: Config.BACKGROUND_IMAGE

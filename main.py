@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 
-# from kivy.uix.screenmanager import ScreenManager
-
-# import config as Config
 import db_models as DataBase
+import config as Config
 from UI import FireDepartment
 
 

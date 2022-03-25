@@ -6,6 +6,13 @@
 		orientation: 'vertical'
 
 		BoxLayout:
+			canvas:
+				Color:
+					rgba: (1, 1, 1, .5)
+				Rectangle:
+					pos: self.pos
+					size: self.size
+
 			size_hint: (1, None)
 			size: (self.width, 70)
 			padding: 10
@@ -74,6 +81,13 @@
 		orientation: 'vertical'
 
 		BoxLayout:
+			canvas:
+				Color:
+					rgba: (1, 1, 1, .5)
+				Rectangle:
+					pos: self.pos
+					size: self.size
+
 			size_hint: (1, None)
 			size: (self.width, 70)
 			padding: 10
@@ -162,3 +176,25 @@
 		valign: 'middle'
 		id: text_input
 		text: self.parent.show_time
+
+
+<PhoneField>
+	size_hint: (1, None)
+	size: (self.width, 50)
+
+	Label:
+		size_hint: (.3, 1)
+		text_size: self.size
+		font_size: 16
+		halign: 'left'
+		valign: 'middle'
+		text: self.parent.show_text
+
+	TextInput:
+		size_hint: (.7, 1)
+		multiline: False
+		padding_y: [self.height/2 - (self.line_height/2) * len(self._lines), 0]
+		font_size: 16
+		valign: 'middle'
+		text: self.parent.show_phone_number
+		id: text_input

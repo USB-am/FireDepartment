@@ -1,16 +1,23 @@
 #:import os os
 #:import Config config
 
+# id: settings_frame
+
 <Settings>
 	BoxLayout:
 		orientation: 'vertical'
-		spacing: 10
 
 		BoxLayout:
+			canvas:
+				Color:
+					rgba: (1, 1, 1, .5)
+				Rectangle:
+					pos: self.pos
+					size: self.size
+
 			size_hint: (1, None)
 			size: (self.width, 70)
 			padding: 10
-			spacing: 10
 
 			Button:
 				size_hint: (None, None)
@@ -25,7 +32,6 @@
 					allow_stretch: True
 
 			Label:
-				font_size: 30
 				text: 'Настройки'
 
 			Label:
@@ -35,11 +41,11 @@
 		ScrollView:
 			GridLayout:
 				cols: 1
-				do_scroll_x: False
-				size_hint: (1, None)
 				height: self.minimum_height
-				spacing: 20
+				size_hint: (1, None)
+				do_scroll_x: False
 				padding: 10
+				spacing: 10
 				id: settings_frame
 
 				Label:

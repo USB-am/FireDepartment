@@ -5,7 +5,6 @@ from datetime import datetime
 from datetime import time as DateTimeTime
 
 from kivy.lang import Builder
-from kivy.uix.screenmanager import Screen
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from flask_sqlalchemy import sqlalchemy
@@ -14,8 +13,9 @@ from sqlalchemy.sql.sqltypes import String, Integer, DateTime, Time
 import config as Config
 from db_models import db, Tag, Rank, Position, Person, Post
 from UI.calendar_field import Calendar
+from .custom_widgets import CustomScreen
 
-__all__ = ('EditTags', 'EditTag', )
+# __all__ = ('EditTags', 'EditTag', )
 
 
 Builder.load_file(os.path.join(Config.PATTERNS_DIR, 'edit_page.kv'))
@@ -29,7 +29,7 @@ class EditDBRow(BoxLayout):
 		super().__init__()
 
 
-class EditPages(Screen):
+class EditPages(CustomScreen):
 	def __init__(self):
 		super().__init__()
 
@@ -107,7 +107,34 @@ class TimeField(BoxLayout):
 		return DateTimeTime(hour=int(hour)-1, minute=int(minute))
 
 
-class EditPage(Screen):
+class PhoneField(BoxLayout):
+	MASK = '+7 (___) ___-__-__'
+
+	def __init__(self, show_text: str, phone_number: int):
+		self.show_text = show_text
+		self.phone_number = phone_number
+		self.show_phone_number = self.get_str_phone_number()
+
+		super().__init__()
+
+	def get_str_phone_number(self) -> str:
+		if self.phone_number is None:
+			return ''
+
+		phone_symbols = list(str(self.phone_number))
+		state = phone_symbols[0]
+		city_code = phone_symbols[1:3]
+		number_1 = phone_symbols[4:6]
+		number_2 = phone_symbols[7:8]
+		number_3 = phone_symbols[9:10]
+
+		return str(self.phone_number)
+
+	def get_value(self) -> str:
+		return self.ids.text_input.text
+
+
+class EditPage(CustomScreen):
 	def __init__(self):
 		super().__init__()
 
@@ -115,7 +142,6 @@ class EditPage(Screen):
 
 	def apply_changes(self, instance) -> None:
 		values = self.get_fields_values()
-		print(values)
 		db.session.query(self.table).filter_by(id=self.item.id).update(values)
 		db.session.commit()
 
@@ -145,7 +171,12 @@ class EditPage(Screen):
 
 		for column in columns_info:
 			if isinstance(column['type'], String):
-				widget = self.create_string_field(column)
+				if column['name'].lower().find('phone') == -1:
+					widget = self.create_string_field(column)
+					print(f'{column["name"]} is String field')
+				else:
+					widget = self.create_phone_field(column)
+					print(f'{column["name"]} is Phone field')
 				container.add_widget(widget)
 
 			elif isinstance(column['type'], DateTime):
@@ -176,6 +207,12 @@ class EditPage(Screen):
 		return TimeField(
 			show_text=column['name'].title(),
 			time=getattr(self.item, column['name'])
+		)
+
+	def create_phone_field(self, column: dict):
+		return PhoneField(
+			show_text=column['name'].title(),
+			phone_number=getattr(self.item, column['name'])
 		)
 
 	def __get_columns_info(self) -> list:

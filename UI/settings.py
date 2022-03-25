@@ -3,11 +3,12 @@
 import os
 
 from kivy.lang import Builder
-from kivy.uix.screenmanager import Screen
 from kivy.uix.boxlayout import BoxLayout
+from kivy.graphics.context_instructions import Color
 
 import config as Config
 from db_models import Tag, Rank, Position, Person, Post
+from .custom_widgets import CustomScreen
 
 
 Builder.load_file(os.path.join(Config.PATTERNS_DIR, 'settings.kv'))
@@ -31,7 +32,7 @@ class EditRow(BoxLayout):
 		super().__init__()
 
 
-class Settings(Screen):
+class Settings(CustomScreen):
 	name = 'settings'
 
 	def __init__(self):

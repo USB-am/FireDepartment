@@ -7,6 +7,14 @@
 		spacing: 10
 
 		BoxLayout:
+			canvas:
+				Color:
+					rgba: (1, 1, 1, .5)
+
+				Rectangle:
+					pos: self.pos
+					size: self.size
+
 			size_hint: (1, None)
 			size: (self.width, 70)
 			padding: 10
@@ -23,6 +31,7 @@
 				size_hint: (None, None)
 				size: (50, 50)
 				on_press: app.root.current = 'settings'
+				background_color: (1, 1, 1, .5)
 
 				Image:
 					source: os.path.join(Config.IMAGES_DIR, 'settings_button.png')
