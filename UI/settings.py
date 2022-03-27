@@ -1,33 +1,29 @@
 # -*- coding: utf-8 -*-
 
-import os
+from os.path import join as os_join
 
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
-from kivy.graphics.context_instructions import Color
 
 import config as Config
-from db_models import Tag, Rank, Position, Person, Post
-from .custom_widgets import CustomScreen
+from UI.custom_screen import CustomScreen
+from UI.custom_widgets import FDTitleLabel, FDSeparator
+import db_models
 
 
-Builder.load_file(os.path.join(Config.PATTERNS_DIR, 'settings.kv'))
+path_to_kv_file = os_join(Config.PATTERNS_DIR, 'settings.kv')
+Builder.load_file(path_to_kv_file)
+
+DB_TABLES = [db_models.Tag, db_models.Rank, db_models.Position, \
+	db_models.Person, db_models.Post
+]
 
 
-TABLES = (
-	(Tag,      'create_tags',      'edit_tags'     ),
-	(Rank,     'create_ranks',     'edit_ranks'    ),
-	(Position, 'create_positions', 'edit_positions'),
-	(Person,   'create_persons',   'edit_persons'  ),
-	(Post,     'create_posts',     'edit_posts'    ),
-)
-
-
-class EditRow(BoxLayout):
-	def __init__(self, table, to_create: str, to_edit: str):
+class TableSettings(BoxLayout):
+	def __init__(self, table):
 		self.table = table
-		self.to_create = to_create
-		self.to_edit = to_edit
+		self.view_text = self.table.__tablename__
+		self.to_list_edit = f'edit_list_{self.table.__tablename__}s'
 
 		super().__init__()
 
@@ -38,10 +34,11 @@ class Settings(CustomScreen):
 	def __init__(self):
 		super().__init__()
 
-		self.__show_db_operations()
+		self.__data_base_settings()
 
-	def __show_db_operations(self) -> None:
-		container = self.ids.settings_frame
+	def __data_base_settings(self) -> None:
+		container = self.ids.settings_list
 
-		for table, to_create, to_edit in TABLES:
-			container.add_widget(EditRow(table, to_create, to_edit))
+		for table in DB_TABLES:
+			widget = TableSettings(table)
+			container.add_widget(widget)

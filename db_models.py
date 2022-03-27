@@ -72,6 +72,7 @@ class Post(db.Model):
 	__tablename__ = 'Post'
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), nullable=False)
+	description = db.Column(db.Text(), nullable=True)
 	tags = db.relationship('Tag', secondary=post_tags, backref='posts')
 	persons = db.relationship('Person', secondary=post_persons, backref='posts')
 

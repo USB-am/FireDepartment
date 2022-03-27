@@ -15,8 +15,17 @@ LANG = {
 	'Person': 'Человек',
 	'Post': 'Пост'
 }
+
+THEME = True	# True - light theme; False - dark theme
+
+FONT_TITLE_SIZE = 20
+FONT_SIZE = 16
+
+BUTTON_COLOR = (0, 0, 0, 1)
+FONT_COLOR = (1, 1, 1, 1)
 BACKGROUND_COLOR = (1, 1, 1, 1)
-BACKGROUND_IMAGE = 'C:/Users/CupkoRI/Desktop/bg.png'
+BACKGROUND_COLOR_OPACITY = (0, 0, 0, .5)
+BACKGROUND_IMAGE = os.path.join(IMAGES_DIR, 'bg.png')
 
 if not os.path.exists(BACKGROUND_IMAGE):
 	BACKGROUND_IMAGE = None

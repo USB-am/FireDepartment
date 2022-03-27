@@ -1,16 +1,16 @@
-#:import os os
+#:import os_join os.path.join
 #:import Config config
-
-# id: settings_frame
+#:import FDLabel,FDTitleLabel,FDButton UI.custom_widgets
 
 <Settings>
 	BoxLayout:
 		orientation: 'vertical'
+		spacing: 10
 
 		BoxLayout:
 			canvas:
 				Color:
-					rgba: (1, 1, 1, .5)
+					rgba: Config.BACKGROUND_COLOR_OPACITY
 				Rectangle:
 					pos: self.pos
 					size: self.size
@@ -19,79 +19,79 @@
 			size: (self.width, 70)
 			padding: 10
 
-			Button:
+			FDButton:
 				size_hint: (None, None)
 				size: (50, 50)
-				on_press: app.root.current = 'main_page'
+				on_press: root.manager.current = 'main_page'
 
 				Image:
-					source: os.path.join(Config.IMAGES_DIR, 'back_button.png')
+					pos: self.parent.pos
 					size: self.parent.size
-					x: self.parent.x
-					y: self.parent.y + 5
+					source: os_join(Config.IMAGES_DIR, 'back_button.png')
 					allow_stretch: True
 
-			Label:
+			FDTitleLabel:
 				text: 'Настройки'
 
-			Label:
+			FDLabel:
 				size_hint: (None, None)
 				size: (50, 50)
 
 		ScrollView:
 			GridLayout:
 				cols: 1
-				height: self.minimum_height
 				size_hint: (1, None)
 				do_scroll_x: False
+				height: self.minimum_height
 				padding: 10
 				spacing: 10
-				id: settings_frame
-
-				Label:
-					size_hint: (1, None)
-					size: (self.width, 50)
-					font_size: 26
-					text_size: self.size
-					halign: 'left'
-					text: 'Работа с базой данных:'
+				id: settings_list
 
 
-<EditRow>
+<TableSettings>
+	canvas:
+		Color:
+			rgba: Config.BACKGROUND_COLOR_OPACITY
+		Rectangle:
+			pos: self.pos
+			size: self.size
+
 	size_hint: (1, None)
 	size: (self.width, 50)
+	padding: 10
 	spacing: 10
-	padding: [20, 0, 20, 0]
 
-	Label:
+	FDLabel:
 		text_size: self.size
 		halign: 'left'
 		valign: 'middle'
-		font_size: 20
-		text: Config.LANG[self.parent.table.__tablename__]
+		text: self.parent.view_text
 
-	Button:
+	FDButton:
 		size_hint: (None, None)
-		size: (40, 40)
-		id: create
-		on_press: app.root.current = self.parent.to_create
+		size: (30, 30)
+		on_press: print('Create button')
 
 		Image:
-			source: os.path.join(Config.IMAGES_DIR, 'add_button.png')
-			size: (30, 30)
+			width: self.parent.width - 10
+			height: self.parent.height - 10
 			x: self.parent.x + 5
 			y: self.parent.y + 5
+			source: os_join(Config.IMAGES_DIR, 'add_button.png')
 			allow_stretch: True
 
-	Button:
+	FDButton:
 		size_hint: (None, None)
-		size: (40, 40)
-		id: edit
-		on_press: app.root.current = self.parent.to_edit
+		size: (30, 30)
+		on_press:
+			app.root.current = self.parent.to_list_edit
+			# app.root.get_screen(app.root.current).update_list(self.parent.table)
+
 
 		Image:
-			source: os.path.join(Config.IMAGES_DIR, 'edit_button.png')
-			size: (30, 30)
+			width: self.parent.width - 10
+			height: self.parent.height - 10
 			x: self.parent.x + 5
 			y: self.parent.y + 5
+			source: os_join(Config.IMAGES_DIR, 'edit_button.png')
 			allow_stretch: True

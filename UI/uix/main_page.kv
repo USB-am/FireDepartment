@@ -1,16 +1,16 @@
-#:import os os
+#:import os_join os.path.join
 #:import Config config
+#:import FDLabel,FDTitleLabel,FDButton UI.custom_widgets
 
 <MainPage>
 	BoxLayout:
 		orientation: 'vertical'
-		spacing: 10
 
+		# === TOOLBAR === #
 		BoxLayout:
 			canvas:
 				Color:
-					rgba: (1, 1, 1, .5)
-
+					rgba: Config.BACKGROUND_COLOR_OPACITY
 				Rectangle:
 					pos: self.pos
 					size: self.size
@@ -18,27 +18,45 @@
 			size_hint: (1, None)
 			size: (self.width, 70)
 			padding: 10
-			spacing: 10
 
-			Label:
+			FDLabel:
 				size_hint: (None, None)
 				size: (50, 50)
 
-			Label:
-				text: 'Главная страница'
+			FDTitleLabel:
+				text: 'КЧАУ!'
 
-			Button:
+			FDButton:
 				size_hint: (None, None)
 				size: (50, 50)
-				on_press: app.root.current = 'settings'
-				background_color: (1, 1, 1, .5)
+				on_press: root.manager.current = 'settings'
 
 				Image:
-					source: os.path.join(Config.IMAGES_DIR, 'settings_button.png')
-					size: (40, 40)
+					width: self.parent.width - 10
+					height: self.parent.height - 10
 					x: self.parent.x + 5
 					y: self.parent.y + 5
-					allow_stretch: True
+					source: os_join(Config.IMAGES_DIR, 'settings_button.png')
+		# === TOOLBAR === #
 
-		Label:
-			text: 'Posts list'
+
+		# === CONTENT === #
+		BoxLayout:
+			ScrollView:
+				GridLayout:
+					cols: 1
+					size_hint: (1, None)
+					height: self.minimum_height
+					do_scroll_x: False
+					padding: 15
+					spacing: 10
+					id: post_list
+		# === CONTENT === #
+
+
+<PostItem>
+	size_hint: (1, None)
+	size: (self.width, 70)
+	color: Config.FONT_COLOR
+	background_color: Config.BACKGROUND_COLOR_OPACITY
+	text: self.view_text

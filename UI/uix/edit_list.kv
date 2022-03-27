@@ -1,0 +1,57 @@
+#:import os_join os.path.join
+#:import Config config
+#:import FDLabel,FDTitleLabel,FDButton UI.custom_widgets
+
+
+<EditList>
+	BoxLayout:
+		orientation: 'vertical'
+		spacing: 10
+
+		BoxLayout:
+			canvas:
+				Color:
+					rgba: Config.BACKGROUND_COLOR_OPACITY
+				Rectangle:
+					pos: self.pos
+					size: self.size
+
+			size_hint: (1, None)
+			size: (self.width, 70)
+			padding: 10
+
+			FDButton:
+				size_hint: (None, None)
+				size: (50, 50)
+				on_press: root.manager.current = 'settings'
+
+				Image:
+					pos: self.parent.pos
+					size: self.parent.size
+					source: os_join(Config.IMAGES_DIR, 'back_button.png')
+
+			FDTitleLabel:
+				text: 'List'
+
+			FDLabel:
+				size_hint: (None, None)
+				size: (50, 50)
+
+		ScrollView:
+			GridLayout:
+				cols: 1
+				do_scroll_x: False
+				height: self.minimum_height
+				size_hint: (1, None)
+				padding: 10
+				spacing: 10
+				id: edit_list
+
+
+<EditItem>
+	size_hint: (1, None)
+	size: (self.width, 70)
+	color: Config.FONT_COLOR
+	background_color: Config.BACKGROUND_COLOR_OPACITY
+	text: self.view_text
+	on_press: print(app.root.current)

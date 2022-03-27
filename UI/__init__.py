@@ -5,8 +5,10 @@ from kivy.uix.screenmanager import ScreenManager
 
 from .main_page import MainPage
 from .settings import Settings
-from .edit_tables import EditTags, EditTag, EditPositions, EditPosition, EditRanks, \
-	EditRank, EditPersons, EditPerson
+from .edit_list import EditTagList, EditRankList, EditPositionList, \
+	EditPersonList, EditPostList
+# from .edit_tables import EditTags, EditTag, EditPositions, EditPosition, EditRanks, \
+# 	EditRank, EditPersons, EditPerson
 
 # Temp import
 from kivy.config import Config
@@ -19,16 +21,13 @@ class Manager(ScreenManager):
 
 		self.add_widget(MainPage())
 		self.add_widget(Settings())
-		self.add_widget(EditTags())
-		self.add_widget(EditTag())
-		self.add_widget(EditRanks())
-		self.add_widget(EditRank())
-		self.add_widget(EditPositions())
-		self.add_widget(EditPosition())
-		self.add_widget(EditPersons())
-		self.add_widget(EditPerson())
+		self.add_widget(EditTagList())
+		self.add_widget(EditRankList())
+		self.add_widget(EditPositionList())
+		self.add_widget(EditPersonList())
+		self.add_widget(EditPostList())
 
-		self.current='main_page'
+		self.current='settings'
 
 
 class FireDepartment(App):

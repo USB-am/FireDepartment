@@ -1,0 +1,16 @@
+#:import FDLabel UI.custom_widgets
+
+<StringField>
+	size_hint: (1, None)
+	size: (self.width, 50)
+	padding: 10
+
+	FDLabel:
+		size_hint: (.3, 1)
+		text: self.parent.view_text
+
+	TextInput:
+		size_hint: (.7, 1)
+		multiline: False
+		font_size: Config.FONT_SIZE
+		padding_y: [self.height/2 - (self.line_height/2) * len(self._lines), 0]
