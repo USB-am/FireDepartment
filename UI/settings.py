@@ -23,7 +23,8 @@ class TableSettings(BoxLayout):
 	def __init__(self, table):
 		self.table = table
 		self.view_text = self.table.__tablename__
-		self.to_list_edit = f'edit_list_{self.table.__tablename__}s'
+		self.to_create_page = f'create_{self.table.__tablename__.lower()}'
+		self.to_list_edit = f'edit_{self.table.__tablename__.lower()}s'
 
 		super().__init__()
 

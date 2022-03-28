@@ -39,25 +39,25 @@ class EditList(CustomScreen):
 
 
 class EditTagList(EditList):
-	name = 'edit_list_Tags'
+	name = 'edit_tags'
 	table = db_models.Tag
 
 
 class EditRankList(EditList):
-	name = 'edit_list_Ranks'
+	name = 'edit_ranks'
 	table = db_models.Rank
 
 
 class EditPositionList(EditList):
-	name = 'edit_list_Positions'
+	name = 'edit_positions'
 	table = db_models.Position
 
 
 class EditPersonList(EditList):
-	name = 'edit_list_Persons'
+	name = 'edit_persons'
 	table = db_models.Person
 
 
 class EditPostList(EditList):
-	name = 'edit_list_Posts'
+	name = 'edit_posts'
 	table = db_models.Post

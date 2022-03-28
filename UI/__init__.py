@@ -7,8 +7,8 @@ from .main_page import MainPage
 from .settings import Settings
 from .edit_list import EditTagList, EditRankList, EditPositionList, \
 	EditPersonList, EditPostList
-# from .edit_tables import EditTags, EditTag, EditPositions, EditPosition, EditRanks, \
-# 	EditRank, EditPersons, EditPerson
+from .form import CreateTag, CreateRank, CreatePosition, CreatePerson, CreatePost, \
+	EditTag, EditRank, EditPosition, EditPerson, EditPost
 
 # Temp import
 from kivy.config import Config
@@ -19,13 +19,32 @@ class Manager(ScreenManager):
 	def __init__(self):
 		super().__init__()
 
+		# Main page
 		self.add_widget(MainPage())
+
+		# Settings page
 		self.add_widget(Settings())
+
+		# Edit list pages
 		self.add_widget(EditTagList())
 		self.add_widget(EditRankList())
 		self.add_widget(EditPositionList())
 		self.add_widget(EditPersonList())
 		self.add_widget(EditPostList())
+
+		# Create pages
+		self.add_widget(CreateTag())
+		self.add_widget(CreateRank())
+		self.add_widget(CreatePosition())
+		self.add_widget(CreatePerson())
+		self.add_widget(CreatePost())
+
+		# Edit pages
+		self.add_widget(EditTag())
+		self.add_widget(EditRank())
+		self.add_widget(EditPosition())
+		self.add_widget(EditPerson())
+		self.add_widget(EditPost())
 
 		self.current='settings'
 

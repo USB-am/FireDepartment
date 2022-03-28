@@ -6,8 +6,8 @@ from kivy.lang import Builder
 from kivy.uix.button import Button
 
 import config as Config
-from db_models import Post
 from .custom_screen import CustomScreen
+from db_models import Post
 
 
 path_to_kv_file = os.path.join(Config.PATTERNS_DIR, 'main_page.kv')

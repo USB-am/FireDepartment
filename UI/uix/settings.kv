@@ -70,7 +70,9 @@
 	FDButton:
 		size_hint: (None, None)
 		size: (30, 30)
-		on_press: print('Create button')
+		on_press:
+			app.root.current = self.parent.to_create_page
+			app.root.get_screen(app.root.current).update_screen()
 
 		Image:
 			width: self.parent.width - 10
@@ -85,7 +87,6 @@
 		size: (30, 30)
 		on_press:
 			app.root.current = self.parent.to_list_edit
-			# app.root.get_screen(app.root.current).update_list(self.parent.table)
 
 
 		Image:

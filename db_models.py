@@ -27,30 +27,51 @@ class Tag(db.Model):
 	__tablename__ = 'Tag'
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), unique=True, nullable=False)
-	# post = db.relationship('Post', backref='tag')
 
 	def __str__(self):
 		return f'{self.id}. {self.title}'
+
+	@staticmethod
+	def get_fields() -> dict:
+		result = {
+			'title': 'StringField',
+		}
+
+		return result
 
 
 class Rank(db.Model):
 	__tablename__ = 'Rank'
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), unique=True, nullable=False)
-	# person = db.relationship('Person', backref='rank', uselist=False)
 
 	def __str__(self):
 		return f'{self.id}. {self.title}'
+
+	@staticmethod
+	def get_fields() -> dict:
+		result = {
+			'title': 'StringField',
+		}
+
+		return result
 
 
 class Position(db.Model):
 	__tablename__ = 'Position'
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), unique=True, nullable=False)
-	# person = db.relationship('Person', backref='position', uselist=False)
 
 	def __str__(self):
 		return f'{self.id}. {self.title}'
+
+	@staticmethod
+	def get_fields() -> dict:
+		result = {
+			'title': 'StringField',
+		}
+
+		return result
 
 
 class Person(db.Model):
@@ -67,6 +88,20 @@ class Person(db.Model):
 	def __str__(self):
 		return f'{self.id}. {self.name} - {self.phone}'
 
+	@staticmethod
+	def get_fields() -> dict:
+		result = {
+			'name': 'StringField',
+			'phone': 'PhoneField',
+			'add_phone': 'PhoneField',
+			'work_day': 'CalendarField',
+			'work_type': 'RadioField',
+			'position': 'ForeignKeyField',
+			'rank': 'ForeignKeyField',
+		}
+
+		return result
+
 
 class Post(db.Model):
 	__tablename__ = 'Post'
@@ -78,3 +113,14 @@ class Post(db.Model):
 
 	def __str__(self):
 		return f'{self.id}. {self.title}'
+
+	@staticmethod
+	def get_fields() -> dict:
+		result = {
+			'title': 'StringField',
+			'description': 'TextField',
+			'persons': 'ForeignKeyField',
+			'tags': 'ForeignKeyField',
+		}
+
+		return result
