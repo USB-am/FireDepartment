@@ -22,7 +22,7 @@
 			FDButton:
 				size_hint: (None, None)
 				size: (50, 50)
-				on_press: print(app.root.current)
+				on_press: app.root.current = f'{app.root.current}s'
 
 				Image:
 					pos: self.parent.pos

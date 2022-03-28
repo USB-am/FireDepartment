@@ -97,14 +97,57 @@ class CalendarField(BoxLayout):
 		print(value, type(value))
 
 
+class RadioItem(BoxLayout):
+	STATES = {
+		'down': False,
+		'normal': True
+	}
+
+	def __init__(self, title: str):
+		self.title = title
+
+		super().__init__()
+
+	def change_state(self) -> None:
+		if self.STATES[self.ids.check_box.state]:
+			self.ids.check_box.state = 'down'
+		else:
+			self.ids.check_box.state = 'normal'
+
+	def get_value(self) -> bool:
+		return self.ids.check_box.state == 'down'
+
+
 class RadioField(BoxLayout):
+	POINTS = {
+		0: '5/2',
+		1: '1/3',
+		2: 'Всегда'
+	}
+
 	def __init__(self, title):
 		self.title = title
 
 		super().__init__()
 
-	def set_value(self, value):
-		pass
+		self.fill_radiobuttons()
+
+	def fill_radiobuttons(self):
+		for point in range(3):
+			field = RadioItem(self.POINTS[point])
+			self.add_widget(field)
+
+	def set_value(self, value: int) -> None:
+		if value is not None:
+			childrens = self.children[::-1][1:]
+			childrens[value].change_state()
+
+	def get_value(self) -> int:
+		childrens = self.children[::-1][1:]
+
+		for num, children in enumerate(childrens):
+			if children.get_value():
+				return num
 
 
 class ForeignKeyField(BoxLayout):
