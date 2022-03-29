@@ -3,6 +3,7 @@
 from os.path import join as os_join
 from calendar import Calendar
 from datetime import datetime
+from typing import Union
 
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
@@ -10,6 +11,7 @@ from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.label import Label
 
 from config import PATTERNS_DIR
+import db_models
 
 
 path_to_kv_file = os_join(PATTERNS_DIR, 'fields.kv')
@@ -22,7 +24,7 @@ class StringField(BoxLayout):
 
 		super().__init__()
 
-	def set_value(self, value: str) -> None:
+	def set_value(self, value: Union[str, None]) -> None:
 		self.ids.text_input.text = value
 
 	def get_value(self) -> str:
@@ -35,7 +37,7 @@ class PhoneField(BoxLayout):
 
 		super().__init__()
 
-	def set_value(self, value: str) -> None:
+	def set_value(self, value: Union[str, None]) -> None:
 		if value is None:
 			value = ''
 
@@ -59,6 +61,11 @@ class CalendarDate(ToggleButton):
 		)
 
 
+	def set_pressed_state(self) -> None:
+		self.state = 'down'
+		print(f'{self.date.date} is pressed!')
+
+
 	def __get_text(self) -> str:
 		if self.date.month != datetime.now().month:
 			return f'[color=202325]{self.date.day}[/color]'
@@ -67,8 +74,10 @@ class CalendarDate(ToggleButton):
 
 
 class CalendarField(BoxLayout):
-	CALENDAR = Calendar()
 	NOW_DATE = datetime.now()
+	MONTH_DAYS = list(Calendar().itermonthdates(
+		year=NOW_DATE.year, month=NOW_DATE.month
+	))
 
 	def __init__(self, title: str):
 		self.title = title
@@ -78,9 +87,6 @@ class CalendarField(BoxLayout):
 		self.fill_calendar_table()
 
 	def fill_calendar_table(self) -> None:
-		month_days = list(self.CALENDAR.itermonthdates(
-			self.NOW_DATE.year, self.NOW_DATE.month
-		))
 		container = self.ids.calendar_table
 
 		for week_day in ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс']:
@@ -90,26 +96,24 @@ class CalendarField(BoxLayout):
 				text=week_day
 			))
 
-		for day in month_days:
+		for day in self.MONTH_DAYS:
 			container.add_widget(CalendarDate(day))
 
-	def set_value(self, value) -> None:
-		print(value, type(value))
+	def set_value(self, value: Union[int, None]) -> None:
+		pass
+
+	def get_value(self) -> datetime.date:
+		return
 
 
 class RadioItem(BoxLayout):
-	STATES = {
-		'down': False,
-		'normal': True
-	}
-
 	def __init__(self, title: str):
 		self.title = title
 
 		super().__init__()
 
 	def change_state(self) -> None:
-		if self.STATES[self.ids.check_box.state]:
+		if self.ids.check_box.state == 'normal':
 			self.ids.check_box.state = 'down'
 		else:
 			self.ids.check_box.state = 'normal'
@@ -137,7 +141,7 @@ class RadioField(BoxLayout):
 			field = RadioItem(self.POINTS[point])
 			self.add_widget(field)
 
-	def set_value(self, value: int) -> None:
+	def set_value(self, value: Union[int, None]) -> None:
 		if value is not None:
 			childrens = self.children[::-1][1:]
 			childrens[value].change_state()
@@ -150,10 +154,64 @@ class RadioField(BoxLayout):
 				return num
 
 
-class ForeignKeyField(BoxLayout):
-	def __init__(self, title):
-		self.title = title
+class CheckBoxItem(BoxLayout):
+	def __init__(self, db_row, group: str=None):
+		self.db_row = db_row
+		self.title = str(self.db_row)
+
 		super().__init__()
 
-	def set_value(self, value):
+		self.ids.check_box.group = group
+
+	def get_value(self) -> bool:
+		return self.ids.check_box.state == 'down'
+
+
+class ForeignKeyField(BoxLayout):
+	def __init__(self, title: str):
+		self.title = title
+		self.table = getattr(db_models, self.title.title())
+
+		super().__init__()
+
+		self.fill_item_list()
+
+	def fill_item_list(self) -> None:
+		container = self.ids.item_list
+		items = self.table.query.all()
+
+		for item in items:
+			container.add_widget(CheckBoxItem(item, f'{self.title}_foreign_key'))
+
+	def set_value(self, value: Union[int, None]) -> None:
 		pass
+
+	def get_value(self) -> Union[int, None]:
+		childrens = self.ids.item_list.children
+
+		for children in childrens:
+			if children.get_value():
+				return children.db_row.id
+
+
+class ManyToManyField(BoxLayout):
+	def __init__(self, title: str):
+		self.title = title
+		self.table = getattr(db_models, self.title.title())
+
+		super().__init__()
+
+		self.fill_item_list()
+
+	def fill_item_list(self) -> None:
+		container = self.ids.item_list
+		items = self.table.query.all()
+
+		for item in items:
+			container.add_widget(CheckBoxItem(item))
+
+	def set_value(self, value: Union[list, None]) -> None:
+		pass
+
+	def get_value(self) -> list:
+		return []

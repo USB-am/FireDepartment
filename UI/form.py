@@ -16,27 +16,6 @@ Builder.load_file(path_to_kv_file)
 
 
 class Form(CustomScreen):
-	'''
-	def update_screen(self, table_id: int=None) -> None:
-		container = self.ids.field_list
-		container.clear_widgets()
-
-		if table_id is not None:
-			db_row = self.table.query.filter_by(id=table_id).first()
-
-		for title, field_name in self.table.get_fields().items():
-			if field_name == 'StringField':
-				if table_id is None:
-					field = fields.StringField(title, '')
-				else:
-					field = fields.StringField(
-						title,
-						getattr(db_row, title)
-					)
-				container.add_widget(field)
-	'''
-
-
 	def update_screen(self, table_id: int=None) -> None:
 		container = self.ids.field_list
 		container.clear_widgets()
@@ -52,6 +31,12 @@ class Form(CustomScreen):
 
 			container.add_widget(field)
 
+	def get_value(self) -> dict:
+		childrens = self.ids.field_list.children
+
+		for children in childrens:
+			print(children.title, children.get_value(), sep=' - ')
+
 class CreateForm(Form):
 	def update_screen(self) -> None:
 		super().update_screen()
@@ -62,6 +47,7 @@ class CreateForm(Form):
 
 	def insert_values(self, instance) -> None:
 		print('Create button is pressed!')
+		self.get_value()
 
 
 class EditForm(Form):
@@ -74,6 +60,7 @@ class EditForm(Form):
 
 	def update_values(self, instance) -> None:
 		print('Edit button is pressed!')
+		self.get_value()
 
 
 # ==================== #
