@@ -1,10 +1,18 @@
 # -*- coding: utf-8 -*-
 
+from os.path import join as os_join
+
+from kivy.lang import Builder
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.popup import Popup
 
 import config as Config
+
+
+path_to_kv_file = os_join(Config.PATTERNS_DIR, 'custom_widgets.kv')
+Builder.load_file(path_to_kv_file)
 
 
 # ============== #
@@ -54,3 +62,23 @@ class FDSeparator(BoxLayout):
 		super().__init__(**options)
 # === Separator === #
 # ================= #
+
+
+# ===================== #
+# === Error message === #
+class FDErrorMessage(Popup):
+	title = 'Ошибка!'
+
+	def __init__(self, error_message: str):
+		self.content = _FDErrorContent(error_message)
+
+		super().__init__(size_hint=(.7, .7))
+
+
+class _FDErrorContent(BoxLayout):
+	def __init__(self, error_message: str):
+		self.error_message = error_message
+
+		super().__init__()
+# === Error message === #
+# ===================== #

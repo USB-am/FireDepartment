@@ -27,8 +27,10 @@ class StringField(BoxLayout):
 	def set_value(self, value: Union[str, None]) -> None:
 		self.ids.text_input.text = value
 
-	def get_value(self) -> str:
-		return self.ids.text_input.text
+	def get_value(self) -> Union[str, None]:
+		result = self.ids.text_input.text
+		if result:
+			return result
 
 
 class PhoneField(BoxLayout):

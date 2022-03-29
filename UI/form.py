@@ -8,6 +8,8 @@ from config import PATTERNS_DIR
 from .custom_screen import CustomScreen
 from .custom_widgets import FDButton
 from . import fields
+from . import exceptions
+from db_models import db as DataBase
 from db_models import Tag, Rank, Position, Person, Post
 
 
@@ -16,7 +18,10 @@ Builder.load_file(path_to_kv_file)
 
 
 class Form(CustomScreen):
-	def update_screen(self, table_id: int=None) -> None:
+	TABLE_ID = None
+	NEXT_PAGE = 'settings'
+
+	def update_screen(self) -> None:
 		container = self.ids.field_list
 		container.clear_widgets()
 
@@ -25,8 +30,8 @@ class Form(CustomScreen):
 				title=title
 			)
 
-			if table_id is not None:
-				db_row = self.table.query.filter_by(id=table_id).first()
+			if self.TABLE_ID is not None:
+				db_row = self.table.query.filter_by(id=self.TABLE_ID).first()
 				field.set_value(getattr(db_row, title))
 
 			container.add_widget(field)
@@ -34,8 +39,11 @@ class Form(CustomScreen):
 	def get_value(self) -> dict:
 		childrens = self.ids.field_list.children
 
-		for children in childrens:
-			print(children.title, children.get_value(), sep=' - ')
+		result = {children.title: children.get_value() \
+			for children in childrens}
+
+		return result
+
 
 class CreateForm(Form):
 	def update_screen(self) -> None:
@@ -43,24 +51,32 @@ class CreateForm(Form):
 
 		create_btn = self.ids.bottom_button
 		create_btn.text = 'Создать'
-		create_btn.bind(on_press=self.insert_values)
+		# create_btn.bind(on_press=self.insert_values)
 
+	@exceptions.db_exception
 	def insert_values(self, instance) -> None:
-		print('Create button is pressed!')
-		self.get_value()
+		values = super().get_value()
+		new_db_row = self.table(**values)
+
+		DataBase.session.add(new_db_row)
+		DataBase.session.commit()
 
 
 class EditForm(Form):
-	def update_screen(self, table_id: int) -> None:
-		super().update_screen(table_id)
+	def update_screen(self) -> None:
+		super().update_screen()
 
 		edit_btn = self.ids.bottom_button
 		edit_btn.text = 'Изменить'
-		edit_btn.bind(on_press=self.update_values)
+		# edit_btn.bind(on_press=self.insert_values)
 
-	def update_values(self, instance) -> None:
-		print('Edit button is pressed!')
-		self.get_value()
+	@exceptions.db_exception
+	def insert_values(self, instance) -> None:
+		values = super().get_value()
+		db_row = self.table.query.filter_by(id=self.TABLE_ID)
+		db_row.update(values)
+
+		DataBase.session.commit()
 
 
 # ==================== #

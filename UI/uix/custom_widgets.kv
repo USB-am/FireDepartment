@@ -1,0 +1,10 @@
+#:import FDLabel,FDErrorMessage UI.custom_widgets
+
+<_FDErrorContent>
+	orientation: 'vertical'
+	padding: 10
+
+	FDLabel:
+		text_size: self.size
+		valign: 'top'
+		text: self.parent.error_message

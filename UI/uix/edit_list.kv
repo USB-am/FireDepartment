@@ -56,7 +56,8 @@
 	text: self.view_text
 	on_press:
 		app.root.current = app.root.current[:-1]
-		app.root.get_screen(app.root.current).update_screen(self.db_row.id)
+		app.root.get_screen(app.root.current).TABLE_ID = self.db_row.id
+		app.root.get_screen(app.root.current).update_screen()
 
 
 <RadioField>
