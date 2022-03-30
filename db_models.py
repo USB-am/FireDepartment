@@ -35,6 +35,7 @@ class Tag(db.Model):
 	def get_fields() -> dict:
 		result = {
 			'title': 'StringField',
+			'posts': 'ManyToManyField',
 		}
 
 		return result
@@ -98,6 +99,7 @@ class Person(db.Model):
 			'work_day': 'CalendarField',
 			'position': 'ForeignKeyField',
 			'rank': 'ForeignKeyField',
+			'posts': 'ManyToManyField',
 		}
 
 		return result
@@ -119,8 +121,8 @@ class Post(db.Model):
 		result = {
 			'title': 'StringField',
 			'description': 'TextField',
-			'persons': 'ForeignKeyField',
-			'tags': 'ForeignKeyField',
+			'persons': 'ManyToManyField',
+			'tags': 'ManyToManyField',
 		}
 
 		return result

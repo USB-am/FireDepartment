@@ -3,6 +3,7 @@
 from os.path import join as os_join
 
 from kivy.lang import Builder
+from sqlalchemy.orm.collections import InstrumentedList
 
 from config import PATTERNS_DIR
 from .custom_screen import CustomScreen
@@ -51,10 +52,9 @@ class CreateForm(Form):
 
 		create_btn = self.ids.bottom_button
 		create_btn.text = 'Создать'
-		# create_btn.bind(on_press=self.insert_values)
 
 	@exceptions.db_exception
-	def insert_values(self, instance) -> None:
+	def insert_values(self) -> None:
 		values = super().get_value()
 		new_db_row = self.table(**values)
 
@@ -68,15 +68,26 @@ class EditForm(Form):
 
 		edit_btn = self.ids.bottom_button
 		edit_btn.text = 'Изменить'
-		# edit_btn.bind(on_press=self.insert_values)
 
 	@exceptions.db_exception
-	def insert_values(self, instance) -> None:
+	def insert_values(self) -> None:
+		fields = self.table.get_fields()
+
 		values = super().get_value()
 		db_row = self.table.query.filter_by(id=self.TABLE_ID)
+
+		for key, value in fields.items():
+			if value == 'ManyToManyField':
+				field = values.pop(key)
+				self._update_posts(db_row, field)
+
 		db_row.update(values)
 
 		DataBase.session.commit()
+
+	def _update_posts(self, db_row, field) -> None:
+		item = db_row.first()
+		item.posts = field
 
 
 # ==================== #

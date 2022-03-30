@@ -46,7 +46,7 @@ class Manager(ScreenManager):
 		self.add_widget(EditPerson())
 		self.add_widget(EditPost())
 
-		self.current='edit_persons'
+		self.current='settings'
 
 
 class FireDepartment(App):

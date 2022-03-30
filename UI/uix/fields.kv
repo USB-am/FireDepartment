@@ -1,4 +1,4 @@
-#:import FDLabel UI.custom_widgets
+#:import FDLabel,FDTitleLabel UI.custom_widgets
 
 <StringField>
 	size_hint: (1, None)
@@ -17,6 +17,23 @@
 		multiline: False
 		font_size: Config.FONT_SIZE
 		padding_y: [self.height/2 - (self.line_height/2) * len(self._lines), 0]
+		id: text_input
+
+
+<TextField>
+	orientation: 'vertical'
+	size_hint: (1, None)
+	size: (self.width, 200)
+	padding: 10
+
+	FDTitleLabel:
+		size_hint: (1, None)
+		size: (self.width, 50)
+		text_size: self.size
+		text: f'{self.parent.title}:'
+
+	TextInput:
+		font_size: Config.FONT_SIZE
 		id: text_input
 
 
@@ -77,7 +94,7 @@
 		text: self.parent.title
 
 
-<ForeignKeyField>
+<_ToManyField>
 	orientation: 'vertical'
 	size_hint: (1, None)
 	size: (self.width, 400)

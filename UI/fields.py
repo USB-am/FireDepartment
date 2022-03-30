@@ -9,6 +9,7 @@ from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.label import Label
+from sqlalchemy.orm.collections import InstrumentedList
 
 from config import PATTERNS_DIR
 import db_models
@@ -25,12 +26,30 @@ class StringField(BoxLayout):
 		super().__init__()
 
 	def set_value(self, value: Union[str, None]) -> None:
+		if value is None:
+			value = ''
 		self.ids.text_input.text = value
 
 	def get_value(self) -> Union[str, None]:
 		result = self.ids.text_input.text
+
 		if result:
 			return result
+
+
+class TextField(BoxLayout):
+	def __init__(self, title: str):
+		self.title = title
+
+		super().__init__()
+
+	def set_value(self, value: Union[str, None]) -> None:
+		if value is None:
+			value = ''
+		self.ids.text_input.text = value
+
+	def get_value(self) -> str:
+		return self.ids.text_input.text
 
 
 class PhoneField(BoxLayout):
@@ -46,7 +65,10 @@ class PhoneField(BoxLayout):
 		self.ids.text_input.text = value
 
 	def get_value(self) -> str:
-		return self.ids.text_input.text
+		result = self.ids.text_input.text
+
+		if result:
+			return result
 
 
 class CalendarDate(ToggleButton):
@@ -65,7 +87,6 @@ class CalendarDate(ToggleButton):
 
 	def set_pressed_state(self) -> None:
 		self.state = 'down'
-		print(f'{self.date.date} is pressed!')
 
 
 	def __get_text(self) -> str:
@@ -165,17 +186,22 @@ class CheckBoxItem(BoxLayout):
 
 		self.ids.check_box.group = group
 
+
+	def activate(self) -> None:
+		self.ids.check_box.state = 'down'
+
 	def get_value(self) -> bool:
 		return self.ids.check_box.state == 'down'
 
 
-class ForeignKeyField(BoxLayout):
-	def __init__(self, title: str):
-		self.title = title
-		self.table = getattr(db_models, self.title.title())
+class _ToManyField(BoxLayout):
+	def __init__(self, title: str, group: str=None):
+		self.title_ = title
+		self.group = group
 
 		super().__init__()
 
+		self.table = getattr(db_models, self.title_.title())
 		self.fill_item_list()
 
 	def fill_item_list(self) -> None:
@@ -183,7 +209,16 @@ class ForeignKeyField(BoxLayout):
 		items = self.table.query.all()
 
 		for item in items:
-			container.add_widget(CheckBoxItem(item, f'{self.title}_foreign_key'))
+			container.add_widget(CheckBoxItem(item, group=self.group))
+
+	def set_value(self, value: Union[int, None]) -> None:
+		pass
+
+
+class ForeignKeyField(_ToManyField):
+	def __init__(self, title: str):
+		self.title = title
+		super().__init__(title=self.title, group=f'group_{title}')
 
 	def set_value(self, value: Union[int, None]) -> None:
 		pass
@@ -196,24 +231,25 @@ class ForeignKeyField(BoxLayout):
 				return children.db_row.id
 
 
-class ManyToManyField(BoxLayout):
+class ManyToManyField(_ToManyField):
 	def __init__(self, title: str):
 		self.title = title
-		self.table = getattr(db_models, self.title.title())
+		super().__init__(title=title[:-1])
 
-		super().__init__()
+	def set_value(self, value: list) -> None:
+		childrens = self.ids.item_list.children
 
-		self.fill_item_list()
-
-	def fill_item_list(self) -> None:
-		container = self.ids.item_list
-		items = self.table.query.all()
-
-		for item in items:
-			container.add_widget(CheckBoxItem(item))
-
-	def set_value(self, value: Union[list, None]) -> None:
-		pass
+		for children in childrens:
+			if children.db_row in value:
+				children.activate()
 
 	def get_value(self) -> list:
-		return []
+		result = InstrumentedList()
+		childrens = self.ids.item_list.children
+
+		for children in childrens:
+			if children.get_value():
+				item = self.table.query.filter_by(id=children.db_row.id)
+				result.append(item.first())
+
+		return result

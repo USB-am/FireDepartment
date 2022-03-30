@@ -23,7 +23,7 @@
 				size_hint: (None, None)
 				size: (50, 50)
 				on_press:
-					app.root.current = f'{app.root.current}s'
+					app.root.current = self.parent.parent.parent.NEXT_PAGE
 
 				Image:
 					pos: self.parent.pos
@@ -62,6 +62,5 @@
 			FDButton:
 				id: bottom_button
 				on_press:
-					app.root.current_screen.insert_values(None)
-					# app.root.current = app.root.current_screen.NEXT_PAGE
-					# print('123')
+					app.root.current_screen.insert_values()
+					app.root.current = app.root.current_screen.NEXT_PAGE
