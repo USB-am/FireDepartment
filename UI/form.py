@@ -3,7 +3,6 @@
 from os.path import join as os_join
 
 from kivy.lang import Builder
-from sqlalchemy.orm.collections import InstrumentedList
 
 from config import PATTERNS_DIR
 from .custom_screen import CustomScreen

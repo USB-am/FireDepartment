@@ -11,17 +11,18 @@ from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.label import Label
 from sqlalchemy.orm.collections import InstrumentedList
 
-from config import PATTERNS_DIR
+import config as Config
 import db_models
 
 
-path_to_kv_file = os_join(PATTERNS_DIR, 'fields.kv')
+path_to_kv_file = os_join(Config.PATTERNS_DIR, 'fields.kv')
 Builder.load_file(path_to_kv_file)
 
 
 class StringField(BoxLayout):
 	def __init__(self, title: str):
 		self.title = title
+		self.view_text = Config.LANG.get(self.title.title(), '[Неизвестно]')
 
 		super().__init__()
 
@@ -40,6 +41,7 @@ class StringField(BoxLayout):
 class TextField(BoxLayout):
 	def __init__(self, title: str):
 		self.title = title
+		self.view_text = Config.LANG.get(self.title.title(), '[Неизвестно]')
 
 		super().__init__()
 
@@ -55,6 +57,7 @@ class TextField(BoxLayout):
 class PhoneField(BoxLayout):
 	def __init__(self, title: str):
 		self.title = title
+		self.view_text = Config.LANG.get(self.title.title(), '[Неизвестно]')
 
 		super().__init__()
 
@@ -104,6 +107,7 @@ class CalendarField(BoxLayout):
 
 	def __init__(self, title: str):
 		self.title = title
+		self.view_text = Config.LANG.get(self.title.title(), '[Неизвестно]')
 
 		super().__init__()
 
@@ -154,6 +158,7 @@ class RadioField(BoxLayout):
 
 	def __init__(self, title):
 		self.title = title
+		self.view_text = Config.LANG.get(self.title.title(), '[Неизвестно]')
 
 		super().__init__()
 
@@ -197,6 +202,7 @@ class CheckBoxItem(BoxLayout):
 class _ToManyField(BoxLayout):
 	def __init__(self, title: str, group: str=None):
 		self.title_ = title
+		self.view_text = Config.LANG.get(self.title_.title(), '[Неизвестно]')
 		self.group = group
 
 		super().__init__()

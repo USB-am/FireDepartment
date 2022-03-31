@@ -7,6 +7,7 @@ from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
+from kivy.uix.colorpicker import ColorPicker
 
 import config as Config
 
@@ -62,6 +63,27 @@ class FDSeparator(BoxLayout):
 		super().__init__(**options)
 # === Separator === #
 # ================= #
+
+
+# =================== #
+# === Color input === #
+class _FDColorInputContent(BoxLayout):
+	def get_value(self) -> tuple:
+		return self.ids.color_picker.color
+
+class FDColorInput(Popup):
+	def __init__(self, title: str):
+		self.title = title
+		self.content = _FDColorInputContent()
+
+		super().__init__(size_hint=(.9, .9))
+
+		self.content.ids.accept_btn.bind(on_press=self.update_value)
+
+	def update_value(self, instance) -> None:
+		print(self.content.get_value())
+# === Color input === #
+# =================== #
 
 
 # ===================== #

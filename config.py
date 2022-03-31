@@ -9,11 +9,22 @@ PATTERNS_DIR = os.path.join(BASE_DIR, 'UI', 'uix')
 IMAGES_DIR = os.path.join(BASE_DIR, 'UI', 'img')
 
 LANG = {
+	'Title': 'Название',
+	'Name': 'ФИО',
+	'Phone': 'Телефон',
+	'Add_Phone': 'Телефон 2',
+	'Work_Type': 'График работы',
 	'Tag': 'Тег',
+	'Tags': 'Теги',
 	'Rank': 'Звание',
+	'Ranks': 'Звания',
 	'Position': 'Должность',
+	'Positions': 'Должности',
 	'Person': 'Человек',
-	'Post': 'Пост'
+	'Persons': 'Люди',
+	'Post': 'Пост',
+	'Posts': 'Посты',
+	'Description': 'Описание'
 }
 
 THEME = True	# True - light theme; False - dark theme

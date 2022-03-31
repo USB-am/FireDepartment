@@ -2,6 +2,7 @@
 
 from flask_sqlalchemy import sqlalchemy
 
+from db_models import db as DataBase
 from UI.custom_widgets import FDErrorMessage
 
 
@@ -30,6 +31,7 @@ def db_exception(func):
 			error_text = 'Поле не может быть пустым!\n\n'\
 				f'{error_message.orig}'
 
+			DataBase.session.rollback()
 			FDErrorMessage(error_text).open()
 
 	return wrapper

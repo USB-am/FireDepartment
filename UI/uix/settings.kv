@@ -96,3 +96,28 @@
 			y: self.parent.y + 5
 			source: os_join(Config.IMAGES_DIR, 'edit_button.png')
 			allow_stretch: True
+
+
+<CustomColorInput>
+	size_hint: (1, None)
+	size: (self.width, 50)
+
+	# text_size: self.size
+	halign: 'left'
+	valign: 'middle'
+	text: self.title.title()
+
+	Image:
+		width: 30
+		height: 30
+		x: self.parent.x + self.parent.width - 50
+		y: self.parent.y + 10
+		source: os_join(Config.IMAGES_DIR, 'color_circle.png')
+
+
+<CustomizationSettings>
+	orientation: 'vertical'
+	size_hint: (1, None)
+	size: (self.width, 180)
+	padding: 10
+	spacing: 10
