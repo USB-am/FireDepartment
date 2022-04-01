@@ -5,6 +5,7 @@ from os.path import join as os_join
 from kivy.lang import Builder
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.colorpicker import ColorPicker
+from kivy.uix.button import Button
 
 import config as Config
 from UI.custom_screen import CustomScreen
@@ -40,6 +41,7 @@ class CustomColorInput(FDButton):
 		self.bind(on_press=self.color_input.open)
 
 	def get_value(self) -> tuple:
+		print('CustomColorInput get value')
 		return self.color_input.get_value()
 
 
@@ -55,6 +57,10 @@ class CustomizationSettings(BoxLayout):
 		self.add_widget(CustomColorInput('Text #3'))
 
 
+class ToCustomSettingsButton(Button):
+	pass
+
+
 class Settings(CustomScreen):
 	name = 'settings'
 
@@ -63,7 +69,8 @@ class Settings(CustomScreen):
 
 		self.__data_base_settings()
 		self.ids.settings_list.add_widget(FDSeparator())
-		self.__customization_settings()
+		# self.__customization_settings()
+		self.ids.settings_list.add_widget(ToCustomSettingsButton())
 
 	def __data_base_settings(self) -> None:
 		container = self.ids.settings_list

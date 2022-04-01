@@ -23,6 +23,12 @@ post_persons = db.Table('post_persons',
 )
 
 
+#class Settings(db.Model):
+#	__tablename__ = 'Settings'
+#	id = db.Column(db.Integer, primary_key=True)
+#	
+
+
 class Tag(db.Model):
 	__tablename__ = 'Tag'
 	id = db.Column(db.Integer, primary_key=True)
@@ -95,8 +101,9 @@ class Person(db.Model):
 			'name': 'StringField',
 			'phone': 'PhoneField',
 			'add_phone': 'PhoneField',
-			'work_type': 'RadioField',
-			'work_day': 'CalendarField',
+			# 'work_type': 'RadioField',
+			# 'work_day': 'CalendarField',
+			'work_type': 'WorkGraph',
 			'position': 'ForeignKeyField',
 			'rank': 'ForeignKeyField',
 			'posts': 'ManyToManyField',

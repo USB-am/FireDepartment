@@ -60,6 +60,7 @@ class FDSeparator(BoxLayout):
 			'size': (self.width, 10),
 			'padding': (0, 4, 0, 4)
 		})
+
 		super().__init__(**options)
 # === Separator === #
 # ================= #
@@ -78,10 +79,10 @@ class FDColorInput(Popup):
 
 		super().__init__(size_hint=(.9, .9))
 
-		self.content.ids.accept_btn.bind(on_press=self.update_value)
+		self.content.ids.accept_btn.bind(on_press=lambda e: print(self.get_value()))
 
-	def update_value(self, instance) -> None:
-		print(self.content.get_value())
+	def get_value(self) -> tuple:
+		return self.content.get_value()
 # === Color input === #
 # =================== #
 

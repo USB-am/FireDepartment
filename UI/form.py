@@ -32,15 +32,22 @@ class Form(CustomScreen):
 
 			if self.TABLE_ID is not None:
 				db_row = self.table.query.filter_by(id=self.TABLE_ID).first()
-				field.set_value(getattr(db_row, title))
+				field.set_value(db_row, title)
 
 			container.add_widget(field)
 
 	def get_value(self) -> dict:
 		childrens = self.ids.field_list.children
+		result = {}
 
-		result = {children.title: children.get_value() \
-			for children in childrens}
+		for children in childrens:
+			value = children.get_value()
+
+			if isinstance(value, dict):
+				result.update(value)
+				continue
+
+			result[children.title] = value
 
 		return result
 

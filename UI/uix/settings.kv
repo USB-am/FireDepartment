@@ -121,3 +121,20 @@
 	size: (self.width, 180)
 	padding: 10
 	spacing: 10
+
+
+<ToCustomSettingsButton>
+	size_hint: (1, None)
+	size: (self.width, 70)
+	background_color: Config.BACKGROUND_COLOR_OPACITY
+	halign: 'left'
+	text: 'Внешний вид'
+	on_press:
+		print('Edit customization button is pressed!')
+
+	Image:
+		width: 30
+		height: 30
+		x: self.parent.x + self.parent.width - 50
+		y: self.parent.y + 20
+		source: os_join(Config.IMAGES_DIR, 'color_circle.png')

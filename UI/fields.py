@@ -26,9 +26,12 @@ class StringField(BoxLayout):
 
 		super().__init__()
 
-	def set_value(self, value: Union[str, None]) -> None:
+	def set_value(self, db_row, key: str) -> None:
+		value = getattr(db_row, key)
+
 		if value is None:
 			value = ''
+
 		self.ids.text_input.text = value
 
 	def get_value(self) -> Union[str, None]:
@@ -45,9 +48,12 @@ class TextField(BoxLayout):
 
 		super().__init__()
 
-	def set_value(self, value: Union[str, None]) -> None:
+	def set_value(self, db_row, key: str) -> None:
+		value = getattr(db_row, key)
+
 		if value is None:
 			value = ''
+
 		self.ids.text_input.text = value
 
 	def get_value(self) -> str:
@@ -61,7 +67,9 @@ class PhoneField(BoxLayout):
 
 		super().__init__()
 
-	def set_value(self, value: Union[str, None]) -> None:
+	def set_value(self, db_row, key: str) -> None:
+		value = getattr(db_row, key)
+
 		if value is None:
 			value = ''
 
@@ -87,7 +95,6 @@ class CalendarDate(ToggleButton):
 			markup=True
 		)
 
-
 	def set_pressed_state(self) -> None:
 		self.state = 'down'
 
@@ -97,6 +104,15 @@ class CalendarDate(ToggleButton):
 			return f'[color=202325]{self.date.day}[/color]'
 
 		return str(self.date.day)
+
+	def is_active(self) -> bool:
+		return self.state == 'down'
+
+	def activate(self) -> None:
+		self.background_color = [1, 0, 0, 1]
+
+	def deactivate(self) -> None:
+		self.background_color = [1, 1, 1, 1]
 
 
 class CalendarField(BoxLayout):
@@ -126,11 +142,56 @@ class CalendarField(BoxLayout):
 		for day in self.MONTH_DAYS:
 			container.add_widget(CalendarDate(day))
 
-	def set_value(self, value: Union[int, None]) -> None:
-		pass
+	def set_value(self, date: datetime.date) -> None:
+		print(f'Calendar field get value={date}')
+		childrens = self.ids.calendar_table.children[::-1][7:]
+
+		for children in childrens:
+			if children.date == date.date():
+				children.set_pressed_state()
+				break
 
 	def get_value(self) -> datetime.date:
-		return
+		childrens = self.ids.calendar_table.children[::-1][7:]
+
+		for children in childrens:
+			if children.is_active():
+				return children.date
+
+	def update_active_dates(self, type_: int) -> None:
+		getattr(self, f'update_dates_{type_}')()
+
+	def update_dates_0(self) -> None:
+		# 5/2 Graph
+		self.deactivate_all()
+		childrens = self.ids.calendar_table.children[::-1][7:]
+
+		for num, children in enumerate(childrens):
+			if not children.date.isoweekday() in (6, 7):
+				children.activate()
+
+	def update_dates_1(self) -> None:
+		# 1/3 Graph
+		self.deactivate_all()
+		childrens = self.ids.calendar_table.children[::-1][7:]
+		selected_date = self.get_value()
+
+		for num, children in enumerate(childrens):
+			if (children.date - selected_date).days % 4 == 0:
+				children.activate()
+
+	def update_dates_2(self) -> None:
+		childrens = self.ids.calendar_table.children[::-1][7:]
+		selected_date = self.get_value()
+
+		for children in childrens:
+			children.activate()
+
+	def deactivate_all(self) -> None:
+		childrens = self.ids.calendar_table.children[::-1][7:]
+
+		for children in childrens:
+			children.deactivate()
 
 
 class RadioItem(BoxLayout):
@@ -148,12 +209,18 @@ class RadioItem(BoxLayout):
 	def get_value(self) -> bool:
 		return self.ids.check_box.state == 'down'
 
+	def bind_check_box(self, bind_method) -> None:
+		self.ids.check_box.bind(on_press=lambda event: bind_method(self.title))
+
 
 class RadioField(BoxLayout):
 	POINTS = {
 		0: '5/2',
 		1: '1/3',
-		2: 'Всегда'
+		2: 'Всегда',
+		'5/2': 0,
+		'1/3': 1,
+		'Всегда': 2
 	}
 
 	def __init__(self, title):
@@ -164,22 +231,58 @@ class RadioField(BoxLayout):
 
 		self.fill_radiobuttons()
 
-	def fill_radiobuttons(self):
-		for point in range(3):
-			field = RadioItem(self.POINTS[point])
-			self.add_widget(field)
-
-	def set_value(self, value: Union[int, None]) -> None:
-		if value is not None:
+	def set_value(self, active_point: int) -> None:
+		print(f'Radio field get value={active_point}')
+		if active_point is not None:
 			childrens = self.children[::-1][1:]
-			childrens[value].change_state()
+			childrens[active_point].change_state()
 
-	def get_value(self) -> int:
+	def get_value(self) -> Union[int, None]:
 		childrens = self.children[::-1][1:]
 
 		for num, children in enumerate(childrens):
 			if children.get_value():
 				return num
+
+	def fill_radiobuttons(self):
+		for point in range(3):
+			field = RadioItem(self.POINTS[point])
+			self.add_widget(field)
+
+	def bind_all(self, on_press_method) -> None:
+		childrens = self.children[::-1][1:]
+
+		for children in childrens:
+			children.bind_check_box(on_press_method)
+
+
+class WorkGraph(BoxLayout):
+	def __init__(self, title: str):
+		self.title = title
+		self.calendar_field = CalendarField(self.title)
+		self.radio_field = RadioField(self.title)
+		self.radio_field.bind_all(self.update_active_dates)
+
+		super().__init__()
+
+		self.add_widget(self.radio_field)
+		self.add_widget(self.calendar_field)
+
+	def set_value(self, db_row, key) -> None:
+		self.calendar_field.set_value(db_row.work_day)
+		self.radio_field.set_value(db_row.work_type)
+
+	def get_value(self) -> dict:
+		return {
+			'work_type': self.radio_field.get_value(),
+			'work_day': self.calendar_field.get_value()
+		}
+
+	def update_active_dates(self, type_: str) -> None:
+		if not None in (self.radio_field.get_value(), self.calendar_field.get_value()):
+			self.calendar_field.update_active_dates(RadioField.POINTS[type_])
+		else:
+			self.calendar_field.deactivate_all()
 
 
 class CheckBoxItem(BoxLayout):
@@ -217,17 +320,14 @@ class _ToManyField(BoxLayout):
 		for item in items:
 			container.add_widget(CheckBoxItem(item, group=self.group))
 
-	def set_value(self, value: Union[int, None]) -> None:
-		pass
-
 
 class ForeignKeyField(_ToManyField):
 	def __init__(self, title: str):
 		self.title = title
 		super().__init__(title=self.title, group=f'group_{title}')
 
-	def set_value(self, value: Union[int, None]) -> None:
-		pass
+	def set_value(self, db_row, key: str) -> None:
+		value = getattr(db_row, key)
 
 	def get_value(self) -> Union[int, None]:
 		childrens = self.ids.item_list.children
@@ -242,7 +342,8 @@ class ManyToManyField(_ToManyField):
 		self.title = title
 		super().__init__(title=title[:-1])
 
-	def set_value(self, value: list) -> None:
+	def set_value(self, db_row, key: str) -> None:
+		value = getattr(db_row, key)
 		childrens = self.ids.item_list.children
 
 		for children in childrens:
