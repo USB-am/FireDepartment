@@ -98,12 +98,14 @@ class CalendarDate(ToggleButton):
 	def set_pressed_state(self) -> None:
 		self.state = 'down'
 
-
 	def __get_text(self) -> str:
 		if self.date.month != datetime.now().month:
 			return f'[color=202325]{self.date.day}[/color]'
 
 		return str(self.date.day)
+
+	def bind_date(self, bind_method):
+		self.bind(on_press=bind_method)
 
 	def is_active(self) -> bool:
 		return self.state == 'down'
@@ -142,8 +144,10 @@ class CalendarField(BoxLayout):
 		for day in self.MONTH_DAYS:
 			container.add_widget(CalendarDate(day))
 
-	def set_value(self, date: datetime.date) -> None:
-		print(f'Calendar field get value={date}')
+	def set_value(self, date: Union[datetime.date, None], radio_field: int=None) -> None:
+		if date is None:
+			return
+
 		childrens = self.ids.calendar_table.children[::-1][7:]
 
 		for children in childrens:
@@ -151,12 +155,21 @@ class CalendarField(BoxLayout):
 				children.set_pressed_state()
 				break
 
+		if radio_field is not None:
+			self.update_active_dates(radio_field)
+
 	def get_value(self) -> datetime.date:
 		childrens = self.ids.calendar_table.children[::-1][7:]
 
 		for children in childrens:
 			if children.is_active():
 				return children.date
+
+	def bind_all(self, on_press_method):
+		childrens = self.ids.calendar_table.children[::-1][7:]
+
+		for children in childrens:
+			children.bind_date(on_press_method)
 
 	def update_active_dates(self, type_: int) -> None:
 		getattr(self, f'update_dates_{type_}')()
@@ -210,17 +223,14 @@ class RadioItem(BoxLayout):
 		return self.ids.check_box.state == 'down'
 
 	def bind_check_box(self, bind_method) -> None:
-		self.ids.check_box.bind(on_press=lambda event: bind_method(self.title))
+		self.ids.check_box.bind(on_press=bind_method)
 
 
 class RadioField(BoxLayout):
 	POINTS = {
 		0: '5/2',
 		1: '1/3',
-		2: 'Всегда',
-		'5/2': 0,
-		'1/3': 1,
-		'Всегда': 2
+		2: 'Всегда'
 	}
 
 	def __init__(self, title):
@@ -261,6 +271,8 @@ class WorkGraph(BoxLayout):
 		self.title = title
 		self.calendar_field = CalendarField(self.title)
 		self.radio_field = RadioField(self.title)
+
+		self.calendar_field.bind_all(self.update_active_dates)
 		self.radio_field.bind_all(self.update_active_dates)
 
 		super().__init__()
@@ -269,7 +281,7 @@ class WorkGraph(BoxLayout):
 		self.add_widget(self.calendar_field)
 
 	def set_value(self, db_row, key) -> None:
-		self.calendar_field.set_value(db_row.work_day)
+		self.calendar_field.set_value(db_row.work_day, db_row.work_type)
 		self.radio_field.set_value(db_row.work_type)
 
 	def get_value(self) -> dict:
@@ -278,11 +290,16 @@ class WorkGraph(BoxLayout):
 			'work_day': self.calendar_field.get_value()
 		}
 
-	def update_active_dates(self, type_: str) -> None:
-		if not None in (self.radio_field.get_value(), self.calendar_field.get_value()):
-			self.calendar_field.update_active_dates(RadioField.POINTS[type_])
-		else:
-			self.calendar_field.deactivate_all()
+	def update_active_dates(self, instance) -> None:
+		radio_value = self.radio_field.get_value()
+		calendar_value = self.calendar_field.get_value()
+
+		if (calendar_value is not None and radio_value == 1) or \
+			radio_value in (0, 2):
+
+			self.calendar_field.update_active_dates(radio_value)
+
+		else:	self.calendar_field.deactivate_all()
 
 
 class CheckBoxItem(BoxLayout):
@@ -293,7 +310,6 @@ class CheckBoxItem(BoxLayout):
 		super().__init__()
 
 		self.ids.check_box.group = group
-
 
 	def activate(self) -> None:
 		self.ids.check_box.state = 'down'
