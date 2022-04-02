@@ -5,6 +5,7 @@
 <MainPage>
 	BoxLayout:
 		orientation: 'vertical'
+		spacing: 5
 
 		# === TOOLBAR === #
 		BoxLayout:
@@ -40,6 +41,35 @@
 		# === TOOLBAR === #
 
 
+		# === SEARCH BLOCK === #
+		BoxLayout:
+			size_hint: (1, None)
+			size: (self.width, 50)
+			padding: [15, 0]
+			spacing: 10
+
+			TextInput:
+				multiline: False
+				font_size: int(Config.FONT_SIZE * 1.5)
+				padding_y: [self.height/2 - (self.line_height/2) * len(self._lines), 0]
+				id: text_input
+
+			FDButton:
+				size_hint: (None, None)
+				size: (50, 50)
+				id: search_btn
+				on_press:
+					print('Search button is pressed!')
+
+				Image:
+					width: self.parent.width - 10
+					height: self.parent.height - 10
+					x: self.parent.x + 5
+					y: self.parent.y + 5
+					source: os_join(Config.IMAGES_DIR, 'search_button.png')
+		# === SEARCH BLOCK === #
+
+
 		# === CONTENT === #
 		BoxLayout:
 			ScrollView:
@@ -60,3 +90,5 @@
 	color: Config.FONT_COLOR
 	background_color: Config.BACKGROUND_COLOR_OPACITY
 	text: self.view_text
+	on_press:
+		print(self.view_text)

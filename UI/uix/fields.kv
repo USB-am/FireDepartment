@@ -164,6 +164,7 @@
 			size: (30, 30)
 			text: '+'
 			on_press:
+				app.root.current = self.parent.parent.to_create
 				print(app.root.current)
 
 	ScrollView:

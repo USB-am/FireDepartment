@@ -21,6 +21,11 @@ class Form(CustomScreen):
 	TABLE_ID = None
 	NEXT_PAGE = 'settings'
 
+	def __init__(self):
+		super().__init__()
+
+		self.bind(on_enter=lambda event: self.update_screen())
+
 	def update_screen(self) -> None:
 		container = self.ids.field_list
 		container.clear_widgets()

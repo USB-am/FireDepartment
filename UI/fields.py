@@ -321,6 +321,7 @@ class CheckBoxItem(BoxLayout):
 class _ToManyField(BoxLayout):
 	def __init__(self, title: str, group: str=None):
 		self.title_ = title
+		self.to_create = f'create_{self.title_}'
 		self.view_text = Config.LANG.get(self.title_.title(), '[Неизвестно]')
 		self.group = group
 

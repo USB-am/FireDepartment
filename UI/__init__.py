@@ -3,7 +3,7 @@
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager
 
-from .main_page import MainPage
+from .main_page import MainPage, PostPage
 from .settings import Settings
 from .edit_list import EditTagList, EditRankList, EditPositionList, \
 	EditPersonList, EditPostList
@@ -21,6 +21,7 @@ class Manager(ScreenManager):
 
 		# Main page
 		self.add_widget(MainPage())
+		self.add_widget(PostPage())
 
 		# Settings page
 		self.add_widget(Settings())
@@ -46,7 +47,7 @@ class Manager(ScreenManager):
 		self.add_widget(EditPerson())
 		self.add_widget(EditPost())
 
-		self.current='settings'
+		self.current='main_page'
 
 
 class FireDepartment(App):
