@@ -1,0 +1,86 @@
+#:import os_join os.path.join
+#:import Config config
+#:import FDTitleLabel,FDLabel,FDButton UI.custom_widgets
+
+<PostPage>
+	BoxLayout:
+		orientation: 'vertical'
+
+		BoxLayout:
+			canvas:
+				Color:
+					rgba: Config.BACKGROUND_COLOR_OPACITY
+				Rectangle:
+					pos: self.pos
+					size: self.size
+
+			size_hint: (1, None)
+			size: (self.width, 70)
+			padding: 10
+			spacing: 10
+
+			FDButton:
+				size_hint: (None, None)
+				size: (50, 50)
+				on_press:
+					app.root.current = 'main_page'
+
+				Image:
+					width: self.parent.width - 10
+					height: self.parent.height - 10
+					x: self.parent.x + 5
+					y: self.parent.y + 5
+					source: os_join(Config.IMAGES_DIR, 'back_button.png')
+
+			FDTitleLabel:
+				id: title_label
+
+			FDButton:
+				size_hint: (None, None)
+				size: (50, 50)
+				on_press:
+					print('Delete method')
+
+				Image:
+					width: self.parent.width - 10
+					height: self.parent.height - 10
+					x: self.parent.x + 5
+					y: self.parent.y + 5
+					source: os_join(Config.IMAGES_DIR, 'delete_button.png')
+
+		ScrollView:
+			GridLayout:
+				cols: 1
+				height: self.minimum_height
+				do_scroll_x: False
+				size_hint: (1, None)
+				padding: 10
+				spacing: 10
+				id: info_container
+
+
+<DescriptionField>
+	canvas:
+		Color:
+			rgba: Config.BACKGROUND_COLOR_OPACITY
+		Rectangle:
+			pos: self.pos
+			size: self.size
+
+	orientation: 'vertical'
+	size_hint: (1, None)
+	size: (self.width, 150)
+	padding: 10
+
+	FDTitleLabel:
+		size_hint: (1, None)
+		size: (self.width, 30)
+		text_size: self.size
+		halign: 'left'
+		valign: 'middle'
+		text: 'Описание:'
+
+	TextInput:
+		font_size: Config.FONT_SIZE
+		text: self.parent.text
+		id: text_input

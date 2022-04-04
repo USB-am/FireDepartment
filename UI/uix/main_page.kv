@@ -25,7 +25,7 @@
 				size: (50, 50)
 
 			FDTitleLabel:
-				text: 'КЧАУ!'
+				text: 'Fire Department'
 
 			FDButton:
 				size_hint: (None, None)
@@ -91,4 +91,5 @@
 	background_color: Config.BACKGROUND_COLOR_OPACITY
 	text: self.view_text
 	on_press:
-		print(self.view_text)
+		app.root.current = 'post_page'
+		app.root.current_screen.fill_info(self.post)

@@ -3,7 +3,8 @@
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager
 
-from .main_page import MainPage, PostPage
+from .main_page import MainPage
+from .post_page import PostPage
 from .settings import Settings
 from .edit_list import EditTagList, EditRankList, EditPositionList, \
 	EditPersonList, EditPostList
