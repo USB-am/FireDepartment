@@ -59,6 +59,31 @@
 				id: info_container
 
 
+<TitleField>
+	canvas:
+		Color:
+			rgba: Config.BACKGROUND_COLOR_OPACITY
+		Rectangle:
+			pos: self.pos
+			size: self.size
+
+	size_hint: (1, None)
+	size: (self.width, 50)
+	padding: 10
+
+	FDLabel:
+		size_hint: (.3, 1)
+		text_size: self.size
+		halign: 'left'
+		valign: 'middle'
+		text: 'Название'
+
+	TextInput:
+		size_hint: (.7, 1)
+		font_size: Config.FONT_SIZE
+		text: self.parent.title
+
+
 <DescriptionField>
 	canvas:
 		Color:
@@ -84,3 +109,42 @@
 		font_size: Config.FONT_SIZE
 		text: self.parent.text
 		id: text_input
+
+
+<PersonItem>
+	text: self.title
+
+
+<TagItem>
+	size_hint: (1, None)
+	size: (self.width, 30)
+	font_size: Config.FONT_SIZE
+	text: self.title
+
+
+<ListField>
+	canvas:
+		Color:
+			rgba: Config.BACKGROUND_COLOR_OPACITY
+		Rectangle:
+			pos: self.pos
+			size: self.size
+
+	orientation: 'vertical'
+	size_hint: (1, None)
+	size: (self.width, self.widget_height)
+	padding: 10
+
+	FDTitleLabel:
+		size_hint: (1, None)
+		size: (self.width, 30)
+		text_size: self.size
+		halign: 'left'
+		valign: 'middle'
+		id: title
+
+	BoxLayout:
+		orientation: 'vertical'
+		padding: 10
+		spacing: 10
+		id: list_
