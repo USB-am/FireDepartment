@@ -8,7 +8,7 @@ from kivy.uix.button import Button
 import config as Config
 from .custom_screen import CustomScreen
 from db_models import db as DataBase
-from db_models import Post
+from db_models import Post, Tag
 
 
 path_to_kv_file = os.path.join(Config.PATTERNS_DIR, 'main_page.kv')
@@ -40,6 +40,9 @@ class MainPage(CustomScreen):
 		self.ids.search_btn.bind(on_press=self.search)
 		self.bind(on_enter=self.fill_posts)
 
+		self.ids.text_input.text = 'new'
+		self.search(None)
+
 	def fill_posts(self, instance) -> None:
 		container = self.ids.post_list
 		container.clear_widgets()
@@ -55,8 +58,12 @@ class MainPage(CustomScreen):
 
 		for tag in tags:
 			search_text = f'%{tag}%'
-			print(type(Post.tags), Post.tags, dir(Post.tags))
-			print(Post.tags.like('%new%'))
-			# print(Post.tags.like(search_text), end='\n'*5)
-			# print(Post.query.filter(Post.tags.all().filter(search_text)).all())
-			# print(DataBase.session.query(Post).filter(Post.tags.like(search_text)))
+			x = Post.tags.any(title=tag)
+			# x = Post.tags.contains(tag)
+			x = Tag.title.contains(tag)
+			print('x',x.like(search_text))
+			# y = Post.query.filter(x).all()
+			y = DataBase.session.query(Post).filter(x)
+			# y = Tag.posts.filter(x)
+			# print(dir(Tag.posts))
+			print('y',y)
