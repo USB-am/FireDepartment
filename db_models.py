@@ -95,8 +95,6 @@ class Person(db.Model):
 			'name': 'StringField',
 			'phone': 'PhoneField',
 			'add_phone': 'PhoneField',
-			# 'work_type': 'RadioField',
-			# 'work_day': 'CalendarField',
 			'work_type': 'WorkGraph',
 			'position': 'ForeignKeyField',
 			'rank': 'ForeignKeyField',

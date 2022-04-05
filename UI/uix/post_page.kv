@@ -60,13 +60,6 @@
 
 
 <TitleField>
-	canvas:
-		Color:
-			rgba: Config.BACKGROUND_COLOR_OPACITY
-		Rectangle:
-			pos: self.pos
-			size: self.size
-
 	size_hint: (1, None)
 	size: (self.width, 50)
 	padding: 10
@@ -85,13 +78,6 @@
 
 
 <DescriptionField>
-	canvas:
-		Color:
-			rgba: Config.BACKGROUND_COLOR_OPACITY
-		Rectangle:
-			pos: self.pos
-			size: self.size
-
 	orientation: 'vertical'
 	size_hint: (1, None)
 	size: (self.width, 150)
@@ -112,6 +98,9 @@
 
 
 <PersonItem>
+	size_hint: (1, None)
+	size: (self.width, 30)
+	font_size: Config.FONT_SIZE
 	text: self.title
 
 
@@ -123,13 +112,6 @@
 
 
 <ListField>
-	canvas:
-		Color:
-			rgba: Config.BACKGROUND_COLOR_OPACITY
-		Rectangle:
-			pos: self.pos
-			size: self.size
-
 	orientation: 'vertical'
 	size_hint: (1, None)
 	size: (self.width, self.widget_height)
@@ -148,3 +130,29 @@
 		padding: 10
 		spacing: 10
 		id: list_
+
+
+<UserStateContent>
+	orientation: 'vertical'
+
+	ScrollView:
+		GridLayout:
+			cols: 1
+			height: self.minimum_height
+			size_hint: (1, None)
+			do_scroll_x: False
+			padding: 10
+			spacing: 10
+			id: content
+
+	BoxLayout:
+		size_hint: (1, None)
+		size: (self.width, 70)
+		padding: 10
+		spacing: 10
+
+		FDButton:
+			text: 'Дозвонилась'
+
+		FDButton:
+			text: 'Не дозвонилась'

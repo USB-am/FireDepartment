@@ -34,9 +34,6 @@ class MainPage(CustomScreen):
 		self.ids.search_btn.bind(on_press=self.search)
 		self.bind(on_enter=self.fill_posts)
 
-		self.ids.text_input.text = 'new;#2'
-		self.search(None)
-
 	def fill_posts(self, instance) -> None:
 		container = self.ids.post_list
 		container.clear_widgets()

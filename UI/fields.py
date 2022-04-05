@@ -61,17 +61,22 @@ class TextField(BoxLayout):
 
 
 class PhoneField(BoxLayout):
+	MASK = r'+7 (___) ___-__-__'
+	# find phone number regular: ^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$
+
 	def __init__(self, title: str):
 		self.title = title
 		self.view_text = Config.LANG.get(self.title.title(), '[Неизвестно]')
 
 		super().__init__()
 
+		# self.ids.text_input.bind(on_focus=self.numbers_to_phone)
+
 	def set_value(self, db_row, key: str) -> None:
 		value = getattr(db_row, key)
 
 		if value is None:
-			value = ''
+			value = self.MASK
 
 		self.ids.text_input.text = value
 
@@ -92,6 +97,7 @@ class CalendarDate(ToggleButton):
 			size=(30, 30),
 			font_size=14,
 			group='calendar',
+			background_color=(1, 1, 1, 1),
 			markup=True
 		)
 
@@ -242,7 +248,6 @@ class RadioField(BoxLayout):
 		self.fill_radiobuttons()
 
 	def set_value(self, active_point: int) -> None:
-		print(f'Radio field get value={active_point}')
 		if active_point is not None:
 			childrens = self.children[::-1][1:]
 			childrens[active_point].change_state()
@@ -285,9 +290,27 @@ class WorkGraph(BoxLayout):
 		self.radio_field.set_value(db_row.work_type)
 
 	def get_value(self) -> dict:
+		work_type = self.radio_field.get_value()
+		work_day = self.calendar_field.get_value()
+
+		if not None in (work_type, work_day):
+			if work_type == 0:
+				hour = 8
+			elif work_type == 1:
+				hour = 9
+			else:
+				hour = 0
+
+			work_day = datetime(
+				year=work_day.year,
+				month=work_day.month,
+				day=work_day.day,
+				hour=hour
+			)
+
 		return {
-			'work_type': self.radio_field.get_value(),
-			'work_day': self.calendar_field.get_value()
+			'work_type': work_type,
+			'work_day': work_day
 		}
 
 	def update_active_dates(self, instance) -> None:
@@ -345,6 +368,12 @@ class ForeignKeyField(_ToManyField):
 
 	def set_value(self, db_row, key: str) -> None:
 		value = getattr(db_row, key)
+		childrens = self.ids.item_list.children
+
+		for children in childrens:
+			if children.db_row.id == value:
+				children.activate()
+				break
 
 	def get_value(self) -> Union[int, None]:
 		childrens = self.ids.item_list.children
