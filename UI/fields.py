@@ -14,6 +14,7 @@ from sqlalchemy.orm.collections import InstrumentedList
 
 import config as Config
 import db_models
+from .custom_widgets import FDPhoneTextInput
 
 
 path_to_kv_file = os_join(Config.PATTERNS_DIR, 'fields.kv')
@@ -62,15 +63,6 @@ class TextField(BoxLayout):
 
 
 class PhoneField(BoxLayout):
-	MASK = '+7 (495) ___-__-__'
-	_PATTERN = r'\+?[78](\d{3})(\d{3})(\d{2})(\d{2})'
-	_REPL = r'+7 (\1) \2-\3-\4'
-	# re.sub(
-	# 	pattern,
-	# 	r'+7 (\1) \2-\3-\4',
-	# 	'88005553535'
-	# )
-
 	def __init__(self, title: str):
 		self.title = title
 		self.view_text = Config.LANG.get(self.title.title(), '[Неизвестно]')
@@ -80,12 +72,10 @@ class PhoneField(BoxLayout):
 	def set_value(self, db_row, key: str) -> None:
 		value = getattr(db_row, key)
 
-		if value is None:
-			value = self.MASK
+		if value is not None:
+			self.ids.text_input.text = value
 
-		self.ids.text_input.text = value
-
-	def get_value(self) -> str:
+	def get_value(self) -> Union[str, None]:
 		result = self.ids.text_input.text
 
 		if result:

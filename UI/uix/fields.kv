@@ -1,4 +1,4 @@
-#:import FDLabel,FDTitleLabel,FDButton UI.custom_widgets
+#:import FDLabel,FDTitleLabel,FDButton,FDPhoneTextInput UI.custom_widgets
 
 <StringField>
 	size_hint: (1, None)
@@ -34,6 +34,7 @@
 
 	TextInput:
 		font_size: Config.FONT_SIZE
+		# input_filter: 'int'
 		id: text_input
 
 
@@ -49,12 +50,11 @@
 		valign: 'middle'
 		text: self.parent.view_text
 
-	TextInput:
+	FDPhoneTextInput:
 		size_hint: (.7, 1)
 		multiline: False
 		font_size: Config.FONT_SIZE
 		padding_y: [self.height/2 - (self.line_height/2) * len(self._lines), 0]
-		text: self.parent.MASK
 		id: text_input
 
 

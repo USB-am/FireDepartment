@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 
+# Temp import
+from kivy.config import Config
+Config.set("graphics", "resizable", "0")
+Config.set('graphics', 'width', '350')
+
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager
 
@@ -10,11 +15,6 @@ from .edit_list import EditTagList, EditRankList, EditPositionList, \
 	EditPersonList, EditPostList
 from .form import CreateTag, CreateRank, CreatePosition, CreatePerson, CreatePost, \
 	EditTag, EditRank, EditPosition, EditPerson, EditPost
-
-# Temp import
-from kivy.config import Config
-Config.set("graphics", "resizable", "0")
-Config.set('graphics', 'width', '350')
 
 
 class Manager(ScreenManager):
@@ -49,7 +49,7 @@ class Manager(ScreenManager):
 		self.add_widget(EditPerson())
 		self.add_widget(EditPost())
 
-		self.current='main_page'
+		self.current='edit_persons'
 
 
 class FireDepartment(App):

@@ -5,6 +5,7 @@ from os.path import join as os_join
 from kivy.lang import Builder
 from kivy.uix.label import Label
 from kivy.uix.button import Button
+from kivy.uix.textinput import TextInput
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.popup import Popup
 from kivy.uix.colorpicker import ColorPicker
@@ -49,6 +50,51 @@ class FDButton(Button):
 		super().__init__(**options)
 # === Buttons === #
 # =============== #
+
+
+# ======================== #
+# === Phone text input === #
+class FDPhoneTextInput(TextInput):
+	MASK = '+7 (495) ___-__-__'
+	_PATTERN = r'\+?[78](\d{3})(\d{3})(\d{2})(\d{2})'
+	_REPL = r'+7 (\1) \2-\3-\4'
+	#re.sub(
+	#	pattern,
+	#	r'+7 (\1) \2-\3-\4',
+	#	'88005553535'
+	#)
+
+	def __init__(self, **options):
+		super().__init__(**options)
+
+		self.text = self.MASK
+		self.wrapper_number = '7495'
+		# self.insert_filter = 'int'
+
+	#def on_focus(self, instance, is_focus) -> None:
+	#	if is_focus:
+	#		instance.cursor = (4, 0)
+
+	def insert_text(self, substring: str, from_undo: bool=False) -> None:
+		true_conditions = (
+			substring.isdigit(),
+			len(self.text) < 18
+		)
+		cursor_index = self.cursor_index()
+		now_text = list(self.text)
+
+		'''
+		if now_text[cursor_index - 1] == '_':
+			now_text[cursor_index - 1] = substring
+
+		print(''.join(now_text), self.text)
+		'''
+
+		if all(true_conditions):
+			self.text = ''.join(now_text)
+			# return super().insert_text(substring, from_undo=from_undo)
+# === Phone text input === #
+# ======================== #
 
 
 # ================= #
