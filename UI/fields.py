@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from re import sub
 from os.path import join as os_join
 from calendar import Calendar
 from datetime import datetime
@@ -61,16 +62,20 @@ class TextField(BoxLayout):
 
 
 class PhoneField(BoxLayout):
-	MASK = r'+7 (___) ___-__-__'
-	# find phone number regular: ^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$
+	MASK = '+7 (495) ___-__-__'
+	_PATTERN = r'\+?[78](\d{3})(\d{3})(\d{2})(\d{2})'
+	_REPL = r'+7 (\1) \2-\3-\4'
+	# re.sub(
+	# 	pattern,
+	# 	r'+7 (\1) \2-\3-\4',
+	# 	'88005553535'
+	# )
 
 	def __init__(self, title: str):
 		self.title = title
 		self.view_text = Config.LANG.get(self.title.title(), '[Неизвестно]')
 
 		super().__init__()
-
-		# self.ids.text_input.bind(on_focus=self.numbers_to_phone)
 
 	def set_value(self, db_row, key: str) -> None:
 		value = getattr(db_row, key)
