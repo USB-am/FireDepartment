@@ -65,6 +65,7 @@ class TextField(BoxLayout):
 class PhoneField(BoxLayout):
 	def __init__(self, title: str):
 		self.title = title
+		print(f'Phone field {self.title} is init!!!')
 		self.view_text = Config.LANG.get(self.title.title(), '[Неизвестно]')
 
 		super().__init__()

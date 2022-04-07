@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import re
 from os.path import join as os_join
 
 from kivy.lang import Builder
@@ -15,6 +16,17 @@ import config as Config
 
 path_to_kv_file = os_join(Config.PATTERNS_DIR, 'custom_widgets.kv')
 Builder.load_file(path_to_kv_file)
+
+
+def check_exceptions(func):
+	def wrapper(*args, **kwargs):
+		try:
+			return func(*args, **kwargs)
+		except IndexError:
+			pass
+		except Exception as exception:
+			print(exception)
+	return wrapper
 
 
 # ============== #
@@ -56,43 +68,48 @@ class FDButton(Button):
 # === Phone text input === #
 class FDPhoneTextInput(TextInput):
 	MASK = '+7 (495) ___-__-__'
-	_PATTERN = r'\+?[78](\d{3})(\d{3})(\d{2})(\d{2})'
+	_COMPLITE_PATTERN = r'\+?[78](\d{3})(\d{3})(\d{2})(\d{2})'
+	_NOT_COMPLITE_PATTERN = r'\+?[78]([0-9_]{3})([0-9_]{3})([0-9_]{2})([0-9_]{2})'
 	_REPL = r'+7 (\1) \2-\3-\4'
-	#re.sub(
-	#	pattern,
-	#	r'+7 (\1) \2-\3-\4',
-	#	'88005553535'
-	#)
 
 	def __init__(self, **options):
 		super().__init__(**options)
 
 		self.text = self.MASK
-		self.wrapper_number = '7495'
-		# self.insert_filter = 'int'
+		self.wrapper_number = '7495'.ljust(11, '_')
 
-	#def on_focus(self, instance, is_focus) -> None:
-	#	if is_focus:
-	#		instance.cursor = (4, 0)
-
+	@check_exceptions
 	def insert_text(self, substring: str, from_undo: bool=False) -> None:
-		true_conditions = (
-			substring.isdigit(),
-			len(self.text) < 18
-		)
+		if not substring.isdigit():
+			return
+
+		cursor_index = self.__get_cursor_index()
+		if cursor_index == -1:
+			return
+
+		now_text_list = list(self.text)
+		now_text_list[cursor_index] = substring
+		now_text = ''.join(now_text_list)
+		self.wrapper_number = ''.join(re.findall(r'[\d_]*', now_text))
+
+		# print(re.sub(self._COMPLITE_PATTERN, self._REPL, only_numbers))
+		# print(re.sub(self._NOT_COMPLITE_PATTERN, self._REPL, only_numbers))
+		# print(only_numbers, end='\n'*3)
+		print(self.wrapper_number)
+
+		self.text = re.sub(self._NOT_COMPLITE_PATTERN, self._REPL, self.wrapper_number)
+		self.cursor = (self.__get_cursor_index(True), 0)
+
+	def __get_cursor_index(self, find_underline: bool=False) -> int:
 		cursor_index = self.cursor_index()
-		now_text = list(self.text)
 
-		'''
-		if now_text[cursor_index - 1] == '_':
-			now_text[cursor_index - 1] = substring
+		if cursor_index == len(self.text) or find_underline:
+			cursor_index = self.text.find('_')
 
-		print(''.join(now_text), self.text)
-		'''
+			if cursor_index == -1:
+				return len(self.text)
 
-		if all(true_conditions):
-			self.text = ''.join(now_text)
-			# return super().insert_text(substring, from_undo=from_undo)
+		return cursor_index
 # === Phone text input === #
 # ======================== #
 
