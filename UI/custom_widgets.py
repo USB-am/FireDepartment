@@ -78,6 +78,12 @@ class FDPhoneTextInput(TextInput):
 		self.text = self.MASK
 		self.wrapper_number = '7495'.ljust(11, '_')
 
+	def keyboard_on_key_down(self, window, keycode, text, modiriers) -> None:
+		if keycode[1] in ('backspace', 'delete'):
+			return
+
+		return super().keyboard_on_key_down(window, keycode, text, modiriers)
+
 	@check_exceptions
 	def insert_text(self, substring: str, from_undo: bool=False) -> None:
 		if not substring.isdigit():
@@ -92,24 +98,20 @@ class FDPhoneTextInput(TextInput):
 		now_text = ''.join(now_text_list)
 		self.wrapper_number = ''.join(re.findall(r'[\d_]*', now_text))
 
-		# print(re.sub(self._COMPLITE_PATTERN, self._REPL, only_numbers))
-		# print(re.sub(self._NOT_COMPLITE_PATTERN, self._REPL, only_numbers))
-		# print(only_numbers, end='\n'*3)
-		print(self.wrapper_number)
-
 		self.text = re.sub(self._NOT_COMPLITE_PATTERN, self._REPL, self.wrapper_number)
-		self.cursor = (self.__get_cursor_index(True), 0)
+		self.cursor = (self.__get_cursor_index(), 0)
 
-	def __get_cursor_index(self, find_underline: bool=False) -> int:
+	def __get_cursor_index(self) -> int:
 		cursor_index = self.cursor_index()
 
-		if cursor_index == len(self.text) or find_underline:
+		if cursor_index == len(self.text):
 			cursor_index = self.text.find('_')
 
-			if cursor_index == -1:
-				return len(self.text)
-
 		return cursor_index
+
+	def set_value(self, phone_number: str) -> None:
+		self.wrapper_number = phone_number
+		self.text = re.sub(self._COMPLITE_PATTERN, self._REPL, self.wrapper_number)
 # === Phone text input === #
 # ======================== #
 

@@ -65,7 +65,6 @@ class TextField(BoxLayout):
 class PhoneField(BoxLayout):
 	def __init__(self, title: str):
 		self.title = title
-		print(f'Phone field {self.title} is init!!!')
 		self.view_text = Config.LANG.get(self.title.title(), '[Неизвестно]')
 
 		super().__init__()
@@ -74,7 +73,7 @@ class PhoneField(BoxLayout):
 		value = getattr(db_row, key)
 
 		if value is not None:
-			self.ids.text_input.text = value
+			self.ids.text_input.set_value(value)
 
 	def get_value(self) -> Union[str, None]:
 		result = self.ids.text_input.text
