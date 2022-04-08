@@ -76,10 +76,7 @@ class PhoneField(BoxLayout):
 			self.ids.text_input.set_value(value)
 
 	def get_value(self) -> Union[str, None]:
-		result = self.ids.text_input.text
-
-		if result:
-			return result
+		return self.ids.text_input.get_value()
 
 
 class CalendarDate(ToggleButton):

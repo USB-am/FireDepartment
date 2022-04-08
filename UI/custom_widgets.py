@@ -112,6 +112,21 @@ class FDPhoneTextInput(TextInput):
 	def set_value(self, phone_number: str) -> None:
 		self.wrapper_number = phone_number
 		self.text = re.sub(self._COMPLITE_PATTERN, self._REPL, self.wrapper_number)
+
+	def get_value(self) -> Union[str, None]:
+		complite_value = re.sub(
+			self._COMPLITE_PATTERN,
+			self._REPL,
+			self.wrapper_number
+		)
+		not_complite_value = re.sub(
+			self._NOT_COMPLITE_PATTERN,
+			self._REPL,
+			self.wrapper_number
+		)
+
+		if complite_value == not_complite_value:
+			return self.wrapper
 # === Phone text input === #
 # ======================== #
 
