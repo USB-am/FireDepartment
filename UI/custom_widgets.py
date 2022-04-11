@@ -98,7 +98,7 @@ class FDPhoneTextInput(TextInput):
 		now_text = ''.join(now_text_list)
 		self.wrapper_number = ''.join(re.findall(r'[\d_]*', now_text))
 
-		self.text = re.sub(self._NOT_COMPLITE_PATTERN, self._REPL, self.wrapper_number)
+		self.text = self.sub_from_pattern(self._NOT_COMPLITE_PATTERN)
 		self.cursor = (self.__get_cursor_index(), 0)
 
 	def __get_cursor_index(self) -> int:
@@ -109,24 +109,19 @@ class FDPhoneTextInput(TextInput):
 
 		return cursor_index
 
+	def sub_from_pattern(self, pattern: str) -> str:
+		return re.sub(pattern, self._REPL, self.wrapper_number)
+
 	def set_value(self, phone_number: str) -> None:
 		self.wrapper_number = phone_number
-		self.text = re.sub(self._COMPLITE_PATTERN, self._REPL, self.wrapper_number)
+		self.text = self.sub_from_pattern(self._COMPLITE_PATTERN)
 
-	def get_value(self) -> Union[str, None]:
-		complite_value = re.sub(
-			self._COMPLITE_PATTERN,
-			self._REPL,
-			self.wrapper_number
-		)
-		not_complite_value = re.sub(
-			self._NOT_COMPLITE_PATTERN,
-			self._REPL,
-			self.wrapper_number
-		)
+	def get_value(self) -> str:
+		complite_value = self.sub_from_pattern(self._COMPLITE_PATTERN)
+		not_complite_value = self.sub_from_pattern(self._NOT_COMPLITE_PATTERN)
 
 		if complite_value == not_complite_value:
-			return self.wrapper
+			return self.wrapper_number
 # === Phone text input === #
 # ======================== #
 

@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import re
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
@@ -88,6 +90,16 @@ class Person(db.Model):
 
 	def __str__(self):
 		return f'{self.id}. {self.name} - {self.phone}'
+
+	def __get_show_phone(self) -> str:
+		if self.phone is None:
+			return ''
+
+		return re.sub(
+			FDPhoneTextInput._COMPLITE_PATTERN,
+			FDPhoneTextInput._REPL,
+			self.phone
+		)
 
 	@staticmethod
 	def get_fields() -> dict:
