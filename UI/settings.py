@@ -57,7 +57,7 @@ class CustomizationSettings(BoxLayout):
 		self.add_widget(CustomColorInput('Text #3'))
 
 
-class ToCustomSettingsButton(Button):
+class ButtonToCustomSettings(Button):
 	pass
 
 
@@ -70,7 +70,7 @@ class Settings(CustomScreen):
 		self.__data_base_settings()
 		self.ids.settings_list.add_widget(FDSeparator())
 		# self.__customization_settings()
-		self.ids.settings_list.add_widget(ToCustomSettingsButton())
+		self.ids.settings_list.add_widget(ButtonToCustomSettings())
 
 	def __data_base_settings(self) -> None:
 		container = self.ids.settings_list

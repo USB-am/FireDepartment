@@ -92,7 +92,6 @@ class EditForm(Form):
 				field = values.pop(key)
 				self._update_posts(db_row, field)
 
-		print(values)
 		db_row.update(values)
 
 		DataBase.session.commit()
