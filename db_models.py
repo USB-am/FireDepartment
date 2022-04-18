@@ -5,12 +5,10 @@ import re
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
-import config as Config
-
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = Config.PATH_TO_DATA_BASE
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fire_department.db'
 
 db = SQLAlchemy(app)
 
@@ -137,3 +135,26 @@ class Post(db.Model):
 		}
 
 		return result
+
+
+class ColorTheme(db.Model):
+	__tablename__ = 'ColorTheme'
+	id = db.Column(db.Integer, primary_key=True)
+	title = db.Column(db.PickleType, nullable=False)
+	button_color = db.Column(db.PickleType, nullable=False)
+	font_color = db.Column(db.PickleType, nullable=False)
+	background_color_opacity = db.Column(db.PickleType, nullable=False)
+	background_image = db.Column(db.String(255), nullable=False)
+
+	def get_values(self) -> dict:
+		return {
+			'ID': self.id,
+			'TITLE': self.title,
+			'BUTTON_COLOR': self.button_color,
+			'FONT_COLOR': self.font_color,
+			'BACKGROUND_COLOR_OPACITY': self.background_color_opacity,
+			'BACKGROUND_IMAGE': self.background_image
+		}
+
+	def __str__(self):
+		return self.title

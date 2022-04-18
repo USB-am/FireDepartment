@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 
-
 from db_models import db as DataBase
-import config as Config
+DataBase.create_all()
+
 from UI import FireDepartment
-from UI.exceptions import global_exception
 
 
-@global_exception
 def main():
-	DataBase.create_all()
 	FireDepartment().run()
 
 

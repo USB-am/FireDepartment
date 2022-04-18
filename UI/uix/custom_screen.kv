@@ -1,12 +1,11 @@
 #:import os os
-#:import Config config
+#:import Settings settings.settings
 
 <CustomScreen>
 	canvas:
 		Color:
-			rgba: Config.BACKGROUND_COLOR
-
+			rgba: (1, 1, 1, 1)
 		Rectangle:
-			pos: self.pos
 			size: self.size
-			source: Config.BACKGROUND_IMAGE
+			pos: self.pos
+			source: os.path.join(Settings.IMAGES_DIR, 'bg.png')
