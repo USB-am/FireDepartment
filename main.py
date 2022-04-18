@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+
 from db_models import db as DataBase
 import config as Config
 from UI import FireDepartment
