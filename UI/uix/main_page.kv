@@ -11,6 +11,7 @@
 		hint_text: 'Поиск'
 		halign: 'left'
 		valign: 'middle'
+		# text_color: Settings.FONT_COLOR
 
 	MDIconButton:
 		size_hint: None, None
@@ -25,12 +26,13 @@
 		orientation: 'vertical'
 
 		MDToolbar:
-			title: 'Menu'
-			icon: 'fire-truck'
+			title: 'Главная'
 			left_action_items:
-				[['fire-truck', lambda x: x, 'Home']]
-			md_bg_color: (1, 1, 1, .5)
-			specific_text_color: (0, 0, 0, 1)
+				[['fire-truck', lambda x: x, '']]
+			right_action_items:
+				[['cog', lambda x: self.parent.parent.move_to_settings(), 'Settings']]
+			md_bg_color: Settings.BACKGROUND_COLOR_OPACITY
+			specific_text_color: Settings.FONT_COLOR
 			elevation: 10
 
 		SearchBlock:
@@ -42,8 +44,20 @@
 				size_hint: 1, None
 				height: self.minimum_height
 				do_scroll_x: False
+				padding: [20, 0]
+				spacing: 10
 				id: container
 
 
 <PostItem>
-	
+	size_hint: 1, None
+	size: self.width, 50
+	padding: [20, 0]
+
+	MDLabel:
+		text: 'Text'
+
+	MDIconButton:
+		size_hint: None, None
+		size: 50, 50
+		icon: 'eye'

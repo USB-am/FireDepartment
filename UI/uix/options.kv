@@ -1,0 +1,40 @@
+#:import Settings settings.settings
+
+
+<TableItem>
+	size_hint: 1, None
+	size: self.width, 50
+	padding: [20, 0]
+	spacing: 10
+
+	MDRectangleFlatIconButton:
+		icon: 'plus-circle-outline'
+		text: 'Создать'
+
+	MDRectangleFlatIconButton:
+		icon: 'playlist-edit'
+		text: 'Изменить'
+
+
+<Options>
+	MDBoxLayout:
+		orientation: 'vertical'
+		spacing: 10
+
+		MDToolbar:
+			title: 'Настройки'
+			left_action_items:
+				[['arrow-left', lambda x: self.parent.parent.move_to_back()]]
+			md_bg_color: Settings.BACKGROUND_COLOR_OPACITY
+			specific_text_color: Settings.FONT_COLOR
+			elevation: 10
+
+		ScrollView:
+			GridLayout:
+				cols: 1
+				size_hint: 1, None
+				height: self.minimum_height
+				do_scroll_x: False
+				padding: [20, 0]
+				spacing: 10
+				id: container
