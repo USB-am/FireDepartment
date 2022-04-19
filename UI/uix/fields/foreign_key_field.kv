@@ -1,0 +1,20 @@
+#:import Settings settings.settings
+
+<ForeignKeyField>
+	orientation: 'vertical'
+	size_hint: 1, None
+	size: self.width, 400
+	padding: [10, 0]
+	spacing: 10
+
+	MDBoxLayout:
+		size_hint: 1, None
+		size: self.width, 50
+
+		MDIcon:
+			size_hint: None, None
+			size: 50, 50
+			icon: 'pound'
+
+		MDLabel:
+			hint_text: self.parent.title

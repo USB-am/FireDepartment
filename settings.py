@@ -101,6 +101,8 @@ class Settings:
 	def __init__(self):
 		self.__dict__.update(self.__upload_config())
 		self.__dict__.update(self.__upload_color_theme())
+		self.INVERTED_FONT_COLOR = self.__invert_tuple(self.FONT_COLOR)
+		self.INVERTED_BUTTON_COLOR = self.__invert_tuple(self.BUTTON_COLOR)
 		self.PATH_MANAGER = PathManager()
 
 	def update_config(self) -> None:
@@ -112,6 +114,11 @@ class Settings:
 
 		with open('config.json', mode='w', encoding='utf-8') as config_file:
 			json.dump(data, config_file, indent=2)
+
+	def __invert_tuple(self, rgba: tuple) -> tuple:
+		result = map(lambda c: 1 - c, rgba[:-1])
+
+		return (*result, rgba[-1])
 
 	@check_exceptions
 	def __upload_config(self) -> dict:

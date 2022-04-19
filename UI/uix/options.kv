@@ -8,12 +8,26 @@
 	spacing: 10
 
 	MDRectangleFlatIconButton:
+		text_color: Settings.INVERTED_FONT_COLOR
+		line_color: Settings.INVERTED_FONT_COLOR
+		icon_color: Settings.INVERTED_FONT_COLOR
 		icon: 'plus-circle-outline'
 		text: 'Создать'
+		on_press:
+			page_name = self.parent.to_create
+			Settings.PATH_MANAGER.forward(page_name)
+			app.root.current = page_name
 
 	MDRectangleFlatIconButton:
+		text_color: Settings.INVERTED_FONT_COLOR
+		line_color: Settings.INVERTED_FONT_COLOR
+		icon_color: Settings.INVERTED_FONT_COLOR
 		icon: 'playlist-edit'
 		text: 'Изменить'
+		on_press:
+			page_name = self.parent.to_edit
+			Settings.PATH_MANAGER.forward(page_name)
+			app.root.current = page_name
 
 
 <Options>
@@ -24,7 +38,7 @@
 		MDToolbar:
 			title: 'Настройки'
 			left_action_items:
-				[['arrow-left', lambda x: self.parent.parent.move_to_back()]]
+				[['arrow-left', lambda x: app.root.move_to_back(x)]]
 			md_bg_color: Settings.BACKGROUND_COLOR_OPACITY
 			specific_text_color: Settings.FONT_COLOR
 			elevation: 10

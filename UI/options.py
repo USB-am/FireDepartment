@@ -8,7 +8,7 @@ from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelOneLine
 
 from settings import settings as Settings
 from .custom_screen import CustomScreen
-from db_models import Tag, Rank, Position, Person, Post
+from db_models import Tag, Rank, Position, Person, Post, ColorTheme
 
 
 path_to_kv_file = os.path.join(Settings.PATTERNS_DIR, 'options.kv')
@@ -20,12 +20,17 @@ TABLES = (
 	(Rank, 'Звания', 'chevron-triple-up'),
 	(Position, 'Должности', 'crosshairs-gps'),
 	(Person, 'Люди', 'account-group'),
-	(Post, 'Ранги пожаров', 'fire-alert')
+	(Post, 'ЧС', 'fire-alert'),
+	(ColorTheme, 'Внешний вид', 'palette')
 )
 
 
 class TableItem(MDBoxLayout):
 	def __init__(self, table):
+		self.table = table
+		self.to_create = f'create_{self.table.__tablename__}'.lower()
+		self.to_edit = f'edit_{self.table.__tablename__}s'.lower()
+
 		super().__init__()
 
 
@@ -36,9 +41,6 @@ class Options(CustomScreen):
 		super().__init__()
 
 		self.update_screen()
-
-	def move_to_back(self) -> None:
-		self.manager.current = Settings.PATH_MANAGER.back()
 
 	def update_screen(self) -> None:
 		container = self.ids.container

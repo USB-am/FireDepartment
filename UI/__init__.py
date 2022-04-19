@@ -8,8 +8,11 @@ Config.set('graphics', 'width', '350')
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager
 
+from settings import settings as Settings
 from .main_page import MainPage
 from .options import Options
+from .update_db_table.create_page import CreateTag, CreateRank, \
+	CreatePosition, CreatePerson, CreatePost, CreateColorTheme
 
 
 class Manager(ScreenManager):
@@ -22,7 +25,19 @@ class Manager(ScreenManager):
 		# Options
 		self.add_widget(Options())
 
-		self.current = 'options'
+		# Create pages
+		self.add_widget(CreateTag())
+		self.add_widget(CreateRank())
+		self.add_widget(CreatePosition())
+		self.add_widget(CreatePerson())
+		self.add_widget(CreatePost())
+		self.add_widget(CreateColorTheme())
+
+		self.current = 'main_page'
+
+	def move_to_back(self, x) -> None:
+		to_page = Settings.PATH_MANAGER.back()
+		self.current = to_page
 
 
 class FireDepartment(MDApp):
