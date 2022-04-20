@@ -32,8 +32,10 @@ class AbstractPage(CustomScreen):
 
 		for title, field_name in fields.items():
 			try:
-				widget = getattr(Fields, field_name)(title)
+				field_obj = getattr(Fields, field_name)
+				widget = field_obj(title=title)
 				container.add_widget(widget)
 				self.widgets.append(widget)
-			except AttributeError:
-				print(f'{field_name} is not found!')
+			except AttributeError as e:
+				# print(f'[{title}] {field_name} is not found!\n{e}')
+				pass

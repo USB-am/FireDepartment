@@ -16,12 +16,12 @@ Builder.load_file(path_to_kv_file)
 
 
 TABLES = (
-	(Tag, 'Теги', 'pound'),
-	(Rank, 'Звания', 'chevron-triple-up'),
-	(Position, 'Должности', 'crosshairs-gps'),
-	(Person, 'Люди', 'account-group'),
-	(Post, 'ЧС', 'fire-alert'),
-	(ColorTheme, 'Внешний вид', 'palette')
+	(Tag, 'Теги', Settings.ICONS['Tag']),
+	(Rank, 'Звания', Settings.ICONS['Rank']),
+	(Position, 'Должности', Settings.ICONS['Position']),
+	(Person, 'Люди', Settings.ICONS['Person']),
+	(Post, 'ЧС', Settings.ICONS['Post']),
+	(ColorTheme, 'Внешний вид', Settings.ICONS['ColorTheme'])
 )
 
 

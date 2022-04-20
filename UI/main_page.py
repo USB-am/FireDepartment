@@ -37,11 +37,16 @@ class MainPage(CustomScreen):
 		posts = Post.query.all()
 
 		for post in posts:
+			post_title = post.title
+			post_description = post.description
+			if post.description is None:
+				post_description = ''
+
 			container.add_widget(MDExpansionPanel(
 				icon='fire-alert',
 				content=PostItem(),
 				panel_cls=MDExpansionPanelTwoLine(
-					text=post.title,
-					secondary_text=post.description
+					text=post_title,
+					secondary_text=post_description
 				)
 			))

@@ -97,6 +97,14 @@ class Settings:
 	PATTERNS_DIR = os.path.join(BASE_DIR, 'UI', 'uix')
 	IMAGES_DIR = os.path.join(BASE_DIR, 'UI', 'img')
 	BACKGROUND_COLOR = (1, 1, 1, 0)
+	ICONS = {
+		'Tag': 'pound',
+		'Rank': 'chevron-triple-up',
+		'Position': 'crosshairs-gps',
+		'Person': 'account-group',
+		'Post': 'fire-alert',
+		'ColorTheme': 'palette'
+	}
 
 	def __init__(self):
 		self.__dict__.update(self.__upload_config())

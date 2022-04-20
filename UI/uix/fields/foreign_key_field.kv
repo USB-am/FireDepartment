@@ -1,5 +1,17 @@
 #:import Settings settings.settings
 
+<ManyTo_Item>
+	size_hint: 1, None
+	size: self.width, 50
+
+	MDCheckbox:
+		size_hint: None, None
+		size: 50, 50
+
+	MDLabel:
+		text: self.parent.item_info.title
+
+
 <ForeignKeyField>
 	orientation: 'vertical'
 	size_hint: 1, None
@@ -14,7 +26,17 @@
 		MDIcon:
 			size_hint: None, None
 			size: 50, 50
-			icon: 'pound'
+			# icon: 'pound'
+			icon: Settings.ICONS.get(self.parent.parent.title, '')
 
 		MDLabel:
-			hint_text: self.parent.title
+			text: self.parent.parent.title
+
+	ScrollView:
+		GridLayout:
+			cols: 1
+			height: self.minimum_height
+			size_hint: 1, None
+			do_scroll_x: False
+			spacing: 10
+			id: container
