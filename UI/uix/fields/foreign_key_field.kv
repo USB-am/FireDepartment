@@ -7,9 +7,39 @@
 	MDCheckbox:
 		size_hint: None, None
 		size: 50, 50
+		group: self.parent.group
+		id: checkbox
 
 	MDLabel:
 		text: self.parent.item_info.title
+
+
+<TableContent>
+	orientation: 'vertical'
+	size_hint: 1, 1
+
+	MDIcon:
+		icon: Settings.ICONS.get(self.parent.item_info.__tablename__, '')
+
+
+<ManyTo_PersonItem>
+	size_hint: 1, None
+	size: self.width, 75
+
+	MDCheckbox:
+		size_hint: None, 1
+		size: 50, self.height
+		group: self.parent.group
+		id: checkbox
+
+	MDRectangleFlatIconButton:
+		id: show_info
+		size_hint: 1, 1
+		icon: Settings.ICONS.get('Person', '')
+		text: self.parent.item_info.name
+		line_color: 0, 0, 0, 0
+		text_color: Settings.INVERTED_FONT_COLOR
+		icon_color: Settings.INVERTED_FONT_COLOR
 
 
 <ForeignKeyField>
@@ -26,8 +56,7 @@
 		MDIcon:
 			size_hint: None, None
 			size: 50, 50
-			# icon: 'pound'
-			icon: Settings.ICONS.get(self.parent.parent.title, '')
+			icon: self.parent.parent.icon
 
 		MDLabel:
 			text: self.parent.parent.title

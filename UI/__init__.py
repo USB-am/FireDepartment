@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 # Temp import
+import os
+#os.environ['KIVY_NO_CONSOLELOG'] = '1'
 from kivy.config import Config
 Config.set("graphics", "resizable", "0")
 Config.set('graphics', 'width', '350')
@@ -33,7 +35,7 @@ class Manager(ScreenManager):
 		self.add_widget(CreatePost())
 		self.add_widget(CreateColorTheme())
 
-		self.current = 'main_page'
+		self.current = 'create_person'
 
 	def move_to_back(self, x) -> None:
 		to_page = Settings.PATH_MANAGER.back()
