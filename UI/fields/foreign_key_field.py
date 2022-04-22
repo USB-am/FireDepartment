@@ -5,9 +5,10 @@ import os
 from kivy.lang import Builder
 from kivy.uix.togglebutton import ToggleButton
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.button import MDRectangleFlatIconButton, MDRaisedButton
+from kivymd.uix.label import MDLabel
 from kivymd.uix.dialog import MDDialog
 
+# from UI.custom_item import CustomItem
 import db_models
 from settings import settings as Settings
 from settings import LANG
@@ -34,8 +35,32 @@ class TableContent(MDBoxLayout):
 
 		super().__init__()
 
+		self.fill_content()
+
+	def fill_content(self) -> None:
+		container = self.ids.table_content_container
+		container.clear_widgets()
+
+		fields = getattr(db_models, self.item_info.__tablename__).get_fields()
+
+		for field in fields.keys():
+			title_field = field.title()
+			icon = Settings.ICONS.get(title_field, '')
+			title = LANG.get(title_field, '')
+			value = getattr(self.item_info, field)
+			text = f'{title}: {value}'
+			container.add_widget(MDLabel(
+				text=text
+			))
+			#container.add_widget(CustomItem(
+			#	parent_=field,
+			#	text=text
+			#))
+
 
 class ManyTo_PersonItem(MDBoxLayout):
+	dialog = None
+
 	def __init__(self, item_info: db_models.db.Model, group: str=None):
 		# self.item_info = item_info
 		self.item_info = db_models.Person.query.first()
@@ -46,16 +71,14 @@ class ManyTo_PersonItem(MDBoxLayout):
 		self.ids.show_info.bind(on_press=self.open_dialog)
 
 	def open_dialog(self, instance) -> None:
-		MDDialog(
-			type="custom",
-			content_cls=TableContent(self.item_info),
-			buttons=[
-				MDRaisedButton(
-					text='OK',
-					on_press=lambda e: e.parent.parent.parent.parent.dismiss()
-				)
-			]
-		).open()
+		if self.dialog is None:
+			self.dialog = MDDialog(
+				title=f'{self.item_info.name}',
+				type='custom',
+				content_cls=TableContent(self.item_info)
+			)
+
+		self.dialog.open()
 
 	def is_active(self) -> bool:
 		return False
@@ -77,7 +100,7 @@ class ForeignKeyField(MDBoxLayout):
 		self.fill_container()
 
 	def fill_container(self) -> None:
-		container = self.ids.container
+		container = self.ids.foreign_key_container
 		container.clear_widgets()
 
 		items = self.table.query.all()

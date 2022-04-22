@@ -103,7 +103,12 @@ class Settings:
 		'Position': 'crosshairs-gps',
 		'Person': 'account-group',
 		'Post': 'fire-alert',
-		'ColorTheme': 'palette'
+		'Posts': 'fire-alert',
+		'ColorTheme': 'palette',
+		'Name': 'form-textbox',
+		'Phone': 'phone',
+		'Add_Phone': 'phone-plus',
+		'Work_Type': 'calendar-multiselec',
 	}
 
 	def __init__(self):

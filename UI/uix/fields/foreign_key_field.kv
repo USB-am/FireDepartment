@@ -1,6 +1,7 @@
+#:import os os
 #:import Settings settings.settings
 
-<ManyTo_Item>
+<ManyTo_Item>:
 	size_hint: 1, None
 	size: self.width, 50
 
@@ -14,15 +15,22 @@
 		text: self.parent.item_info.title
 
 
-<TableContent>
+<TableContent>:
 	orientation: 'vertical'
-	size_hint: 1, 1
+	size_hint: 1, None
+	size: self.width, 400
 
-	MDIcon:
-		icon: Settings.ICONS.get(self.parent.item_info.__tablename__, '')
+	ScrollView:
+		GridLayout:
+			cols: 1
+			size_hint: 1, None
+			height: self.minimum_height
+			do_scroll_x: False
+			spacing: 10
+			id: table_content_container
 
 
-<ManyTo_PersonItem>
+<ManyTo_PersonItem>:
 	size_hint: 1, None
 	size: self.width, 75
 
@@ -42,7 +50,7 @@
 		icon_color: Settings.INVERTED_FONT_COLOR
 
 
-<ForeignKeyField>
+<ForeignKeyField>:
 	orientation: 'vertical'
 	size_hint: 1, None
 	size: self.width, 400
@@ -68,4 +76,4 @@
 			size_hint: 1, None
 			do_scroll_x: False
 			spacing: 10
-			id: container
+			id: foreign_key_container
