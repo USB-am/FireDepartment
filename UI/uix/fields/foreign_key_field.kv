@@ -1,53 +1,22 @@
 #:import os os
 #:import Settings settings.settings
 
-<ManyTo_Item>:
+<CheckboxItem>:
 	size_hint: 1, None
 	size: self.width, 50
 
 	MDCheckbox:
 		size_hint: None, None
 		size: 50, 50
-		group: self.parent.group
-		id: checkbox
-
-	MDLabel:
-		text: self.parent.item_info.title
-
-
-<TableContent>:
-	orientation: 'vertical'
-	size_hint: 1, None
-	size: self.width, 400
-
-	ScrollView:
-		GridLayout:
-			cols: 1
-			size_hint: 1, None
-			height: self.minimum_height
-			do_scroll_x: False
-			spacing: 10
-			id: table_content_container
-
-
-<ManyTo_PersonItem>:
-	size_hint: 1, None
-	size: self.width, 75
-
-	MDCheckbox:
-		size_hint: None, 1
-		size: 50, self.height
-		group: self.parent.group
-		id: checkbox
 
 	MDRectangleFlatIconButton:
-		id: show_info
 		size_hint: 1, 1
-		icon: Settings.ICONS.get('Person', '')
-		text: self.parent.item_info.name
+		icon: 'account'
+		text: 'text'
 		line_color: 0, 0, 0, 0
 		text_color: Settings.INVERTED_FONT_COLOR
 		icon_color: Settings.INVERTED_FONT_COLOR
+		id: show_info_button
 
 
 <ForeignKeyField>:
