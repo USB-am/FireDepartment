@@ -1,25 +1,10 @@
 # -*- coding: utf-8 -*-
 
-import os
-
-from kivy.lang import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
 
 import db_models
 from settings import settings as Settings
-from settings import LANG
-
-
-path_to_kv_file = os.path.join(
-	Settings.PATTERNS_DIR, 'fields', 'foreign_key_field.kv')
-Builder.load_file(path_to_kv_file)
-
-
-class CheckboxItem(MDBoxLayout):
-	def __init__(self, db_row: db_models.db.Model):
-		self.db_row = db_row
-
-		super().__init__()
+from ._to_many_field import CheckboxItem
 
 
 class ForeignKeyField(MDBoxLayout):
@@ -29,6 +14,7 @@ class ForeignKeyField(MDBoxLayout):
 
 		super().__init__()
 
+		self.widgets_list = []
 		self.fill_content()
 
 	def fill_content(self) -> None:
@@ -39,4 +25,11 @@ class ForeignKeyField(MDBoxLayout):
 		db_rows = db_table.query.all()
 
 		for db_row in db_rows:
-			content.add_widget(CheckboxItem(db_row))
+			checkbox_item = CheckboxItem(db_row, group=self.title)
+			self.widgets_list.append(checkbox_item)
+			content.add_widget(checkbox_item)
+
+	def get_value(self) -> int:
+		for widget in self.widgets_list:
+			if widget.is_active():
+				return widget.db_row.id

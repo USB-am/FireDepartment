@@ -1,25 +1,7 @@
 #:import os os
 #:import Settings settings.settings
 
-<CheckboxItem>:
-	size_hint: 1, None
-	size: self.width, 50
-
-	MDCheckbox:
-		size_hint: None, None
-		size: 50, 50
-
-	MDRectangleFlatIconButton:
-		size_hint: 1, 1
-		icon: 'account'
-		text: 'text'
-		line_color: 0, 0, 0, 0
-		text_color: Settings.INVERTED_FONT_COLOR
-		icon_color: Settings.INVERTED_FONT_COLOR
-		id: show_info_button
-
-
-<ForeignKeyField>:
+<ManyToManyField>:
 	orientation: 'vertical'
 	size_hint: 1, None
 	size: self.width, 400
@@ -45,4 +27,4 @@
 			size_hint: 1, None
 			do_scroll_x: False
 			spacing: 10
-			id: foreign_key_container
+			id: many_to_many_container

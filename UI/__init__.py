@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Temp import
-import os
+# import os
 #os.environ['KIVY_NO_CONSOLELOG'] = '1'
 from kivy.config import Config
 Config.set("graphics", "resizable", "0")

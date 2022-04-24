@@ -29,7 +29,7 @@ class Tag(db.Model):
 	title = db.Column(db.String(255), unique=True, nullable=False)
 
 	def __str__(self):
-		return f'{self.id}. {self.title}'
+		return self.title
 
 	@staticmethod
 	def get_fields() -> dict:
@@ -47,7 +47,8 @@ class Rank(db.Model):
 	title = db.Column(db.String(255), unique=True, nullable=False)
 
 	def __str__(self):
-		return f'{self.id}. {self.title}'
+		# return f'{self.id}. {self.title}'
+		return self.title
 
 	@staticmethod
 	def get_fields() -> dict:
@@ -64,7 +65,8 @@ class Position(db.Model):
 	title = db.Column(db.String(255), unique=True, nullable=False)
 
 	def __str__(self):
-		return f'{self.id}. {self.title}'
+		# return f'{self.id}. {self.title}'
+		return self.title
 
 	@staticmethod
 	def get_fields() -> dict:
@@ -87,7 +89,8 @@ class Person(db.Model):
 	rank = db.Column(db.Integer, db.ForeignKey('Rank.id'), nullable=True)
 
 	def __str__(self):
-		return f'{self.id}. {self.name} - {self.phone}'
+		# return f'{self.id}. {self.name} - {self.phone}'
+		return self.name
 
 	def __get_show_phone(self) -> str:
 		if self.phone is None:
@@ -123,7 +126,8 @@ class Post(db.Model):
 	persons = db.relationship('Person', secondary=post_persons, backref='posts')
 
 	def __str__(self):
-		return f'{self.id}. {self.title}'
+		# return f'{self.id}. {self.title}'
+		return self.title
 
 	@staticmethod
 	def get_fields() -> dict:
