@@ -1,0 +1,16 @@
+#:import Settings settings.settings
+
+
+<PhoneField>:
+	size_hint: 1, None
+	size: self.width, 50
+	hint_text: self.info_text
+	helper_text: ''
+	mode: 'rectangle'
+	# hint_text_color_normal: Settings.FONT_COLOR
+	# hint_text_color_focus: Settings.FONT_COLOR
+	# text_color: Settings.FONT_COLOR
+	# text_color_focus: Settings.FONT_COLOR
+	icon_right: Settings.ICONS.get(self.title, '')
+	# icon_right_color_normal: Settings.FONT_COLOR
+	# icon_right_color_focus: Settings.FONT_COLOR

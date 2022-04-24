@@ -1,10 +1,11 @@
 #:import Settings settings.settings
 
+
 <StringField>
 	size_hint: 1, None
 	size: self.width, 50
-	hint_text: self.title
+	hint_text: self.info_text
 	helper_text: ''
 	mode: 'rectangle'
 	text_color: Settings.FONT_COLOR
-	icon_right: 'form-textbox'
+	icon_right: Settings.ICONS.get(self.title, '')

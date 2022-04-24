@@ -10,13 +10,13 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDTextButton
 
 from settings import settings as Settings
-from UI.fields.abstract__to_many_field import ForeignKeyField
+from UI.fields.abstract__to_many_field import ForeignKeyField, ManyToManyField
 
 
 class MyApp(MDApp):
 	def build(self):
 		bl = MDBoxLayout(orientation='vertical')
-		f = ForeignKeyField('Person')
+		f = ManyToManyField('Person')
 		b = MDTextButton(text='Get value')
 		b.bind(on_press=lambda e: print(f.get_value()))
 
