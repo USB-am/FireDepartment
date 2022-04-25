@@ -4,6 +4,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 
 import db_models
 from settings import settings as Settings
+from settings import LANG
 from ._to_many_field import CheckboxItem
 
 
@@ -11,6 +12,7 @@ class _ToManyField(MDBoxLayout):
 	def __init__(self, title: str, group: bool=False):
 		self.title = title.title()
 		self.icon = Settings.ICONS.get(self.title, '')
+		self.title_label_text = LANG.get(self.title)
 		self.group = group
 
 		super().__init__()

@@ -40,3 +40,6 @@ class PhoneField(MDTextField):
 			return result
 
 		return numbers
+
+	def get_value(self) -> str:
+		return self.numbers_to_phone(self.text)

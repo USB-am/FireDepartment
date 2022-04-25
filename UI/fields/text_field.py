@@ -10,11 +10,11 @@ from settings import LANG
 
 
 path_to_kv_file = os.path.join(
-	Settings.PATTERNS_DIR, 'fields', 'string_field.kv')
+	Settings.PATTERNS_DIR, 'fields', 'text_field.kv')
 Builder.load_file(path_to_kv_file)
 
 
-class StringField(MDTextField):
+class TextField(MDTextField):
 	def __init__(self, title: str):
 		self.title = title.title()
 		self.info_text = LANG.get(self.title, '')

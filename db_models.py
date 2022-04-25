@@ -89,7 +89,6 @@ class Person(db.Model):
 	rank = db.Column(db.Integer, db.ForeignKey('Rank.id'), nullable=True)
 
 	def __str__(self):
-		# return f'{self.id}. {self.name} - {self.phone}'
 		return self.name
 
 	def __get_show_phone(self) -> str:

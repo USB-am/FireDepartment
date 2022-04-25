@@ -87,3 +87,9 @@ class WorkGraph(MDBoxLayout):
 	def set_item(self, text_item):
 		self.ids.dropdown_item.set_item(text_item)
 		self.DROP_DOWN.dismiss()
+
+	def get_value(self) -> dict:
+		return {
+			'work_day': None,
+			'work_type': None
+		}

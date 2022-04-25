@@ -3,6 +3,7 @@
 import os
 
 from kivy.lang import Builder
+from kivymd.uix.button import MDRectangleFlatButton
 
 from settings import settings as Settings
 from db_models import Tag, Rank, Position, Person, Post, ColorTheme
@@ -14,7 +15,13 @@ Builder.load_file(path_to_kv_file)
 
 
 class CreatePage(AbstractPage):
-	pass
+	def submit(self, instance: MDRectangleFlatButton) -> None:
+		for widget in self.widgets:
+			try:
+				value = widget.get_value()
+				print(f'{widget.title} has value {value}')
+			except AttributeError:
+				print(f'{widget.title} has not method .get_value')
 
 
 class CreateTag(CreatePage):

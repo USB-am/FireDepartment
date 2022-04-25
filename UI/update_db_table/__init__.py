@@ -3,6 +3,7 @@
 import os
 
 from kivy.lang import Builder
+from kivymd.uix.button import MDRectangleFlatButton
 
 from settings import settings as Settings
 from settings import LANG
@@ -35,3 +36,14 @@ class AbstractPage(CustomScreen):
 			widget = field_obj(title=title)
 			container.add_widget(widget)
 			self.widgets.append(widget)
+
+		submit_button = MDRectangleFlatButton(
+			text='Create',
+			size_hint=(1, None),
+			size=(self.width, 100)
+		)
+		submit_button.bind(on_press=self.submit)
+		container.add_widget(submit_button)
+
+	def submit(self, instance: MDRectangleFlatButton) -> None:
+		pass

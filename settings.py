@@ -22,8 +22,8 @@ LANG = {
 	'Positions': 'Должности',
 	'Person': 'Человек',
 	'Persons': 'Люди',
-	'Post': 'Пост',
-	'Posts': 'Посты',
+	'Post': 'ЧС',
+	'Posts': 'ЧС',
 	'Description': 'Описание'
 }
 
