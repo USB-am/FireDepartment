@@ -47,6 +47,7 @@ class ForeignKeyField(_ToManyField):
 
 class ManyToManyField(_ToManyField):
 	def __init__(self, title: str):
+		title = title[:-1]
 		super().__init__(title, False)
 
 	def get_value(self) -> list:
