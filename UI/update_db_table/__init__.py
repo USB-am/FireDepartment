@@ -37,5 +37,5 @@ class AbstractPage(CustomScreen):
 				container.add_widget(widget)
 				self.widgets.append(widget)
 			except AttributeError as e:
-				# print(f'[{title}] {field_name} is not found!\n{e}')
-				pass
+				print(f'[{title}] {field_name} is not found!\n{e}')
+				# pass

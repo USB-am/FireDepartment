@@ -108,7 +108,7 @@ class Settings:
 		'Name': 'form-textbox',
 		'Phone': 'phone',
 		'Add_Phone': 'phone-plus',
-		'Work_Type': 'calendar-multiselec',
+		'Work_Type': 'calendar-multiselect',
 	}
 
 	def __init__(self):

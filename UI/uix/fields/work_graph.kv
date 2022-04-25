@@ -1,0 +1,30 @@
+#:import Settings settings.settings
+
+
+<IconListItem>:
+	IconLeftWidget:
+		icon: root.icon
+
+
+<WorkGraph>:
+	# orientation: 'vertical'
+	size_hint: 1, None
+	size: self.width, 50
+	padding: [10, 0]
+
+	MDIconButton:
+		size_hint: None, None
+		size: 50, 50
+		icon: Settings.ICONS.get(self.parent.title, '')
+		on_press: self.parent.open_date_picker()
+
+	MDLabel:
+		text: self.parent.title_label_text
+
+	MDDropDownItem:
+		id: dropdown_item
+		size_hint: 1, None
+		size: self.width, 50
+		items: self.parent.items
+		text: '-'
+		on_release: self.parent.DROP_DOWN.open()
