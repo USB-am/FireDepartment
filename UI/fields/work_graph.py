@@ -39,6 +39,7 @@ class WorkGraph(MDBoxLayout):
 	DROP_DOWN = None
 
 	def __init__(self, title: str):
+		self.column_name = title
 		self.title = title.title()
 		self.title_label_text = LANG.get(self.title, '')
 		self.items = [str(i+1) for i in range(50)]

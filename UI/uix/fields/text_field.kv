@@ -1,5 +1,6 @@
 #:import Settings settings.settings
 
+
 <TextField>:
 	size_hint: 1, None
 	size: self.width, 50
@@ -7,3 +8,4 @@
 	multiline: True
 	mode: 'rectangle'
 	max_height: 150
+	icon_right: Settings.ICONS.get(self.title, '')

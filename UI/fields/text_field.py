@@ -16,10 +16,15 @@ Builder.load_file(path_to_kv_file)
 
 class TextField(MDTextField):
 	def __init__(self, title: str):
+		self.column_name = title
 		self.title = title.title()
 		self.info_text = LANG.get(self.title, '')
 
 		super().__init__()
 
 	def get_value(self) -> str:
+		result = self.text
+
+		if result == '':	return
+
 		return self.text

@@ -106,6 +106,8 @@ class Settings:
 		'Posts': 'fire-alert',
 		'ColorTheme': 'palette',
 		'Name': 'form-textbox',
+		'Title': 'form-textbox',
+		'Description': 'text-long',
 		'Phone': 'phone',
 		'Add_Phone': 'phone-plus',
 		'Work_Type': 'calendar-multiselect',

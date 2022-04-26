@@ -4,6 +4,7 @@ import os
 
 from kivy.lang import Builder
 from kivymd.uix.button import MDRectangleFlatButton
+from kivymd.uix.card import MDSeparator
 
 from settings import settings as Settings
 from settings import LANG

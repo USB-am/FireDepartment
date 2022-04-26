@@ -39,6 +39,7 @@ class _ToManyField(MDBoxLayout):
 
 class ForeignKeyField(_ToManyField):
 	def __init__(self, title: str):
+		self.column_name = title
 		super().__init__(title, True)
 
 	def get_value(self) -> int:
@@ -49,6 +50,7 @@ class ForeignKeyField(_ToManyField):
 
 class ManyToManyField(_ToManyField):
 	def __init__(self, title: str):
+		self.column_name = title
 		title = title[:-1]
 		super().__init__(title, False)
 

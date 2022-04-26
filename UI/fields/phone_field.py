@@ -21,6 +21,7 @@ _REPL = r'+7 (\1) \2-\3-\4'
 
 class PhoneField(MDTextField):
 	def __init__(self, title: str):
+		self.column_name = title
 		self.title = title.title()
 		self.info_text = LANG.get(self.title, '')
 
