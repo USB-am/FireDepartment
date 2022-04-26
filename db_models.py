@@ -47,7 +47,6 @@ class Rank(db.Model):
 	title = db.Column(db.String(255), unique=True, nullable=False)
 
 	def __str__(self):
-		# return f'{self.id}. {self.title}'
 		return self.title
 
 	@staticmethod
@@ -65,7 +64,6 @@ class Position(db.Model):
 	title = db.Column(db.String(255), unique=True, nullable=False)
 
 	def __str__(self):
-		# return f'{self.id}. {self.title}'
 		return self.title
 
 	@staticmethod
@@ -107,7 +105,8 @@ class Person(db.Model):
 			'name': 'StringField',
 			'phone': 'PhoneField',
 			'add_phone': 'PhoneField',
-			'work_type': 'WorkGraph',
+			'work_type': 'WorkTypeField',
+			'work_day': 'WorkDayField',
 			'position': 'ForeignKeyField',
 			'rank': 'ForeignKeyField',
 			'posts': 'ManyToManyField',
@@ -125,7 +124,6 @@ class Post(db.Model):
 	persons = db.relationship('Person', secondary=post_persons, backref='posts')
 
 	def __str__(self):
-		# return f'{self.id}. {self.title}'
 		return self.title
 
 	@staticmethod

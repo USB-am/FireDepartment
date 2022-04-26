@@ -41,7 +41,11 @@ def check_db_exceptions(method):
 			return method_result
 		except Exception as error:
 			# print(f'Dir error:\n{dir(error)}')
-			ErrorInfo(str(error)).open()
+			error_message = '[{error_code}] {error_text}'.format(
+				error_code=error.__class__.__name__,
+				error_text='\n'.join(error.args))
+			ErrorInfo(error_message).open()
+			DataBase.session.rollback()
 
 	return wrapper
 
@@ -59,7 +63,6 @@ class DataBaseSaveManager:
 class CreatePage(AbstractPage):
 	def submit(self, instance: MDRectangleFlatButton) -> None:
 		values = self.get_field_values()
-		print(values)
 		DataBaseSaveManager.insert(self.table, values)
 
 	def get_field_values(self) -> dict:

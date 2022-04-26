@@ -35,7 +35,7 @@ class Manager(ScreenManager):
 		self.add_widget(CreatePost())
 		self.add_widget(CreateColorTheme())
 
-		self.current = 'create_post'
+		self.current = 'create_person'
 
 	def move_to_back(self, x) -> None:
 		to_page = Settings.PATH_MANAGER.back()

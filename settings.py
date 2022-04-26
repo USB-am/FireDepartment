@@ -110,7 +110,8 @@ class Settings:
 		'Description': 'text-long',
 		'Phone': 'phone',
 		'Add_Phone': 'phone-plus',
-		'Work_Type': 'calendar-multiselect',
+		'Work_Type': 'timer-sand',
+		'Work_Day': 'calendar-multiselect',
 	}
 
 	def __init__(self):

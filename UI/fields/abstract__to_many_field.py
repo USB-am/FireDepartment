@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from sqlalchemy.orm.collections import InstrumentedList
 from kivymd.uix.boxlayout import MDBoxLayout
 
 import db_models
@@ -13,7 +14,10 @@ class _ToManyField(MDBoxLayout):
 		self.title = title.title()
 		self.icon = Settings.ICONS.get(self.title, '')
 		self.title_label_text = LANG.get(self.title)
-		self.group = group
+		if group:
+			self.group = self.title
+		else:
+			self.group = group
 
 		super().__init__()
 
@@ -55,10 +59,10 @@ class ManyToManyField(_ToManyField):
 		super().__init__(title, False)
 
 	def get_value(self) -> list:
-		result = []
+		result = InstrumentedList()
 
 		for widget in self.widgets_list:
 			if widget.is_active():
-				result.append(widget.db_row.id)
+				result.append(widget.db_row)
 
 		return result

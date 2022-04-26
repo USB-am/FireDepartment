@@ -1,0 +1,16 @@
+#:import Settings settings.settings
+
+
+<WorkDayField>:
+	size_hint: 1, None
+	size: self.width, 50
+	padding: [10, 0]
+
+	MDBoxLayout:
+		MDIcon:
+			size_hint: None, None
+			size: 50, 50
+			icon: Settings.ICONS.get(self.parent.parent.title, '')
+
+		MDLabel:
+			text: self.parent.parent.info_text
