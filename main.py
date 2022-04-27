@@ -3,7 +3,7 @@
 from db_models import db as DataBase
 DataBase.create_all()
 
-from UI import FireDepartment
+from UI.fire_department import FireDepartment
 
 
 def main():

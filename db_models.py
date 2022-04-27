@@ -120,6 +120,7 @@ class Post(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), nullable=False)
 	description = db.Column(db.Text(), nullable=True)
+	urgent = db.Column(db.Boolean(), nullable=False)
 	tags = db.relationship('Tag', secondary=post_tags, backref='posts')
 	persons = db.relationship('Person', secondary=post_persons, backref='posts')
 
@@ -131,6 +132,7 @@ class Post(db.Model):
 		result = {
 			'title': 'StringField',
 			'description': 'TextField',
+			'urgent': 'BooleanField',
 			'persons': 'ManyToManyField',
 			'tags': 'ManyToManyField',
 		}

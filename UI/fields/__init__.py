@@ -6,6 +6,7 @@ from .text_field import TextField
 from .phone_field import PhoneField
 from .work_type import WorkTypeField
 from .work_day import WorkDayField
+from .boolean_field import BooleanField
 
 
 __all__ = (
@@ -15,5 +16,6 @@ __all__ = (
 	'PhoneField',
 	'TextField',
 	'WorkTypeField',
-	'WorkDayField'
+	'WorkDayField',
+	'BooleanField'
 )

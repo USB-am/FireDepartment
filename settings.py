@@ -112,6 +112,7 @@ class Settings:
 		'Add_Phone': 'phone-plus',
 		'Work_Type': 'timer-sand',
 		'Work_Day': 'calendar-multiselect',
+		'Urgent': 'truck-fast',
 	}
 
 	def __init__(self):

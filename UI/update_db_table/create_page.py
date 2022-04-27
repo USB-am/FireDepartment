@@ -54,7 +54,6 @@ class DataBaseSaveManager:
 	@staticmethod
 	@check_db_exceptions
 	def insert(table: DataBase.Model, values: dict) -> None:
-		print(f'DataBaseSaveManager get values:\n{values}')
 		new_item = table(**values)
 		DataBase.session.add(new_item)
 		DataBase.session.commit()
