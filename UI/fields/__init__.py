@@ -4,8 +4,8 @@ from .string_field import StringField
 from .abstract__to_many_field import ForeignKeyField, ManyToManyField
 from .text_field import TextField
 from .phone_field import PhoneField
-from .work_type import WorkTypeField
-from .work_day import WorkDayField
+from .work_graph.work_type import WorkTypeField
+from .work_graph.work_day import WorkDayField
 from .boolean_field import BooleanField
 
 
