@@ -19,14 +19,12 @@ Builder.load_file(path_to_kv_file)
 class SelectDate(MDDatePicker):
 	def __init__(self, callback):
 		self.callback_ = callback
-		print('Init SelectDate')
-		print(dir(self))
 
 		super().__init__()
 
-	def ok_click(self, *a) -> None:
-		super().ok_click(*a)
-		print('ok_click', a)
+	def on_save(self, date: date, date_range: list) -> None:
+		self.callback_(date)
+		super().on_save()
 
 
 class WorkDayField(MDBoxLayout):
@@ -47,7 +45,11 @@ class WorkDayField(MDBoxLayout):
 
 	def update_now_date(self, date: date) -> None:
 		self.now_date = date
-		print(self.now_date)
+
+		self.update_label_date()
+
+	def update_label_date(self) -> None:
+		self.ids.show_date.text = self.now_date.strftime('%d.%m.%Y')
 
 	def get_value(self) -> date:
-		return
+		return self.now_date
