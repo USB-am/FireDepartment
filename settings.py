@@ -2,9 +2,10 @@
 
 import os
 import json
+from datetime import datetime
 
 from db_models import db as DataBase
-from db_models import ColorTheme
+from db_models import ColorTheme, WorkType
 
 
 LANG = {
@@ -57,8 +58,32 @@ def create_default_settings():
 		background_color_opacity=(1, 1, 1, .5),
 		background_image=path_to_default_bg
 	)
-
 	DataBase.session.add_all([dark, light])
+
+	# Add new work graphs to data base
+	five_two = WorkType(
+		title='5/2',
+		start_work_day=datetime(year=2022, month=4, day=25, hour=8),
+		finish_work_day=datetime(year=2022, month=4, day=25, hour=16),
+		work_day_range=5,
+		week_day_range=2
+	)
+	one_three = WorkType(
+		title='1/3',
+		start_work_day=datetime(year=2022, month=4, day=25, hour=9),
+		finish_work_day=datetime(year=2022, month=4, day=26, hour=9),
+		work_day_range=1,
+		week_day_range=3
+	)
+	all_ = WorkType(
+		title='Всегда',
+		start_work_day=datetime(year=2022, month=4, day=25, hour=9),
+		finish_work_day=datetime(year=2022, month=4, day=26, hour=9),
+		work_day_range=1,
+		week_day_range=0
+	)
+	DataBase.session.add_all([five_two, one_three, all_])
+
 	DataBase.session.commit()
 
 
@@ -113,6 +138,10 @@ class Settings:
 		'Work_Type': 'timer-sand',
 		'Work_Day': 'calendar-multiselect',
 		'Urgent': 'truck-fast',
+		'Start_Work_Day': 'timer-play',
+		'Finish_Work_Day': 'timer-pause',
+		'Work_Day_Range': 'calendar-text',
+		'Week_Day_Range': 'calendar-week-end',
 	}
 
 	def __init__(self):

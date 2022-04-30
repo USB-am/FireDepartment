@@ -2,6 +2,7 @@
 
 from sqlalchemy.orm.collections import InstrumentedList
 from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.label import MDLabel
 
 import db_models
 from settings import settings as Settings
@@ -28,7 +29,7 @@ class _ToManyField(MDBoxLayout):
 		content = self.ids.container
 		content.clear_widgets()
 
-		db_table = getattr(db_models, self.title)
+		db_table = getattr(db_models, self.title.replace('_', ''))
 		db_rows = db_table.query.all()
 
 		for db_row in db_rows:
@@ -39,6 +40,15 @@ class _ToManyField(MDBoxLayout):
 
 			self.widgets_list.append(checkbox_item)
 			content.add_widget(checkbox_item)
+
+		if len(self.widgets_list) == 0:
+			content.add_widget(MDLabel(
+				text='[Пусто]',
+				size_hint=(1, None),
+				size=(self.width, 50),
+				text_size=self.size,
+				halign='center'
+			))
 
 
 class ForeignKeyField(_ToManyField):

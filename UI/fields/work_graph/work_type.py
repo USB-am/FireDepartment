@@ -7,6 +7,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 
 from settings import settings as Settings
 from settings import LANG
+from .work_time import GraphSlice, Graph
 
 
 path_to_kv_file = os.path.join(

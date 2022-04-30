@@ -5,7 +5,7 @@ from datetime import datetime
 from datetime import timedelta
 
 
-class TypeGraph:
+class GraphSlice:
 	def __init__(self, start_work_day: datetime, finish_work_day: datetime,\
 		work_day_range: int, week_day_range: int):
 
@@ -29,7 +29,7 @@ class TypeGraph:
 
 
 class Graph:
-	def __init__(self, starting_date: date, type_: TypeGraph):
+	def __init__(self, starting_date: date, type_: GraphSlice):
 		self.starting_date = starting_date
 		self.type_ = type_
 
@@ -45,8 +45,8 @@ if __name__ == '__main__':
 	y = datetime(year=now_date.year, month=now_date.month,
 		day=25, hour=17)
 
-	grs = [TypeGraph(x, y, 7-i, i) for i in range(1, 7)]
-	grs.append(TypeGraph(x, y, 1, 3))
+	grs = [GraphSlice(x, y, 7-i, i) for i in range(1, 7)]
+	grs.append(GraphSlice(x, y, 1, 3))
 
 	for gr in grs:
 		print(gr, gr.calc_next_work_day())

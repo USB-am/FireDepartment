@@ -2,8 +2,9 @@
 
 
 <WorkDayField>:
+	orientation: 'vertical'
 	size_hint: 1, None
-	size: self.width, 50
+	size: self.width, 100
 	padding: [10, 0]
 
 	MDBoxLayout:
@@ -13,4 +14,17 @@
 			icon: Settings.ICONS.get(self.parent.parent.title, '')
 
 		MDLabel:
+			size_hint: 1, None
+			size: self.width, 50
 			text: self.parent.parent.info_text
+
+		MDLabel:
+			size_hint: None, None
+			size: 100, 50
+			text: 'dd.mm.yyyy'
+
+	MDRectangleFlatButton:
+		size_hint: 1, None
+		size: self.width, 50
+		text: 'Open calendar'
+		id: open_calendar_button

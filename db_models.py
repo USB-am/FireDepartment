@@ -82,7 +82,7 @@ class Person(db.Model):
 	phone = db.Column(db.String(255), nullable=False)
 	add_phone = db.Column(db.String(255), nullable=True)
 	work_day = db.Column(db.DateTime(), nullable=True)
-	work_type = db.Column(db.Integer, nullable=True)
+	work_type = db.Column(db.Integer, db.ForeignKey('WorkType.id'), nullable=True)
 	position = db.Column(db.Integer, db.ForeignKey('Position.id'), nullable=True)
 	rank = db.Column(db.Integer, db.ForeignKey('Rank.id'), nullable=True)
 
@@ -105,7 +105,8 @@ class Person(db.Model):
 			'name': 'StringField',
 			'phone': 'PhoneField',
 			'add_phone': 'PhoneField',
-			'work_type': 'WorkTypeField',
+			# 'work_type': 'WorkTypeField',
+			'work_type': 'ForeignKeyField',
 			'work_day': 'WorkDayField',
 			'position': 'ForeignKeyField',
 			'rank': 'ForeignKeyField',
@@ -143,7 +144,7 @@ class Post(db.Model):
 class ColorTheme(db.Model):
 	__tablename__ = 'ColorTheme'
 	id = db.Column(db.Integer, primary_key=True)
-	title = db.Column(db.PickleType, nullable=False)
+	title = db.Column(db.String(255), nullable=False)
 	button_color = db.Column(db.PickleType, nullable=False)
 	font_color = db.Column(db.PickleType, nullable=False)
 	background_color_opacity = db.Column(db.PickleType, nullable=False)
@@ -158,6 +159,30 @@ class ColorTheme(db.Model):
 			'BACKGROUND_COLOR_OPACITY': self.background_color_opacity,
 			'BACKGROUND_IMAGE': self.background_image
 		}
+
+	def __str__(self):
+		return self.title
+
+
+class WorkType(db.Model):
+	__tablename__ = 'WorkType'
+	id = db.Column(db.Integer, primary_key=True)
+	title = db.Column(db.String(255), nullable=False)
+	start_work_day = db.Column(db.DateTime(), nullable=False)
+	finish_work_day = db.Column(db.DateTime(), nullable=False)
+	work_day_range = db.Column(db.Integer, nullable=False)
+	week_day_range = db.Column(db.Integer, nullable=False)
+
+	def get_fields(self) -> dict:
+		result = {
+			'title': 'StringField',
+			'start_work_day': 'DateTimeField',
+			'finish_work_day': 'DateTimeField',
+			'work_day_range': 'IntegerField',
+			'week_day_range': 'IntegerField',
+		}
+
+		return result
 
 	def __str__(self):
 		return self.title
