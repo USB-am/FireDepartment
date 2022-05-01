@@ -1,0 +1,34 @@
+#:import Settings settings.settings
+
+
+<ListElement>:
+	size_hint: 1, None
+	size: self.width, 50
+	icon: self.icon_
+	text: self.show_text
+	halign: 'center'
+	on_press:
+		print(f'You pressed on {self.show_text} button')
+
+
+<AbstractEditListPage>:
+	MDBoxLayout:
+		orientation: 'vertical'
+
+		MDToolbar:
+			left_action_items:
+				[['arrow-left', lambda x: app.root.move_to_back(x)]]
+			md_bg_color: Settings.BACKGROUND_COLOR_OPACITY
+			specific_text_color: Settings.FONT_COLOR
+			elevation: 10
+			id: toolbar
+
+		ScrollView:
+			GridLayout:
+				cols: 1
+				height: self.minimum_height
+				size_hint: 1, None
+				do_scroll_x: False
+				spacing: 10
+				padding: 10
+				id: content

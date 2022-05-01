@@ -13,6 +13,8 @@ from .main_page import MainPage
 from .options import Options
 from .update_db_table.create_page import CreateTag, CreateRank, \
 	CreatePosition, CreatePerson, CreatePost, CreateColorTheme
+from .update_db_table.edit_list_page import EditListTag, EditListRank, \
+	EditListPosition, EditListPerson, EditListPost
 
 
 class Manager(ScreenManager):
@@ -33,7 +35,15 @@ class Manager(ScreenManager):
 		self.add_widget(CreatePost())
 		self.add_widget(CreateColorTheme())
 
-		self.current = 'create_person'
+		# Edit list pages
+		self.add_widget(EditListTag())
+		self.add_widget(EditListRank())
+		self.add_widget(EditListPosition())
+		self.add_widget(EditListPerson())
+		self.add_widget(EditListPost())
+
+		self.current = 'edit_persons'
+		self.current_screen.fill_content()
 
 	def move_to_back(self, x) -> None:
 		to_page = Settings.PATH_MANAGER.back()
