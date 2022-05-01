@@ -1,0 +1,17 @@
+#:import Settings settings.settings
+
+
+<AbstractEditPage>:
+	MDBoxLayout:
+		orientation: 'vertical'
+
+		MDToolbar:
+			left_action_items:
+				[['arrow-left', lambda x: app.root.move_to_back(x)]]
+			md_bg_color: Settings.BACKGROUND_COLOR_OPACITY
+			specific_text_color: Settings.FONT_COLOR
+			elevation: 10
+			id: toolbar
+
+		MDLabel:
+			text: 'All good'

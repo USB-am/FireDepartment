@@ -15,6 +15,8 @@ from .update_db_table.create_page import CreateTag, CreateRank, \
 	CreatePosition, CreatePerson, CreatePost, CreateColorTheme
 from .update_db_table.edit_list_page import EditListTag, EditListRank, \
 	EditListPosition, EditListPerson, EditListPost
+from .update_db_table.edit_page import EditTag, EditRank, \
+	EditPosition, EditPerson, EditPost
 
 
 class Manager(ScreenManager):
@@ -41,6 +43,13 @@ class Manager(ScreenManager):
 		self.add_widget(EditListPosition())
 		self.add_widget(EditListPerson())
 		self.add_widget(EditListPost())
+
+		# Edit posts
+		self.add_widget(EditTag())
+		self.add_widget(EditRank())
+		self.add_widget(EditPosition())
+		self.add_widget(EditPerson())
+		self.add_widget(EditPost())
 
 		self.current = 'edit_persons'
 		self.current_screen.fill_content()

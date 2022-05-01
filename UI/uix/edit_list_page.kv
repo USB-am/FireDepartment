@@ -8,7 +8,9 @@
 	text: self.show_text
 	halign: 'center'
 	on_press:
-		print(f'You pressed on {self.show_text} button')
+		page_name = app.root.current[:-1]
+		Settings.PATH_MANAGER.forward(page_name)
+		app.root.current = page_name
 
 
 <AbstractEditListPage>:
