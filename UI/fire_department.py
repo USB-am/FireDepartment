@@ -51,7 +51,7 @@ class Manager(ScreenManager):
 		self.add_widget(EditPerson())
 		self.add_widget(EditPost())
 
-		self.current = 'edit_persons'
+		self.current = 'edit_posts'
 		self.current_screen.fill_content()
 
 	def move_to_back(self, x) -> None:
