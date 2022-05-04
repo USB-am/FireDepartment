@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-import re
-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
@@ -10,16 +8,17 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///fire_department.db'
 
+
 db = SQLAlchemy(app)
 
 
-post_tags = db.Table('post_tags',
+post_tags = db.Table('emergency_tags',
 	db.Column('tag_id', db.Integer, db.ForeignKey('Tag.id')),
-	db.Column('post_id', db.Integer, db.ForeignKey('Post.id')),
+	db.Column('emergency_id', db.Integer, db.ForeignKey('Emergency.id')),
 )
-post_persons = db.Table('post_persons',
-	db.Column('person_id', db.Integer, db.ForeignKey('Person.id')),
-	db.Column('post_id', db.Integer, db.ForeignKey('Post.id')),
+post_humans = db.Table('emergency_humans',
+	db.Column('human_id', db.Integer, db.ForeignKey('Human.id')),
+	db.Column('emergency_id', db.Integer, db.ForeignKey('Emergency.id')),
 )
 
 
@@ -32,13 +31,11 @@ class Tag(db.Model):
 		return self.title
 
 	@staticmethod
-	def get_fields() -> dict:
-		result = {
+	def get_fields(self) -> dict:
+		return {
 			'title': 'StringField',
-			'posts': 'ManyToManyField',
+			'posts': 'ManyToManyField'
 		}
-
-		return result
 
 
 class Rank(db.Model):
@@ -50,12 +47,10 @@ class Rank(db.Model):
 		return self.title
 
 	@staticmethod
-	def get_fields() -> dict:
-		result = {
+	def get_fields(self) -> dict:
+		return {
 			'title': 'StringField',
 		}
-
-		return result
 
 
 class Position(db.Model):
@@ -67,78 +62,59 @@ class Position(db.Model):
 		return self.title
 
 	@staticmethod
-	def get_fields() -> dict:
-		result = {
+	def get_fields(self) -> dict:
+		return {
 			'title': 'StringField',
 		}
 
-		return result
 
-
-class Person(db.Model):
-	__tablename__ = 'Person'
+class Human(db.Model):
+	__tablename__ = 'Human'
 	id = db.Column(db.Integer, primary_key=True)
-	name = db.Column(db.String(255), nullable=False)
-	phone = db.Column(db.String(255), nullable=False)
-	add_phone = db.Column(db.String(255), nullable=True)
+	title = db.Column(db.String(255), nullable=False)
+	phone_1 = db.Column(db.String(255), nullable=False)
+	phone_2 = db.Column(db.String(255), nullable=True)
 	work_day = db.Column(db.DateTime(), nullable=True)
 	work_type = db.Column(db.Integer, db.ForeignKey('WorkType.id'), nullable=True)
 	position = db.Column(db.Integer, db.ForeignKey('Position.id'), nullable=True)
 	rank = db.Column(db.Integer, db.ForeignKey('Rank.id'), nullable=True)
 
 	def __str__(self):
-		return self.name
-
-	def __get_show_phone(self) -> str:
-		if self.phone is None:
-			return ''
-
-		return re.sub(
-			FDPhoneTextInput._COMPLITE_PATTERN,
-			FDPhoneTextInput._REPL,
-			self.phone
-		)
+		return self.title
 
 	@staticmethod
-	def get_fields() -> dict:
-		result = {
-			'name': 'StringField',
-			'phone': 'PhoneField',
-			'add_phone': 'PhoneField',
-			# 'work_type': 'WorkTypeField',
-			'work_type': 'ForeignKeyField',
+	def get_fields(self) -> dict:
+		return {
+			'title': 'StringField',
+			'phone_1': 'PhoneField',
+			'phone_2': 'PhoneField',
 			'work_day': 'WorkDayField',
+			'work_type': 'ForeignKeyField',
 			'position': 'ForeignKeyField',
 			'rank': 'ForeignKeyField',
-			'posts': 'ManyToManyField',
 		}
 
-		return result
-
-
-class Post(db.Model):
-	__tablename__ = 'Post'
+class Emergency(db.Model):
+	__tablename__ = 'Emergency'
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), nullable=False)
 	description = db.Column(db.Text(), nullable=True)
-	urgent = db.Column(db.Boolean(), nullable=False)
-	tags = db.relationship('Tag', secondary=post_tags, backref='posts')
-	persons = db.relationship('Person', secondary=post_persons, backref='posts')
+	urgent = db.Column(db.Boolean(), nullable=True)
+	tags = db.relationship('Tag', secondary=post_tags, backref='emergencies')
+	humans = db.relationship('Human', secondary=post_humans, backref='emergencies')
 
 	def __str__(self):
 		return self.title
 
 	@staticmethod
-	def get_fields() -> dict:
-		result = {
+	def get_fields(self) -> dict:
+		return {
 			'title': 'StringField',
-			'description': 'TextField',
+			'description': 'DescriptionField',
 			'urgent': 'BooleanField',
-			'persons': 'ManyToManyField',
+			'humans': 'ManyToManyField',
 			'tags': 'ManyToManyField',
 		}
-
-		return result
 
 
 class ColorTheme(db.Model):
@@ -150,6 +126,9 @@ class ColorTheme(db.Model):
 	background_color_opacity = db.Column(db.PickleType, nullable=False)
 	background_image = db.Column(db.String(255), nullable=False)
 
+	def __str__(self):
+		return self.title
+
 	def get_values(self) -> dict:
 		return {
 			'ID': self.id,
@@ -159,9 +138,6 @@ class ColorTheme(db.Model):
 			'BACKGROUND_COLOR_OPACITY': self.background_color_opacity,
 			'BACKGROUND_IMAGE': self.background_image
 		}
-
-	def __str__(self):
-		return self.title
 
 
 class WorkType(db.Model):
@@ -173,6 +149,9 @@ class WorkType(db.Model):
 	work_day_range = db.Column(db.Integer, nullable=False)
 	week_day_range = db.Column(db.Integer, nullable=False)
 
+	def __str__(self):
+		return self.title
+
 	def get_fields(self) -> dict:
 		result = {
 			'title': 'StringField',
@@ -183,6 +162,3 @@ class WorkType(db.Model):
 		}
 
 		return result
-
-	def __str__(self):
-		return self.title
