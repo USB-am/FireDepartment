@@ -1,0 +1,29 @@
+#:import FDIcon,FDLabel app.tools.custom_widgets.label
+#:import MDToolbar kivymd.uix.toolbar.MDToolbar
+#:import SearchBlock app.tools.fields.search_block
+
+
+<MainPage>:
+	MDBoxLayout:
+		orientation: 'vertical'
+
+		MDToolbar:
+			id: toolbar
+			left_action_items: [['fire-truck', lambda x: print(x), '']]
+			right_action_items: [['cog', lambda x: print(x), '']]
+			elevation: 10
+
+		SearchBlock:
+			size_hint: 1, None
+			size: self.width, 50
+			padding: [10, 0]
+
+		ScrollView:
+			GridLayout:
+				id: content
+				cols: 1
+				do_scroll_x: False
+				size_hint: 1, None
+				height: self.minimum_height
+				padding: 10
+				spacing: 10

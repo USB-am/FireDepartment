@@ -1,0 +1,17 @@
+<SearchBlock>:
+	MDTextField:
+		id: text_field
+		hint_text: 'Search...'
+
+	MDIconButton:
+		id: search_button
+		icon: 'account'
+		theme_text_color: 'Custom'
+		# text_color: app.theme_cls.opposite_icon_color
+		# text_color: text_field.text_color
+		md_bg_color: app.theme_cls.primary_color
+		on_press:
+			print('icon right color', text_field.icon_right_color)
+			print('color mode', text_field.color_mode)
+			print('hint text color', text_field.hint_text_color)
+			print('opposite_colors', text_field.opposite_colors)
