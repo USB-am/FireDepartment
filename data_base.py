@@ -23,6 +23,7 @@ post_humans = db.Table('emergency_humans',
 
 
 class Tag(db.Model):
+	icon = 'pound'
 	__tablename__ = 'Tag'
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), unique=True, nullable=False)
@@ -39,6 +40,7 @@ class Tag(db.Model):
 
 
 class Rank(db.Model):
+	icon = 'chevron-triple-up'
 	__tablename__ = 'Rank'
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), unique=True, nullable=False)
@@ -54,6 +56,7 @@ class Rank(db.Model):
 
 
 class Position(db.Model):
+	icon = 'crosshairs-gps'
 	__tablename__ = 'Position'
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), unique=True, nullable=False)
@@ -69,6 +72,7 @@ class Position(db.Model):
 
 
 class Human(db.Model):
+	icon = 'account-group'
 	__tablename__ = 'Human'
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), nullable=False)
@@ -95,6 +99,7 @@ class Human(db.Model):
 		}
 
 class Emergency(db.Model):
+	icon = 'fire-alert'
 	__tablename__ = 'Emergency'
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), nullable=False)
@@ -118,6 +123,7 @@ class Emergency(db.Model):
 
 
 class ColorTheme(db.Model):
+	icon = 'palette'
 	__tablename__ = 'ColorTheme'
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), nullable=False)
@@ -141,6 +147,7 @@ class ColorTheme(db.Model):
 
 
 class WorkType(db.Model):
+	icon = 'timer-sand'
 	__tablename__ = 'WorkType'
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), nullable=False)
