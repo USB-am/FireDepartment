@@ -7,7 +7,7 @@ from app.tools.custom_widgets import CustomScreen
 from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelTwoLine
 from kivymd.uix.boxlayout import MDBoxLayout
 
-from config import PATTERNS_DIR
+from config import PATTERNS_DIR, LOCALIZED
 from data_base import Emergency
 
 
@@ -28,17 +28,22 @@ class MainPage(CustomScreen):
 	def __init__(self):
 		super().__init__()
 
+		self.update_title()
 		self.update_content()
 
 	def filter_emergencies(self, search_text: str) -> list:
 		return Emergency.query.all()
+
+	def update_title(self) -> None:
+		translate_text = LOCALIZED.translate('Emergency')
+		self.ids.toolbar.title = translate_text
 
 	def update_content(self, emergencies: list=Emergency.query.all()) -> None:
 		content = self.ids.content
 		content.clear_widgets()
 
 		for emergency in emergencies:
-			emergency_text = str(emergency)
+			emergency_text = emergency.title
 			emergency_secondary = emergency.description if not None else '-'
 
 			content.add_widget(MDExpansionPanel(
