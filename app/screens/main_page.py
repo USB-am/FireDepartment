@@ -3,10 +3,10 @@
 import os
 
 from kivy.lang import Builder
-from app.tools.custom_widgets import CustomScreen
 from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelTwoLine
 from kivymd.uix.boxlayout import MDBoxLayout
 
+from app.tools.custom_widgets import CustomScreen, FDExpansionPanel
 from config import PATTERNS_DIR, LOCALIZED
 from data_base import Emergency
 
@@ -43,14 +43,11 @@ class MainPage(CustomScreen):
 		content.clear_widgets()
 
 		for emergency in emergencies:
-			emergency_text = emergency.title
-			emergency_secondary = emergency.description if not None else '-'
-
-			content.add_widget(MDExpansionPanel(
-				icon=emergency.icon,
-				content = EmergencyElement(emergency),
-				panel_cls=MDExpansionPanelTwoLine(
-					text=emergency_text,
-					secondary_text=emergency_secondary
+			content.add_widget(FDExpansionPanel(
+				db_model=emergency,
+				content=EmergencyElement,
+				text=(
+					emergency.title,
+					emergency.description
 				)
 			))

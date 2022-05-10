@@ -7,8 +7,11 @@ import json
 # Temp func
 def create_localized_file() -> None:
 	localized_dict = {
-		'emergency': 'Черезвычайная ситуация',
-		'human': 'Человек'
+		'emergency': 'ЧС',
+		'human': 'Человек',
+		'settings': 'Настройки',
+		'create_tag': 'Создать тег',
+		'title': 'Название',
 	}
 
 	file = open(os.path.join(BASE_DIR, 'config', 'localized', 'ru.json'), mode='w')
@@ -45,4 +48,3 @@ IMAGES_DIR = os.path.join(BASE_DIR, 'app', 'images')
 LANG = 'ru'	# Temp variable (TODO: load from db)
 create_localized_file()
 LOCALIZED = _load_localized(LANG)
-print(LOCALIZED)

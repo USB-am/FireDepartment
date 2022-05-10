@@ -32,7 +32,7 @@ class Tag(db.Model):
 		return self.title
 
 	@staticmethod
-	def get_fields(self) -> dict:
+	def get_fields() -> dict:
 		return {
 			'title': 'StringField',
 			'posts': 'ManyToManyField'
@@ -49,7 +49,7 @@ class Rank(db.Model):
 		return self.title
 
 	@staticmethod
-	def get_fields(self) -> dict:
+	def get_fields() -> dict:
 		return {
 			'title': 'StringField',
 		}
@@ -65,7 +65,7 @@ class Position(db.Model):
 		return self.title
 
 	@staticmethod
-	def get_fields(self) -> dict:
+	def get_fields() -> dict:
 		return {
 			'title': 'StringField',
 		}
@@ -87,7 +87,7 @@ class Human(db.Model):
 		return self.title
 
 	@staticmethod
-	def get_fields(self) -> dict:
+	def get_fields() -> dict:
 		return {
 			'title': 'StringField',
 			'phone_1': 'PhoneField',
@@ -97,6 +97,7 @@ class Human(db.Model):
 			'position': 'ForeignKeyField',
 			'rank': 'ForeignKeyField',
 		}
+
 
 class Emergency(db.Model):
 	icon = 'fire-alert'
@@ -112,7 +113,7 @@ class Emergency(db.Model):
 		return self.title
 
 	@staticmethod
-	def get_fields(self) -> dict:
+	def get_fields() -> dict:
 		return {
 			'title': 'StringField',
 			'description': 'DescriptionField',
@@ -134,6 +135,18 @@ class ColorTheme(db.Model):
 
 	def __str__(self):
 		return self.title
+
+	@staticmethod
+	def get_fields() -> dict:
+		result = {
+			'title': 'StringField',
+			'button_color': 'ColorSelectField',
+			'font_color': 'ColorSelectField',
+			'background_color_opacity': 'ColorSelectField',
+			'background_image': 'ColorSelectField',
+		}
+
+		return result
 
 	def get_values(self) -> dict:
 		return {
@@ -159,7 +172,7 @@ class WorkType(db.Model):
 	def __str__(self):
 		return self.title
 
-	def get_fields(self) -> dict:
+	def get_fields() -> dict:
 		result = {
 			'title': 'StringField',
 			'start_work_day': 'DateTimeField',
