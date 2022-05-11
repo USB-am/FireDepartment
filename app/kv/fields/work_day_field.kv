@@ -8,4 +8,14 @@
 		size: self.width, 50
 
 		MDIcon:
-			icon: self.parent.icon
+			size_hint: None, None
+			size: 50, 50
+			icon: self.parent.parent.icon
+
+		MDLabel:
+			text: self.parent.parent.display_text
+
+	MDRaisedButton:
+		id: open_calendar_button
+		size_hint: 1, 1
+		text: 'dd.mm.yyyy'
