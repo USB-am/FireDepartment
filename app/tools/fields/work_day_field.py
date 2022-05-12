@@ -33,7 +33,7 @@ class WorkDayField(MDBoxLayout):
 		self._value = None
 		self._dialog = MDDatePicker()
 
-		self._dialog.bind(on_save=self._update_value, on_cancle=self._close_dialog)
+		self._dialog.bind(on_save=self._update_value)
 		self.ids.open_calendar_button.bind(on_press=self._open_calendar)
 
 	def _open_calendar(self, instance: MDRaisedButton) -> None:
@@ -50,10 +50,8 @@ class WorkDayField(MDBoxLayout):
 	def _update_value(self, instance: MDDatePicker, date: datetime.date,\
 				range_: list=[]) -> None:
 
-		print(str(date))
-
-	def _close_dialog(self) -> None:
-		print('_close_dialog', dir(self._dialog))
+		self.ids.open_calendar_button.text = date.strftime('%d.%m.%Y')
+		self._value = date
 
 	def get_value(self) -> None:
 		return self._value
