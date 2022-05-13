@@ -17,7 +17,7 @@ Builder.load_file(path_to_kv_file)
 class ElementToManyField(MDBoxLayout):
 	def __init__(self, element: data_base.db, group: str=None):
 		self._element = element
-		self.icon = self._element.icon
+		# self.icon = self._element.icon
 		self.display_text = self._element.title
 		self.group = group
 
@@ -29,6 +29,7 @@ class AbstractToManyField(MDBoxLayout):
 		self.title = title
 		self.display_text = LOCALIZED.translate(self.title)
 		self._table = getattr(data_base, self._table_name)
+		self.icon = self._table.icon
 		self.to_create_screen = f'create_{self._table_name.lower()}'
 
 		super().__init__()
@@ -36,10 +37,16 @@ class AbstractToManyField(MDBoxLayout):
 		self.fill_content()
 
 	def fill_content(self) -> None:
+		elements = self._table.query.all()
+
+		if not elements:
+			return
+
 		container = self.ids.content
 		container.clear_widgets()
 
-		elements = self._table.query.all()
-
 		for element in elements:
-			container.add_widget(ElementToManyField(element, self.group))
+			container.add_widget(ElementToManyField(
+				element=element,
+				group=self.group
+			))

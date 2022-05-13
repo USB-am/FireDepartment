@@ -4,7 +4,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 
 from . import AbstractUpdateDBScreen
 from data_base import Tag, Rank, Position, Human, Emergency, ColorTheme,\
-	WorkType
+	Worktype
 
 
 class AbstractCreateScreen(AbstractUpdateDBScreen):
@@ -43,4 +43,4 @@ class CreateColorTheme(AbstractCreateScreen):
 
 class CreateWorkType(AbstractCreateScreen):
 	name = 'create_worktype'
-	table = WorkType
+	table = Worktype
