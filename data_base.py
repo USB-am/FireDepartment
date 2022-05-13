@@ -35,7 +35,7 @@ class Tag(db.Model):
 	def get_fields() -> dict:
 		return {
 			'title': 'StringField',
-			'posts': 'ManyToManyField'
+			'emergencys': 'ManyToManyField'
 		}
 
 
