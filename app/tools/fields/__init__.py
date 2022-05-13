@@ -5,6 +5,8 @@ from .work_day_field import WorkDayField
 from .description_field import DescriptionField
 from .boolean_field import BooleanField
 from .search_block import SearchBlock
+from .to_many_fields.many_to_many_field import ManyToManyField
+from .to_many_fields.one_to_many_field import ForeignKeyField
 
 
 __all__ = (
@@ -13,4 +15,6 @@ __all__ = (
 	'DescriptionField',
 	'WorkDayField',
 	'BooleanField',
+	'ManyToManyField',
+	'ForeignKeyField',
 )

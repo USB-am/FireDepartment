@@ -1,0 +1,53 @@
+#:import FDIcon,FDLabel app.tools.custom_widgets.label
+#:import FDIconButton app.tools.custom_widgets.button
+
+
+<ElementToManyField>:
+	size_hint: 1, None
+	size: self.width, 50
+
+	MDCheckbox:
+		size_hint: None, None
+		size: 50, 50
+		group: self.parent.group
+
+	MDTextButton:
+		size_hint: 1, 1
+		text: self.parent.display_text
+		on_press:
+			print(f'{self.parent.display_text} is pressed')
+
+
+<AbstractToManyField>:
+	orientation: 'vertical'
+	size_hint: 1, None
+	size: self.width, 400
+
+	MDBoxLayout:
+		size_hint: 1, None
+		size: self.width, 50
+
+		FDIcon:
+			size_hint: None, None
+			size: 50, 50
+			icon: self.parent.parent.icon
+
+		FDLabel:
+			text: self.parent.parent.display_text
+
+		FDIconButton:
+			size_hint: None, None
+			size: 50, 50
+			icon: 'folder-multiple-plus'
+			on_press:
+				app.forward(self.parent.parent.to_create_screen)
+
+	ScrollView:
+		GridLayout:
+			id: content
+			cols: 1
+			height: self.minimum_height
+			size_hint: 1, None
+			do_scroll_x: False
+			padding: [10, 0]
+			spacing: 10
