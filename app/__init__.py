@@ -49,7 +49,7 @@ class Manager(ScreenManager):
 		self.add_widget(CreateColorTheme())
 		self.add_widget(CreateWorkType())
 
-		self.current = 'create_human'
+		self.current = 'create_emergency'
 
 
 class Application(MDApp):
