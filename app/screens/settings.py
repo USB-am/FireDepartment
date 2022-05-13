@@ -8,7 +8,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from app.tools.custom_widgets import CustomScreen, FDExpansionPanel
 from config import PATTERNS_DIR, LOCALIZED
 from data_base import Tag, Rank, Position, Human, Emergency, \
-	ColorTheme, WorkType
+	ColorTheme, Worktype
 
 
 path_to_kv_file = os.path.join(PATTERNS_DIR, 'screens', 'settings.kv')
@@ -44,7 +44,7 @@ class Settings(CustomScreen):
 		content.clear_widgets()
 
 		data_bases = (Tag, Rank, Position, Human, Emergency,
-			ColorTheme, WorkType)
+			ColorTheme, Worktype)
 
 		for db_model in data_bases:
 			content.add_widget(FDExpansionPanel(

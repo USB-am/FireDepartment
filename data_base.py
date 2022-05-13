@@ -79,7 +79,7 @@ class Human(db.Model):
 	phone_1 = db.Column(db.String(255), nullable=False)
 	phone_2 = db.Column(db.String(255), nullable=True)
 	work_day = db.Column(db.DateTime(), nullable=True)
-	work_type = db.Column(db.Integer, db.ForeignKey('WorkType.id'), nullable=True)
+	worktype = db.Column(db.Integer, db.ForeignKey('Worktype.id'), nullable=True)
 	position = db.Column(db.Integer, db.ForeignKey('Position.id'), nullable=True)
 	rank = db.Column(db.Integer, db.ForeignKey('Rank.id'), nullable=True)
 
@@ -93,7 +93,7 @@ class Human(db.Model):
 			'phone_1': 'PhoneField',
 			'phone_2': 'PhoneField',
 			'work_day': 'WorkDayField',
-			'work_type': 'ForeignKeyField',
+			'worktype': 'ForeignKeyField',
 			'position': 'ForeignKeyField',
 			'rank': 'ForeignKeyField',
 		}
@@ -159,9 +159,9 @@ class ColorTheme(db.Model):
 		}
 
 
-class WorkType(db.Model):
+class Worktype(db.Model):
 	icon = 'timer-sand'
-	__tablename__ = 'WorkType'
+	__tablename__ = 'Worktype'
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), nullable=False)
 	start_work_day = db.Column(db.DateTime(), nullable=False)

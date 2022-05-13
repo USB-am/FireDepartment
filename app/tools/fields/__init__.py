@@ -7,6 +7,7 @@ from .boolean_field import BooleanField
 from .search_block import SearchBlock
 from .to_many_fields.many_to_many_field import ManyToManyField
 from .to_many_fields.one_to_many_field import ForeignKeyField
+from .phone_field import PhoneField
 
 
 __all__ = (
@@ -17,4 +18,5 @@ __all__ = (
 	'BooleanField',
 	'ManyToManyField',
 	'ForeignKeyField',
+	'PhoneField',
 )
