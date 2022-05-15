@@ -8,6 +8,7 @@ from .search_block import SearchBlock
 from .to_many_fields.many_to_many_field import ManyToManyField
 from .to_many_fields.one_to_many_field import ForeignKeyField
 from .phone_field import PhoneField
+from .date_time_field import DateTimeField
 
 
 __all__ = (
@@ -19,4 +20,5 @@ __all__ = (
 	'ManyToManyField',
 	'ForeignKeyField',
 	'PhoneField',
+	'DateTimeField',
 )
