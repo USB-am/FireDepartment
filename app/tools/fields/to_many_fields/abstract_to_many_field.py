@@ -26,6 +26,10 @@ class ElementToManyField(MDBoxLayout):
 	def state(self) -> bool:
 		return self.ids.checkbox.active
 
+	@state.setter
+	def state(self, status: bool) -> None:
+		self.ids.checkbox.active = status
+
 	@property
 	def id(self) -> int:
 		return self._element.id
@@ -42,9 +46,9 @@ class AbstractToManyField(MDBoxLayout):
 		super().__init__()
 
 		self._elements = []
-		self.fill_content()
+		self.update_content()
 
-	def fill_content(self) -> None:
+	def update_content(self) -> None:
 		elements = self._table.query.all()
 
 		if not elements:
@@ -60,3 +64,7 @@ class AbstractToManyField(MDBoxLayout):
 			)
 			self._elements.append(el)
 			container.add_widget(el)
+
+	def clear(self) -> None:
+		for element in self._elements:
+			element.state = False

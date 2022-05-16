@@ -20,3 +20,6 @@ class FDTextField(MDTextField):
 			return None
 
 		return self.text
+
+	def clear(self) -> None:
+		self.text = ''

@@ -65,7 +65,6 @@ class Application(MDApp):
 		self.path_manager.forward(page_name)
 		self.screen_manager.current = page_name
 
-
 	def back(self) -> str:
 		current_page_name = self.path_manager.back()
 		self.screen_manager.current = current_page_name
