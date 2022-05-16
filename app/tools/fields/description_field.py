@@ -20,6 +20,3 @@ class DescriptionField(FDTextField):
 		self.display_text = self.title.title()
 
 		super().__init__()
-
-	def get_value(self) -> str:
-		return self.ids.textarea.text

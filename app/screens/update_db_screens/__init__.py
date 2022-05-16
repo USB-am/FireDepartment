@@ -14,6 +14,8 @@ Builder.load_file(path_to_kv_file)
 
 
 class AbstractUpdateDBScreen(CustomScreen):
+	''' Abstract class to Create and Update screens '''
+
 	def __init__(self):
 		super().__init__()
 
@@ -23,18 +25,26 @@ class AbstractUpdateDBScreen(CustomScreen):
 		self.update_content()
 
 	def update_title(self) -> None:
+		''' Set toolbar title '''
 		translate_text = LOCALIZED.translate(self.name)
 		self.ids.toolbar.title = translate_text
 
 	def update_content(self) -> None:
+		''' Create fields '''
 		content = self.ids.content
 		content.clear_widgets()
 
-		for title, field in self.table.get_fields().items():
+		for title, field_name in self.table.get_fields().items():
 			try:
-				content.add_widget(getattr(fields, field)(title))
+				field = getattr(fields, field_name)(title)
+				content.add_widget(field)
+				self.fields[title] = field
 			except Exception as error:
 				print('[{}] {}'.format(
 					error.__class__.__name__,
 					str(error)
 				))
+
+	def get_values(self) -> dict:
+		''' Returns field values '''
+		return {title: field.get_value() for title, field in self.fields.items()}

@@ -17,7 +17,6 @@ class StringField(FDTextField):
 
 	def __init__(self, title: str):
 		self.title = title
-
 		self.display_text = LOCALIZED.translate(self.title)
 
 		super().__init__()

@@ -13,4 +13,10 @@ Builder.load_file(path_to_kv_file)
 
 
 class FDTextField(MDTextField):
-	pass
+	''' Custom TextField widget '''
+
+	def get_value(self) -> str:
+		if not self.text:
+			return None
+
+		return self.text

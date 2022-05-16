@@ -9,3 +9,12 @@ class ManyToManyField(AbstractToManyField):
 		self._table_name = title[:-1].title()
 
 		super().__init__(title)
+
+	def get_value(self) -> list:
+		result = []
+
+		for element in self._elements:
+			if element.state:
+				result.append(element.id)
+
+		return result
