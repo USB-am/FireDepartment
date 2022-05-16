@@ -23,8 +23,26 @@ class AbstractCreateScreen(AbstractUpdateDBScreen):
 		create_button.bind(on_press=self.create)
 		self.ids.content.add_widget(create_button)
 
-	def create(self, instance: Button) -> None:
-		print(self.get_values())
+	def create(self, instance: Button) -> bool:
+		try:
+			self.insert_values()
+			return True
+
+		except Exception as error:
+			print('[{}] {}'.format(
+				error.__class__.__name__,
+				error
+			))
+			db.session.rollback()
+
+			return False
+
+	def insert_values(self) -> None:
+		entered_values = self.get_values()
+		element = self.table(**entered_values)
+
+		db.session.add(element)
+		# db.session.commit()
 
 
 class CreateTag(AbstractCreateScreen):
