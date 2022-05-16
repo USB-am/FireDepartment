@@ -27,8 +27,4 @@ class PhoneField(FDTextField):
 		super().__init__()
 
 	def insert_text(self, substring: str, from_undo: bool=False) -> None:
-		new_text = self.text + substring
-		if len(new_text) == 11:
-			pass
-
 		super().insert_text(substring, from_undo)

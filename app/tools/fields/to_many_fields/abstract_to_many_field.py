@@ -17,11 +17,18 @@ Builder.load_file(path_to_kv_file)
 class ElementToManyField(MDBoxLayout):
 	def __init__(self, element: data_base.db, group: str=None):
 		self._element = element
-		# self.icon = self._element.icon
 		self.display_text = self._element.title
 		self.group = group
 
 		super().__init__()
+
+	@property
+	def state(self) -> bool:
+		return self.ids.checkbox.active
+
+	@property
+	def id(self) -> int:
+		return self._element.id
 
 
 class AbstractToManyField(MDBoxLayout):
@@ -34,6 +41,7 @@ class AbstractToManyField(MDBoxLayout):
 
 		super().__init__()
 
+		self._elements = []
 		self.fill_content()
 
 	def fill_content(self) -> None:
@@ -46,7 +54,9 @@ class AbstractToManyField(MDBoxLayout):
 		container.clear_widgets()
 
 		for element in elements:
-			container.add_widget(ElementToManyField(
+			el = ElementToManyField(
 				element=element,
 				group=self.group
-			))
+			)
+			self._elements.append(el)
+			container.add_widget(el)

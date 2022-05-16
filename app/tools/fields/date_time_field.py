@@ -45,9 +45,6 @@ class DateTimeField(MDBoxLayout):
 		self.ids.date_button.bind(on_press=self._open_date_dialog)
 		self.ids.time_button.bind(on_press=self._open_time_dialog)
 
-		print(dir(self))
-		print(self.__doc__)
-
 	def _open_date_dialog(self, instance: MDRaisedButton) -> None:
 		''' Open MDDatePicker dialog '''
 
