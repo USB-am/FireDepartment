@@ -19,6 +19,8 @@ class AbstractUpdateDBScreen(CustomScreen):
 	def __init__(self):
 		super().__init__()
 
+		self.bind(on_pre_enter=self.update_to_many_fields)
+
 		self.fields = {}
 
 		self.update_title()
@@ -44,6 +46,16 @@ class AbstractUpdateDBScreen(CustomScreen):
 					error.__class__.__name__,
 					str(error)
 				))
+
+	def update_to_many_fields(self, instance: CustomScreen) -> None:
+		''' Update ForeignKeyFields and ManyToManyFields to pre load screen '''
+		for field in self.fields.values():
+			if isinstance(field, (fields.ManyToManyField, fields.ForeignKeyField)):
+				field.update_content()
+
+	def clear_fields_content(self) -> None:
+		''' Clears all fields from the entered data '''
+		[field.clear() for field in self.fields.values()]
 
 	def get_values(self) -> dict:
 		''' Returns field values '''

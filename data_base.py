@@ -106,8 +106,8 @@ class Emergency(db.Model):
 	title = db.Column(db.String(255), nullable=False)
 	description = db.Column(db.Text(), nullable=True)
 	urgent = db.Column(db.Boolean(), nullable=True)
-	tags = db.relationship('Tag', secondary=post_tags, backref='emergencies')
-	humans = db.relationship('Human', secondary=post_humans, backref='emergencies')
+	tags = db.relationship('Tag', secondary=post_tags, backref='emergencys')
+	humans = db.relationship('Human', secondary=post_humans, backref='emergencys')
 
 	def __str__(self):
 		return self.title

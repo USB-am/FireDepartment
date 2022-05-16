@@ -25,8 +25,11 @@ class AbstractCreateScreen(AbstractUpdateDBScreen):
 
 	def create(self, instance: Button) -> bool:
 		try:
-			self.insert_values()
-			return True
+			# self.insert_values()
+			super().clear_fields_content()
+			# print(dir(super().manager))
+			print(dir(self))
+			# super().manager.back()
 
 		except Exception as error:
 			print('[{}] {}'.format(
@@ -35,14 +38,12 @@ class AbstractCreateScreen(AbstractUpdateDBScreen):
 			))
 			db.session.rollback()
 
-			return False
-
 	def insert_values(self) -> None:
 		entered_values = self.get_values()
 		element = self.table(**entered_values)
 
 		db.session.add(element)
-		# db.session.commit()
+		db.session.commit()
 
 
 class CreateTag(AbstractCreateScreen):

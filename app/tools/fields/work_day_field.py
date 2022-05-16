@@ -53,5 +53,8 @@ class WorkDayField(MDBoxLayout):
 		self.ids.open_calendar_button.text = date.strftime('%d.%m.%Y')
 		self._value = date
 
+	def clear(self) -> None:
+		self._value = None
+
 	def get_value(self) -> None:
 		return self._value

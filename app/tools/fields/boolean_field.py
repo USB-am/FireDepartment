@@ -23,3 +23,6 @@ class BooleanField(MDBoxLayout):
 
 	def get_value(self) -> bool:
 		return self.ids.switch.active
+
+	def clear(self) -> None:
+		self.ids.switch.active = False
