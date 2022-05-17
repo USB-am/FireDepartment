@@ -1,8 +1,7 @@
 <ListElement>:
-	size_hint: 1, None
-	size: self.width, 50
-	on_press:
-		app.forward(self.to_edit_screen)
+	on_release:
+		# app.forward(self.to_edit_screen)
+		print('ListElement is pressed')
 
 
 <AbstractUpdateListScreen>:
@@ -12,14 +11,11 @@
 		MDToolbar:
 			id: toolbar
 			left_action_items: [['arrow-left', lambda x: app.back(), '']]
+			right_action_items: [['delete', lambda x: print(x), 'Select to delete']]
 			elevation: 10
 
 		ScrollView:
-			GridLayout:
+			MDSelectionList:
 				id: content
-				cols: 1
-				do_scroll_x: False
-				size_hint: 1, None
-				height: self.minimum_height
 				padding: [20, 10]
 				spacing: 10
