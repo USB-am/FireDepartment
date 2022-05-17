@@ -25,11 +25,10 @@ class AbstractCreateScreen(AbstractUpdateDBScreen):
 
 	def create(self, instance: Button) -> bool:
 		try:
-			# self.insert_values()
+			self.insert_values()
 			super().clear_fields_content()
-			# print(dir(super().manager))
-			print(dir(self))
-			# super().manager.back()
+			# TODO: Вывести сообщение о успешном создании
+			self.redirect_to_back_screen()
 
 		except Exception as error:
 			print('[{}] {}'.format(

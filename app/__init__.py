@@ -8,26 +8,12 @@ Config.set('graphics', 'width', '350')
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager
 
+from app.tools.path_manager import PathManager
 from .screens import MainPage, Settings, CreateTag, CreateRank,\
 	CreatePosition, CreateHuman, CreateEmergency, CreateColorTheme,\
-	CreateWorkType
-
-
-class PathManager:
-	PATH = ['main_page']
-
-	def forward(self, page_name: str) -> None:
-		self.PATH.append(page_name)
-
-	def back(self) -> str:
-		if len(self.PATH) > 1:
-			self.PATH = self.PATH[:-1]
-
-		return self.get_current_page_name
-
-	@property
-	def get_current_page_name(self) -> str:
-		return self.PATH[-1]
+	CreateWorkType, UpdateListTag, UpdateListRank, UpdateListPosition,\
+	UpdateListHuman, UpdateListEmergency, UpdateListColorTheme,\
+	UpdateListWorkType
 
 
 class Manager(ScreenManager):
@@ -49,7 +35,16 @@ class Manager(ScreenManager):
 		self.add_widget(CreateColorTheme())
 		self.add_widget(CreateWorkType())
 
-		self.current = 'create_emergency'
+		# Update list screens
+		self.add_widget(UpdateListTag())
+		self.add_widget(UpdateListRank())
+		self.add_widget(UpdateListPosition())
+		self.add_widget(UpdateListHuman())
+		self.add_widget(UpdateListEmergency())
+		self.add_widget(UpdateListColorTheme())
+		self.add_widget(UpdateListWorkType())
+
+		self.current = 'settings'
 
 
 class Application(MDApp):
@@ -59,14 +54,13 @@ class Application(MDApp):
 		super().__init__()
 
 		self.screen_manager = Manager()
-		self.path_manager = PathManager()
 
 	def forward(self, page_name: str) -> None:
-		self.path_manager.forward(page_name)
+		PathManager.forward(page_name)
 		self.screen_manager.current = page_name
 
 	def back(self) -> str:
-		current_page_name = self.path_manager.back()
+		current_page_name = PathManager.back()
 		self.screen_manager.current = current_page_name
 
 		return current_page_name
