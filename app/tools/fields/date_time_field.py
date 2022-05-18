@@ -9,6 +9,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.picker import MDTimePicker, MDDatePicker
 
 from config import PATTERNS_DIR, LOCALIZED
+from app.tools.check_exceptions import check_none_value
 
 
 path_to_kv_file = os.path.join(PATTERNS_DIR, 'fields', 'date_time_field.kv')
@@ -56,7 +57,7 @@ class DateTimeField(MDBoxLayout):
 		self._time_dialog.open()
 
 	def _update_date(self, instance: MDDatePicker, date: datetime.date,\
-				range_: list) -> None:
+				range_: list=[]) -> None:
 		''' Update self._date and text to date_button '''
 
 		self._date = date
@@ -84,3 +85,10 @@ class DateTimeField(MDBoxLayout):
 				minute=self._time.minute)
 		except AttributeError:
 			pass
+
+	@check_none_value
+	def set_value(self, date: datetime.datetime) -> None:
+		''' Set value and update button states '''
+
+		self._date = self._update_date(None, date.date)
+		self._time = self._update_time(None, date.time)

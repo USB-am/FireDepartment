@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from kivy.uix.button import Button
-from kivymd.uix.boxlayout import MDBoxLayout
 
 from . import AbstractUpdateDBScreen
 from data_base import db, Tag, Rank, Position, Human, Emergency, ColorTheme,\
@@ -10,6 +9,12 @@ from config import LOCALIZED
 
 
 class AbstractCreateScreen(AbstractUpdateDBScreen):
+	def __init__(self):
+		super().__init__()
+
+		self.update_title()
+		self.update_content()
+
 	def update_content(self) -> None:
 		super().update_content()
 

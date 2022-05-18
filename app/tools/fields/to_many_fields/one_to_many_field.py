@@ -14,4 +14,9 @@ class ForeignKeyField(AbstractToManyField):
 	def get_value(self) -> db.Model:
 		for element in self._elements:
 			if element.state:
-				return element._element
+				return element._element.id
+
+	def set_value(self, active_item: int) -> None:
+		for element in self._elements:
+			if element._element.id == active_item:
+				element.state = True

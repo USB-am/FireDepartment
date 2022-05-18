@@ -6,6 +6,7 @@ from kivy.lang import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
 
 from config import PATTERNS_DIR, LOCALIZED
+from app.tools.check_exceptions import check_none_value
 
 
 path_to_kv_file = os.path.join(PATTERNS_DIR, 'fields', 'boolean_field.kv')
@@ -23,6 +24,10 @@ class BooleanField(MDBoxLayout):
 
 	def get_value(self) -> bool:
 		return self.ids.switch.active
+
+	@check_none_value
+	def set_value(self, value: bool) -> None:
+		self.ids.switch.active = value
 
 	def clear(self) -> None:
 		self.ids.switch.active = False

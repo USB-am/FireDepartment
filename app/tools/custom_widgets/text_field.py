@@ -21,5 +21,9 @@ class FDTextField(MDTextField):
 
 		return self.text
 
+	def set_value(self, text: str) -> None:
+		if text is not None:
+			self.text = text
+
 	def clear(self) -> None:
 		self.text = ''

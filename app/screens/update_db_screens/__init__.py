@@ -23,9 +23,6 @@ class AbstractUpdateDBScreen(CustomScreen):
 
 		self.fields = {}
 
-		self.update_title()
-		self.update_content()
-
 	def update_title(self) -> None:
 		''' Set toolbar title '''
 		translate_text = LOCALIZED.translate(self.name)

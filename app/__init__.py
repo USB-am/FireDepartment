@@ -9,11 +9,16 @@ from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager
 
 from app.tools.path_manager import PathManager
-from .screens import MainPage, Settings, CreateTag, CreateRank,\
-	CreatePosition, CreateHuman, CreateEmergency, CreateColorTheme,\
-	CreateWorkType, UpdateListTag, UpdateListRank, UpdateListPosition,\
+from .screens import \
+	MainPage,\
+	Settings,\
+	CreateTag, CreateRank, CreatePosition, CreateHuman, CreateEmergency,\
+	CreateColorTheme, CreateWorkType,\
+	UpdateListTag, UpdateListRank, UpdateListPosition,\
 	UpdateListHuman, UpdateListEmergency, UpdateListColorTheme,\
-	UpdateListWorkType
+	UpdateListWorkType,\
+	EditTag, EditRank, EditPosition, EditHuman, EditEmergency, EditColorTheme,\
+	EditWorkType
 
 
 class Manager(ScreenManager):
@@ -43,6 +48,15 @@ class Manager(ScreenManager):
 		self.add_widget(UpdateListEmergency())
 		self.add_widget(UpdateListColorTheme())
 		self.add_widget(UpdateListWorkType())
+
+		# Edit screens
+		self.add_widget(EditTag())
+		self.add_widget(EditRank())
+		self.add_widget(EditPosition())
+		self.add_widget(EditHuman())
+		self.add_widget(EditEmergency())
+		self.add_widget(EditColorTheme())
+		self.add_widget(EditWorkType())
 
 		self.current = 'settings'
 
