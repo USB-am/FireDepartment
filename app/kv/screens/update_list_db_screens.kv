@@ -1,7 +1,12 @@
 <ListElement>:
 	on_release:
-		# app.forward(self.to_edit_screen)
-		print('ListElement is pressed')
+		app.forward(self.to_edit_screen)
+		app.root.current_screen.update_content(self._element)
+
+
+<SelectionList>:
+	padding: [20, 10]
+	spacing: 10
 
 
 <AbstractUpdateListScreen>:
@@ -11,11 +16,10 @@
 		MDToolbar:
 			id: toolbar
 			left_action_items: [['arrow-left', lambda x: app.back(), '']]
-			right_action_items: [['delete', lambda x: print(x), 'Select to delete']]
 			elevation: 10
 
 		ScrollView:
-			MDSelectionList:
+			List:
 				id: content
 				padding: [20, 10]
 				spacing: 10

@@ -4,7 +4,7 @@ import os
 
 from kivy.lang import Builder
 from kivy.uix.button import Button
-from kivymd.uix.list import TwoLineAvatarIconListItem, IconLeftWidget
+from kivymd.uix.list import TwoLineAvatarIconListItem, IconLeftWidget, MDList
 
 from app.tools.custom_widgets import CustomScreen
 from config import PATTERNS_DIR, LOCALIZED
@@ -19,7 +19,7 @@ Builder.load_file(path_to_kv_file)
 class ListElement(TwoLineAvatarIconListItem):
 	def __init__(self, element: db.Model):
 		self._element = element
-		self.text = str(element)
+		self.text = str(self._element)
 		self.secondary_text = 'two list'
 		self.table_icon = self._element.icon
 		self.to_edit_screen = f'edit_{self._element.__tablename__.lower()}'
@@ -27,6 +27,15 @@ class ListElement(TwoLineAvatarIconListItem):
 		super().__init__()
 
 		self.add_widget(IconLeftWidget(icon=self.table_icon))
+
+
+class List(MDList):
+	def update_content(self, table: db.Model) -> None:
+		self.clear_widgets()
+		elements = table.query.all()
+
+		for element in elements:
+			self.add_widget(ListElement(element))
 
 
 class AbstractUpdateListScreen(CustomScreen):
@@ -41,16 +50,7 @@ class AbstractUpdateListScreen(CustomScreen):
 		self.ids.toolbar.title = translate_text
 
 	def update_content(self, instance: CustomScreen) -> None:
-		elements = self.table.query.all()
-
-		if not elements:
-			return
-
-		content = self.ids.content
-		content.clear_widgets()
-
-		for element in elements:
-			content.add_widget(ListElement(element))
+		self.ids.content.update_content(self.table)
 
 
 class UpdateListTag(AbstractUpdateListScreen):
