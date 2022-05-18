@@ -28,8 +28,9 @@ class MainPage(CustomScreen):
 	def __init__(self):
 		super().__init__()
 
+		self.bind(on_pre_enter=lambda x: self.update_content())
+
 		self.update_title()
-		self.update_content()
 
 	def filter_emergencies(self, search_text: str) -> list:
 		return Emergency.query.all()
@@ -38,7 +39,12 @@ class MainPage(CustomScreen):
 		translate_text = LOCALIZED.translate('Emergency')
 		self.ids.toolbar.title = translate_text
 
-	def update_content(self, emergencies: list=Emergency.query.all()) -> None:
+	def update_content(self) -> None:
+		emergencies = Emergency.query.all()
+
+		if not emergencies:
+			return
+
 		content = self.ids.content
 		content.clear_widgets()
 
@@ -48,6 +54,6 @@ class MainPage(CustomScreen):
 				content=EmergencyElement,
 				text=(
 					emergency.title,
-					emergency.description
+					str(emergency.description)
 				)
 			))

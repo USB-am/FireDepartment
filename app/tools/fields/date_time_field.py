@@ -90,5 +90,5 @@ class DateTimeField(MDBoxLayout):
 	def set_value(self, date: datetime.datetime) -> None:
 		''' Set value and update button states '''
 
-		self._date = self._update_date(None, date.date)
-		self._time = self._update_time(None, date.time)
+		self._date = self._update_date(None, date.date())
+		self._time = self._update_time(None, date.time())

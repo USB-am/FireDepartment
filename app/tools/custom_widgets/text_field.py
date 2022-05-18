@@ -23,7 +23,7 @@ class FDTextField(MDTextField):
 
 	def set_value(self, text: str) -> None:
 		if text is not None:
-			self.text = text
+			self.text = str(text)
 
 	def clear(self) -> None:
 		self.text = ''
