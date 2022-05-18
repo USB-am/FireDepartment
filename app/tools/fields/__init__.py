@@ -9,6 +9,7 @@ from .to_many_fields.many_to_many_field import ManyToManyField
 from .to_many_fields.one_to_many_field import ForeignKeyField
 from .phone_field import PhoneField
 from .date_time_field import DateTimeField
+from .integer_field import IntegerField
 
 
 __all__ = (
@@ -21,4 +22,5 @@ __all__ = (
 	'ForeignKeyField',
 	'PhoneField',
 	'DateTimeField',
+	'IntegerField',
 )
