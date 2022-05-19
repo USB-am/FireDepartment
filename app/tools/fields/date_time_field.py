@@ -83,12 +83,12 @@ class DateTimeField(MDBoxLayout):
 				day=self._date.day,
 				hour=self._time.hour,
 				minute=self._time.minute)
-		except AttributeError:
-			pass
+		except AttributeError as e:
+			print(f'[{e.__class__.__name__}] {e}')
 
 	@check_none_value
 	def set_value(self, date: datetime.datetime) -> None:
 		''' Set value and update button states '''
 
-		self._date = self._update_date(None, date.date())
-		self._time = self._update_time(None, date.time())
+		self._update_date(None, date.date())
+		self._update_time(None, date.time())

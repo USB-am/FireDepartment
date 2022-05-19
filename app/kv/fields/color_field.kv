@@ -1,0 +1,22 @@
+#:import FDIcon,FDLabel app.tools.custom_widgets.label
+
+
+<ColorField>:
+	size_hint: 1, None
+	size: self.width, 50
+
+	FDIcon:
+		size_hint: None, None
+		size: 50, 50
+		icon: root.icon
+
+	FDLabel:
+		text: root.display_text
+
+	MDFloatingActionButton:
+		size_hint: None, None
+		size: 50, 50
+		icon: 'palette'
+		md_bg_color: app.theme_cls.accent_color
+		on_release:
+			root.open_dialog()

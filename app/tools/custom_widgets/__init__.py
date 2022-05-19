@@ -2,7 +2,7 @@ from . import label, button
 from .custom_screen import CustomScreen
 from .expansion_panel import FDExpansionPanel
 from .text_field import FDTextField
-from .dialog import FDDialog
+from .dialog import FDDialog, FDColorPicker
 
 __all__ = (
 	'label',
@@ -11,4 +11,5 @@ __all__ = (
 	'CustomScreen',
 	'FDTextField',
 	'FDDialog',
+	'FDColorPicker',
 )
