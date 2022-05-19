@@ -80,8 +80,11 @@ class Application(MDApp):
 		return current_page_name
 
 	def build(self) -> Manager:
-		self.theme_cls.primary_palette = 'BlueGray'#'Indigo'#
-		self.theme_cls.accent_palette = 'Teal'
-		self.theme_cls.theme_style = 'Light'
+		# self.theme_cls.primary_palette = 'BlueGray'#'Indigo'#
+		# self.theme_cls.accent_palette = 'Teal'
+		# self.theme_cls.theme_style = 'Light'
 
 		return self.screen_manager
+
+	def on_start(self):
+		self.fps_monitor_start()
