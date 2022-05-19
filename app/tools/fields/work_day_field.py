@@ -2,7 +2,6 @@
 
 import os
 import datetime
-from random import randint
 
 from kivy.lang import Builder
 from kivymd.uix.button import MDRaisedButton

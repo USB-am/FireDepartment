@@ -31,16 +31,12 @@ class AbstractUpdateScreen(AbstractUpdateDBScreen):
 		content.add_widget(update_button)
 
 	def fill_fields(self) -> None:
-		print(f'[{self.__class__.__name__}]:')
 		for column_name, field in self.fields.items():
 			element_column_value = getattr(self._element, column_name)
 			field.set_value(element_column_value)
-			print(f'\t{column_name}: {getattr(self._element, column_name)}')
-		print()
 
 	def update(self, instance: Button) -> None:
 		values = self.get_values()
-		print(self._element.emergencys, type(self._element.emergencys), end='\n'*5)
 		self.table.query.filter_by(id=self._element.id).update(values)
 
 

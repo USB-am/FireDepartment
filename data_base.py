@@ -140,10 +140,10 @@ class ColorTheme(db.Model):
 	def get_fields() -> dict:
 		result = {
 			'title': 'StringField',
-			'button_color': 'ColorSelectField',
-			'font_color': 'ColorSelectField',
-			'background_color_opacity': 'ColorSelectField',
-			'background_image': 'ColorSelectField',
+			'button_color': 'ColorField',
+			'font_color': 'ColorField',
+			'background_color_opacity': 'ColorField',
+			'background_image': 'ColorField',
 		}
 
 		return result
