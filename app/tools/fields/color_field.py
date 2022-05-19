@@ -4,6 +4,7 @@ import os
 
 from kivy.lang import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.picker import MDThemePicker
 
 from config import PATTERNS_DIR, LOCALIZED
 from app.tools.custom_widgets import FDColorPicker
@@ -22,10 +23,13 @@ class ColorField(MDBoxLayout):
 
 		super().__init__()
 
+		self.theme_picker = MDThemePicker()
+		self.theme_picker.bind(on_pre_dismiss=lambda e: print('on_pre_dismiss'))
 		self._color_picker = FDColorPicker(title=self.display_text)
 
 	def open_dialog(self) -> None:
-		self._color_picker.open()
+		# self._color_picker.open()
+		self.theme_picker.open()
 
 	def get_value(self) -> list:
 		return self._color_picker.current_color
