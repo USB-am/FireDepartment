@@ -9,7 +9,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.picker import MDDatePicker
 
 from config import PATTERNS_DIR, LOCALIZED
-from app.tools.check_exceptions import check_none_value
+from app.exceptions.check_exceptions import check_none_value
 
 
 path_to_kv_file = os.path.join(PATTERNS_DIR, 'fields', 'work_day_field.kv')
@@ -17,10 +17,6 @@ Builder.load_file(path_to_kv_file)
 
 
 from kivymd.uix.label import MDLabel
-
-
-class CalendarLayout(MDBoxLayout):	# ???
-	pass
 
 
 class WorkDayField(MDBoxLayout):

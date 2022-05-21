@@ -9,7 +9,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.picker import MDTimePicker, MDDatePicker
 
 from config import PATTERNS_DIR, LOCALIZED
-from app.tools.check_exceptions import check_none_value
+from app.exceptions.check_exceptions import check_none_value
 
 
 path_to_kv_file = os.path.join(PATTERNS_DIR, 'fields', 'date_time_field.kv')
