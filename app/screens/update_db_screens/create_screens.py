@@ -5,7 +5,10 @@ from kivy.uix.button import Button
 from . import AbstractUpdateDBScreen
 from data_base import db, Tag, Rank, Position, Human, Emergency, ColorTheme,\
 	Worktype
+from data_base.tools import create_empty
 from config import LOCALIZED
+from app.exceptions.custom_exceptions import DataBaseUpdateError
+
 
 
 class AbstractCreateScreen(AbstractUpdateDBScreen):
@@ -30,7 +33,8 @@ class AbstractCreateScreen(AbstractUpdateDBScreen):
 
 	def create(self, instance: Button) -> bool:
 		try:
-			self.insert_values()
+			# self.insert_values()
+			create_empty(self.table, self.get_values())
 			super().clear_fields_content()
 			# TODO: Вывести сообщение о успешном создании
 			self.redirect_to_back_screen()
