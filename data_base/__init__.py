@@ -127,11 +127,11 @@ class ColorTheme(db.Model):
 	icon = 'palette'
 	__tablename__ = 'ColorTheme'
 	id = db.Column(db.Integer, primary_key=True)
-	title = db.Column(db.String(255), nullable=False)
-	button_color = db.Column(db.PickleType, nullable=False)
-	font_color = db.Column(db.PickleType, nullable=False)
-	background_color_opacity = db.Column(db.PickleType, nullable=False)
-	background_image = db.Column(db.String(255), nullable=False)
+	colors = db.Column(db.PickleType, nullable=False)
+	theme = db.Column(db.String(255), nullable=False)
+	accent = db.Column(db.String(255), nullable=False)
+	style = db.Column(db.Boolean(), nullable=False)
+	hue = db.Column(db.String(255), nullable=False)	# Оттенок
 
 	def __str__(self):
 		return self.title
@@ -139,24 +139,14 @@ class ColorTheme(db.Model):
 	@staticmethod
 	def get_fields() -> dict:
 		result = {
-			'title': 'StringField',
-			'button_color': 'ColorField',
-			'font_color': 'ColorField',
-			'background_color_opacity': 'ColorField',
-			'background_image': 'ColorField',
+			'colors': 'ColorsField',
+			'theme': 'SelectField',
+			'accent': 'SelectField',
+			'style': 'BooleanField',
+			'hue': 'SelectField',
 		}
 
 		return result
-
-	def get_values(self) -> dict:
-		return {
-			'ID': self.id,
-			'TITLE': self.title,
-			'BUTTON_COLOR': self.button_color,
-			'FONT_COLOR': self.font_color,
-			'BACKGROUND_COLOR_OPACITY': self.background_color_opacity,
-			'BACKGROUND_IMAGE': self.background_image
-		}
 
 
 class Worktype(db.Model):

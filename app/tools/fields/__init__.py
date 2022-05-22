@@ -11,6 +11,7 @@ from .phone_field import PhoneField
 from .date_time_field import DateTimeField
 from .integer_field import IntegerField
 from .color_field import ColorField
+from .select_field import SelectField
 
 
 __all__ = (
@@ -25,4 +26,5 @@ __all__ = (
 	'DateTimeField',
 	'IntegerField',
 	'ColorField',
+	'SelectField',
 )
