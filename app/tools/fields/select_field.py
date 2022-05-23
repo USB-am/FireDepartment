@@ -5,12 +5,18 @@ import os
 from kivy.lang import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.menu import MDDropdownMenu
+from kivymd.uix.list import OneLineListItem
+from kivymd.theming import ThemeManager
 
 from config import PATTERNS_DIR, LOCALIZED
 
 
 path_to_kv_file = os.path.join(PATTERNS_DIR, 'fields', 'select_field.kv')
 Builder.load_file(path_to_kv_file)
+
+
+class MenuItem(OneLineListItem):
+	pass
 
 
 class SelectField(MDBoxLayout):
@@ -31,8 +37,10 @@ class SelectField(MDBoxLayout):
 
 		menu_items = [{
 			'icon': self.icon,
-			'viewclass': 'OneLineListItem',
-			'text': text
+			'viewclass': 'MenuItem',
+			'text': text,
+			'bg_color': ThemeManager().colors['Red']['500'],	# TODO: сделать выборку пол ключам
+			'on_release': lambda x=text: print(f'You selected {x} item')
 		} for text in self.data]
 		self.menu = MDDropdownMenu(
 			caller=self.ids.open_dropmenu_button,
