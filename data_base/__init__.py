@@ -127,7 +127,6 @@ class ColorTheme(db.Model):
 	icon = 'palette'
 	__tablename__ = 'ColorTheme'
 	id = db.Column(db.Integer, primary_key=True)
-	colors = db.Column(db.PickleType, nullable=False)
 	theme = db.Column(db.String(255), nullable=False)
 	accent = db.Column(db.String(255), nullable=False)
 	style = db.Column(db.Boolean(), nullable=False)
@@ -139,11 +138,10 @@ class ColorTheme(db.Model):
 	@staticmethod
 	def get_fields() -> dict:
 		result = {
-			'colors': 'ColorsField',
 			'theme': 'SelectField',
 			'accent': 'SelectField',
-			'style': 'BooleanField',
 			'hue': 'SelectField',
+			# 'style': 'BooleanField',
 		}
 
 		return result
