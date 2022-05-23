@@ -12,13 +12,12 @@ from app.tools.path_manager import PathManager
 from .screens import \
 	MainPage,\
 	Settings,\
+	UpdateColorTheme,\
 	CreateTag, CreateRank, CreatePosition, CreateHuman, CreateEmergency,\
-	CreateColorTheme, CreateWorkType,\
+	CreateWorkType,\
 	UpdateListTag, UpdateListRank, UpdateListPosition,\
-	UpdateListHuman, UpdateListEmergency, UpdateListColorTheme,\
-	UpdateListWorkType,\
-	EditTag, EditRank, EditPosition, EditHuman, EditEmergency, EditColorTheme,\
-	EditWorkType
+	UpdateListHuman, UpdateListEmergency, UpdateListWorkType,\
+	EditTag, EditRank, EditPosition, EditHuman, EditEmergency, EditWorkType
 
 
 class Manager(ScreenManager):
@@ -37,7 +36,6 @@ class Manager(ScreenManager):
 		self.add_widget(CreatePosition())
 		self.add_widget(CreateHuman())
 		self.add_widget(CreateEmergency())
-		self.add_widget(CreateColorTheme())
 		self.add_widget(CreateWorkType())
 
 		# Update list screens
@@ -46,7 +44,6 @@ class Manager(ScreenManager):
 		self.add_widget(UpdateListPosition())
 		self.add_widget(UpdateListHuman())
 		self.add_widget(UpdateListEmergency())
-		self.add_widget(UpdateListColorTheme())
 		self.add_widget(UpdateListWorkType())
 
 		# Edit screens
@@ -55,8 +52,10 @@ class Manager(ScreenManager):
 		self.add_widget(EditPosition())
 		self.add_widget(EditHuman())
 		self.add_widget(EditEmergency())
-		self.add_widget(EditColorTheme())
 		self.add_widget(EditWorkType())
+
+		# Update color theme
+		self.add_widget(UpdateColorTheme())
 
 		self.current = 'settings'
 
@@ -80,9 +79,9 @@ class Application(MDApp):
 		return current_page_name
 
 	def build(self) -> Manager:
-		# self.theme_cls.primary_palette = 'BlueGray'#'Indigo'#
-		# self.theme_cls.accent_palette = 'Teal'
-		# self.theme_cls.theme_style = 'Light'
+		self.theme_cls.primary_palette = 'BlueGray'#'Indigo'#
+		self.theme_cls.accent_palette = 'Teal'
+		self.theme_cls.theme_style = 'Light'
 
 		return self.screen_manager
 

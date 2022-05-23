@@ -1,3 +1,20 @@
+#:import randint random
+
+<ColorThemeElement>:
+	size_hint: 1, None
+	size: self.width, 60
+	padding: [20, 10]
+
+	MDRectangleFlatIconButton:
+		size_hint: 1, None
+		size: self.width, 50
+		icon: 'palette'
+		text: 'ColorThemeElement'
+		line_color: (0, 0, 0, 0)
+		on_release:
+			app.forward('update_color_theme')
+
+
 <DataBaseElement>:
 	size_hint: 1, None
 	size: self.width, 50
@@ -6,15 +23,15 @@
 
 	MDRectangleFlatIconButton:
 		icon: 'plus-circle'
-		text: 'Создать'
-		on_press:
-			app.forward(self.parent.to_create_screen_name)
+		text: 'Создать'	# TODO: Change to LOCALIZED.translate method
+		on_release:
+			app.forward(root.to_create_screen_name)
 
 	MDRectangleFlatIconButton:
 		icon: 'playlist-edit'
-		text: 'Изменить'
-		on_press:
-			app.forward(self.parent.to_edit_screen_name)
+		text: 'Изменить'	# TODO: Change to LOCALIZED.translate method
+		on_release:
+			app.forward(root.to_edit_screen_name)
 
 
 <Settings>:

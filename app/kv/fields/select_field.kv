@@ -3,24 +3,18 @@
 
 <SelectField>:
 	size_hint: 1, None
-	size: self.width, 100
-	orientation: 'vertical'
+	size: self.width, 50
 
-	MDBoxLayout:
-		size_hint: 1, None
-		size: self.width, 50
+	MDIcon:
+		size_hint: None, None
+		size: 50, 50
+		icon: root.icon
 
-		MDIcon:
-			size_hint: None, None
-			size: 50, 50
-			icon: root.icon
+	MDLabel:
+		text: root.display_text
 
-		MDLabel:
-			text: root.display_text
-
-	MDBoxLayout:
-		size_hint: 1, None
-		size: self.width, 50
-
-		MDRectangleFlatButton:
-			text: 'MDRectangleFlatButton'
+	MDRectangleFlatButton:
+		id: open_dropmenu_button
+		text: 'MDRectangleFlatButton'
+		on_release:
+			root.menu.open()
