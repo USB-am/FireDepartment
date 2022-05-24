@@ -87,7 +87,6 @@ class Application(MDApp):
 		self.theme_cls.accent_palette = self.theme.accent
 		self.theme_cls.primary_hue = self.theme.hue
 		self.theme_cls.theme_style = 'Light' if self.theme.style else 'Dark'
-		print(self.theme)
 
 		return self.screen_manager
 

@@ -1,0 +1,39 @@
+#:import LOCALIZED config
+#:import FDIcon,FDLabel app.tools.custom_widgets.label
+
+
+<FDCheckbox>:
+	size_hint: 1, None
+	size: self.width, 50
+
+	MDCheckbox:
+		id: checkbox
+		size_hint: None, None
+		size: 50, 50
+		group: root.group
+
+	FDLabel:
+		text: root.display_text
+
+
+<StyleRadioField>:
+	orientation: 'vertical'
+	size_hint: 1, None
+	size: self.width, 100
+
+	MDBoxLayout:
+		size_hint: 1, None
+		size: self.width, 50
+
+		FDIcon:
+			size_hint: None, None
+			size: 50, 50
+			icon: root.icon
+
+		FDLabel:
+			text: root.display_text
+
+	MDBoxLayout:
+		size_hint: 1, None
+		size: self.width, 50
+		id: radio_buttons_container

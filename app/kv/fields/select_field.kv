@@ -13,13 +13,8 @@
 	MDLabel:
 		text: root.display_text
 
-	MDRectangleFlatButton:
+	MDFloatingActionButton:
 		id: open_dropmenu_button
-		text: 'MDRectangleFlatButton'
+		icon: root.icon
 		on_release:
 			root.menu.open()
-
-	MDIconButton:
-		icon: 'account'
-		on_release:
-			root.get_value()
