@@ -130,7 +130,7 @@ class ColorTheme(db.Model):
 	theme = db.Column(db.String(255), nullable=False)
 	accent = db.Column(db.String(255), nullable=False)
 	hue = db.Column(db.String(255), nullable=False)	# Оттенок
-	style = db.Column(db.String(255), nullable=False)	# Light, Dark
+	style = db.Column(db.String(255), nullable=False)	# Light/Dark
 
 	def __str__(self):
 		return f'ColorTheme:\n'\

@@ -85,3 +85,6 @@ class SelectField(MDBoxLayout):
 
 	def get_value(self) -> str:
 		return self.menu.value
+
+	def set_value(self, value: str) -> None:
+		pass
