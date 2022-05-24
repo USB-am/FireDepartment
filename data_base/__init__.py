@@ -145,7 +145,7 @@ class ColorTheme(db.Model):
 			'theme': 'SelectField',
 			'accent': 'SelectField',
 			'hue': 'SelectField',
-			# 'style': 'BooleanField',
+			'style': 'StyleRadioField',
 		}
 
 		return result

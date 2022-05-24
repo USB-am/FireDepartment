@@ -12,6 +12,7 @@ from .date_time_field import DateTimeField
 from .integer_field import IntegerField
 from .color_field import ColorField
 from .select_field import SelectField
+from .style_radio_field import StyleRadioField
 
 
 __all__ = (
@@ -27,4 +28,5 @@ __all__ = (
 	'IntegerField',
 	'ColorField',
 	'SelectField',
+	'StyleRadioField',
 )

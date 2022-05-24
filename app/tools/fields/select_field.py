@@ -5,7 +5,6 @@ import os
 from kivy.lang import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.menu import MDDropdownMenu
-from kivymd.uix.list import OneLineListItem
 from kivymd.theming import ThemeManager
 
 from config import PATTERNS_DIR, LOCALIZED
@@ -31,38 +30,40 @@ class DropdownMenu(MDDropdownMenu):
 
 		super().__init__()
 
+		self.value = None
+
 	def _item_creation(self) -> list:
 		items = []
 		theme = ColorTheme.query.first()
 
 		for text in self.data:
-			theme_key = theme.theme if not self.title in ('theme', 'accent') else text
+			# TODO: сейчас выбор только из theme.theme. Сделать еще из theme.accent
+			theme_key = theme.theme\
+				if not self.title in ('theme', 'accent') else text
 			hue_key = theme.hue if self.title != 'hue' else text
 			items.append({
-				'viewclass': 'MenuItem',
+				'viewclass': 'OneLineListItem',
 				'text': text,
 				'bg_color': COLORS[theme_key][hue_key],
-				'on_release': lambda x=text: print(f'You selected {x} item')
+				'on_release': lambda x=text: self._update_value(x)
 			})
 
 		return items
 
-
-class MenuItem(OneLineListItem):
-	pass
+	def _update_value(self, item: str) -> None:
+		self.value = item
+		self.dismiss()
 
 
 class SelectField(MDBoxLayout):
 	icons = {
 		'theme': 'shape',
 		'accent': 'exclamation-thick',
-		'hue': 'format-size',
-		'style': 'theme-light-dark'
+		'hue': 'format-size'
 	}
 
-	def __init__(self, title: str, data: list):
+	def __init__(self, title: str):
 		self.title = title
-		self.data = data
 		self.display_text = LOCALIZED.translate(self.title)
 		self.icon = self.icons.get(title, 'bus')
 
@@ -71,12 +72,16 @@ class SelectField(MDBoxLayout):
 		self.menu = DropdownMenu(
 			caller=self.ids.open_dropmenu_button,
 			title=self.title,
-			data=self.data
+			data=self._get_data()
 		)
 
-	def get_value(self) -> str:
-		theme = ColorTheme.query.first()
-		print(f'theme = {theme}')
+	def _get_data(self) -> list:
+		if self.title in ('theme', 'accent'):
+			return tuple(COLORS.keys())[:-2]
+		elif self.title in ('hue',):
+			return COLORS['Red'].keys()
+		else:
+			return []
 
-	def set_value(self, value: str) -> None:
-		pass
+	def get_value(self) -> str:
+		return self.menu.value
