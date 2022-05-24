@@ -21,6 +21,8 @@ class FDCheckbox(MDBoxLayout):
 
 		super().__init__()
 
+		self.checkbox.active = True
+
 	@property
 	def checkbox(self) -> MDCheckbox:
 		return self.ids.checkbox
@@ -59,6 +61,13 @@ class RadioContainer(MDBoxLayout):
 	def get_value(self) -> str:
 		return tuple(filter(lambda layout: layout.active, self.items))[0].title
 
+	def set_value(self, value: str) -> None:
+		''' Set active state to checkbox '''
+		tuple(filter(
+			lambda layout: layout.title==value,
+			self.items
+		))[0].active = True
+
 
 class StyleRadioField(MDBoxLayout):
 	def __init__(self, title: str):
@@ -68,21 +77,14 @@ class StyleRadioField(MDBoxLayout):
 
 		super().__init__()
 
-		self.update_content()
-		print(self.get_value())
-
-	def update_content(self) -> None:
-		content = self.ids.radio_buttons_container
-		content.clear_widgets()
-
-		group_name = 'theme_style'
-		content.add_widget(RadioContainer(
+		self.radio_container = RadioContainer(
 			items=('Light', 'Dark'),
-			group=group_name
-		))
+			group='theme_style'
+		)
+		self.add_widget(self.radio_container)
 
 	def get_value(self) -> str:
-		self.ids.radio_buttons_container.children[0].get_value()
+		self.radio_container.get_value()
 
 	def set_value(self, value: str) -> None:
-		pass
+		self.radio_container.set_value(value)

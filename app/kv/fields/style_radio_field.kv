@@ -16,6 +16,11 @@
 		text: root.display_text
 
 
+<RadioContainer>:
+	size_hint: 1, None
+	size: self.width, 50
+
+
 <StyleRadioField>:
 	orientation: 'vertical'
 	size_hint: 1, None
@@ -32,8 +37,3 @@
 
 		FDLabel:
 			text: root.display_text
-
-	MDBoxLayout:
-		size_hint: 1, None
-		size: self.width, 50
-		id: radio_buttons_container

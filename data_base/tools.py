@@ -30,7 +30,7 @@ def create_base_theme() -> None:
 			theme='BlueGray',
 			accent='Teal',
 			hue='200',
-			style=1
+			style='Light'
 		)
 
 		db.session.add(theme)
