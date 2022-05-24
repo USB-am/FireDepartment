@@ -18,6 +18,8 @@ from .screens import \
 	UpdateListTag, UpdateListRank, UpdateListPosition,\
 	UpdateListHuman, UpdateListEmergency, UpdateListWorkType,\
 	EditTag, EditRank, EditPosition, EditHuman, EditEmergency, EditWorkType
+from data_base import ColorTheme
+from data_base.tools import create_base_theme
 
 
 class Manager(ScreenManager):
@@ -66,6 +68,8 @@ class Application(MDApp):
 	def __init__(self):
 		super().__init__()
 
+		create_base_theme()
+		self.theme = ColorTheme.query.first()
 		self.screen_manager = Manager()
 
 	def forward(self, page_name: str) -> None:
@@ -79,9 +83,11 @@ class Application(MDApp):
 		return current_page_name
 
 	def build(self) -> Manager:
-		self.theme_cls.primary_palette = 'BlueGray'
-		self.theme_cls.accent_palette = 'Teal'
-		self.theme_cls.theme_style = 'Light'
+		self.theme_cls.primary_palette = self.theme.theme
+		self.theme_cls.accent_palette = self.theme.accent
+		self.theme_cls.primary_hue = self.theme.hue
+		self.theme_cls.theme_style = 'Light' if self.theme.style else 'Dark'
+		print(self.theme)
 
 		return self.screen_manager
 
