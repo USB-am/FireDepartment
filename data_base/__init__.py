@@ -129,11 +129,15 @@ class ColorTheme(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	theme = db.Column(db.String(255), nullable=False)
 	accent = db.Column(db.String(255), nullable=False)
-	style = db.Column(db.Boolean(), nullable=False)
 	hue = db.Column(db.String(255), nullable=False)	# Оттенок
+	style = db.Column(db.String(255), nullable=False)	# Light, Dark
 
 	def __str__(self):
-		return self.title
+		return f'ColorTheme:\n'\
+			f'\tTheme={self.theme}\n'\
+			f'\tAccent={self.accent}\n'\
+			f'\tHue={self.hue}\n'\
+			f'\tStyle={self.style}'
 
 	@staticmethod
 	def get_fields() -> dict:
