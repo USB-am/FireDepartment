@@ -37,9 +37,10 @@ class FDCheckbox(MDBoxLayout):
 
 
 class RadioContainer(MDBoxLayout):
-	def __init__(self, items: tuple, group: str=None):
+	def __init__(self, items: tuple, update_theme_method, group: str=None):
 		super().__init__()
 
+		self.update_theme_method = update_theme_method
 		self.group = group
 		self.items = self._creation_radiobuttons(items)
 
@@ -58,6 +59,8 @@ class RadioContainer(MDBoxLayout):
 		if not instance.active:
 			instance.active = True
 
+		self.update_theme_method({'theme_style': self.get_value()})
+
 	def get_value(self) -> str:
 		return tuple(filter(lambda layout: layout.active, self.items))[0].title
 
@@ -70,7 +73,7 @@ class RadioContainer(MDBoxLayout):
 
 
 class StyleRadioField(MDBoxLayout):
-	def __init__(self, title: str):
+	def __init__(self, title: str, update_theme_method):
 		self.title = title
 		self.display_text = LOCALIZED.translate(self.title)
 		self.icon = 'theme-light-dark'
@@ -79,12 +82,13 @@ class StyleRadioField(MDBoxLayout):
 
 		self.radio_container = RadioContainer(
 			items=('Light', 'Dark'),
+			update_theme_method=update_theme_method,
 			group='theme_style'
 		)
 		self.add_widget(self.radio_container)
 
 	def get_value(self) -> str:
-		self.radio_container.get_value()
+		return self.radio_container.get_value()
 
 	def set_value(self, value: str) -> None:
 		self.radio_container.set_value(value)

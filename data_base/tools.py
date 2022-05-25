@@ -27,10 +27,10 @@ def create_base_theme() -> None:
 
 	if theme_element is None:
 		theme = ColorTheme(
-			theme='BlueGray',
-			accent='Teal',
-			hue='200',
-			style='Light'
+			primary_palette='BlueGray',
+			accent_palette='Teal',
+			primary_hue='900',
+			theme_style='Light'
 		)
 
 		db.session.add(theme)
