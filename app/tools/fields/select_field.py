@@ -3,6 +3,7 @@
 import os
 
 from kivy.lang import Builder
+from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.theming import ThemeManager
@@ -30,17 +31,24 @@ class DropdownMenu(MDDropdownMenu):
 
 		super().__init__()
 
+		self._update_items_color()
+
 		self.value = None
+
+	def open(self) -> None:
+		super().open()
+
+		self._update_items_color()
 
 	def _item_creation(self) -> list:
 		items = []
 		theme = ColorTheme.query.first()
 
 		for text in self.data:
-			# TODO: сейчас выбор только из theme.theme. Сделать еще из theme.accent
-			theme_key = theme.theme\
-				if not self.title in ('theme', 'accent') else text
-			hue_key = theme.hue if self.title != 'hue' else text
+			theme_key = theme.primary_palette\
+				if not self.title in ('primary_palette', 'accent_palette') else text
+			hue_key = theme.primary_hue if self.title != 'primary_hue' else text
+
 			items.append({
 				'viewclass': 'OneLineListItem',
 				'text': text,
@@ -52,19 +60,27 @@ class DropdownMenu(MDDropdownMenu):
 
 	def _update_value(self, item: str) -> None:
 		self.value = item
-		self.dismiss()
+
+	def _update_items_color(self) -> None:
+		theme = MDApp.get_running_app().theme_cls
+
+		if self.title in ('primary_palette', 'accent_palette'):
+			for item in self.items:
+				item['bg_color'] = COLORS[item['text']][theme.primary_hue]
 
 
 class SelectField(MDBoxLayout):
 	icons = {
-		'theme': 'shape',
-		'accent': 'exclamation-thick',
-		'hue': 'format-size'
+		'primary_palette': 'shape',
+		'accent_palette': 'exclamation-thick',
+		'primary_hue': 'format-size'
 	}
 
-	def __init__(self, title: str):
+	def __init__(self, title: str, update_theme_method):
 		self.title = title
-		self.display_text = LOCALIZED.translate(self.title)
+		self.update_theme_method = update_theme_method
+		self.translate_text = LOCALIZED.translate(self.title)
+		self.display_text = self.translate_text[:]
 		self.icon = self.icons.get(title, 'bus')
 
 		super().__init__()
@@ -74,11 +90,19 @@ class SelectField(MDBoxLayout):
 			title=self.title,
 			data=self._get_data()
 		)
+		self.menu.bind(on_dismiss=lambda x: self._change_theme())
+
+	def _change_theme(self) -> None:
+		self.update_theme_method({self.title: self.get_value()})
+		self._update_label()
+
+	def _update_label(self):
+		self.ids.label.text = f'{self.translate_text} ({self.menu.value})'
 
 	def _get_data(self) -> list:
-		if self.title in ('theme', 'accent'):
+		if self.title in ('primary_palette', 'accent_palette'):
 			return tuple(COLORS.keys())[:-2]
-		elif self.title in ('hue',):
+		elif self.title in ('primary_hue',):
 			return COLORS['Red'].keys()
 		else:
 			return []
@@ -87,4 +111,5 @@ class SelectField(MDBoxLayout):
 		return self.menu.value
 
 	def set_value(self, value: str) -> None:
-		pass
+		self.menu.value = value
+		self._update_label()

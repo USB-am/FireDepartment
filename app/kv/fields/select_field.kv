@@ -11,10 +11,12 @@
 		icon: root.icon
 
 	MDLabel:
+		id: label
 		text: root.display_text
 
 	MDFloatingActionButton:
 		id: open_dropmenu_button
 		icon: root.icon
+		md_bg_color: app.theme_cls.accent_color
 		on_release:
 			root.menu.open()

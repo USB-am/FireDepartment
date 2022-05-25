@@ -83,10 +83,10 @@ class Application(MDApp):
 		return current_page_name
 
 	def build(self) -> Manager:
-		self.theme_cls.primary_palette = self.theme.theme
-		self.theme_cls.accent_palette = self.theme.accent
-		self.theme_cls.primary_hue = self.theme.hue
-		self.theme_cls.theme_style = 'Light' if self.theme.style else 'Dark'
+		self.theme_cls.primary_palette = self.theme.primary_palette
+		self.theme_cls.accent_palette = self.theme.accent_palette
+		self.theme_cls.primary_hue = self.theme.primary_hue
+		self.theme_cls.theme_style = self.theme.theme_style
 
 		return self.screen_manager
 

@@ -127,10 +127,10 @@ class ColorTheme(db.Model):
 	icon = 'palette'
 	__tablename__ = 'ColorTheme'
 	id = db.Column(db.Integer, primary_key=True)
-	theme = db.Column(db.String(255), nullable=False)
-	accent = db.Column(db.String(255), nullable=False)
-	hue = db.Column(db.String(255), nullable=False)	# Оттенок
-	style = db.Column(db.String(255), nullable=False)	# Light/Dark
+	primary_palette = db.Column(db.String(255), nullable=False)
+	accent_palette = db.Column(db.String(255), nullable=False)
+	primary_hue = db.Column(db.String(255), nullable=False)	# Оттенок
+	theme_style = db.Column(db.String(255), nullable=False)	# Light/Dark
 
 	def __str__(self):
 		return f'ColorTheme:\n'\
@@ -142,10 +142,10 @@ class ColorTheme(db.Model):
 	@staticmethod
 	def get_fields() -> dict:
 		result = {
-			'theme': 'SelectField',
-			'accent': 'SelectField',
-			'hue': 'SelectField',
-			'style': 'StyleRadioField',
+			'primary_hue': 'SelectField',
+			'primary_palette': 'SelectField',
+			'accent_palette': 'SelectField',
+			'theme_style': 'StyleRadioField',
 		}
 
 		return result
