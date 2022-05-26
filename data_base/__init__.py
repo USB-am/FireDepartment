@@ -131,13 +131,10 @@ class ColorTheme(db.Model):
 	accent_palette = db.Column(db.String(255), nullable=False)
 	primary_hue = db.Column(db.String(255), nullable=False)	# Оттенок
 	theme_style = db.Column(db.String(255), nullable=False)	# Light/Dark
+	background_image = db.Column(db.Text(), nullable=True)
 
 	def __str__(self):
-		return f'ColorTheme:\n'\
-			f'\tTheme={self.theme}\n'\
-			f'\tAccent={self.accent}\n'\
-			f'\tHue={self.hue}\n'\
-			f'\tStyle={self.style}'
+		return f'<ColorTheme {self.id}>'
 
 	@staticmethod
 	def get_fields() -> dict:
@@ -146,6 +143,7 @@ class ColorTheme(db.Model):
 			'primary_palette': 'SelectField',
 			'accent_palette': 'SelectField',
 			'theme_style': 'StyleRadioField',
+			'background_image': 'FileManagerField'
 		}
 
 		return result

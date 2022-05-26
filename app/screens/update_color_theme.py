@@ -10,7 +10,8 @@ from kivymd.uix.card import MDSeparator
 from app.tools.custom_widgets import CustomScreen
 from app.tools import fields as FIELDS
 from config import PATTERNS_DIR, LOCALIZED
-from data_base import ColorTheme
+from data_base import db, ColorTheme
+from data_base.tools import check_db_commit_except
 
 
 path_to_kv_file = os.path.join(PATTERNS_DIR, 'screens', 'update_color_theme.kv')
@@ -68,10 +69,13 @@ class UpdateColorTheme(CustomScreen):
 		for palette, color in values.items():
 			setattr(app.theme_cls, palette, color)
 
+	@check_db_commit_except
 	def save(self, values: dict) -> None:
-		pass
+		self.table.query.filter_by(id=1).update(values)
+		db.session.commit()
 
 	def apply_change(self, instance: Button) -> None:
 		values = self.get_values()
+		print(values)
 		self.update_theme(values)
 		self.save(values)

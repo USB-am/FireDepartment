@@ -13,6 +13,7 @@ from .integer_field import IntegerField
 from .color_field import ColorField
 from .select_field import SelectField
 from .style_radio_field import StyleRadioField
+from .file_manager_field import FileManagerField
 
 
 __all__ = (
@@ -29,4 +30,5 @@ __all__ = (
 	'ColorField',
 	'SelectField',
 	'StyleRadioField',
+	'FileManagerField',
 )
