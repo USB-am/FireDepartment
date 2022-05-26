@@ -7,7 +7,7 @@ from kivy.uix.button import Button
 from kivymd.app import MDApp
 from kivymd.uix.card import MDSeparator
 
-from app.tools.custom_widgets import CustomScreen
+from app.tools.custom_widgets import CustomScreen, Submit
 from app.tools import fields as FIELDS
 from config import PATTERNS_DIR, LOCALIZED
 from data_base import db, ColorTheme
@@ -50,7 +50,7 @@ class UpdateColorTheme(CustomScreen):
 
 			self.widgets[column_name] = field
 
-		update_button = Button(
+		update_button = Submit(
 			size_hint=(1, None),
 			size=(self.width, 60),
 			text=LOCALIZED.translate('Update')
