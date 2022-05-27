@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from kivy.uix.button import Button
-
 from . import AbstractUpdateDBScreen
 from data_base import db, Tag, Rank, Position, Human, Emergency, ColorTheme,\
 	Worktype
 from data_base.tools import create_empty
 from config import LOCALIZED
 from app.exceptions.custom_exceptions import DataBaseUpdateError
+from app.tools.custom_widgets import Submit
 
 
 
@@ -23,7 +22,7 @@ class AbstractCreateScreen(AbstractUpdateDBScreen):
 
 		content = self.ids.content
 
-		create_button = Button(
+		create_button = Submit(
 			size_hint=(1, None),
 			size=(self.width, 60),
 			text=LOCALIZED.translate('Create')
@@ -31,7 +30,7 @@ class AbstractCreateScreen(AbstractUpdateDBScreen):
 		create_button.bind(on_press=self.create)
 		self.ids.content.add_widget(create_button)
 
-	def create(self, instance: Button) -> bool:
+	def create(self, instance: Submit) -> bool:
 		try:
 			# self.insert_values()
 			create_empty(self.table, self.get_values())

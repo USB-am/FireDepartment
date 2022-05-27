@@ -13,5 +13,4 @@ Builder.load_file(path_to_kv_file)
 
 
 class Submit(Button):
-	def __init__(self, **kw):
-		super().__init__(**kw)
+	pass

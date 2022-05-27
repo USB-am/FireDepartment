@@ -10,13 +10,14 @@
 		id: checkbox
 		size_hint: None, None
 		size: 50, 50
-		group: self.parent.group
+		selected_color: app.theme_cls.accent_color
+		group: root.group
 
 	MDTextButton:
 		size_hint: 1, 1
-		text: self.parent.display_text
+		text: root.display_text
 		on_press:
-			print(f'{self.parent.display_text} is pressed')
+			print(f'{root.display_text} is pressed')
 
 
 <AbstractToManyField>:
@@ -31,17 +32,17 @@
 		FDIcon:
 			size_hint: None, None
 			size: 50, 50
-			icon: self.parent.parent.icon
+			icon: root.icon
 
 		FDLabel:
-			text: self.parent.parent.display_text
+			text: root.display_text
 
 		FDIconButton:
 			size_hint: None, None
 			size: 50, 50
 			icon: 'folder-multiple-plus'
 			on_press:
-				app.forward(self.parent.parent.to_create_screen)
+				app.forward(root.to_create_screen)
 
 	ScrollView:
 		GridLayout:

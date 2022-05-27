@@ -19,6 +19,8 @@ def check_db_commit_except(func):
 @check_db_commit_except
 def create_empty(table: db.Model, values: dict) -> None:
 	new_empty = table(**values)
+	db.session.add(new_empty)
+	db.session.commit()
 
 
 @check_db_commit_except
