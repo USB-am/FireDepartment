@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from kivy.uix.button import Button
+# from kivy.uix.button import Button
 
 from config import PATTERNS_DIR, LOCALIZED
 from . import AbstractUpdateDBScreen
 from data_base import db, Tag, Rank, Position, Human, Emergency, ColorTheme,\
 	Worktype
+from app.tools.custom_widgets import Submit
 
 
 class AbstractUpdateScreen(AbstractUpdateDBScreen):
@@ -22,7 +23,7 @@ class AbstractUpdateScreen(AbstractUpdateDBScreen):
 
 		content = self.ids.content
 
-		update_button = Button(
+		update_button = Submit(
 			size_hint=(1, None),
 			size=(self.width, 60),
 			text=LOCALIZED.translate('Update')
@@ -35,7 +36,7 @@ class AbstractUpdateScreen(AbstractUpdateDBScreen):
 			element_column_value = getattr(self._element, column_name)
 			field.set_value(element_column_value)
 
-	def update(self, instance: Button) -> None:
+	def update(self, instance: Submit) -> None:
 		values = self.get_values()
 		self.table.query.filter_by(id=self._element.id).update(values)
 

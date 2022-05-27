@@ -3,7 +3,6 @@
 import os
 
 from kivy.lang import Builder
-from kivy.uix.button import Button
 from kivymd.app import MDApp
 from kivymd.uix.card import MDSeparator
 
@@ -74,7 +73,7 @@ class UpdateColorTheme(CustomScreen):
 		self.table.query.filter_by(id=1).update(values)
 		db.session.commit()
 
-	def apply_change(self, instance: Button) -> None:
+	def apply_change(self, instance: Submit) -> None:
 		values = self.get_values()
 		print(values)
 		self.update_theme(values)
