@@ -1,5 +1,5 @@
 from .main_page import MainPage
-from .settings import Settings
+from .settings import Options
 from .update_color_theme import UpdateColorTheme
 from .update_db_screens.create_screens import CreateTag, CreateRank,\
 	CreatePosition, CreateHuman, CreateEmergency, CreateWorkType
@@ -12,7 +12,7 @@ from .update_db_screens.update_screens import EditTag, EditRank, EditPosition,\
 
 __all__ = (
 	'MainPage',\
-	'Settings',\
+	'Options',\
 	'UpdateColorTheme',\
 	'CreateTag', 'CreateRank', 'CreatePosition', 'CreateHuman', 'CreateEmergency',\
 	'CreateWorkType',\

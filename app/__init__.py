@@ -11,7 +11,7 @@ from kivy.uix.screenmanager import ScreenManager
 from app.tools.path_manager import PathManager
 from .screens import \
 	MainPage,\
-	Settings,\
+	Options,\
 	UpdateColorTheme,\
 	CreateTag, CreateRank, CreatePosition, CreateHuman, CreateEmergency,\
 	CreateWorkType,\
@@ -29,8 +29,8 @@ class Manager(ScreenManager):
 		# Main page
 		self.add_widget(MainPage())
 
-		# Settings
-		self.add_widget(Settings())
+		# Options
+		self.add_widget(Options())
 
 		# Create screens
 		self.add_widget(CreateTag())

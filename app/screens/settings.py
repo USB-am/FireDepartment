@@ -30,7 +30,7 @@ class ColorThemeElement(MDBoxLayout):
 	pass
 
 
-class Settings(CustomScreen):
+class Options(CustomScreen):
 	name = 'settings'
 
 	def __init__(self):
@@ -40,7 +40,7 @@ class Settings(CustomScreen):
 		self.update_content()
 
 	def update_title(self) -> None:
-		translate_text = LOCALIZED.translate('Settings')
+		translate_text = LOCALIZED.translate('Options')
 		self.ids.toolbar.title = translate_text
 
 	def update_content(self) -> None:

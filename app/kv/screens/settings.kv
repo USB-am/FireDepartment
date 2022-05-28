@@ -8,7 +8,10 @@
 		size: self.width, 50
 		icon: 'palette'
 		text: 'ColorThemeElement'
+		md_bg_color: (0, 0, 0, 0)
 		line_color: (0, 0, 0, 0)
+		text_color: app.theme_cls.text_color
+		icon_color: app.theme_cls.text_color
 		on_release:
 			app.forward('update_color_theme')
 
@@ -38,7 +41,7 @@
 			app.forward(root.to_edit_screen_name)
 
 
-<Settings>:
+<Options>:
 	MDBoxLayout:
 		orientation: 'vertical'
 
