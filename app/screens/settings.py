@@ -18,6 +18,7 @@ Builder.load_file(path_to_kv_file)
 class DataBaseElement(MDBoxLayout):
 	def __init__(self, db_model_obj):
 		self.db_model_obj = db_model_obj
+
 		self.to_create_screen_name = 'create_{}'.format(
 			self.db_model_obj.__tablename__.lower())
 		self.to_edit_screen_name = 'edit_{}s'.format(
@@ -27,7 +28,8 @@ class DataBaseElement(MDBoxLayout):
 
 
 class ColorThemeElement(MDBoxLayout):
-	pass
+	icon = 'palette'
+	display_text = LOCALIZED.translate('ColorTheme')
 
 
 class Options(CustomScreen):
@@ -54,7 +56,7 @@ class Options(CustomScreen):
 			content.add_widget(FDExpansionPanel(
 				db_model=db_model,
 				content=DataBaseElement,
-				text=(db_model.__tablename__, )
+				text=(LOCALIZED.translate(db_model.__tablename__), )
 			))
 
 		content.add_widget(ColorThemeElement())
