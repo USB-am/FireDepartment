@@ -16,7 +16,7 @@
 	MDTextButton:
 		size_hint: 1, 1
 		text: root.display_text
-		on_press:
+		on_release:
 			print(f'{root.display_text} is pressed')
 
 
@@ -41,7 +41,7 @@
 			size_hint: None, None
 			size: 50, 50
 			icon: 'folder-multiple-plus'
-			on_press:
+			on_release:
 				app.forward(root.to_create_screen)
 
 	ScrollView:

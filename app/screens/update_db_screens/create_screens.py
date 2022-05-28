@@ -32,7 +32,6 @@ class AbstractCreateScreen(AbstractUpdateDBScreen):
 
 	def create(self, instance: Submit) -> bool:
 		try:
-			# self.insert_values()
 			create_empty(self.table, self.get_values())
 			super().clear_fields_content()
 			# TODO: Вывести сообщение о успешном создании
@@ -44,13 +43,6 @@ class AbstractCreateScreen(AbstractUpdateDBScreen):
 				error
 			))
 			db.session.rollback()
-
-	def insert_values(self) -> None:
-		entered_values = self.get_values()
-		element = self.table(**entered_values)
-
-		db.session.add(element)
-		db.session.commit()
 
 
 class CreateTag(AbstractCreateScreen):
