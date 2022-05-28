@@ -13,18 +13,15 @@ class ManyToManyField(AbstractToManyField):
 		super().__init__(title)
 
 	def get_value(self) -> list:
-		# result = list(filter(lambda el: el.state, self._elements))
-		# print(result)
 		result = InstrumentedList()
 
 		for element in self._elements:
 			if element.state:
 				result.append(element._element)
-		print(result)
 
 		return result
 
 	def set_value(self, active_items: list) -> None:
 		for element in self._elements:
-			if element._element.id in active_items:
+			if element._element in active_items:
 				element.state = True
