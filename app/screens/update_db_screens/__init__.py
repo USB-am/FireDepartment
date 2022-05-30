@@ -3,9 +3,12 @@
 import os
 
 from kivy.lang import Builder
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.button import MDFlatButton
 
 from config import PATTERNS_DIR, LOCALIZED
-from app.tools.custom_widgets import CustomScreen
+from app.tools.custom_widgets import CustomScreen, FDDialog
+from app.tools.custom_widgets.label import FDLabel
 from app.tools import fields
 
 

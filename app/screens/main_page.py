@@ -15,6 +15,27 @@ path_to_kv_file = os.path.join(PATTERNS_DIR, 'screens', 'main_page.kv')
 Builder.load_file(path_to_kv_file)
 
 
+class EmergenciesFilter:
+	__current = ''
+
+	@property
+	def current(self) -> list:
+		if self.__current == '':
+			return self.all()
+		else:
+			return []
+
+	@current.setter
+	def current(self, search_text: str) -> None:
+		self.__current = search_text
+
+	def all(self) -> list:
+		return Emergency.query.all()
+
+	def filter_(self, tag: str) -> list:
+		return []
+
+
 class EmergencyElement(MDBoxLayout):
 	def __init__(self, element):
 		self._element = element
@@ -24,16 +45,30 @@ class EmergencyElement(MDBoxLayout):
 
 class MainPage(CustomScreen):
 	name = 'main_page'
+	filters = EmergenciesFilter()
 
 	def __init__(self):
 		super().__init__()
 
-		self.bind(on_pre_enter=lambda x: self.update_content())
-
 		self.update_title()
 
-	def filter_emergencies(self, search_text: str) -> list:
-		return Emergency.query.all()
+		self.bind(on_pre_enter=lambda x: self.update_content())
+		self.ids.search_block.text_field.bind(
+			on_text_validate=lambda x: self.search())
+		self.ids.search_block.search_button.bind(
+			on_release=lambda x: self.search())
+
+	def search(self) -> None:
+		self.filters.current = self.ids.search_block.text_field.text
+
+	def view_posts(self, emergencies: list) -> None:
+		for emergency in emergencies:
+			self.ids.content.add_widget(
+				FDExpansionPanel(
+					db_model=emergency,
+					content=EmergencyElement,
+					text=(emergency.title, str(emergency.description))
+			))
 
 	def update_title(self) -> None:
 		translate_text = LOCALIZED.translate('Emergency')
@@ -48,12 +83,4 @@ class MainPage(CustomScreen):
 		content = self.ids.content
 		content.clear_widgets()
 
-		for emergency in emergencies:
-			content.add_widget(FDExpansionPanel(
-				db_model=emergency,
-				content=EmergencyElement,
-				text=(
-					emergency.title,
-					str(emergency.description)
-				)
-			))
+		self.view_posts(self.filters.current)
