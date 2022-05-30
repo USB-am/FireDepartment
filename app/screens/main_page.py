@@ -8,7 +8,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 
 from app.tools.custom_widgets import CustomScreen, FDExpansionPanel
 from config import PATTERNS_DIR, LOCALIZED
-from data_base import Emergency
+from data_base import db, Emergency, Tag
 
 
 path_to_kv_file = os.path.join(PATTERNS_DIR, 'screens', 'main_page.kv')
@@ -19,21 +19,39 @@ class EmergenciesFilter:
 	__current = ''
 
 	@property
-	def current(self) -> list:
+	def current(self) -> tuple:
 		if self.__current == '':
 			return self.all()
 		else:
-			return []
+			return self.filter_()
 
 	@current.setter
 	def current(self, search_text: str) -> None:
 		self.__current = search_text
 
-	def all(self) -> list:
-		return Emergency.query.all()
+	def all(self) -> tuple:
+		return tuple(Emergency.query.all())
 
-	def filter_(self, tag: str) -> list:
-		return []
+	def filter_(self) -> tuple:
+		def sort_by_id(elements: tuple) -> tuple:
+			return sorted(elements, key=lambda element: element.id)
+
+		elements_set = set()
+		# 'tag #1, tag #2 ,  tg#N' -> ('tag #1', 'tag #2', 'tg#N')
+		search_elements = tuple(map(
+			lambda x: x.strip(), self.__current.split(',')))
+
+		for tag in search_elements:
+			questions = Tag.query.filter(Tag.title.like(f'%{tag}%'))
+
+			emergencies = tuple(map(lambda tag: tag.emergencys, questions))
+			# ([...], [...], [...]) -> [.........]
+			elements = [item for sublist in emergencies for item in sublist]
+			elements_set |= set(elements)
+
+		found_elements = tuple(elements_set)
+
+		return sort_by_id(found_elements)
 
 
 class EmergencyElement(MDBoxLayout):
@@ -60,8 +78,21 @@ class MainPage(CustomScreen):
 
 	def search(self) -> None:
 		self.filters.current = self.ids.search_block.text_field.text
+		self.update_content(self.filters.current)
 
-	def view_posts(self, emergencies: list) -> None:
+	def clear_content(self) -> None:
+		self.ids.content.clear_widgets()
+
+	def update_title(self) -> None:
+		translate_text = LOCALIZED.translate('Emergency')
+		self.ids.toolbar.title = translate_text
+
+	def update_content(self, emergencies: list=None) -> None:
+		if emergencies is None:
+			emergencies = self.filters.current
+
+		self.clear_content()
+
 		for emergency in emergencies:
 			self.ids.content.add_widget(
 				FDExpansionPanel(
@@ -69,18 +100,3 @@ class MainPage(CustomScreen):
 					content=EmergencyElement,
 					text=(emergency.title, str(emergency.description))
 			))
-
-	def update_title(self) -> None:
-		translate_text = LOCALIZED.translate('Emergency')
-		self.ids.toolbar.title = translate_text
-
-	def update_content(self) -> None:
-		emergencies = Emergency.query.all()
-
-		if not emergencies:
-			return
-
-		content = self.ids.content
-		content.clear_widgets()
-
-		self.view_posts(self.filters.current)

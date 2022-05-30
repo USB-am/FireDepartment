@@ -6,6 +6,7 @@ from config import PATTERNS_DIR, LOCALIZED
 from . import AbstractUpdateDBScreen
 from data_base import db, Tag, Rank, Position, Human, Emergency, ColorTheme,\
 	Worktype
+from data_base.tools import update_row
 from app.tools.custom_widgets import Submit
 
 
@@ -37,8 +38,12 @@ class AbstractUpdateScreen(AbstractUpdateDBScreen):
 			field.set_value(element_column_value)
 
 	def update(self, instance: Submit) -> None:
+		element = self.table.query.filter(self.table.id==self._element.id)\
+			.first()
 		values = self.get_values()
-		self.table.query.filter_by(id=self._element.id).update(values)
+
+		update_row(element, values)
+		self.redirect_to_back_screen()
 
 
 class EditTag(AbstractUpdateScreen):

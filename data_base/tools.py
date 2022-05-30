@@ -24,6 +24,14 @@ def create_empty(table: db.Model, values: dict) -> None:
 
 
 @check_db_commit_except
+def update_row(element: db.Model, values: dict) -> None:
+	for column_name, value in values.items():
+		setattr(element, column_name, value)
+
+	db.session.commit()
+
+
+@check_db_commit_except
 def create_base_theme() -> None:
 	theme_element = ColorTheme.query.first()
 
