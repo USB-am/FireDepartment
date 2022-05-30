@@ -50,7 +50,7 @@ class Options(CustomScreen):
 		content.clear_widgets()
 
 		data_bases = (Tag, Rank, Position, Human, Emergency,
-			Worktype)#, ColorTheme)
+			Worktype)
 
 		for db_model in data_bases:
 			content.add_widget(FDExpansionPanel(

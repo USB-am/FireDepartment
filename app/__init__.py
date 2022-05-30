@@ -59,7 +59,7 @@ class Manager(ScreenManager):
 		# Update color theme
 		self.add_widget(UpdateColorTheme())
 
-		self.current = 'settings'
+		self.current = 'main_page'
 
 
 class Application(MDApp):
