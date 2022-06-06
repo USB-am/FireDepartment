@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from .string_field import StringField
+from .string_field import StringField, TagStringField
 from .work_day_field import WorkDayField
 from .description_field import DescriptionField
 from .boolean_field import BooleanField
@@ -18,6 +18,7 @@ from .file_manager_field import FileManagerField
 
 __all__ = (
 	'StringField',
+	'TagStringField',
 	'SearchBlock',
 	'DescriptionField',
 	'WorkDayField',

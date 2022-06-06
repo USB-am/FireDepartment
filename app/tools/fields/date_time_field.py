@@ -61,19 +61,34 @@ class DateTimeField(MDBoxLayout):
 		''' Update self._date and text to date_button '''
 
 		self._date = date
-		self.ids.date_button.text = date.strftime('%d.%m.%Y')
+		self.update_value_text()
 
 	def _update_time(self, instance: MDTimePicker, time: datetime.time) -> None:
 		''' Update self._time and text to time_button '''
 
 		self._time = time
-		self.ids.time_button.text = time.strftime('%H:%M:%S')
+		self.update_value_text()
+
+	def update_value_text(self) -> None:
+		self.ids.fill_data.text = self.__get_markup_str()
+
+	def __get_markup_str(self) -> str:
+		def check_none(value: datetime.datetime, type_: str, ftime: str) -> str:
+			if value is None:
+				return 'dd.mm.yyyy' if type_ == 'date' else 'HH:MM:SS'
+			else:
+				return '[b]{}[/b]'.format(value.strftime(ftime))
+
+		return '\n'.join((
+			check_none(self._date, 'date', '%d.%m.%Y'),
+			check_none(self._time, 'time', '%H:%M:%S')
+		))
 
 	def clear(self) -> None:
 		self._date = None
-		self.ids.date_button.text = 'dd.mm.yyyy'
 		self._time = None
-		self.ids.time_button.text = 'HH:MM:SS'
+
+		self.update_value_text()
 
 	def get_value(self) -> datetime.datetime:
 		''' Returns requested datetime '''
