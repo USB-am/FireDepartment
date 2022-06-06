@@ -16,9 +16,6 @@ path_to_kv_file = os.path.join(PATTERNS_DIR, 'fields', 'work_day_field.kv')
 Builder.load_file(path_to_kv_file)
 
 
-from kivymd.uix.label import MDLabel
-
-
 class WorkDayField(MDBoxLayout):
 	icon = 'calendar-multiselect'
 

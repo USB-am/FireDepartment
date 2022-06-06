@@ -1,3 +1,6 @@
+#:import Submit app.tools.custom_widgets
+
+
 <WorkDayField>:
 	orientation: 'vertical'
 	size_hint: 1, None
@@ -15,7 +18,7 @@
 		MDLabel:
 			text: self.parent.parent.display_text
 
-	MDRaisedButton:
+	Submit:
 		id: open_calendar_button
 		size_hint: None, None
 		size: self.parent.width, 50
