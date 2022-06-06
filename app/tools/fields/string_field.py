@@ -20,3 +20,9 @@ class StringField(FDTextField):
 		self.display_text = LOCALIZED.translate(self.title)
 
 		super().__init__()
+
+
+class TagStringField(StringField):
+	def insert_text(self, substring: str, from_undo: bool=False) -> None:
+		if substring != ',':
+			super().insert_text(substring, from_undo)
