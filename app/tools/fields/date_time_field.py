@@ -71,7 +71,9 @@ class DateTimeField(MDBoxLayout):
 
 	def clear(self) -> None:
 		self._date = None
+		self.ids.date_button.text = 'dd.mm.yyyy'
 		self._time = None
+		self.ids.time_button.text = 'HH:MM:SS'
 
 	def get_value(self) -> datetime.datetime:
 		''' Returns requested datetime '''
