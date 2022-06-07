@@ -54,11 +54,30 @@ class EmergenciesFilter:
 		return sort_by_id(found_elements)
 
 
+class EmergencyInfoBlock():
+	pass
+
+
 class EmergencyElement(MDBoxLayout):
 	def __init__(self, element):
 		self._element = element
 
 		super().__init__()
+
+		self._fill_info_row()
+
+	def _fill_info_row(self) -> None:
+		values = {
+			'urgent': ('truck-fast', self._element.urgent),
+			'humans': ('account-group', len(self._element.humans)),
+			'tags': ('pound', len(self._element.tags))
+		}
+
+		for _, (icon, value) in values.items():
+			if not value:
+				continue
+
+			self.ids.info_row.add_widget(EmergencyInfoBlock(icon, value))
 
 
 class MainPage(CustomScreen):

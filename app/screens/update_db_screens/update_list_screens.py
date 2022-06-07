@@ -4,7 +4,7 @@ import os
 
 from kivy.lang import Builder
 from kivy.uix.button import Button
-from kivymd.uix.list import TwoLineAvatarIconListItem, IconLeftWidget, MDList
+from kivymd.uix.list import OneLineAvatarIconListItem, IconLeftWidget, MDList
 
 from app.tools.custom_widgets import CustomScreen
 from config import PATTERNS_DIR, LOCALIZED
@@ -16,11 +16,10 @@ path_to_kv_file = os.path.join(PATTERNS_DIR, 'screens', 'update_list_db_screens.
 Builder.load_file(path_to_kv_file)
 
 
-class ListElement(TwoLineAvatarIconListItem):
+class ListElement(OneLineAvatarIconListItem):
 	def __init__(self, element: db.Model):
 		self._element = element
 		self.text = str(self._element)
-		self.secondary_text = 'two list'
 		self.table_icon = self._element.icon
 		self.to_edit_screen = f'edit_{self._element.__tablename__.lower()}'
 
