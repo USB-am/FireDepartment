@@ -32,6 +32,13 @@ def update_row(element: db.Model, values: dict) -> None:
 
 
 @check_db_commit_except
+def delete_row(element: db.Model) -> None:
+	db.session.delete(element)
+
+	db.session.commit()
+
+
+@check_db_commit_except
 def create_base_theme() -> None:
 	theme_element = ColorTheme.query.first()
 
