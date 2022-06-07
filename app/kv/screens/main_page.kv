@@ -4,12 +4,15 @@
 
 
 <EmergencyElement>:
+	orientation: 'vertical'
 	size_hint: 1, None
-	size: self.width, 50
+	size: self.width, 100
 	padding: [30, 0]
 
-	FDLabel:
-		text: 'Text'
+	MDBoxLayout:
+		id: info_row
+		size_hint: 1, None
+		size: self.width, 50
 
 	FDIconButton:
 		size_hint: None, None
