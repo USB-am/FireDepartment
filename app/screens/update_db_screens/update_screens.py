@@ -6,7 +6,7 @@ from config import PATTERNS_DIR, LOCALIZED
 from . import AbstractUpdateDBScreen
 from data_base import db, Tag, Rank, Position, Human, Emergency, ColorTheme,\
 	Worktype
-from data_base.tools import update_row
+from data_base.tools import update_row, delete_row
 from app.tools.custom_widgets import Submit
 
 
@@ -15,6 +15,7 @@ class AbstractUpdateScreen(AbstractUpdateDBScreen):
 		super().__init__()
 
 		self.update_title()
+		self.add_right_icon('delete', self.delete_db_row)
 
 	def update_content(self, element: db.Model) -> None:
 		super().update_content()
@@ -32,6 +33,9 @@ class AbstractUpdateScreen(AbstractUpdateDBScreen):
 		update_button.bind(on_release=self.update)
 		content.add_widget(update_button)
 
+	def add_right_icon(self, icon: str, callback) -> None:
+		self.ids.toolbar.right_action_items = [[icon, lambda x: callback(x)]]
+
 	def fill_fields(self) -> None:
 		for column_name, field in self.fields.items():
 			element_column_value = getattr(self._element, column_name)
@@ -43,6 +47,10 @@ class AbstractUpdateScreen(AbstractUpdateDBScreen):
 		values = self.get_values()
 
 		update_row(element, values)
+		self.redirect_to_back_screen()
+
+	def delete_db_row(self, instance) -> None:
+		delete_row(self._element)
 		self.redirect_to_back_screen()
 
 
