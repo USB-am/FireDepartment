@@ -1,4 +1,5 @@
 from .main_page import MainPage
+from .emergency import EmergencyPage
 from .settings import Options
 from .update_color_theme import UpdateColorTheme
 from .update_db_screens.create_screens import CreateTag, CreateRank,\
@@ -13,6 +14,7 @@ from .update_db_screens.update_screens import EditTag, EditRank, EditPosition,\
 __all__ = (
 	'MainPage',\
 	'Options',\
+	'EmergencyPage',\
 	'UpdateColorTheme',\
 	'CreateTag', 'CreateRank', 'CreatePosition', 'CreateHuman', 'CreateEmergency',\
 	'CreateWorkType',\
