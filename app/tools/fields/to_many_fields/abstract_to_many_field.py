@@ -49,7 +49,8 @@ class AbstractToManyField(MDBoxLayout):
 		self.update_content()
 
 	def update_content(self) -> None:
-		elements = self._table.query.all()
+		elements = data_base.db.session.query(self._table)\
+			.order_by(self._table.title).all()
 
 		if not elements:
 			return
