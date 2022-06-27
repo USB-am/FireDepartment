@@ -5,6 +5,8 @@ from kivy.config import Config
 Config.set("graphics", "resizable", "0")
 Config.set('graphics', 'width', '350')
 
+import os
+
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager
 
@@ -21,6 +23,8 @@ from .screens import \
 	EditTag, EditRank, EditPosition, EditHuman, EditEmergency, EditWorkType
 from data_base import ColorTheme
 from data_base.tools import create_base_theme
+
+from config import IMAGES_DIR
 
 
 class Manager(ScreenManager):
@@ -87,6 +91,8 @@ class Application(MDApp):
 		return current_page_name
 
 	def build(self) -> Manager:
+		self.icon = os.path.join(IMAGES_DIR, '_bg.png')
+
 		self.theme_cls.primary_palette = self.theme.primary_palette
 		self.theme_cls.accent_palette = self.theme.accent_palette
 		self.theme_cls.primary_hue = self.theme.primary_hue
