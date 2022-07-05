@@ -84,6 +84,10 @@ class EmergencyElement(MDBoxLayout):
 
 			self.ids.info_row.add_widget(EmergencyInfoBlock(icon, int(value)))
 
+	def get_values(self) -> dict:
+		return {field: getattr(self._element, field)\
+			for field in self._element.get_fields().keys()}
+
 
 class MainPage(CustomScreen):
 	name = 'main_page'

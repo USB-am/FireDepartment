@@ -2,7 +2,7 @@
 
 # Temp import
 from kivy.config import Config
-Config.set("graphics", "resizable", "0")
+# Config.set("graphics", "resizable", "0")
 Config.set('graphics', 'width', '350')
 
 import os
