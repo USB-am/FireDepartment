@@ -29,7 +29,8 @@
 		size: 50, 50
 		icon: 'eye'
 		on_release:
-			print('Open')
+			app.forward('emergency_page')
+			app.root.current_screen.update_values(root.get_values())
 
 
 <MainPage>:

@@ -1,0 +1,26 @@
+<ToManyDisplayField>:
+	orientation: 'vertical'
+	size_hint: 1, None
+	size: self.width, 300
+
+	MDBoxLayout:
+		size_hint: 1, None
+		size: self.width, 50
+
+		MDIcon:
+			size_hint: None, 1
+			size: 50, self.height
+			icon: 'account-group'
+
+		MDLabel:
+			text: root.display_text
+
+	ScrollView:
+		GridLayout:
+			id: content
+			cols: 1
+			height: self.minimum_height
+			do_scroll_x: False
+			size_hint: 1, None
+			padding: 10
+			spacing: 10
