@@ -4,6 +4,7 @@ import os
 
 from kivy.lang import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.dialog import MDDialog
 
 from config import PATTERNS_DIR, LOCALIZED
 import data_base
@@ -14,6 +15,33 @@ path_to_kv_file = os.path.join(PATTERNS_DIR, 'fields', 'to_many_fields',
 Builder.load_file(path_to_kv_file)
 
 
+class DialogElement(MDBoxLayout):
+	def __init__(self, title, value):
+		self.title = title
+		self.value = value
+
+		super().__init__()
+
+
+class DialogContent(MDBoxLayout):
+	def __init__(self, element: data_base.db):
+		super().__init__()
+
+		self.__element = element
+		self.update_content()
+
+	def __get_values(self) -> dict:
+		rows = self.__element.get_fields().keys()
+		return {key: getattr(self.__element, key) for key in rows}
+
+	def update_content(self) -> None:
+		self.clear_widgets()
+
+		for title, value in self.__get_values().items():
+			print(title, value)
+			self.add_widget(DialogElement(title, value))
+
+
 class ElementToManyField(MDBoxLayout):
 	def __init__(self, element: data_base.db, group: str=None):
 		self._element = element
@@ -21,6 +49,12 @@ class ElementToManyField(MDBoxLayout):
 		self.group = group
 
 		super().__init__()
+
+		self.dialog = MDDialog(
+			title=self.display_text,
+			type='custom',
+			content_cls=DialogContent(self._element)
+		)
 
 	@property
 	def state(self) -> bool:
@@ -33,6 +67,9 @@ class ElementToManyField(MDBoxLayout):
 	@property
 	def id(self) -> int:
 		return self._element.id
+
+	def show_display_info(self) -> None:
+		self.dialog.open()
 
 
 class AbstractToManyField(MDBoxLayout):
