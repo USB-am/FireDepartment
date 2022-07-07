@@ -2,6 +2,24 @@
 #:import FDIconButton app.tools.custom_widgets.button
 
 
+<DialogElement>:
+	size_hint: 1, None
+	size: self.width, 50
+
+	MDLabel:
+		size_hint: .3, 1
+		text: root.title + ': '
+
+	MDLabel:
+		size_hint: .7, 1
+		text: str(root.value)
+
+
+<DialogContent>:
+	orientation: 'vertical'
+	size_hint: .8, .8
+
+
 <ElementToManyField>:
 	size_hint: 1, None
 	size: self.width, 50
@@ -18,7 +36,8 @@
 		size_hint: 1, 1
 		text: root.display_text
 		on_release:
-			print(f'{root.display_text} is pressed')
+			# print(f'{root.display_text} is pressed')
+			root.show_display_info()
 
 
 <AbstractToManyField>:
