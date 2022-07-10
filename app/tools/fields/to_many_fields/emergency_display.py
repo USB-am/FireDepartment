@@ -25,15 +25,16 @@ class DisplayElementToManyField(ElementToManyField):
 
 
 class ToManyDisplayField(MDBoxLayout):
-	def __init__(self, title: str):
+	def __init__(self, title: str, values: list):
 		self.title = title
 		self.display_text = LOCALIZED.translate(self.title)
+		self.values = values
 
 		super().__init__()
 
-	def update(self, values: list) -> None:
+	def update(self) -> None:
 		content = self.ids.content
 		content.clear_widgets()
 
-		for value in values:
+		for value in self.values:
 			content.add_widget(DisplayElementToManyField(value))

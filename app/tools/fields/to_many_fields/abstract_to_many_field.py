@@ -5,6 +5,7 @@ import os
 from kivy.lang import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.dialog import MDDialog
+from kivymd.uix.label import MDLabel
 
 from config import PATTERNS_DIR, LOCALIZED
 import data_base
@@ -15,31 +16,26 @@ path_to_kv_file = os.path.join(PATTERNS_DIR, 'fields', 'to_many_fields',
 Builder.load_file(path_to_kv_file)
 
 
-class DialogElement(MDBoxLayout):
-	def __init__(self, title, value):
-		self.title = title
-		self.value = value
-
-		super().__init__()
-
-
 class DialogContent(MDBoxLayout):
 	def __init__(self, element: data_base.db):
+		self._element = element
 		super().__init__()
 
-		self.__element = element
-		self.update_content()
+		self.__init_ui()
 
-	def __get_values(self) -> dict:
-		rows = self.__element.get_fields().keys()
-		return {key: getattr(self.__element, key) for key in rows}
-
-	def update_content(self) -> None:
-		self.clear_widgets()
-
-		for title, value in self.__get_values().items():
-			print(title, value)
-			self.add_widget(DialogElement(title, value))
+	def __init_ui(self) -> None:
+		for title in self._element.get_fields().keys():
+			key = MDLabel(
+				text=f'{LOCALIZED.translate(title)}:',
+				halign='left',
+				size_hint=(.4, None),
+				size=(self.width, 50))
+			value = MDLabel(
+				text=f'{getattr(self._element, title)}',
+				size_hint=(.6, None),
+				size=(self.width, 50))
+			self.add_widget(key)
+			self.add_widget(value)
 
 
 class ElementToManyField(MDBoxLayout):
@@ -53,7 +49,8 @@ class ElementToManyField(MDBoxLayout):
 		self.dialog = MDDialog(
 			title=self.display_text,
 			type='custom',
-			content_cls=DialogContent(self._element)
+			content_cls=DialogContent(self._element),
+			size_hint=(.9, .8)
 		)
 
 	@property
