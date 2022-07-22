@@ -15,11 +15,6 @@ path_to_kv_file = path.join(SCREENS_DIR, 'main_page.kv')
 Builder.load_file(path_to_kv_file)
 
 
-class Test:
-	def __init__(self, title: str):
-		self.title = title
-
-
 class MainPage(CustomScreen):
 	name = 'main_page'
 
