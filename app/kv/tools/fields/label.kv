@@ -1,0 +1,41 @@
+<FDLabel>:
+	orientation: 'horizontal'
+	size_hint: 1, None
+	size: self.width, 50
+
+	MDLabel:
+		size_hint: .3, 1
+		text: root.display_title
+
+	MDLabel:
+		size_hint: .7, 1
+		text: root.display_content
+
+
+<FDIcon>:
+	orientation: 'horizontal'
+	size_hint: 1, None
+	size: self.width, 50
+
+	MDIcon:
+		size_hint: None, None
+		size: 50, 50
+		icon: root.icon
+
+	MDLabel:
+		text: root.display_content
+
+
+<FDEntry>:
+	size_hint: 1, None
+	size: self.width, 50
+	hint_text: root.display_title
+
+
+<FDTextArea>:
+	size_hint: 1, None
+	size: self.width, 50
+	multiline: True
+	mode: 'rectangle'
+	max_height: 150
+	hint_text: root.display_title

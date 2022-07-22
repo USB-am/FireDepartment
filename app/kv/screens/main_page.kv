@@ -1,61 +1,10 @@
-#:import FDIcon,FDLabel app.tools.custom_widgets.label
-#:import FDIconButton app.tools.custom_widgets.button
-#:import SearchBlock app.tools.fields.search_block
-
-
-<EmergencyInfoBlock>:
-	size_hint: None, 1
-	size: 50, self.height
-
-	FDIcon:
-		icon: root.icon
-
-	FDLabel:
-		text: root.text
-
-
-<EmergencyElement>:
-	size_hint: 1, None
-	size: self.width, 50
-	padding: [30, 0]
-
-	MDBoxLayout:
-		id: info_row
-		size_hint: 1, None
-		size: self.width, 50
-
-	FDIconButton:
-		size_hint: None, None
-		size: 50, 50
-		icon: 'eye'
-		on_release:
-			app.forward('emergency_page')
-			app.root.current_screen.update_values(root.get_values())
-			# print(root.get_values())
-
-
 <MainPage>:
-	MDBoxLayout:
-		orientation: 'vertical'
-
-		MDToolbar:
-			id: toolbar
-			left_action_items: [['fire-truck', lambda x: print(x), '']]
-			right_action_items: [['cog', lambda x: app.forward('settings'), '']]
-			elevation: 10
-
-		SearchBlock:
-			id: search_block
+	ScrollView:
+		GridLayout:
+			id: content
+			cols: 1
+			height: self.minimum_height
+			do_scroll_x: False
 			size_hint: 1, None
-			size: self.width, 50
-			padding: [10, 0]
-
-		ScrollView:
-			GridLayout:
-				id: content
-				cols: 1
-				do_scroll_x: False
-				size_hint: 1, None
-				height: self.minimum_height
-				padding: 10
-				spacing: 10
+			padding: [15, 10]
+			spacing: 10
