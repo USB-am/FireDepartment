@@ -37,17 +37,12 @@ class FDEntry(MDTextField):
 
 		super().__init__()
 
-
-class FDTextArea(MDTextField):
-	def __init__(self, title: str):
-		self.title = title
-		self.display_title = LOCALIZED.translate(title)
-
-		super().__init__()
-
 	def get_value(self) -> str:
 		return self.text
 
 	def set_value(self, value: str) -> None:
 		self.text = value
-		# super().insert_text(value)
+
+
+class FDTextArea(FDEntry):
+	pass

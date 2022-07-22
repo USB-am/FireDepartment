@@ -17,21 +17,21 @@ class Application(MDApp):
 	def __init__(self):
 		super().__init__()
 
-		self.path_manager = PathManager()
 		self.screen_manager = ScreenManager()
+		self.path_manager = PathManager(self.screen_manager)
 
 		# Main page
 		self.screen_manager.add_widget(MainPage())
 
 		self.screen_manager.current = 'main_page'
 
-	def back(self) -> None:
-		self.path_manager.back()
-		self.screen_manager.current = self.path_manager.current
+	# def back(self) -> None:
+	# 	self.path_manager.back()
+	# 	self.screen_manager.current = self.path_manager.current
 
-	def forward(self, screen_name: str) -> None:
-		self.path_manager.forward(screen_name)
-		self.screen_manager.current = self.path_manager.current
+	# def forward(self, screen_name: str) -> None:
+	# 	self.path_manager.forward(screen_name)
+	# 	self.screen_manager.current = self.path_manager.current
 
 	def build(self) -> ScreenManager:
 		return self.screen_manager

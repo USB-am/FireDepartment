@@ -20,3 +20,6 @@ class FDSwitch(MDBoxLayout):
 
 	def get_value(self) -> bool:
 		return self.ids.switch.active
+
+	def set_value(self, value: bool) -> None:
+		self.ids.switch.active = value

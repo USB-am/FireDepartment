@@ -7,6 +7,7 @@ import json
 # Temp func
 def create_localized_file() -> None:
 	localized_dict = {
+		'main_page': 'Пожарка <3',
 		'options': 'Настройки',
 		'colortheme': 'Персонализация',
 		'create_tag': 'Новый тег',
