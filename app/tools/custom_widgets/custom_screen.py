@@ -10,7 +10,7 @@ from data_base import ColorTheme
 from config import PATTERNS_DIR
 
 
-def _get_bg_image() -> None:
+def _get_bg_image() -> str:
 	try:
 		bg_image = ColorTheme.query.first().background_image
 
