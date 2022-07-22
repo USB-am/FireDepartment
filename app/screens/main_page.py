@@ -2,7 +2,7 @@ from os import path
 
 from kivy.lang import Builder
 
-from config import SCREENS_DIR, LOCALIZED
+from config import SCREENS_DIR, LOCALIZED, path_manager
 from app.tools import CustomScreen
 
 
@@ -21,11 +21,8 @@ class MainPage(CustomScreen):
 	def __init__(self):
 		super().__init__()
 
-		s1 = FDTextArea('Content')
-		s2 = FDTextArea('Human')
-		s2.set_value('1. None\n2. True')
-		self.ids.content.add_widget(s1)
-		self.ids.content.add_widget(s2)
-		b = Button(text='Check', size_hint=(1, None), size=(self.width, 70))
-		b.bind(on_release=lambda e: print(s1.get_value()))
-		self.ids.content.add_widget(b)
+		self.toolbar.add_left_button('fire-truck', lambda e: print(
+			path_manager.PathManager().current))
+
+		# self.main_layout.ids.content.add_widget(FDSwitch('Content'))
+		self.add_widgets(FDSwitch('Content'), FDSwitch('Human'))
