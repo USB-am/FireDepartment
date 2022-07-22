@@ -50,4 +50,4 @@ class FDTextArea(MDTextField):
 
 	def set_value(self, value: str) -> None:
 		self.text = value
-		super().insert_text(value)
+		# super().insert_text(value)
