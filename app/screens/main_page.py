@@ -4,9 +4,6 @@ from data_base import db, Emergency
 from app.tools.addition_elements import MainPageListElement
 
 
-print(Emergency.query.all())
-
-
 class MainPage(CustomScreen):
 	name = 'main_page'
 
@@ -19,5 +16,5 @@ class MainPage(CustomScreen):
 			path_manager.PathManager().current))
 
 		# self.add_widgets(FDSwitch('Content'), FDSwitch('Human'))
-		for row in Emergency.query.all():
+		for row in Emergency.query.all()[:10]:
 			self.add_widgets(MainPageListElement(row))

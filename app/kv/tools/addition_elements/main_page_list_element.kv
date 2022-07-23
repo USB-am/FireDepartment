@@ -1,6 +1,18 @@
-<MainPageListElement>:
+<ElementContent>:
+	orientation: 'horizontal'
 	size_hint: 1, None
 	size: self.width, 50
+	padding: [30, 0]
 
-	MDLabel:
-		text: root.db_row.title
+	MDBoxLayout:
+		orientation: 'horizontal'
+		id: content
+		spacing: 0
+
+	MDIconButton:
+		size_hint: None, None
+		size: 50, 50
+		icon: 'eye'
+
+		on_release:
+			print(f'You view {root._db_row.title}')

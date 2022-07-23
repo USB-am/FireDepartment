@@ -22,12 +22,12 @@ class FDLabel(MDBoxLayout):
 
 
 class FDIcon(MDBoxLayout):
-	def __init__(self, icon: str, content: str):
+	def __init__(self, icon: str, content: str, **options):
 		self.icon = icon
 		self.content = content
 		self.display_content = LOCALIZED.translate(content)
 
-		super().__init__()
+		super().__init__(**options)
 
 
 class FDEntry(MDTextField):
