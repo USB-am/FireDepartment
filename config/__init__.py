@@ -90,6 +90,7 @@ BASE_DIR = os.getcwd()
 PATTERNS_DIR = os.path.join(BASE_DIR, 'app', 'kv')
 TOOLS_DIR = os.path.join(PATTERNS_DIR, 'tools')
 FIELDS_DIR = os.path.join(TOOLS_DIR, 'fields')
+ADDITION_ELEMENTS_DIR = os.path.join(TOOLS_DIR, 'addition_elements')
 SCREENS_DIR = os.path.join(PATTERNS_DIR, 'screens')
 IMAGES_DIR = os.path.join(BASE_DIR, 'app', 'images')
 
