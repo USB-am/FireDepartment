@@ -9,7 +9,7 @@ Config.set('graphics', 'width', '350')
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager
 
-from app.screens import MainPage
+from app.screens import MainPage, Fires
 from config.path_manager import PathManager
 
 
@@ -22,16 +22,9 @@ class Application(MDApp):
 
 		# Main page
 		self.screen_manager.add_widget(MainPage())
+		self.screen_manager.add_widget(Fires())
 
 		self.screen_manager.current = 'main_page'
-
-	# def back(self) -> None:
-	# 	self.path_manager.back()
-	# 	self.screen_manager.current = self.path_manager.current
-
-	# def forward(self, screen_name: str) -> None:
-	# 	self.path_manager.forward(screen_name)
-	# 	self.screen_manager.current = self.path_manager.current
 
 	def build(self) -> ScreenManager:
 		return self.screen_manager
