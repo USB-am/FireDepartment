@@ -29,3 +29,7 @@ class CustomScreen(Screen):
 	def add_widgets(self, *widgets: Widget) -> None:
 		for widget in widgets:
 			self.main_layout.ids.content.add_widget(widget)
+
+	def clear_scroll_content(self) -> None:
+		content = self.main_layout.ids.content
+		content.clear_widgets()
