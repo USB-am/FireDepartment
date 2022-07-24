@@ -4,7 +4,7 @@ from kivy.lang import Builder
 from kivy.uix.screenmanager import Screen
 from kivy.uix.widget import Widget
 
-from config import TOOLS_DIR#, path_manager
+from config import TOOLS_DIR, path_manager
 from app.tools.toolbar import FDToolbar
 from app.tools.scroll_layout import FDScrollLayout
 
@@ -20,6 +20,7 @@ class CustomScreen(Screen):
 	def __init__(self):
 		self.toolbar = FDToolbar(self.name)
 		self.main_layout = FDScrollLayout()
+		self.path_manager_ = path_manager.PathManager()
 
 		super().__init__()
 

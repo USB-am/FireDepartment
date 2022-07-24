@@ -10,9 +10,11 @@
 		spacing: 0
 
 	MDIconButton:
+		id: view_button
 		size_hint: None, None
 		size: 50, 50
 		icon: 'eye'
 
-		on_release:
-			print(f'You view {root._db_row.title}')
+		# on_release:
+		# 	# root.path_manager.forward('fires')
+		# 	app.screen_manager.get_screen(app.screen_manager.current).path_manager_.forward('fires')
