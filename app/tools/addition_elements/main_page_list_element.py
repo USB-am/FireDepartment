@@ -1,10 +1,11 @@
 from os import path
 
 from kivy.lang import Builder
+from kivymd.uix.button import MDIconButton
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelOneLine
 
-from config import ADDITION_ELEMENTS_DIR
+from config import ADDITION_ELEMENTS_DIR, path_manager
 from data_base import db, Human, Tag
 from app.tools.fields.label import FDIcon
 
@@ -20,6 +21,7 @@ class ElementContent(MDBoxLayout):
 		super().__init__()
 
 		self.fill_content()
+		self.ids.view_button.bind(on_release=self.start_call)
 
 	def fill_content(self) -> None:
 		content = self.ids.content
@@ -33,6 +35,10 @@ class ElementContent(MDBoxLayout):
 
 		count_included_tags = str(len(self._db_row.tags))
 		content.add_widget(FDIcon(Tag.icon, count_included_tags))
+
+	def start_call(self, event: MDIconButton) -> None:
+		fires_screen = path_manager.PathManager().forward('fires')
+		fires_screen.add_tab(self._db_row)
 
 
 class MainPageListElement(MDExpansionPanel):

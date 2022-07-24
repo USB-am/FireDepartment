@@ -1,3 +1,6 @@
+from kivy.uix.screenmanager import Screen
+
+
 class PathManager:
 	_instance = None
 	_screen_manager = None
@@ -10,6 +13,7 @@ class PathManager:
 
 		return cls._instance
 
+	@property
 	def current(self) -> str:
 		return self._path[-1]
 
@@ -22,10 +26,14 @@ class PathManager:
 
 		self._path = self._path[:-1]
 
-	def back(self) -> None:
+	def back(self) -> Screen:
 		self._back()
-		self._screen_manager.current = self.current()
+		self._screen_manager.current = self.current
 
-	def forward(self, screen_name: str) -> None:
+		return self._screen_manager.get_screen(self.current)
+
+	def forward(self, screen_name: str) -> Screen:
 		self._forward(screen_name)
-		self._screen_manager.current = self.current()
+		self._screen_manager.current = self.current
+
+		return self._screen_manager.get_screen(self.current)
