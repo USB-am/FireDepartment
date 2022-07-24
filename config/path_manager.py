@@ -1,14 +1,14 @@
 class PathManager:
-	instance = None
+	_instance = None
 	_screen_manager = None
 	_path = ['main_page',]
 
 	def __new__(cls, screen_manager=None):
-		if PathManager.instance is None:
-			PathManager.instance = super().__new__(cls)
-			PathManager._screen_manager = screen_manager
+		if cls._instance is None:
+			cls._instance = super().__new__(cls)
+			cls._screen_manager = screen_manager
 
-		return PathManager.instance
+		return cls._instance
 
 	def current(self) -> str:
 		return self._path[-1]
@@ -28,5 +28,4 @@ class PathManager:
 
 	def forward(self, screen_name: str) -> None:
 		self._forward(screen_name)
-		print(f'Current = {self.current()} [{type(self.current())}]')
 		self._screen_manager.current = self.current()
