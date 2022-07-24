@@ -11,10 +11,12 @@ class MainPage(CustomScreen):
 		super().__init__()
 
 		self.toolbar.add_left_button('fire-truck', lambda e: print(
-			path_manager.PathManager().current))
+			path_manager.PathManager().forward('fires')))
 		self.toolbar.add_right_button('cog', lambda e: print(
-			path_manager.PathManager().current))
+			path_manager.PathManager().current()))
 
-		# self.add_widgets(FDSwitch('Content'), FDSwitch('Human'))
+		self.bind(on_pre_enter=self.fill_emergencies)
+
+	def fill_emergencies(self, event) -> None:
 		for row in Emergency.query.all()[:10]:
 			self.add_widgets(MainPageListElement(row))
