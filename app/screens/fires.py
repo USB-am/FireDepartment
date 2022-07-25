@@ -20,4 +20,4 @@ class Fires(CustomScreen):
 		self.add_widgets(self.notebook_)
 
 	def add_tab(self, emergency: db.Model) -> None:
-		self.notebook_.add_widget(notebook.Tab(emergency))
+		self.notebook_.add_widget(notebook.Tab(emergency=emergency))
