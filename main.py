@@ -11,6 +11,10 @@ from kivy.uix.screenmanager import ScreenManager
 
 from app.screens import MainPage, Fires
 from config.path_manager import PathManager
+from data_base import db
+
+
+db.create_all()
 
 
 class Application(MDApp):

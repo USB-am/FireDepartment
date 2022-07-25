@@ -1,6 +1,7 @@
 from os import path
 
 from kivy.lang import Builder
+from kivy.properties import StringProperty
 from kivymd.uix.tab import MDTabs, MDTabsBase
 from kivymd.uix.boxlayout import MDBoxLayout
 
