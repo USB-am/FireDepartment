@@ -1,7 +1,7 @@
 from os import path
 
 from kivy.lang import Builder
-from kivy.properties import StringProperty
+from kivy.properties import ObjectProperty
 from kivymd.uix.tab import MDTabs, MDTabsBase
 from kivymd.uix.boxlayout import MDBoxLayout
 
@@ -17,6 +17,7 @@ class Tab(MDBoxLayout, MDTabsBase):
 	def __init__(self, emergency: db.Model):
 		self.emergency = emergency
 		self.title = emergency.title
+		self.icon = emergency.icon
 
 		super().__init__()
 
