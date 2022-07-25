@@ -1,10 +1,10 @@
 from config import LOCALIZED, path_manager
-from app.tools import CustomScreen
+from app.tools import CustomScrolledScreen
 from data_base import db, Emergency
 from app.tools.addition_elements import MainPageListElement
 
 
-class MainPage(CustomScreen):
+class MainPage(CustomScrolledScreen):
 	name = 'main_page'
 
 	def __init__(self):
