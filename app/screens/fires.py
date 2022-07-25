@@ -15,9 +15,8 @@ class Fires(CustomScreen):
 		self.toolbar.add_right_button('check-outline', lambda e: print(
 			'call is finished!'))
 
-		self.main_layout.ids.content.padding = 0
 		self.notebook_ = notebook.NoteBook()
-		self.add_widgets(self.notebook_)
+		self.ids.widgets.add_widget(self.notebook_)
 
 	def add_tab(self, emergency: db.Model) -> None:
 		self.notebook_.add_widget(notebook.Tab(emergency=emergency))

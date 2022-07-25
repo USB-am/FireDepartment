@@ -19,12 +19,19 @@ class CustomScreen(Screen):
 
 	def __init__(self):
 		self.toolbar = FDToolbar(self.name)
-		self.main_layout = FDScrollLayout()
 		self.path_manager_ = path_manager.PathManager()
 
 		super().__init__()
 
 		self.ids.widgets.add_widget(self.toolbar)
+
+
+class CustomScrolledScreen(CustomScreen):
+	def __init__(self):
+		self.main_layout = FDScrollLayout()
+
+		super().__init__()
+
 		self.ids.widgets.add_widget(self.main_layout)
 
 	def add_widgets(self, *widgets: Widget) -> None:
