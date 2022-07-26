@@ -76,7 +76,7 @@ class Human(db.Model):
 	__tablename__ = 'Human'
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), nullable=False)
-	phone_1 = db.Column(db.String(255), nullable=False)
+	phone_1 = db.Column(db.String(255), nullable=True)
 	phone_2 = db.Column(db.String(255), nullable=True)
 	work_day = db.Column(db.DateTime(), nullable=True)
 	worktype = db.Column(db.Integer, db.ForeignKey('Worktype.id'), nullable=True)

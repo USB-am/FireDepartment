@@ -19,4 +19,8 @@ class Fires(CustomScreen):
 		self.ids.widgets.add_widget(self.notebook_)
 
 	def add_tab(self, emergency: Emergency) -> None:
-		self.notebook_.add_widget(notebook.TabEmergency(emergency))
+		tab = notebook.TabEmergency(emergency)
+		self.notebook_.add_widget(tab)
+
+		tabs = self.notebook_.get_tab_list()
+		self.notebook_.switch_tab(tabs[-1])
