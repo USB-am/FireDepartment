@@ -14,4 +14,3 @@ Builder.load_file(path_to_kv_file)
 class FDScrollLayout(ScrollView):
 	def add_widgets(self, *widgets) -> None:
 		[self.ids.content.add_widget(widget) for widget in widgets]
-		print('method add_widgets is finished')

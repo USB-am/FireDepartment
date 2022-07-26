@@ -24,8 +24,8 @@ class ListElement(MDBoxLayout):
 
 
 class SelectedList(MDBoxLayout):
-	def __init__(self, title: str, group: str=None, show_create: bool=False):
-		self.icon = 'bus'
+	def __init__(self, icon: str, title: str, group: str=None, show_create: bool=False):
+		self.icon = icon
 		self.title = title
 		self.group = group
 

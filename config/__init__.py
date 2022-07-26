@@ -8,6 +8,7 @@ import json
 def create_localized_file() -> None:
 	localized_dict = {
 		'main_page': 'Пожарка <3',
+		'fires': 'Пахнет жареным',
 		'options': 'Настройки',
 		'colortheme': 'Персонализация',
 		'create_tag': 'Новый тег',
