@@ -1,8 +1,8 @@
 from os import path
 
 from kivy.lang import Builder
-from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.textfield import MDTextField
+from kivymd.uix.boxlayout import MDBoxLayout
 
 from config import FIELDS_DIR, LOCALIZED
 
@@ -28,6 +28,17 @@ class FDIcon(MDBoxLayout):
 		self.display_content = LOCALIZED.translate(content)
 
 		super().__init__(**options)
+
+
+class FDTitleLabel(MDTextField):
+	icon = 'cursor-text'
+
+	def __init__(self, title: str, text: str):
+		self.title = title
+
+		super().__init__()
+
+		self.text = text if text is not None else ''
 
 
 class FDEntry(MDTextField):
