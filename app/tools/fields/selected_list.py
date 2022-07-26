@@ -2,6 +2,7 @@ from os import path
 
 from kivy.lang import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.button import MDIconButton
 
 from config import FIELDS_DIR, LOCALIZED
 
@@ -23,7 +24,7 @@ class ListElement(MDBoxLayout):
 
 
 class SelectedList(MDBoxLayout):
-	def __init__(self, title: str, group: str=None):
+	def __init__(self, title: str, group: str=None, show_create: bool=False):
 		self.icon = 'bus'
 		self.title = title
 		self.group = group
@@ -31,6 +32,15 @@ class SelectedList(MDBoxLayout):
 		self.display_title = LOCALIZED.translate(title)
 
 		super().__init__()
+
+		self.__add_top_button() if show_create else None
+
+	def __add_top_button(self) -> None:
+		top_panel = self.ids.top_panel
+		add_button = MDIconButton(icon='plus', size_hint=(None, None), size=(50, 50))
+		add_button.bind(on_release=lambda e: print('plus button is pressed'))
+
+		top_panel.add_widget(add_button)
 
 	def update_content(self, values: list) -> None:
 		content = self.ids.content

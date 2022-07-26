@@ -4,6 +4,9 @@ from data_base import db, Emergency
 from app.tools.addition_elements import MainPageListElement
 
 
+from app.tools.fields.selected_list import SelectedList
+
+
 class MainPage(CustomScrolledScreen):
 	name = 'main_page'
 
