@@ -1,6 +1,6 @@
 from config import LOCALIZED
 from app.tools import CustomScreen
-from data_base import db#, Emergency
+from data_base import db, Emergency
 from app.tools.fields import notebook
 
 
@@ -18,5 +18,5 @@ class Fires(CustomScreen):
 		self.notebook_ = notebook.NoteBook()
 		self.ids.widgets.add_widget(self.notebook_)
 
-	def add_tab(self, emergency: db.Model) -> None:
-		self.notebook_.add_widget(notebook.Tab(emergency=emergency))
+	def add_tab(self, emergency: Emergency) -> None:
+		self.notebook_.add_widget(notebook.TabEmergency(emergency))

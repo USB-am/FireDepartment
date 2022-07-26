@@ -6,7 +6,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelOneLine
 
 from config import ADDITION_ELEMENTS_DIR, path_manager
-from data_base import db, Human, Tag
+from data_base import Emergency, Human, Tag
 from app.tools.fields.label import FDIcon
 
 
@@ -15,7 +15,7 @@ Builder.load_file(path_to_kv_file)
 
 
 class ElementContent(MDBoxLayout):
-	def __init__(self, db_row: db.Model):
+	def __init__(self, db_row: Emergency):
 		self._db_row = db_row
 
 		super().__init__()
@@ -44,7 +44,7 @@ class ElementContent(MDBoxLayout):
 class MainPageListElement(MDExpansionPanel):
 	icon = 'fire-alert'
 
-	def __init__(self, db_row: db.Model):
+	def __init__(self, db_row: Emergency):
 		self._db_row = db_row
 		self.title = db_row.title
 		self.urgent = db_row.urgent
