@@ -12,8 +12,8 @@ class Fires(CustomScreen):
 
 		self.toolbar.add_left_button('arrow-left', lambda e: \
 			self.path_manager_.back())
-		self.toolbar.add_right_button('check-outline', lambda e: print(
-			'call is finished!'))
+		self.toolbar.add_right_button('check-outline', lambda e: \
+			self.end_call())
 
 		self.notebook_ = notebook.NoteBook()
 		self.ids.widgets.add_widget(self.notebook_)
@@ -24,3 +24,10 @@ class Fires(CustomScreen):
 
 		tabs = self.notebook_.get_tab_list()
 		self.notebook_.switch_tab(tabs[-1])
+
+	def get_current_tab(self) -> notebook.TabEmergency:
+		return self.notebook_.carousel.current_slide
+
+	def end_call(self) -> None:
+		# TODO: Will do the deletion of the current cell.
+		pass
