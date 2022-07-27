@@ -4,9 +4,6 @@ from data_base import db, Emergency
 from app.tools.addition_elements import MainPageListElement
 
 
-from app.tools.fields.selected_list import SelectedList
-
-
 class MainPage(CustomScrolledScreen):
 	name = 'main_page'
 
@@ -15,8 +12,8 @@ class MainPage(CustomScrolledScreen):
 
 		self.toolbar.add_left_button('fire-truck', lambda e: \
 			self.path_manager_.forward('fires'))
-		self.toolbar.add_right_button('cog', lambda e: print(
-			self.path_manager_.current))
+		self.toolbar.add_right_button('cog', lambda e: \
+			self.path_manager_.forward('options'))
 
 		self.bind(on_pre_enter=self.fill_emergencies)
 

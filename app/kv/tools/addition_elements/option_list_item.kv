@@ -1,0 +1,24 @@
+<OptionListItem>:
+
+
+<ItemContent>:
+	orientation: 'horizontal'
+	size_hint: 1, None
+	size: self.width, 50
+	padding: 25, 0
+	spacing: 20
+	halign: 'right'
+
+	MDBoxLayout:
+		size_hint: 1, 1
+		MDRectangleFlatIconButton:
+			id: create_button
+			icon: 'playlist-plus'
+			text: 'Create'
+
+	MDBoxLayout:
+		size_hint: None, None
+		MDRectangleFlatIconButton:
+			id: edit_button
+			icon: 'playlist-edit'
+			text: 'Edit'
