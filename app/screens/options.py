@@ -1,6 +1,5 @@
 from os import path
 
-from config import LOCALIZED
 from data_base import Emergency, Human, Tag, Rank, Position
 from app.tools.custom_screen import CustomScrolledScreen
 from app.tools.addition_elements import OptionListItem
