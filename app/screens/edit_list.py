@@ -1,9 +1,8 @@
 from os import path
 
-from kivymd.uix.label import MDLabel
-
-from data_base import Tag, Rank, Position, Human, Emergency
+from data_base import db, Tag, Rank, Position, Human, Emergency
 from app.tools.custom_screen import CustomScrolledScreen
+from app.tools.addition_elements.edit_list_item import EditListItem
 
 
 class BaseEditList(CustomScrolledScreen):
@@ -12,6 +11,9 @@ class BaseEditList(CustomScrolledScreen):
 
 		self.toolbar.add_left_button('arrow-left', lambda e: \
 			self.path_manager_.back())
+		self.toolbar.add_right_button('trash-can', lambda e: \
+			print('delete button is pressed'))
+		# delete-empty
 
 		self.bind(on_pre_enter=lambda e: self._update_content())
 
@@ -19,10 +21,7 @@ class BaseEditList(CustomScrolledScreen):
 		self.clear_scroll_content()
 		elements = self.table.query.all()
 
-		for element in elements:
-			self.add_widgets(MDLabel(text=element.title, size_hint=(1, None), size=(self.width, 50)))
-
-		print('_update_content is finished')
+		[self.add_widgets(EditListItem(element)) for element in elements]
 
 
 class TagEditList(BaseEditList):
