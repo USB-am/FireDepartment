@@ -11,8 +11,8 @@ Builder.load_file(path_to_kv_file)
 
 
 class FDSwitch(MDBoxLayout):
-	def __init__(self, title: str):
-		self.icon = 'bus'
+	def __init__(self, icon: str, title: str):
+		self.icon = icon
 		self.title = title
 		self.display_title = LOCALIZED.translate(title)
 
