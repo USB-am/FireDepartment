@@ -13,7 +13,8 @@ from app.screens import \
 	MainPage, \
 	Fires, \
 	Options, \
-	TagEditList, RankEditList, PositionEditList, HumanEditList, EmergencyEditList
+	TagEditList, RankEditList, PositionEditList, HumanEditList, EmergencyEditList, \
+	EditTag, EditRank, EditPosition, EditHuman, EditEmergency
 from config.path_manager import PathManager
 from data_base import db
 
@@ -44,7 +45,14 @@ class Application(MDApp):
 		self.screen_manager.add_widget(HumanEditList())
 		self.screen_manager.add_widget(EmergencyEditList())
 
-		self.screen_manager.current = 'options'
+		# Edit page
+		self.screen_manager.add_widget(EditTag())
+		self.screen_manager.add_widget(EditRank())
+		self.screen_manager.add_widget(EditPosition())
+		self.screen_manager.add_widget(EditHuman())
+		self.screen_manager.add_widget(EditEmergency())
+
+		self.screen_manager.current = 'edit_tag_list'
 
 	def build(self) -> ScreenManager:
 		return self.screen_manager
