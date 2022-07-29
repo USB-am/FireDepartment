@@ -42,6 +42,10 @@ class TestSelectedList(unittest.TestCase):
 		self.assertEqual(len(multi_content.children), 100)
 		self.assertIsInstance(multi_content.children[0], ListElement)
 
+	def test_select_items(self):
+		# TODO: Check selected items from SelectedList
+		pass
+
 
 if __name__ == '__main__':
 	unittest.main()
