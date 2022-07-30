@@ -9,43 +9,48 @@ from app.tools.fields.controllers import FDSwitch
 
 
 class BaseUpdateTagTable:
-	fields = OrderedDict({
-		'title': FDEntry,#('title'),
-	})
+	def __init__(self):
+		self.fields = OrderedDict({
+			'title': FDEntry('title'),
+		})
 
 
 class BaseUpdateRankTable:
-	fields = OrderedDict({
-		'title': FDEntry,#('title'),
-	})
+	def __init__(self):
+		self.fields = OrderedDict({
+			'title': FDEntry('title'),
+		})
 
 
 class BaseUpdatePositionTable:
-	fields = OrderedDict({
-		'title': FDEntry,#('title'),
-	})
+	def __init__(self):
+		self.fields = OrderedDict({
+			'title': FDEntry('title'),
+		})
 
 
 class BaseUpdateHumanTable:
-	fields = OrderedDict({
-		'title': FDEntry,#('title'),
-		'phone_1': FDEntry,#('phone_1'),
-		'phone_2': FDEntry,#('phone_2'),
-		# 'work_day': FDCalendar,#('work_day'),
-		# 'worktype': FDWorkType,#('worktype'),
-		'position': SelectedList,#(Position.icon, 'Position', 'update_human', True),
-		'rank': SelectedList,#(Rank.icon, 'Rank', 'update_rank', True),
-	})
+	def __init__(self):
+		self.fields = OrderedDict({
+			'title': FDEntry('title'),
+			'phone_1': FDEntry('phone_1'),
+			'phone_2': FDEntry('phone_2'),
+			# 'work_day': FDCalendar('work_day'),
+			# 'worktype': FDWorkType('worktype'),
+			'position': SelectedList(Position.icon, 'Position', 'update_human', True),
+			'rank': SelectedList(Rank.icon, 'Rank', 'update_rank', True),
+		})
 
 
 class BaseUpdateEmergencyTable:
-	fields = OrderedDict({
-		'title': FDEntry,#('title'),
-		'description': FDTextArea,#('description'),
-		'urgent': FDSwitch,#('truck-fast', 'Urgent'),
-		'tags': SelectedList,#(Tag.icon, 'Tags', 'update_tags', True),
-		'humans': SelectedList,#(Human.icon, 'Humans', 'update_humans', True),
-	})
+	def __init__(self):
+		self.fields = OrderedDict({
+			'title': FDEntry('title'),
+			'description': FDTextArea('description'),
+			'urgent': FDSwitch('truck-fast', 'Urgent'),
+			'tags': SelectedList(Tag.icon, 'Tags', 'update_tags', True),
+			'humans': SelectedList(Human.icon, 'Humans', 'update_humans', True),
+		})
 
 
 class BaseUpdateDBTable(CustomScrolledScreen):
@@ -58,7 +63,9 @@ class BaseUpdateDBTable(CustomScrolledScreen):
 		self.__init_ui()
 
 	def __init_ui(self) -> None:
-		pass
+		for key, field in self.fields.items():
+			self.add_widgets(field)
+		# pass
 
 
 class BaseEditPage(BaseUpdateDBTable):
@@ -72,26 +79,71 @@ class BaseEditPage(BaseUpdateDBTable):
 		pass
 
 
-class EditTag(BaseUpdateTagTable, BaseEditPage):
+class EditTag(BaseEditPage):
 	name = 'edit_tag'
 	table = Tag
 
+	def __init__(self):
+		self.fields = OrderedDict({
+			'title': FDEntry('title'),
+		})
 
-class EditRank(BaseUpdateRankTable, BaseEditPage):
+		super().__init__()
+
+
+class EditRank(BaseEditPage):
 	name = 'edit_rank'
 	table = Rank
 
+	def __init__(self):
+		self.fields = OrderedDict({
+			'title': FDEntry('title'),
+		})
 
-class EditPosition(BaseUpdatePositionTable, BaseEditPage):
+		super().__init__()
+
+
+class EditPosition(BaseEditPage):
 	name = 'edit_position'
 	table = Position
 
+	def __init__(self):
+		self.fields = OrderedDict({
+			'title': FDEntry('title'),
+		})
 
-class EditHuman(BaseUpdateHumanTable, BaseEditPage):
+		super().__init__()
+
+
+class EditHuman(BaseEditPage):
 	name = 'edit_human'
 	table = Human
 
+	def __init__(self):
+		self.fields = OrderedDict({
+			'title': FDEntry('title'),
+			'phone_1': FDEntry('phone_1'),
+			'phone_2': FDEntry('phone_2'),
+			# 'work_day': FDCalendar('work_day'),
+			# 'worktype': FDWorkType('worktype'),
+			'position': SelectedList(Position.icon, 'Position', 'update_human', True),
+			'rank': SelectedList(Rank.icon, 'Rank', 'update_rank', True),
+		})
 
-class EditEmergency(BaseUpdateEmergencyTable, BaseEditPage):
+		super().__init__()
+
+
+class EditEmergency(BaseEditPage):
 	name = 'edit_emergency'
 	table = Emergency
+
+	def __init__(self):
+		self.fields = OrderedDict({
+			'title': FDEntry('title'),
+			'description': FDTextArea('description'),
+			'urgent': FDSwitch('truck-fast', 'Urgent'),
+			'tags': SelectedList(Tag.icon, 'Tags', 'update_tags', True),
+			'humans': SelectedList(Human.icon, 'Humans', 'update_humans', True),
+		})
+
+		super().__init__()
