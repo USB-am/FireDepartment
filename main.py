@@ -52,7 +52,7 @@ class Application(MDApp):
 		self.screen_manager.add_widget(EditHuman())
 		self.screen_manager.add_widget(EditEmergency())
 
-		self.screen_manager.current = 'edit_tag_list'
+		self.screen_manager.current = 'main_page'
 
 	def build(self) -> ScreenManager:
 		return self.screen_manager

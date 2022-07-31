@@ -15,7 +15,7 @@ class BaseUpdateDBTable(CustomScrolledScreen):
 		super().__init__()
 
 		self.toolbar.add_left_button('arrow-left', lambda e: \
-			self.path_manager_.back())
+			self.back())
 
 		self.__init_ui()
 

@@ -12,7 +12,7 @@ class Options(CustomScrolledScreen):
 		super().__init__()
 
 		self.toolbar.add_left_button('arrow-left', lambda e: \
-			self.path_manager_.back())
+			self.back())
 
 		tables = (Tag, Rank, Position, Human, Emergency)
 		for table in tables:

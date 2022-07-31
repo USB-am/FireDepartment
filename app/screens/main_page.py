@@ -1,4 +1,4 @@
-from config import LOCALIZED, path_manager
+from config import LOCALIZED
 from app.tools import CustomScrolledScreen
 from data_base import db, Emergency
 from app.tools.addition_elements import MainPageListElement
@@ -11,9 +11,9 @@ class MainPage(CustomScrolledScreen):
 		super().__init__()
 
 		self.toolbar.add_left_button('fire-truck', lambda e: \
-			self.path_manager_.forward('fires'))
+			self.forward('fires'))
 		self.toolbar.add_right_button('cog', lambda e: \
-			self.path_manager_.forward('options'))
+			self.forward('options'))
 
 		self.bind(on_pre_enter=self.fill_emergencies)
 
