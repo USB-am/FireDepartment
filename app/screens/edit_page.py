@@ -69,11 +69,11 @@ class BaseUpdateDBTable(CustomScrolledScreen):
 
 
 class BaseEditPage(BaseUpdateDBTable):
-	def __init__(self):
-		super().__init__()
+	# def __init__(self):
+	# 	super().__init__()
 
-		self.entry = FDEntry('Title')
-		self.add_widgets(self.entry)
+	# 	self.entry = FDEntry('Title')
+	# 	self.add_widgets(self.entry)
 
 	def _update_content(self, db_row: db.Model) -> None:
 		pass
@@ -142,8 +142,8 @@ class EditEmergency(BaseEditPage):
 			'title': FDEntry('title'),
 			'description': FDTextArea('description'),
 			'urgent': FDSwitch('truck-fast', 'Urgent'),
-			'tags': SelectedList(Tag.icon, 'Tags', 'update_tags', True),
 			'humans': SelectedList(Human.icon, 'Humans', 'update_humans', True),
+			'tags': SelectedList(Tag.icon, 'Tags', 'update_tags', True),
 		})
 
 		super().__init__()
