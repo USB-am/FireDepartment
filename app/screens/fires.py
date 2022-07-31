@@ -11,7 +11,7 @@ class Fires(CustomScreen):
 		super().__init__()
 
 		self.toolbar.add_left_button('arrow-left', lambda e: \
-			self.path_manager_.back())
+			self.back())
 		self.toolbar.add_right_button('check-outline', lambda e: \
 			self.end_call())
 

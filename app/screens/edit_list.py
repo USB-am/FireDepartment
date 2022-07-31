@@ -10,7 +10,7 @@ class BaseEditList(CustomScrolledScreen):
 		super().__init__()
 
 		self.toolbar.add_left_button('arrow-left', lambda e: \
-			self.path_manager_.back())
+			self.back())
 		self.toolbar.add_right_button('trash-can', lambda e: \
 			print('delete button is pressed'))
 		# delete-empty

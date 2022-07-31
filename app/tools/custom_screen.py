@@ -18,12 +18,16 @@ class CustomScreen(Screen):
 	bg_image = 'C:\\Python\\AndroidApps\\FireDepartment_Finish\\app\\images\\_bg.png'
 
 	def __init__(self):
-		self.toolbar = FDToolbar(self.name)
-		self.path_manager_ = path_manager.PathManager()
-
 		super().__init__()
 
+		self.toolbar = FDToolbar(self.name)
 		self.ids.widgets.add_widget(self.toolbar)
+
+	def forward(self, screen_name: str) -> Screen:
+		return path_manager.PathManager().forward(screen_name)
+
+	def back(self) -> Screen:
+		return path_manager.PathManager().back()
 
 
 class CustomScrolledScreen(CustomScreen):

@@ -42,10 +42,6 @@ class TabEmergency(Tab):
 		humans_list.update_content(self.db_row.humans)
 		self.scrolled_layout.add_widgets(humans_list)
 
-		tag_list = SelectedList(Tag.icon, 'Tags')
-		tag_list.update_content(self.db_row.tags)
-		self.scrolled_layout.add_widgets(tag_list)
-
 
 class NoteBook(MDTabs):
 	pass
