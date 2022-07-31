@@ -1,56 +1,13 @@
 from collections import OrderedDict
 
+from kivy.uix.button import Button
+
 from config import LOCALIZED, path_manager
 from data_base import db, Tag, Rank, Position, Human, Emergency
 from app.tools.custom_screen import CustomScrolledScreen
 from app.tools.fields.label import FDEntry, FDTextArea
 from app.tools.fields.selected_list import SelectedList
 from app.tools.fields.controllers import FDSwitch
-
-
-class BaseUpdateTagTable:
-	def __init__(self):
-		self.fields = OrderedDict({
-			'title': FDEntry('title'),
-		})
-
-
-class BaseUpdateRankTable:
-	def __init__(self):
-		self.fields = OrderedDict({
-			'title': FDEntry('title'),
-		})
-
-
-class BaseUpdatePositionTable:
-	def __init__(self):
-		self.fields = OrderedDict({
-			'title': FDEntry('title'),
-		})
-
-
-class BaseUpdateHumanTable:
-	def __init__(self):
-		self.fields = OrderedDict({
-			'title': FDEntry('title'),
-			'phone_1': FDEntry('phone_1'),
-			'phone_2': FDEntry('phone_2'),
-			# 'work_day': FDCalendar('work_day'),
-			# 'worktype': FDWorkType('worktype'),
-			'position': SelectedList(Position.icon, 'Position', 'update_human', True),
-			'rank': SelectedList(Rank.icon, 'Rank', 'update_rank', True),
-		})
-
-
-class BaseUpdateEmergencyTable:
-	def __init__(self):
-		self.fields = OrderedDict({
-			'title': FDEntry('title'),
-			'description': FDTextArea('description'),
-			'urgent': FDSwitch('truck-fast', 'Urgent'),
-			'tags': SelectedList(Tag.icon, 'Tags', 'update_tags', True),
-			'humans': SelectedList(Human.icon, 'Humans', 'update_humans', True),
-		})
 
 
 class BaseUpdateDBTable(CustomScrolledScreen):
@@ -65,15 +22,22 @@ class BaseUpdateDBTable(CustomScrolledScreen):
 	def __init_ui(self) -> None:
 		for key, field in self.fields.items():
 			self.add_widgets(field)
-		# pass
+
+
+class BaseCreatePage(BaseUpdateDBTable):
+	def __init__(self):
+		super().__init__()
+
+		self.toolbar.add_right_button('check', lambda e: \
+			print('You pressed on submit button'))
 
 
 class BaseEditPage(BaseUpdateDBTable):
-	# def __init__(self):
-	# 	super().__init__()
+	def __init__(self):
+		super().__init__()
 
-	# 	self.entry = FDEntry('Title')
-	# 	self.add_widgets(self.entry)
+		self.toolbar.add_right_button('check', lambda e: \
+			print('You pressed on submit button'))
 
 	def _update_content(self, db_row: db.Model) -> None:
 		pass
