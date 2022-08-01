@@ -14,7 +14,8 @@ from app.screens import \
 	Fires, \
 	Options, \
 	TagEditList, RankEditList, PositionEditList, HumanEditList, EmergencyEditList, \
-	EditTag, EditRank, EditPosition, EditHuman, EditEmergency
+	EditTag, EditRank, EditPosition, EditHuman, EditEmergency, \
+	CreateTag, CreateRank, CreatePosition, CreateHuman, CreateEmergency
 from config.path_manager import PathManager
 from data_base import db
 
@@ -37,6 +38,13 @@ class Application(MDApp):
 
 		# Options page
 		self.screen_manager.add_widget(Options())
+
+		# Create page
+		self.screen_manager.add_widget(CreateTag())
+		self.screen_manager.add_widget(CreateRank())
+		self.screen_manager.add_widget(CreatePosition())
+		self.screen_manager.add_widget(CreateHuman())
+		self.screen_manager.add_widget(CreateEmergency())
 
 		# Edit list page
 		self.screen_manager.add_widget(TagEditList())

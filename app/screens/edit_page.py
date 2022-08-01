@@ -111,3 +111,73 @@ class EditEmergency(BaseEditPage):
 		})
 
 		super().__init__()
+
+
+class CreateTag(BaseEditPage):
+	name = 'create_tag'
+	table = Tag
+
+	def __init__(self):
+		self.fields = OrderedDict({
+			'title': FDEntry('title'),
+		})
+
+		super().__init__()
+
+
+class CreateRank(BaseEditPage):
+	name = 'create_rank'
+	table = Rank
+
+	def __init__(self):
+		self.fields = OrderedDict({
+			'title': FDEntry('title'),
+		})
+
+		super().__init__()
+
+
+class CreatePosition(BaseEditPage):
+	name = 'create_position'
+	table = Position
+
+	def __init__(self):
+		self.fields = OrderedDict({
+			'title': FDEntry('title'),
+		})
+
+		super().__init__()
+
+
+class CreateHuman(BaseEditPage):
+	name = 'create_human'
+	table = Human
+
+	def __init__(self):
+		self.fields = OrderedDict({
+			'title': FDEntry('title'),
+			'phone_1': FDEntry('phone_1'),
+			'phone_2': FDEntry('phone_2'),
+			# 'work_day': FDCalendar('work_day'),
+			# 'worktype': FDWorkType('worktype'),
+			'position': SelectedList(Position.icon, 'Position', 'update_human', True),
+			'rank': SelectedList(Rank.icon, 'Rank', 'update_rank', True),
+		})
+
+		super().__init__()
+
+
+class CreateEmergency(BaseEditPage):
+	name = 'create_emergency'
+	table = Emergency
+
+	def __init__(self):
+		self.fields = OrderedDict({
+			'title': FDEntry('title'),
+			'description': FDTextArea('description'),
+			'urgent': FDSwitch('truck-fast', 'Urgent'),
+			'humans': SelectedList(Human.icon, 'Humans', 'update_humans', True),
+			'tags': SelectedList(Tag.icon, 'Tags', 'update_tags', True),
+		})
+
+		super().__init__()

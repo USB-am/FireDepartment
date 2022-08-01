@@ -4,7 +4,7 @@ from kivy.lang import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton
 
-from config import FIELDS_DIR, LOCALIZED
+from config import FIELDS_DIR, LOCALIZED, path_manager
 
 
 path_to_kv_file = path.join(FIELDS_DIR, 'selected_list.kv')
@@ -37,8 +37,11 @@ class SelectedList(MDBoxLayout):
 
 	def __add_top_button(self) -> None:
 		top_panel = self.ids.top_panel
-		add_button = MDIconButton(icon='plus', size_hint=(None, None), size=(50, 50))
-		add_button.bind(on_release=lambda e: print('plus button is pressed'))
+		add_button = MDIconButton(icon='plus', size_hint=(None, None),
+		                          size=(50, 50))
+		add_button_path = f'create_{self.title.lower()}'
+		add_button.bind(on_release=lambda e: \
+			path_manager.PathManager().forward(add_button_path))
 
 		top_panel.add_widget(add_button)
 
