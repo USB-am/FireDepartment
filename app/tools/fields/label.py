@@ -65,6 +65,9 @@ class FDEntry(MDTextField):
 		return self.text
 
 	def set_value(self, value: str) -> None:
+		if value is None:
+			value = ''
+
 		self.text = value
 
 

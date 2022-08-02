@@ -2,8 +2,8 @@ from collections import OrderedDict
 
 from kivy.uix.button import Button
 
-from config import LOCALIZED, path_manager
-from data_base import db, Tag, Rank, Position, Human, Emergency
+from config import path_manager
+from data_base import db, Tag, Rank, Position, Human, Emergency, manager
 from app.tools.custom_screen import CustomScrolledScreen
 from app.tools.fields.label import FDEntry, FDTextArea
 from app.tools.fields.selected_list import SelectedList
@@ -30,8 +30,14 @@ class BaseCreatePage(BaseUpdateDBTable):
 	def __init__(self):
 		super().__init__()
 
-		self.toolbar.add_right_button('check', lambda e: \
-			print('You pressed on submit button'))
+		self.toolbar.add_right_button('check', lambda e: self.insert_values())
+
+	def insert_values(self) -> None:
+		rows_count = len(self.table.query.all())
+		title = f'{self.table.__tablename__} #{rows_count+1}'
+
+		manager.insert(self.table, {'title': title})
+		self.back()
 
 
 class BaseEditPage(BaseUpdateDBTable):
@@ -43,7 +49,8 @@ class BaseEditPage(BaseUpdateDBTable):
 			print('You pressed on submit button'))
 
 	def _update_content(self, db_row: db.Model) -> None:
-		pass
+		for column_name, field in self.fields.items():
+			field.set_value(getattr(db_row, column_name))
 
 
 class EditTag(BaseEditPage):
@@ -116,7 +123,7 @@ class EditEmergency(BaseEditPage):
 		super().__init__()
 
 
-class CreateTag(BaseEditPage):
+class CreateTag(BaseCreatePage):
 	name = 'create_tag'
 	table = Tag
 
@@ -128,7 +135,7 @@ class CreateTag(BaseEditPage):
 		super().__init__()
 
 
-class CreateRank(BaseEditPage):
+class CreateRank(BaseCreatePage):
 	name = 'create_rank'
 	table = Rank
 
@@ -140,7 +147,7 @@ class CreateRank(BaseEditPage):
 		super().__init__()
 
 
-class CreatePosition(BaseEditPage):
+class CreatePosition(BaseCreatePage):
 	name = 'create_position'
 	table = Position
 
@@ -152,7 +159,7 @@ class CreatePosition(BaseEditPage):
 		super().__init__()
 
 
-class CreateHuman(BaseEditPage):
+class CreateHuman(BaseCreatePage):
 	name = 'create_human'
 	table = Human
 
@@ -170,7 +177,7 @@ class CreateHuman(BaseEditPage):
 		super().__init__()
 
 
-class CreateEmergency(BaseEditPage):
+class CreateEmergency(BaseCreatePage):
 	name = 'create_emergency'
 	table = Emergency
 

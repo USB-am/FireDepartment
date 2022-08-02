@@ -60,7 +60,7 @@ class Application(MDApp):
 		self.screen_manager.add_widget(EditHuman())
 		self.screen_manager.add_widget(EditEmergency())
 
-		self.screen_manager.current = 'main_page'
+		self.screen_manager.current = 'edit_human_list'
 
 	def build(self) -> ScreenManager:
 		return self.screen_manager
