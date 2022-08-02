@@ -63,3 +63,6 @@ class SelectedList(MDBoxLayout):
 				result.append(row.element)
 
 		return result
+
+	def set_value(self, values: list) -> None:
+		pass

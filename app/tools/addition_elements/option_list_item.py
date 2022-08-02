@@ -33,7 +33,7 @@ class OptionListItem(MDExpansionPanel):
 		self.icon = table.icon
 
 		self.title = LOCALIZED.translate(table.__tablename__)
-		self.content = ItemContent(self.title)
+		self.content = ItemContent(table.__tablename__)
 		self.panel_cls = MDExpansionPanelOneLine(text=self.title)
 
 		super().__init__()
