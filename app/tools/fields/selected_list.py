@@ -12,6 +12,7 @@ Builder.load_file(path_to_kv_file)
 
 
 class ListElement(MDBoxLayout):
+	''' Элемент списка SelectedList '''
 	def __init__(self, element, group: str=None):
 		self.element = element
 		self.group = group
@@ -24,6 +25,7 @@ class ListElement(MDBoxLayout):
 
 
 class SelectedList(MDBoxLayout):
+	''' Виджет выбора элементов базы данных '''
 	def __init__(self, icon: str, title: str, group: str=None, show_create: bool=False):
 		self.icon = icon
 		self.title = title

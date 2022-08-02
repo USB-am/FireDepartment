@@ -14,6 +14,7 @@ Builder.load_file(path_to_kv_file)
 
 
 class CustomScreen(Screen):
+	''' Базовый экран '''
 	color = (0, 0, 0, 0)
 	bg_image = 'C:\\Python\\AndroidApps\\FireDepartment_Finish\\app\\images\\_bg.png'
 
@@ -31,6 +32,7 @@ class CustomScreen(Screen):
 
 
 class CustomScrolledScreen(CustomScreen):
+	''' Экран с прокруткой '''
 	def __init__(self):
 		self.main_layout = FDScrollLayout()
 

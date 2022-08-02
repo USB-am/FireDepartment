@@ -11,6 +11,7 @@ from app.tools.fields.controllers import FDSwitch
 
 
 class BaseUpdateDBTable(CustomScrolledScreen):
+	''' Базовый класс создания/изменения элемента базы данных '''
 	def __init__(self):
 		super().__init__()
 
@@ -25,6 +26,7 @@ class BaseUpdateDBTable(CustomScrolledScreen):
 
 
 class BaseCreatePage(BaseUpdateDBTable):
+	''' Экран создания элемента базы данных '''
 	def __init__(self):
 		super().__init__()
 
@@ -33,6 +35,7 @@ class BaseCreatePage(BaseUpdateDBTable):
 
 
 class BaseEditPage(BaseUpdateDBTable):
+	''' Экран изменения элемента базы данных '''
 	def __init__(self):
 		super().__init__()
 

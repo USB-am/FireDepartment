@@ -12,5 +12,6 @@ Builder.load_file(path_to_kv_file)
 
 
 class FDScrollLayout(ScrollView):
+	''' Виджет прокрутки '''
 	def add_widgets(self, *widgets) -> None:
 		[self.ids.content.add_widget(widget) for widget in widgets]

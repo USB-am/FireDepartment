@@ -15,6 +15,7 @@ Builder.load_file(path_to_kv_file)
 
 
 class ElementContent(MDBoxLayout):
+	''' Содержимое элемента списка на главном экране '''
 	def __init__(self, db_row: Emergency):
 		self._db_row = db_row
 
@@ -42,6 +43,7 @@ class ElementContent(MDBoxLayout):
 
 
 class MainPageListElement(MDExpansionPanel):
+	''' Список элементов на главном экране '''
 	icon = 'fire-alert'
 
 	def __init__(self, db_row: Emergency):

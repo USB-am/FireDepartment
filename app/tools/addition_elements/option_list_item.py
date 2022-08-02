@@ -5,7 +5,7 @@ from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelOneLine
 from kivymd.uix.boxlayout import MDBoxLayout
 
 from data_base import db
-from config import ADDITION_ELEMENTS_DIR, path_manager
+from config import ADDITION_ELEMENTS_DIR, path_manager, LOCALIZED
 
 
 path_to_kv_file = path.join(ADDITION_ELEMENTS_DIR, 'option_list_item.kv')
@@ -13,6 +13,7 @@ Builder.load_file(path_to_kv_file)
 
 
 class ItemContent(MDBoxLayout):
+	''' Содержимое выдвигающегося элемента настроек '''
 	def __init__(self, table_name: str):
 		super().__init__()
 
@@ -26,11 +27,12 @@ class ItemContent(MDBoxLayout):
 
 
 class OptionListItem(MDExpansionPanel):
+	''' Элемент списка настроек '''
 	def __init__(self, table: db.Model):
 		self.table = table
 		self.icon = table.icon
-		self.title = table.__tablename__	# TODO: rewrite
 
+		self.title = LOCALIZED.translate(table.__tablename__)
 		self.content = ItemContent(self.title)
 		self.panel_cls = MDExpansionPanelOneLine(text=self.title)
 

@@ -17,6 +17,7 @@ Builder.load_file(path_to_kv_file)
 
 
 class Tab(MDBoxLayout, MDTabsBase):
+	''' Базовый класс вкладки '''
 	def __init__(self, db_row: db.Model):
 		self.db_row = db_row
 		self.title = db_row.title
@@ -26,6 +27,7 @@ class Tab(MDBoxLayout, MDTabsBase):
 
 
 class TabEmergency(Tab):
+	''' Вкладка с элементами из data_base.Emergency '''
 	def __init__(self, emergency: Emergency):
 		super().__init__(emergency)
 
@@ -44,4 +46,5 @@ class TabEmergency(Tab):
 
 
 class NoteBook(MDTabs):
+	''' Главный виджет виджета с вкладками '''
 	pass

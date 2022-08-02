@@ -5,6 +5,7 @@ from app.tools.addition_elements import MainPageListElement
 
 
 class MainPage(CustomScrolledScreen):
+	''' Главный экран '''
 	name = 'main_page'
 
 	def __init__(self):
