@@ -12,6 +12,7 @@ Builder.load_file(path_to_kv_file)
 
 
 class EditListItem(MDBoxLayout):
+	''' Элемент списка на экране EditPage '''
 	def __init__(self, db_row: db.Model):
 		self.db_row = db_row
 

@@ -11,6 +11,7 @@ Builder.load_file(path_to_kv_file)
 
 
 class FDSwitch(MDBoxLayout):
+	''' Переключатель '''
 	def __init__(self, icon: str, title: str):
 		self.icon = icon
 		self.title = title

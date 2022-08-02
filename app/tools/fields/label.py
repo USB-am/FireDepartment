@@ -12,6 +12,10 @@ Builder.load_file(path_to_kv_file)
 
 
 class FDLabel(MDBoxLayout):
+	'''
+	Виджет класса отображения текста. Имеет вид: 
+	title: content
+	'''
 	def __init__(self, title: str, content: str):
 		self.title = title
 		self.content = content
@@ -22,6 +26,10 @@ class FDLabel(MDBoxLayout):
 
 
 class FDIcon(MDBoxLayout):
+	'''
+	Виджет класса отображения иконки с текстом. Имеет вид:
+	[иконка] текст
+	'''
 	def __init__(self, icon: str, content: str, **options):
 		self.icon = icon
 		self.content = content
@@ -31,6 +39,10 @@ class FDIcon(MDBoxLayout):
 
 
 class FDTitleLabel(MDTextField):
+	'''
+	Виджет класса отображения текста с заголовком. Имеет вид:
+	TITLE: text
+	'''
 	icon = 'cursor-text'
 
 	def __init__(self, title: str, text: str):
@@ -42,6 +54,7 @@ class FDTitleLabel(MDTextField):
 
 
 class FDEntry(MDTextField):
+	''' Поле ввода текста '''
 	def __init__(self, title: str):
 		self.title = title
 		self.display_title = LOCALIZED.translate(title)
@@ -56,4 +69,5 @@ class FDEntry(MDTextField):
 
 
 class FDTextArea(FDEntry):
+	''' Многострочное поле ввода текста '''
 	pass

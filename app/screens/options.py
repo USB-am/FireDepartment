@@ -6,6 +6,7 @@ from app.tools.addition_elements import OptionListItem
 
 
 class Options(CustomScrolledScreen):
+	''' Экран настроек '''
 	name = 'options'
 
 	def __init__(self):

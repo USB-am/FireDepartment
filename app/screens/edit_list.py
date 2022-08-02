@@ -6,6 +6,7 @@ from app.tools.addition_elements.edit_list_item import EditListItem
 
 
 class BaseEditList(CustomScrolledScreen):
+	''' Базовый класс отображения списка элементов базы данных '''
 	def __init__(self):
 		super().__init__()
 

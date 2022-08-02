@@ -11,6 +11,7 @@ Builder.load_file(path_to_kv_file)
 
 
 class FDToolbar(MDToolbar):
+	''' Верхняя панель '''
 	def __init__(self, title: str):
 		self.title = title
 		self.left_buttons = []

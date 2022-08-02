@@ -5,6 +5,7 @@ from app.tools.fields import notebook
 
 
 class Fires(CustomScreen):
+	''' Экран текущих вызовов '''
 	name = 'fires'
 
 	def __init__(self):
