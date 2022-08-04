@@ -21,5 +21,5 @@ class MainPage(CustomScrolledScreen):
 	def fill_emergencies(self, event) -> None:
 		super().clear_scroll_content()
 
-		for row in Emergency.query.all()[:10]:
+		for row in Emergency.query.all():
 			self.add_widgets(MainPageListElement(row))
