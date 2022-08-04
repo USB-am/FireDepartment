@@ -20,6 +20,9 @@ from config.path_manager import PathManager
 from data_base import db
 
 
+# TODO: Спросить как должны выглядить срочные вызовы
+
+
 db.create_all()
 
 
