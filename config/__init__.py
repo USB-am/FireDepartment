@@ -58,6 +58,7 @@ def create_localized_file() -> None:
 		'background_image': 'Картинка заднего фона',
 		'Light': 'Светлая',
 		'Dark': 'Темная',
+		'search': 'Поиск',
 	}
 
 	file = open(os.path.join(BASE_DIR, 'config', 'localized', 'ru.json'), mode='w')

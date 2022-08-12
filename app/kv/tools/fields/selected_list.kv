@@ -2,6 +2,7 @@
 	orientation: 'vertical'
 	size_hint: 1, None
 	size: self.width, 400
+	spacing: 5
 
 	MDBoxLayout:
 		id: top_panel
@@ -15,6 +16,11 @@
 
 		MDLabel:
 			text: root.display_title
+
+	MDBoxLayout:
+		id: search_block
+		size_hint: 1, None
+		size: self.width, 35
 
 	ScrollView:
 		GridLayout:

@@ -5,6 +5,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton
 
 from config import FIELDS_DIR, LOCALIZED, path_manager
+from app.tools.addition_elements.search_panel import SearchPanel
 
 
 path_to_kv_file = path.join(FIELDS_DIR, 'selected_list.kv')
@@ -36,6 +37,7 @@ class SelectedList(MDBoxLayout):
 		super().__init__()
 
 		self.__add_top_button() if show_create else None
+		self.__include_search_panel()
 
 	def __add_top_button(self) -> None:
 		top_panel = self.ids.top_panel
@@ -46,6 +48,11 @@ class SelectedList(MDBoxLayout):
 			path_manager.PathManager().forward(add_button_path))
 
 		top_panel.add_widget(add_button)
+
+	def __include_search_panel(self) -> None:
+		search = SearchPanel()
+		# search.ids.search_entry.bind(insert_text=lambda *a: print(a))
+		self.ids.search_block.add_widget(search)
 
 	def update_content(self, values: list) -> None:
 		content = self.ids.content
