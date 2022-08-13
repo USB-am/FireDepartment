@@ -5,6 +5,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton
 
 from config import FIELDS_DIR, LOCALIZED, path_manager
+from data_base import db
 from app.tools.addition_elements.search_panel import SearchPanel
 
 
@@ -31,6 +32,7 @@ class SelectedList(MDBoxLayout):
 		self.icon = icon
 		self.title = title
 		self.group = group
+		self.elements = []
 
 		self.display_title = LOCALIZED.translate(title)
 
@@ -51,15 +53,20 @@ class SelectedList(MDBoxLayout):
 
 	def __include_search_panel(self) -> None:
 		search = SearchPanel()
-		# search.ids.search_entry.bind(insert_text=lambda *a: print(a))
+		search.entry.callback = lambda: print('All good!')
+
 		self.ids.search_block.add_widget(search)
 
 	def update_content(self, values: list) -> None:
 		content = self.ids.content
 		content.clear_widgets()
+		self.elements = []
 
 		for element in values:
-			content.add_widget(ListElement(element, group=self.group))
+			list_element = ListElement(element, group=self.group)
+
+			self.elements.append(list_element)
+			content.add_widget(list_element)
 
 	def get_value(self) -> list:
 		content = self.ids.content.children
