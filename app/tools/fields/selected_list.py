@@ -39,7 +39,11 @@ class SelectedList(MDBoxLayout):
 		super().__init__()
 
 		self.__add_top_button() if show_create else None
-		self.__include_search_panel()
+
+		self.search = SearchPanel()
+		self.search.entry.callback = self.filter
+		self.ids.search_block.add_widget(self.search)
+		self.search.button.bind(on_release=lambda e: self.clear_filters())
 
 	def __add_top_button(self) -> None:
 		top_panel = self.ids.top_panel
@@ -51,12 +55,6 @@ class SelectedList(MDBoxLayout):
 
 		top_panel.add_widget(add_button)
 
-	def __include_search_panel(self) -> None:
-		search = SearchPanel()
-		search.entry.callback = lambda: print('All good!')
-
-		self.ids.search_block.add_widget(search)
-
 	def update_content(self, values: list) -> None:
 		content = self.ids.content
 		content.clear_widgets()
@@ -65,21 +63,31 @@ class SelectedList(MDBoxLayout):
 		for element in values:
 			list_element = ListElement(element, group=self.group)
 
-			self.elements.append(list_element)
+			self.elements.append(element)
 			content.add_widget(list_element)
 
 	def filter(self) -> None:
+		def filtering(element: db.Model, search_text) -> bool:
+			return element.title.lower().find(search_text) != -1
+
 		content = self.ids.content
 		content.clear_widgets()
 
-		# TODO: Get text from search entry
-		text = 'test'
-		# TODO: Find string method from get part text or use regulars
-		now_elements = filter(lambda e: e.element.title == text, self.elements)
+		text = self.search.entry.text.lower()
+
+		if text == '':
+			return self.clear_filters
+
+		now_elements = filter(
+			lambda element: filtering(element, text),
+			self.elements)
 
 		for element in now_elements:
-			list_element = ListElement(element, group=self.group)
-			content.add_widget(list_element)
+			content.add_widget(ListElement(element, group=self.group))
+
+	def clear_filters(self) -> None:
+		self.search.clear_entry()
+		self.update_content(self.elements)
 
 	def get_value(self) -> list:
 		content = self.ids.content.children
