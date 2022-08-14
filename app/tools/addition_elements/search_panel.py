@@ -28,7 +28,6 @@ class SearchPanel(MDBoxLayout):
 		super().__init__(size_hint=(1, None), size=(self.width, 35))
 
 		self.__init_ui()
-		self.__binding()
 
 	def __init_ui(self) -> None:
 		self.entry = SearchEntry(hint_text=self._placeholder)
@@ -39,9 +38,6 @@ class SearchPanel(MDBoxLayout):
 
 		self.add_widget(self.entry)
 		self.add_widget(self.button)
-
-	def __binding(self) -> None:
-		self.button.bind(on_release=lambda e: self.clear_entry())
 
 	def clear_entry(self) -> None:
 		self.entry.text = ''
