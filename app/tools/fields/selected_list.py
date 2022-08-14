@@ -68,6 +68,19 @@ class SelectedList(MDBoxLayout):
 			self.elements.append(list_element)
 			content.add_widget(list_element)
 
+	def filter(self) -> None:
+		content = self.ids.content
+		content.clear_widgets()
+
+		# TODO: Get text from search entry
+		text = 'test'
+		# TODO: Find string method from get part text or use regulars
+		now_elements = filter(lambda e: e.element.title == text, self.elements)
+
+		for element in now_elements:
+			list_element = ListElement(element, group=self.group)
+			content.add_widget(list_element)
+
 	def get_value(self) -> list:
 		content = self.ids.content.children
 		result = []
