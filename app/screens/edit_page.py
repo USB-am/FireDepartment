@@ -33,10 +33,9 @@ class BaseCreatePage(BaseUpdateDBTable):
 		self.toolbar.add_right_button('check', lambda e: self.insert_values())
 
 	def insert_values(self) -> None:
-		rows_count = len(self.table.query.all())
-		title = f'{self.table.__tablename__} #{rows_count+1}'
+		values = {key: field.get_value() for key, field in self.fields.items()}
 
-		manager.insert(self.table, {'title': title})
+		manager.insert(self.table, values)
 		self.back()
 
 
