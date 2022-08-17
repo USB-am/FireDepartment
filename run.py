@@ -20,6 +20,8 @@ db.create_all()
 
 
 class PathManager:
+	''' Менеджер путей перехода '''
+
 	def __init__(self, screen_manager: ScreenManager):
 		self.__screen_manager = screen_manager
 
@@ -85,6 +87,8 @@ class Options(CustomScrolledScreen):
 
 
 class Application(MDApp):
+	''' Главный класс приложения '''
+
 	def __init__(self):
 		super().__init__()
 

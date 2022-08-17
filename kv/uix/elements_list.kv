@@ -1,0 +1,21 @@
+<ExpansionEmergencyElement>:
+	MDBoxLayout:
+		id: emergency_elements
+
+	MDIconButton:
+		size_hint: None, None
+		size: 50, 50
+		icon: 'eye'
+
+		on_release:
+			print(f'Open {root.element.title}')
+
+
+<EmergencyContentElement>:
+	MDIcon:
+		size_hint: None, None
+		size: 50, 50
+		icon: root.icon
+
+	MDLabel:
+		text: str(root.value)
