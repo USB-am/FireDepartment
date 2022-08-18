@@ -92,6 +92,9 @@ class CurrentCalls(CustomScreen):
 		self.notebook = FDNoteBook()
 		self.add_widgets(self.notebook)
 
+	def add_tab(self, element: db.Model) -> None:
+		print(f'CurrentCalls.add_tab accept element={element.title}')
+
 
 class Options(CustomScrolledScreen):
 	''' Экран настроек '''
@@ -126,11 +129,18 @@ class Application(MDApp):
 		self.screen_manager = ScreenManager()
 		self.path_manager = PathManager(self.screen_manager)
 
-		self.screen_manager.add_widget(MainPage(self.path_manager))
-		self.screen_manager.add_widget(Options(self.path_manager))
-		self.screen_manager.add_widget(CurrentCalls(self.path_manager))
+		self.setup()
 
 		self.screen_manager.current = 'main_page'
+
+	def setup(self) -> None:
+		self.main_page = MainPage(self.path_manager)
+		self.options = Options(self.path_manager)
+		self.current_calls = CurrentCalls(self.path_manager)
+
+		self.screen_manager.add_widget(self.main_page)
+		self.screen_manager.add_widget(self.options)
+		self.screen_manager.add_widget(self.current_calls)
 
 	def build(self) -> ScreenManager:
 		return self.screen_manager

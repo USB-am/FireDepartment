@@ -11,7 +11,8 @@
 		icon: 'eye'
 
 		on_release:
-			print(f'Open {root.element.title}')
+			app.screen_manager.current = 'current_calls'
+			app.screen_manager.current_screen.add_tab(root.element)
 
 
 <ExpansionOptionsElement>:
