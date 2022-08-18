@@ -43,6 +43,9 @@ class CustomScreen(Screen):
 		self.toolbar = FDToolbar('Base')
 		self.ids.widgets.add_widget(self.toolbar)
 
+	def add_widgets(self, *widgets: Widget) -> None:
+		[self.ids.widgets.add_widget(widget) for widget in widgets]
+
 
 class CustomScrolledScreen(CustomScreen):
 	''' Базовый экран с прокруткой '''

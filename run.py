@@ -60,7 +60,8 @@ class MainPage(CustomScrolledScreen):
 
 	def setup(self) -> None:
 		self.toolbar.title = LOCALIZED.translate('Main')
-		self.toolbar.add_left_button('fire-truck', lambda e: print('All good!'))
+		self.toolbar.add_left_button('fire-truck',
+			lambda e: self.path_manager.forward('current_calls'))
 		self.toolbar.add_right_button('cog',
 			lambda e: self.path_manager.forward('options'))
 
@@ -68,6 +69,28 @@ class MainPage(CustomScrolledScreen):
 		for emergency in Emergency.query.all():
 			element = FDExpansionPanel(emergency, ExpansionEmergencyElement)
 			self.add_widgets(element)
+
+
+class CurrentCalls(CustomScreen):
+	''' Экран текущих вызовов '''
+
+	name = 'current_calls'
+
+	def __init__(self, path_manager: PathManager):
+		super().__init__()
+
+		self.path_manager = path_manager
+
+		self.setup()
+		self.fill_content()
+
+	def setup(self) -> None:
+		self.toolbar.title = LOCALIZED.translate('Current calls')
+		self.toolbar.add_left_button('arrow-left', lambda e: self.path_manager.back())
+
+	def fill_content(self) -> None:
+		self.notebook = FDNoteBook()
+		self.add_widgets(self.notebook)
 
 
 class Options(CustomScrolledScreen):
@@ -84,7 +107,6 @@ class Options(CustomScrolledScreen):
 		self.fill_content()
 
 	def setup(self) -> None:
-		# === Toolbar === #
 		self.toolbar.title = LOCALIZED.translate('Options')
 		self.toolbar.add_left_button('arrow-left', lambda e: self.path_manager.back())
 
