@@ -1,6 +1,9 @@
 # from kivy.lang import Builder
+from kivymd.uix.tab import MDTabs, MDTabsBase
 
 
-class FDNoteBook:
+class FDNoteBook(MDTabs):
+	''' Виджет с вкладками '''
+
 	def __init__(self):
-		pass
+		super().__init__()

@@ -3,9 +3,7 @@ import os
 from kivy.lang import Builder
 from kivy.uix.widget import Widget
 from kivy.uix.screenmanager import Screen
-from kivy.uix.scrollview import ScrollView
 from kivymd.uix.toolbar import MDToolbar
-from kivymd.uix.label import MDLabel
 
 from uix import FDScrollFrame
 

@@ -4,7 +4,7 @@
 from kivy.config import Config
 Config.set('graphics', 'width', '350')
 
-from types import MethodType#, Union
+
 from typing import Union
 
 from kivymd.app import MDApp
@@ -13,7 +13,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from custom_screen import CustomScreen, CustomScrolledScreen
 from config import LOCALIZED
 from uix import FDSearchBlock, FDExpansionPanel, \
-	ExpansionEmergencyElement, ExpansionOptionsElement
+	ExpansionEmergencyElement, ExpansionOptionsElement, FDNoteBook
 from data_base import db, Tag, Rank, Position, Emergency
 
 
@@ -128,9 +128,9 @@ class Application(MDApp):
 
 		self.screen_manager.add_widget(MainPage(self.path_manager))
 		self.screen_manager.add_widget(Options(self.path_manager))
+		self.screen_manager.add_widget(CurrentCalls(self.path_manager))
 
 		self.screen_manager.current = 'main_page'
-		self.path_manager.forward('options')
 
 	def build(self) -> ScreenManager:
 		return self.screen_manager
