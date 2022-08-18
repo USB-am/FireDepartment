@@ -7,6 +7,8 @@ def write_new_localized_dict(path: str) -> None:
 		'search': 'Поиск',
 		'main': 'Главная',
 		'options': 'Настройки',
+		'create': 'Создать',
+		'edit': 'Изменить',
 	}
 
 	with open(path, mode='w') as writed_file:

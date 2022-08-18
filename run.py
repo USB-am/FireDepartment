@@ -12,8 +12,9 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 
 from custom_screen import CustomScreen, CustomScrolledScreen
 from config import LOCALIZED
-from uix import FDSearchBlock, FDExpansionPanel, ExpansionEmergencyElement
-from data_base import db, Emergency
+from uix import FDSearchBlock, FDExpansionPanel, \
+	ExpansionEmergencyElement, ExpansionOptionsElement
+from data_base import db, Tag, Rank, Position, Emergency
 
 
 db.create_all()
@@ -78,12 +79,20 @@ class Options(CustomScrolledScreen):
 		super().__init__()
 
 		self.path_manager = path_manager
+
 		self.setup()
+		self.fill_content()
 
 	def setup(self) -> None:
 		# === Toolbar === #
 		self.toolbar.title = LOCALIZED.translate('Options')
 		self.toolbar.add_left_button('arrow-left', lambda e: self.path_manager.back())
+
+	def fill_content(self) -> None:
+		for data_base_table in (Tag, Rank, Position, Emergency):
+			element = FDExpansionPanel(data_base_table, ExpansionOptionsElement)
+			element.content.binding(self.path_manager)
+			self.add_widgets(element)
 
 
 class Application(MDApp):
@@ -99,6 +108,7 @@ class Application(MDApp):
 		self.screen_manager.add_widget(Options(self.path_manager))
 
 		self.screen_manager.current = 'main_page'
+		self.path_manager.forward('options')
 
 	def build(self) -> ScreenManager:
 		return self.screen_manager
