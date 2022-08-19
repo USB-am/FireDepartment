@@ -13,7 +13,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from custom_screen import CustomScreen, CustomScrolledScreen
 from config import LOCALIZED
 from uix import FDSearchBlock, FDExpansionPanel, \
-	ExpansionEmergencyElement, ExpansionOptionsElement, FDNoteBook
+	ExpansionEmergencyElement, ExpansionOptionsElement, FDNoteBook, FDEmergencyTab
 from data_base import db, Tag, Rank, Position, Emergency
 
 
@@ -87,6 +87,7 @@ class CurrentCalls(CustomScreen):
 	def setup(self) -> None:
 		self.toolbar.title = LOCALIZED.translate('Current calls')
 		self.toolbar.add_left_button('arrow-left', lambda e: self.path_manager.back())
+		self.toolbar.add_right_button('check-outline', lambda e: print('Done'))
 
 	def fill_content(self) -> None:
 		self.notebook = FDNoteBook()
@@ -94,6 +95,7 @@ class CurrentCalls(CustomScreen):
 
 	def add_tab(self, element: db.Model) -> None:
 		print(f'CurrentCalls.add_tab accept element={element.title}')
+		self.notebook.add_widget(FDEmergencyTab(element))
 
 
 class Options(CustomScrolledScreen):
