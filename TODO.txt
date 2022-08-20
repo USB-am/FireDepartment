@@ -3,3 +3,6 @@ FDExpansionPanel:
 
 ExpansionOptionsElement:
 	Отобразить кнопку редактирования по правому краю
+
+FDEmergencyTab:
+	Добавить контент из Emergency
