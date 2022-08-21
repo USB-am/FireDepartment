@@ -6,3 +6,6 @@ ExpansionOptionsElement:
 
 FDEmergencyTab:
 	Добавить контент из Emergency
+
+FDTabs:
+	Сделать закрытие текущей вкладки
