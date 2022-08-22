@@ -17,7 +17,7 @@ class FDDialog(MDDialog):
 	''' Всплывающее окно '''
 
 	def __init__(self, title: str, content: MDBoxLayout,
-	             buttons: list[MDFlatButton]=[], **options):
+	             buttons: list=[], **options):
 
 		self.title = title
 		self.content_cls = content
@@ -32,6 +32,5 @@ class HumanDialogContent(MDBoxLayout):
 
 	def __init__(self, human: Human):
 		self.human = human
-		# self.title = human.title
 
 		super().__init__()
