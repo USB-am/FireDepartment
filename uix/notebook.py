@@ -1,26 +1,66 @@
-# from kivy.lang import Builder
+import os
+
+from kivy.lang import Builder
 from kivymd.uix.tab import MDTabs, MDTabsBase
 from kivymd.uix.floatlayout import MDFloatLayout
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.button import MDRaisedButton
 from kivymd.uix.label import MDLabel
 
-from data_base import Emergency
-from uix import FDScrollFrame
+from data_base import Emergency, Human
+from uix import FDScrollFrame#, FDDialog, HumanDialogContent
+from uix.dialog import FDDialog, HumanDialogContent
+from config import UIX_KV_DIR
+
+
+path_to_kv_file = os.path.join(UIX_KV_DIR, 'notebook.kv')
+Builder.load_file(path_to_kv_file)
+
+
+class HumansSelectedListElement(MDBoxLayout):
+	''' Элемент списка с людьми, которым надо позвонить '''
+
+	def __init__(self, human: Human):
+		self.human = human
+
+		super().__init__()
+
+		dialog_button = MDRaisedButton(text='Ok')
+		self.dialog = FDDialog(
+			title=human.title,
+			content=HumanDialogContent(human),
+			buttons=[dialog_button,])
+
+		dialog_button.bind(on_release=lambda e: self.dialog.dismiss())
+		self.ids.expansion_panel.bind(on_release=lambda e: self.dialog.open())
+
+	@property
+	def phone_1(self) -> str:
+		phone = self.human.phone_1
+		return '-' if phone is None else phone
+
+	@property
+	def phone_2(self) -> str:
+		phone = self.human.phone_2
+		return '-' if phone is None else phone
 
 
 class FDEmergencyTab(MDFloatLayout, MDTabsBase):
+	''' Вкладка с информацией о вызовах '''
+
 	def __init__(self, element: Emergency):
 		self.element = element
 		self.title = element.title
 
 		super().__init__()
 
-		self.scrolled_frame = FDScrollFrame()
-		self.add_widget(self.scrolled_frame)
-
 		self.setup()
 
 	def setup(self) -> None:
-		self.scrolled_frame.add_widgets(MDLabel(text=f'Tab {self.element.title}'))
+		scroll_layout = self.ids.scroll_layout
+
+		for human in self.element.humans:
+			scroll_layout.add_widget(HumansSelectedListElement(human))
 
 
 class FDNoteBook(MDTabs):

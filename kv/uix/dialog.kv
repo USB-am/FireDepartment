@@ -1,0 +1,24 @@
+<HumanDialogContent>:
+	orientation: 'vertical'
+	size_hint: .8, None
+	size: self.width, 400	# TODO: Исходить из размера окна
+
+	MDBoxLayout:
+		size_hint: 1, None
+		size: self.width, 70
+
+		MDIcon:
+			size_hint: None, 1
+			size: self.height, self.height
+			icon: root.human.icon
+
+		MDLabel:
+			text: root.human.title
+
+	MDBoxLayout:
+		size_hint: 1, None
+		size: self.width, 330
+
+		MDLabel:
+			halign: 'center'
+			text: 'Content'
