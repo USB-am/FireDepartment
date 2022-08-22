@@ -3,22 +3,69 @@
 	size_hint: .8, None
 	size: self.width, 400	# TODO: Исходить из размера окна
 
-	MDBoxLayout:
-		size_hint: 1, None
-		size: self.width, 70
+	ScrollView:
+		GridLayout:
+			id: content
+			cols: 1
+			height: self.minimum_height
+			size_hint: 1, None
+			do_scroll_x: False
+			spacing: 10
 
-		MDIcon:
-			size_hint: None, 1
-			size: self.height, self.height
-			icon: root.human.icon
+			MDBoxLayout:
+				size_hint: 1, None
+				size: self.width, 50
 
-		MDLabel:
-			text: root.human.title
+				MDIcon:
+					size_hint: None, 1
+					size: self.height, self.height
+					icon: root.human.icon
 
-	MDBoxLayout:
-		size_hint: 1, None
-		size: self.width, 330
+				MDLabel:
+					text: root.human.title
 
-		MDLabel:
-			halign: 'center'
-			text: 'Content'
+			MDBoxLayout:
+				size_hint: 1, None
+				size: self.width, 50
+
+				MDLabel:
+					size_hint: .4, 1
+					text: 'Phone'
+
+				MDLabel:
+					text: str(root.human.phone_1)
+
+			MDBoxLayout:
+				size_hint: 1, None
+				size: self.width, 50
+
+				MDLabel:
+					size_hint: .4, 1
+					text: 'Addition phone'
+
+				MDLabel:
+					text: str(root.human.phone_2)
+
+			MDBoxLayout:
+				size_hint: 1, None
+				size: self.width, 50
+
+				MDIcon:
+					size_hint: None, 1
+					size: self.height, self.height
+					icon: 'crosshairs-gps'
+
+				MDLabel:
+					text: str(root.human.position)
+
+			MDBoxLayout:
+				size_hint: 1, None
+				size: self.width, 50
+
+				MDIcon:
+					size_hint: None, 1
+					size: self.height, self.height
+					icon: 'chevron-triple-up'
+
+				MDLabel:
+					text: str(root.human.rank)
