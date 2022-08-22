@@ -1,0 +1,42 @@
+<FDEmergencyTab>:
+	ScrollView:
+		GridLayout:
+			id: scroll_layout
+			cols: 1
+			size_hint: 1, None
+			height: self.minimum_height
+			do_scroll_x: False
+			padding: 15, 0
+			spacing: 10
+
+			MDBoxLayout:
+				size_hint: 1, None
+				size: self.width, 75
+
+				MDLabel:
+					size_hint: .4, 1
+					text: 'Название:'
+					halign: 'left'
+
+				MDLabel:
+					size_hint: .6, 1
+					text: root.title
+					halign: 'left'
+
+
+<HumansSelectedListElement>:
+	size_hint: 1, None
+	size: self.width, 70
+
+	MDCheckbox:
+		id: checkbox
+		size_hint: None, None
+		size: 70, 70
+
+	MDExpansionPanelTwoLine:
+		id: expansion_panel
+		text: root.human.title
+		secondary_text: root.phone_1
+
+		on_release:
+			print(f'You pressed on {root.human.title}')
