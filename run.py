@@ -14,7 +14,7 @@ from custom_screen import CustomScreen, CustomScrolledScreen
 from config import LOCALIZED
 from uix import FDSearchBlock, FDExpansionPanel, \
 	ExpansionEmergencyElement, ExpansionOptionsElement, FDNoteBook, FDEmergencyTab
-from data_base import db, Tag, Rank, Position, Emergency
+from data_base import db, Tag, Rank, Position, Human, Emergency
 
 
 db.create_all()
@@ -94,7 +94,6 @@ class CurrentCalls(CustomScreen):
 		self.add_widgets(self.notebook)
 
 	def add_tab(self, element: db.Model) -> None:
-		print(f'CurrentCalls.add_tab accept element={element.title}')
 		self.notebook.add_widget(FDEmergencyTab(element))
 
 
@@ -116,10 +115,27 @@ class Options(CustomScrolledScreen):
 		self.toolbar.add_left_button('arrow-left', lambda e: self.path_manager.back())
 
 	def fill_content(self) -> None:
-		for data_base_table in (Tag, Rank, Position, Emergency):
+		for data_base_table in (Tag, Rank, Position, Human, Emergency):
 			element = FDExpansionPanel(data_base_table, ExpansionOptionsElement)
 			element.content.binding(self.path_manager)
 			self.add_widgets(element)
+
+
+class CreateEntry(CustomScrolledScreen):
+	''' Базовый экран создания новой записи в базе данных '''
+
+	def __init__(self, path_manager: PathManager, table: db.Model):
+		super().__init__()
+
+		self.name = f'create_{table.__tablename__}'.lower()
+		self.path_manager = path_manager
+		self.table = table
+
+		self.setup()
+
+	def setup(self) -> None:
+		self.toolbar.title = LOCALIZED.translate(f'Create {self.table.__tablename__}')
+		self.toolbar.add_left_button('arrow-left', lambda e: self.path_manager.back())
 
 
 class Application(MDApp):
@@ -133,16 +149,26 @@ class Application(MDApp):
 
 		self.setup()
 
-		self.screen_manager.current = 'main_page'
+		self.screen_manager.current = 'options'
 
 	def setup(self) -> None:
 		self.main_page = MainPage(self.path_manager)
-		self.options = Options(self.path_manager)
 		self.current_calls = CurrentCalls(self.path_manager)
+		self.options = Options(self.path_manager)
+		self.create_tag = CreateEntry(self.path_manager, Tag)
+		self.create_rank = CreateEntry(self.path_manager, Rank)
+		self.create_position = CreateEntry(self.path_manager, Position)
+		self.create_human = CreateEntry(self.path_manager, Human)
+		self.create_emergency = CreateEntry(self.path_manager, Emergency)
 
 		self.screen_manager.add_widget(self.main_page)
-		self.screen_manager.add_widget(self.options)
 		self.screen_manager.add_widget(self.current_calls)
+		self.screen_manager.add_widget(self.options)
+		self.screen_manager.add_widget(self.create_tag)
+		self.screen_manager.add_widget(self.create_rank)
+		self.screen_manager.add_widget(self.create_position)
+		self.screen_manager.add_widget(self.create_human)
+		self.screen_manager.add_widget(self.create_emergency)
 
 	def build(self) -> ScreenManager:
 		return self.screen_manager
