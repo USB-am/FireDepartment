@@ -138,6 +138,23 @@ class CreateEntry(CustomScrolledScreen):
 		self.toolbar.add_left_button('arrow-left', lambda e: self.path_manager.back())
 
 
+class EditEntryList(CustomScrolledScreen):
+	''' Базовый класс со списком редактируемых элементов базы данных '''
+
+	def __init__(self, path_manager: PathManager, table: db.Model):
+		super().__init__()
+
+		self.name = f'edit_{table.__tablename__}_list'.lower()
+		self.path_manager = path_manager
+		self.table = table
+
+		self.setup()
+
+	def setup(self) -> None:
+		self.toolbar.title = LOCALIZED.translate(f'Edit {self.table.__tablename__} list')
+		self.toolbar.add_left_button('arrow-left', lambda e: self.path_manager.back())
+
+
 class Application(MDApp):
 	''' Главный класс приложения '''
 
@@ -155,20 +172,34 @@ class Application(MDApp):
 		self.main_page = MainPage(self.path_manager)
 		self.current_calls = CurrentCalls(self.path_manager)
 		self.options = Options(self.path_manager)
+
 		self.create_tag = CreateEntry(self.path_manager, Tag)
 		self.create_rank = CreateEntry(self.path_manager, Rank)
 		self.create_position = CreateEntry(self.path_manager, Position)
 		self.create_human = CreateEntry(self.path_manager, Human)
 		self.create_emergency = CreateEntry(self.path_manager, Emergency)
 
+		self.edit_tag_list = EditEntryList(self.path_manager, Tag)
+		self.edit_rank_list = EditEntryList(self.path_manager, Rank)
+		self.edit_position_list = EditEntryList(self.path_manager, Position)
+		self.edit_human_list = EditEntryList(self.path_manager, Human)
+		self.edit_emergency_list = EditEntryList(self.path_manager, Emergency)
+
 		self.screen_manager.add_widget(self.main_page)
 		self.screen_manager.add_widget(self.current_calls)
 		self.screen_manager.add_widget(self.options)
+
 		self.screen_manager.add_widget(self.create_tag)
 		self.screen_manager.add_widget(self.create_rank)
 		self.screen_manager.add_widget(self.create_position)
 		self.screen_manager.add_widget(self.create_human)
 		self.screen_manager.add_widget(self.create_emergency)
+
+		self.screen_manager.add_widget(self.edit_tag_list)
+		self.screen_manager.add_widget(self.edit_rank_list)
+		self.screen_manager.add_widget(self.edit_position_list)
+		self.screen_manager.add_widget(self.edit_human_list)
+		self.screen_manager.add_widget(self.edit_emergency_list)
 
 	def build(self) -> ScreenManager:
 		return self.screen_manager
