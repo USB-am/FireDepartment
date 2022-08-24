@@ -34,8 +34,20 @@
 			icon: 'playlist-edit'
 			text: root.edit_text
 
-			on_release:
-				print('Edit button is pressed')
+
+<ExpansionEditListElement>:
+	size_hint: 1, None
+	size: self.width, 50
+
+	MDRectangleFlatIconButton:
+		id: button
+		size_hint: None, 1
+		size: root.width, self.height
+		icon: root.element.icon
+		text: root.element.title
+		text_color: 0, 0, 0, 1
+		icon_color: 0, 0, 0, 1
+		line_color: 0, 0, 0, 0
 
 
 <EmergencyContentElement>:
