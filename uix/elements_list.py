@@ -2,6 +2,7 @@ import os
 
 from kivy.lang import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.button import MDRectangleFlatIconButton
 from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelOneLine
 
 from data_base import db, Emergency
@@ -65,6 +66,25 @@ class ExpansionOptionsElement(MDBoxLayout):
 			on_release=lambda e: path_manager.forward(path_to_edit))
 
 
+class ExpansionEditListElement(MDBoxLayout):
+	''' Элемент списка экрана редактирования '''
+
+	def __init__(self, element: db.Model):
+		self.element = element
+
+		super().__init__()
+
+	def binding(self, path_manager) -> None:
+		def redirect_with_call(path_manager, element: db.Model) -> None:
+			screen_name = f'edit_{element.__tablename__}'.lower()
+
+			current_screen = path_manager.forward(screen_name)
+			current_screen.fill_fields(element)
+
+		self.ids.button.bind(on_release=lambda e: redirect_with_call(
+		                                          path_manager, self.element))
+
+
 class FDExpansionPanel(MDExpansionPanel):
 	''' Элемент списка с выпадающим содержимым '''
 
@@ -74,8 +94,10 @@ class FDExpansionPanel(MDExpansionPanel):
 		self.content = content(element)
 
 		if isinstance(element.title, str):
-			self.panel_cls = MDExpansionPanelOneLine(text=element.title)
+			self.title = element.title
 		else:
-			self.panel_cls = MDExpansionPanelOneLine(text=element.__tablename__)
+			self.title = element.__tablename__
+
+		self.panel_cls = MDExpansionPanelOneLine(text=self.title)
 
 		super().__init__()

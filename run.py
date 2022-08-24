@@ -13,7 +13,8 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 from custom_screen import CustomScreen, CustomScrolledScreen
 from config import LOCALIZED
 from uix import FDSearchBlock, FDExpansionPanel, \
-	ExpansionEmergencyElement, ExpansionOptionsElement, FDNoteBook, FDEmergencyTab
+	ExpansionEmergencyElement, ExpansionOptionsElement, FDNoteBook, FDEmergencyTab, \
+	ExpansionEditListElement
 from data_base import db, Tag, Rank, Position, Human, Emergency
 
 
@@ -149,10 +150,44 @@ class EditEntryList(CustomScrolledScreen):
 		self.table = table
 
 		self.setup()
+		self.fill_content()
 
 	def setup(self) -> None:
-		self.toolbar.title = LOCALIZED.translate(f'Edit {self.table.__tablename__} list')
+		self.toolbar.title = LOCALIZED.translate(f'Edit {self.name} list')
 		self.toolbar.add_left_button('arrow-left', lambda e: self.path_manager.back())
+
+	def fill_content(self) -> None:
+		for db_entry in self.table.query.all():
+			element = ExpansionEditListElement(db_entry)
+			element.binding(self.path_manager)
+			self.add_widgets(element)
+
+
+class EditEntry(CustomScrolledScreen):
+	''' Базовый класс редактирования записи базы данных '''
+
+	def __init__(self, path_manager: PathManager, name: str):
+		super().__init__()
+
+		self.name = name
+		self.path_manager = path_manager
+
+		self.element = None
+
+		self.setup()
+		self.fill_content()
+
+	def setup(self) -> None:
+		self.toolbar.title = LOCALIZED.translate(f'Edit {self.name}')
+		self.toolbar.add_left_button('arrow-left', lambda e: self.path_manager.back())
+		self.toolbar.add_right_button('delete', lambda e: print('Delete this entry'))
+
+	def fill_content(self) -> None:
+		print('EditEntry.fill_content')
+
+	def fill_fields(self, element: db.Model) -> None:
+		self.element = element
+		print('EditEntry.fill_fields', element.title)
 
 
 class Application(MDApp):
@@ -200,6 +235,11 @@ class Application(MDApp):
 		self.screen_manager.add_widget(self.edit_position_list)
 		self.screen_manager.add_widget(self.edit_human_list)
 		self.screen_manager.add_widget(self.edit_emergency_list)
+
+		for table in (Tag, Rank, Position, Human, Emergency):
+			name = f'edit_{table.__tablename__}'.lower()
+			screen = EditEntry(self.path_manager, name)
+			self.screen_manager.add_widget(screen)
 
 	def build(self) -> ScreenManager:
 		return self.screen_manager
