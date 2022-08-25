@@ -31,7 +31,7 @@ class SelectedListElement(MDBoxLayout):
 class SelectedList(MDBoxLayout):
 	''' Список с возможностью выбора элементов '''
 
-	def __init__(self, icon: str, title: str, values: list[db.Model], group: str=None,
+	def __init__(self, icon: str, title: str, values: list, group: str=None,
 	             **options):
 		self.icon = icon
 		self.title = title
@@ -44,7 +44,7 @@ class SelectedList(MDBoxLayout):
 
 		self.fill_content(values)
 
-	def fill_content(self, values: list[db.Model]) -> None:
+	def fill_content(self, values: list) -> None:
 		container = self.ids.elements
 
 		for value in values:
