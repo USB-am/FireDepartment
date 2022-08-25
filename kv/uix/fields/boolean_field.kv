@@ -1,0 +1,16 @@
+<BooleanField>:
+	size_hint: 1, None
+	size: self.width, 50
+
+	MDIcon:
+		size_hint: None, 1
+		size: self.height, self.height
+		icon: root.icon
+
+	MDLabel:
+		text: root.display_text
+
+	MDSwitch:
+		id: switch
+		size_hint: None, 1
+		size: 35, self.height

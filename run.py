@@ -14,7 +14,7 @@ from custom_screen import CustomScreen, CustomScrolledScreen
 from config import LOCALIZED
 from uix import FDSearchBlock, FDExpansionPanel, \
 	ExpansionEmergencyElement, ExpansionOptionsElement, FDNoteBook, FDEmergencyTab, \
-	ExpansionEditListElement
+	ExpansionEditListElement, fields
 from data_base import db, Tag, Rank, Position, Human, Emergency
 
 
@@ -139,6 +139,108 @@ class CreateEntry(CustomScrolledScreen):
 		self.toolbar.add_left_button('arrow-left', lambda e: self.path_manager.back())
 
 
+class CreateEntryTag(CreateEntry):
+	''' Экран создания новой записи в таблицу Tag '''
+
+	def __init__(self, path_manager: PathManager, table: Tag):
+		super().__init__(path_manager, table)
+
+		self.title = fields.StringField('Title')
+		self.emergencies = fields.SelectedList(
+			icon=Emergency.icon,
+			title=Emergency.__tablename__,
+			values=Emergency.query.all())
+
+		self.add_widgets(self.title)
+		self.add_widgets(self.emergencies)
+
+
+class CreateEntryRank(CreateEntry):
+	''' Экран создания новой записи в таблицу Rank '''
+
+	def __init__(self, path_manager: PathManager, table: Rank):
+		super().__init__(path_manager, table)
+
+		self.title = fields.StringField('Title')
+		self.humans = fields.SelectedList(
+			icon=Human.icon,
+			title=Human.__tablename__,
+			values=Human.query.all())
+
+		self.add_widgets(self.title)
+		self.add_widgets(self.humans)
+
+
+class CreateEntryPosition(CreateEntry):
+	''' Экран создания новой записи в таблицу Position '''
+
+	def __init__(self, path_manager: PathManager, table: Position):
+		super().__init__(path_manager, table)
+
+		self.title = fields.StringField('Title')
+		self.humans = fields.SelectedList(
+			icon=Human.icon,
+			title=Human.__tablename__,
+			values=Human.query.all())
+
+		self.add_widgets(self.title)
+		self.add_widgets(self.humans)
+
+
+class CreateEntryHuman(CreateEntry):
+	''' Экран создания новой записи в таблицу Human '''
+
+	def __init__(self, path_manager: PathManager, table: Human):
+		super().__init__(path_manager, table)
+
+		self.title = fields.StringField('Title')
+		self.phone_1 = fields.PhoneField('Phone')
+		self.phone_2 = fields.PhoneField('Addition phone')
+		self.work_day = fields.DateField('calendar-month', 'Work day')
+		self.rank = fields.SelectedList(
+			icon=Rank.icon,
+			title=Rank.__tablename__,
+			values=Rank.query.all(),
+			group='ranks')
+		self.position = fields.SelectedList(
+			icon=Position.icon,
+			title=Position.__tablename__,
+			values=Position.query.all(),
+			group='positions')
+
+		self.add_widgets(self.title)
+		self.add_widgets(self.phone_1)
+		self.add_widgets(self.phone_2)
+		self.add_widgets(self.work_day)
+		self.add_widgets(self.rank)
+		self.add_widgets(self.position)
+
+
+class CreateEntryEmergency(CreateEntry):
+	''' Экран создания новой записи в таблицу Emergency '''
+
+	def __init__(self, path_manager: PathManager, table: Emergency):
+		super().__init__(path_manager, table)
+
+		self.title = fields.StringField('Title')
+		self.decription = fields.DescriptionField('Description')
+		self.urgent = fields.BooleanField('truck-fast', 'Urgent')
+		self.humans = fields.SelectedList(
+			icon=Human.icon,
+			title=Human.__tablename__,
+			values=Human.query.all())
+		self.tags = fields.SelectedList(
+			icon=Tag.icon,
+			title=Tag.__tablename__,
+			values=Tag.query.all())
+
+		self.add_widgets(self.title)
+		self.add_widgets(self.decription)
+		self.add_widgets(self.urgent)
+		self.add_widgets(self.humans)
+		self.add_widgets(self.tags)
+
+
 class EditEntryList(CustomScrolledScreen):
 	''' Базовый класс со списком редактируемых элементов базы данных '''
 
@@ -208,11 +310,11 @@ class Application(MDApp):
 		self.current_calls = CurrentCalls(self.path_manager)
 		self.options = Options(self.path_manager)
 
-		self.create_tag = CreateEntry(self.path_manager, Tag)
-		self.create_rank = CreateEntry(self.path_manager, Rank)
-		self.create_position = CreateEntry(self.path_manager, Position)
-		self.create_human = CreateEntry(self.path_manager, Human)
-		self.create_emergency = CreateEntry(self.path_manager, Emergency)
+		self.create_tag = CreateEntryTag(self.path_manager, Tag)
+		self.create_rank = CreateEntryRank(self.path_manager, Rank)
+		self.create_position = CreateEntryPosition(self.path_manager, Position)
+		self.create_human = CreateEntryHuman(self.path_manager, Human)
+		self.create_emergency = CreateEntryEmergency(self.path_manager, Emergency)
 
 		self.edit_tag_list = EditEntryList(self.path_manager, Tag)
 		self.edit_rank_list = EditEntryList(self.path_manager, Rank)

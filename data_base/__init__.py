@@ -3,6 +3,8 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
+# from uix import fields
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -34,7 +36,7 @@ class Tag(db.Model):
 	@staticmethod
 	def get_fields() -> dict:
 		return {
-			'title': 'TagStringField',
+			'title': 'fields.StringField',
 			'emergencys': 'ManyToManyField'
 		}
 
@@ -51,7 +53,7 @@ class Rank(db.Model):
 	@staticmethod
 	def get_fields() -> dict:
 		return {
-			'title': 'StringField',
+			'title': 'fields.StringField',
 		}
 
 
@@ -67,7 +69,7 @@ class Position(db.Model):
 	@staticmethod
 	def get_fields() -> dict:
 		return {
-			'title': 'StringField',
+			'title': 'fields.StringField',
 		}
 
 
@@ -89,9 +91,9 @@ class Human(db.Model):
 	@staticmethod
 	def get_fields() -> dict:
 		return {
-			'title': 'StringField',
-			'phone_1': 'PhoneField',
-			'phone_2': 'PhoneField',
+			'title': 'fields.StringField',
+			'phone_1': 'fields.PhoneField',
+			'phone_2': 'fields.PhoneField',
 			'work_day': 'WorkDayField',
 			'worktype': 'ForeignKeyField',
 			'position': 'ForeignKeyField',
@@ -115,9 +117,9 @@ class Emergency(db.Model):
 	@staticmethod
 	def get_fields() -> dict:
 		return {
-			'title': 'StringField',
-			'description': 'DescriptionField',
-			'urgent': 'BooleanField',
+			'title': 'fields.StringField',
+			'description': 'fields.DescriptionField',
+			'urgent': 'fields.BooleanField',
 			'humans': 'ManyToManyField',
 			'tags': 'ManyToManyField',
 		}
@@ -167,8 +169,8 @@ class Worktype(db.Model):
 			'title': 'StringField',
 			'start_work_day': 'DateTimeField',
 			'finish_work_day': 'DateTimeField',
-			'work_day_range': 'IntegerField',
-			'week_day_range': 'IntegerField',
+			'work_day_range': 'fields.IntegerField',
+			'week_day_range': 'fields.IntegerField',
 		}
 
 		return result

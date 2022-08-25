@@ -1,0 +1,47 @@
+<SelectedListElement>:
+	size_hint: 1, None
+	size: self.width, 50
+
+	MDCheckbox:
+		id: checkbox
+		size_hint: None, 1
+		size: self.height, self.height
+		group: root.group
+
+	MDRectangleFlatButton:
+		id: button
+		size_hint: None, 1
+		size: root.width - self.height, self.height
+		text: root.db_entry.title
+		text_color: 0, 0, 0, 1
+		line_color: 0, 0, 0, 0
+
+
+<SelectedList>:
+	orientation: 'vertical'
+	size_hint: 1, None
+	size: self.width, 400
+
+	MDBoxLayout:
+		id: toolbar
+		size_hint: 1, None
+		size: self.width, 50
+
+		MDIcon:
+			size_hint: None, 1
+			size: self.height, self.height
+			icon: root.icon
+
+		MDLabel:
+			text: root.display_text
+
+	ScrollView:
+		padding: 10
+
+		GridLayout:
+			id: elements
+			cols: 1
+			size_hint: 1, None
+			height: self.minimum_height
+			do_scroll_x: False
+			spacing: 10

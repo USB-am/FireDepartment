@@ -8,6 +8,7 @@ BASE_DIR = os.getcwd()
 # KV DIRS
 KV_DIR = os.path.join(BASE_DIR, 'kv')
 UIX_KV_DIR = os.path.join(KV_DIR, 'uix')
+FIELDS_KV_DIR = os.path.join(UIX_KV_DIR, 'fields')
 
 # LOCALIZED DIRS
 LOCALIZED_DIR = os.path.join(BASE_DIR, 'config', 'vocabulary')
