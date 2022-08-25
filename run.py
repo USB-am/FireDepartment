@@ -137,6 +137,7 @@ class CreateEntry(CustomScrolledScreen):
 	def setup(self) -> None:
 		self.toolbar.title = LOCALIZED.translate(f'Create {self.table.__tablename__}')
 		self.toolbar.add_left_button('arrow-left', lambda e: self.path_manager.back())
+		self.toolbar.add_right_button('plus', lambda e: print('You pressed on "plus" button'))
 
 
 class CreateEntryTag(CreateEntry):
@@ -150,6 +151,7 @@ class CreateEntryTag(CreateEntry):
 			icon=Emergency.icon,
 			title=Emergency.__tablename__,
 			values=Emergency.query.all())
+		self.emergencies.binding(path_manager)
 
 		self.add_widgets(self.title)
 		self.add_widgets(self.emergencies)
@@ -166,6 +168,7 @@ class CreateEntryRank(CreateEntry):
 			icon=Human.icon,
 			title=Human.__tablename__,
 			values=Human.query.all())
+		self.humans.binding(path_manager)
 
 		self.add_widgets(self.title)
 		self.add_widgets(self.humans)
@@ -182,6 +185,7 @@ class CreateEntryPosition(CreateEntry):
 			icon=Human.icon,
 			title=Human.__tablename__,
 			values=Human.query.all())
+		self.humans.binding(path_manager)
 
 		self.add_widgets(self.title)
 		self.add_widgets(self.humans)
@@ -207,6 +211,8 @@ class CreateEntryHuman(CreateEntry):
 			title=Position.__tablename__,
 			values=Position.query.all(),
 			group='positions')
+		self.rank.binding(path_manager)
+		self.position.binding(path_manager)
 
 		self.add_widgets(self.title)
 		self.add_widgets(self.phone_1)
@@ -233,6 +239,8 @@ class CreateEntryEmergency(CreateEntry):
 			icon=Tag.icon,
 			title=Tag.__tablename__,
 			values=Tag.query.all())
+		self.humans.binding(path_manager)
+		self.tags.binding(path_manager)
 
 		self.add_widgets(self.title)
 		self.add_widgets(self.decription)
