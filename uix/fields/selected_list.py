@@ -50,3 +50,8 @@ class SelectedList(MDBoxLayout):
 		for value in values:
 			element = SelectedListElement(value, self.group)
 			container.add_widget(element)
+
+	def binding(self, path_manager) -> None:
+		create_screen_name = f'create_{self.title}'.lower()
+		self.ids.redirect_button.bind(
+			on_release=lambda e: path_manager.forward(create_screen_name))
