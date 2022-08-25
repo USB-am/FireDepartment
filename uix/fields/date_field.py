@@ -19,25 +19,35 @@ class DateField(MDBoxLayout):
 	def __init__(self, icon: str, title: str):
 		self.icon = icon
 		self.title = title
+		self._value = None
 
 		self.display_text = LOCALIZED.translate(title)
-		self.dialog = MDDatePicker(on_save=self.on_save)
-		print(dir(self.dialog))
+		self.dialog = MDDatePicker()
+		self.dialog.bind(on_save=lambda instance, date, date_range: self.set_value(date))
 
 		super().__init__()
 
 		self.binding()
 
-	def on_save(self, instance, value, date_range) -> None:
-		print(instance, type(instance), '\n',
-			value, type(value), '\n',
-			date_range, type(date_range), sep=' '*4)
+	@property
+	def value(self) -> datetime.datetime:
+		return self._value
+
+	@value.setter
+	def value(self, val: datetime.datetime) -> None:
+		self._value = val
+
+		if val is not None:
+			self.ids.button.text = val.strftime('%d.%m.%Y')
+		else:
+			self.ids.button.text = 'dd.mm.yyyy'
 
 	def binding(self) -> None:
 		self.ids.button.bind(on_release=lambda e: self.dialog.open())
 
 	def set_value(self, value: datetime.datetime) -> None:
 		print(f'DateField.set_value get accepted {value}')
+		self.value = value
 
 	def get_value(self) -> datetime.datetime:
-		return datetime.datetime.today()
+		return self.value
