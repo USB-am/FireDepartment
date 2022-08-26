@@ -16,3 +16,39 @@
 		text: 'dd.mm.yyyy'
 		text_color: 0, 0, 0, 1
 		line_color: 0, 0, 0, 1
+
+
+<DateTimeField>:
+	orientation: 'vertical'
+	size_hint: 1, None
+	size: self.width, 80
+
+	MDBoxLayout:
+		id: top_panel
+		size_hint: 1, None
+		size: self.width, 50
+
+		MDIcon:
+			size_hint: None, 1
+			size: self.height, self.height
+			icon: root.icon
+
+		MDLabel:
+			halign: 'left'
+			text: root.display_text
+
+	MDBoxLayout:
+		size_hint: 1, None
+		size: self.width, 30
+
+		MDRectangleFlatButton:
+			id: date_button
+			text: 'dd.mm.yyyy'
+			text_color: 0, 0, 0, 1
+			line_color: 0, 0, 0, 1
+
+		MDRectangleFlatButton:
+			id: time_button
+			text: 'HH:MM:SS'
+			text_color: 0, 0, 0, 1
+			line_color: 0, 0, 0, 1

@@ -15,7 +15,7 @@ from config import LOCALIZED
 from uix import FDSearchBlock, FDExpansionPanel, \
 	ExpansionEmergencyElement, ExpansionOptionsElement, FDNoteBook, FDEmergencyTab, \
 	ExpansionEditListElement, fields
-from data_base import db, Tag, Rank, Position, Human, Emergency
+from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype
 
 
 db.create_all()
@@ -116,7 +116,7 @@ class Options(CustomScrolledScreen):
 		self.toolbar.add_left_button('arrow-left', lambda e: self.path_manager.back())
 
 	def fill_content(self) -> None:
-		for data_base_table in (Tag, Rank, Position, Human, Emergency):
+		for data_base_table in (Tag, Rank, Position, Human, Emergency, Worktype):
 			element = FDExpansionPanel(data_base_table, ExpansionOptionsElement)
 			element.content.binding(self.path_manager)
 			self.add_widgets(element)
@@ -137,7 +137,7 @@ class CreateEntry(CustomScrolledScreen):
 	def setup(self) -> None:
 		self.toolbar.title = LOCALIZED.translate(f'Create {self.table.__tablename__}')
 		self.toolbar.add_left_button('arrow-left', lambda e: self.path_manager.back())
-		self.toolbar.add_right_button('plus', lambda e: print('You pressed on "plus" button'))
+		self.toolbar.add_right_button('plus', lambda e: print('You pressed on "plus"'))
 
 
 class CreateEntryTag(CreateEntry):
@@ -249,6 +249,25 @@ class CreateEntryEmergency(CreateEntry):
 		self.add_widgets(self.tags)
 
 
+class CreateEntryWorktype(CreateEntry):
+	''' Экран создания новой записи в таблицу Worktype '''
+
+	def __init__(self, path_manager: PathManager, table: Worktype):
+		super().__init__(path_manager, table)
+
+		self.title = fields.StringField('Title')
+		self.start_work_day = fields.DateTimeField('run-fast', 'Start work day')
+		self.finish_work_day = fields.DateTimeField('exit-run', 'Finish work day')
+		self.work_day_range = fields.IntegerField('Work day range')
+		self.week_day_range = fields.IntegerField('Week day range')
+
+		self.add_widgets(self.title)
+		self.add_widgets(self.start_work_day)
+		self.add_widgets(self.finish_work_day)
+		self.add_widgets(self.work_day_range)
+		self.add_widgets(self.week_day_range)
+
+
 class EditEntryList(CustomScrolledScreen):
 	''' Базовый класс со списком редактируемых элементов базы данных '''
 
@@ -323,6 +342,7 @@ class Application(MDApp):
 		self.create_position = CreateEntryPosition(self.path_manager, Position)
 		self.create_human = CreateEntryHuman(self.path_manager, Human)
 		self.create_emergency = CreateEntryEmergency(self.path_manager, Emergency)
+		self.create_worktype = CreateEntryWorktype(self.path_manager, Worktype)
 
 		self.edit_tag_list = EditEntryList(self.path_manager, Tag)
 		self.edit_rank_list = EditEntryList(self.path_manager, Rank)
@@ -339,6 +359,7 @@ class Application(MDApp):
 		self.screen_manager.add_widget(self.create_position)
 		self.screen_manager.add_widget(self.create_human)
 		self.screen_manager.add_widget(self.create_emergency)
+		self.screen_manager.add_widget(self.create_worktype)
 
 		self.screen_manager.add_widget(self.edit_tag_list)
 		self.screen_manager.add_widget(self.edit_rank_list)
@@ -346,7 +367,7 @@ class Application(MDApp):
 		self.screen_manager.add_widget(self.edit_human_list)
 		self.screen_manager.add_widget(self.edit_emergency_list)
 
-		for table in (Tag, Rank, Position, Human, Emergency):
+		for table in (Tag, Rank, Position, Human, Emergency, Worktype):
 			name = f'edit_{table.__tablename__}'.lower()
 			screen = EditEntry(self.path_manager, name)
 			self.screen_manager.add_widget(screen)
