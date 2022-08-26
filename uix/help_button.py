@@ -18,10 +18,11 @@ class HelpButton(MDIconButton):
 
 		super().__init__()
 
+		self.ok_button = MDRaisedButton(text=LOCALIZED.translate('Ok'))
 		self.dialog = MDDialog(
 			title=self.display_title,
 			text=self.display_text,
-			buttons=[
-				MDRaisedButton(text=LOCALIZED.translate('Ok')),
-			])
+			buttons=[self.ok_button, ])
+
+		self.ok_button.bind(on_release=lambda e: self.dialog.dismiss())
 		self.bind(on_release=lambda e: self.dialog.open())

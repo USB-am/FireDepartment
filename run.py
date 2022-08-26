@@ -312,11 +312,10 @@ class EditEntry(CustomScrolledScreen):
 		self.toolbar.add_right_button('delete', lambda e: print('Delete this entry'))
 
 	def fill_content(self) -> None:
-		print('EditEntry.fill_content')
+		pass
 
 	def fill_fields(self, element: db.Model) -> None:
 		self.element = element
-		print('EditEntry.fill_fields', element.title)
 
 
 class Application(MDApp):

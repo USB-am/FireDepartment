@@ -6,6 +6,7 @@ from kivy.uix.screenmanager import Screen
 from kivymd.uix.toolbar import MDToolbar
 
 from uix import FDScrollFrame
+from config import STATIC_DIR
 
 
 path_to_kv_file = os.path.join(os.getcwd(), 'kv', 'custom_screen.kv')
@@ -32,8 +33,8 @@ class FDToolbar(MDToolbar):
 class CustomScreen(Screen):
 	''' Базовый экран '''
 
-	bg_image = None
-	color = (0, 0, 0, 0)
+	bg_image = os.path.join(STATIC_DIR, 'bg_02.png')
+	color = (1, 1, 1, .5)
 
 	def __init__(self):
 		super().__init__()
