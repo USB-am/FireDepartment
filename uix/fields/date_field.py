@@ -76,7 +76,12 @@ class DateTimeField(MDBoxLayout):
 		self.binding()
 
 	def setup(self) -> None:
-		help_text = 'Help text'
+		help_text = '''Кнопка слева - дата;
+Кнопка справа - время.
+	AM - 00:00 - 11:59
+	PM - 12:00 - 23:59
+
+Поля ОБЯЗАТЕЛЬНЫ ДЛЯ ВВОДА'''
 		self.ids.top_panel.add_widget(HelpButton(
 			title='Виджет выбора даты и времени.',
 			text=help_text))
