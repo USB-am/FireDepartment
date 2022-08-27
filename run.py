@@ -256,8 +256,10 @@ class CreateEntryWorktype(CreateEntry):
 		super().__init__(path_manager, table)
 
 		self.title = fields.StringField('Title')
-		self.start_work_day = fields.DateTimeField('run-fast', 'Start work day')
-		self.finish_work_day = fields.DateTimeField('exit-run', 'Finish work day')
+		self.start_work_day = fields.DateTimeField('run-fast', 'Start work day',
+			'Дата и время начала рабочего дня')
+		self.finish_work_day = fields.DateTimeField('exit-run', 'Finish work day',
+			'Дата и время конца рабочего дня')
 		self.work_day_range = fields.IntegerField('Work day range')
 		self.week_day_range = fields.IntegerField('Week day range')
 
