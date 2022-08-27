@@ -57,9 +57,10 @@ class DateField(MDBoxLayout):
 class DateTimeField(MDBoxLayout):
 	''' Поле выбора даты и времени '''
 
-	def __init__(self, icon: str, title: str):
+	def __init__(self, icon: str, title: str, help_text: str=None):
 		self.icon = icon
 		self.title = title
+		self.help_text = help_text
 		self._value = None
 
 		self.display_text = LOCALIZED.translate(title)
@@ -72,19 +73,14 @@ class DateTimeField(MDBoxLayout):
 		self.date_dialog.bind(on_save=lambda instance, date, date_range: \
 			self.set_date(date))
 
-		self.setup()
+		if self.help_text is not None:
+			self.setup()
 		self.binding()
 
 	def setup(self) -> None:
-		help_text = '''Кнопка слева - дата;
-Кнопка справа - время.
-	AM - 00:00 - 11:59
-	PM - 12:00 - 23:59
-
-Поля ОБЯЗАТЕЛЬНЫ ДЛЯ ВВОДА'''
 		self.ids.top_panel.add_widget(HelpButton(
 			title='Виджет выбора даты и времени.',
-			text=help_text))
+			text=self.help_text))
 
 	@property
 	def value(self) -> datetime.datetime:
