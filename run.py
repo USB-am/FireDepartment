@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# Temp import
 from kivy.config import Config
 Config.set('graphics', 'width', '350')
 
