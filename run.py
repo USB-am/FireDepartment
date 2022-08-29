@@ -356,14 +356,6 @@ class Application(MDApp):
 		for screen in (CreateEntryTag, CreateEntryRank, CreateEntryPosition, \
 		               CreateEntryHuman, CreateEntryEmergency, CreateEntryWorktype):
 			self.screen_manager.add_widget(screen(self.path_manager))
-		'''
-		self.create_tag = CreateEntryTag(self.path_manager)
-		self.create_rank = CreateEntryRank(self.path_manager)
-		self.create_position = CreateEntryPosition(self.path_manager)
-		self.create_human = CreateEntryHuman(self.path_manager)
-		self.create_emergency = CreateEntryEmergency(self.path_manager)
-		self.create_worktype = CreateEntryWorktype(self.path_manager)
-		'''
 
 		self.edit_tag_list = EditEntryList(self.path_manager, Tag)
 		self.edit_rank_list = EditEntryList(self.path_manager, Rank)
@@ -374,15 +366,6 @@ class Application(MDApp):
 		self.screen_manager.add_widget(self.main_page)
 		self.screen_manager.add_widget(self.current_calls)
 		self.screen_manager.add_widget(self.options)
-
-		'''
-		self.screen_manager.add_widget(self.create_tag)
-		self.screen_manager.add_widget(self.create_rank)
-		self.screen_manager.add_widget(self.create_position)
-		self.screen_manager.add_widget(self.create_human)
-		self.screen_manager.add_widget(self.create_emergency)
-		self.screen_manager.add_widget(self.create_worktype)
-		'''
 
 		self.screen_manager.add_widget(self.edit_tag_list)
 		self.screen_manager.add_widget(self.edit_rank_list)
