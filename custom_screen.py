@@ -33,8 +33,9 @@ class FDToolbar(MDToolbar):
 class CustomScreen(Screen):
 	''' Базовый экран '''
 
-	bg_image = os.path.join(STATIC_DIR, 'bg_02.png')
-	color = (1, 1, 1, .5)
+	# bg_image = os.path.join(STATIC_DIR, 'bg_02.png')
+	bg_image = None
+	color = (1, 1, 1, 1)
 
 	def __init__(self):
 		super().__init__()
