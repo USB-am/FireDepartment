@@ -142,10 +142,13 @@ class CreateEntry(CustomScrolledScreen):
 class CreateEntryTag(CreateEntry):
 	''' Экран создания новой записи в таблицу Tag '''
 
-	def __init__(self, path_manager: PathManager, table: Tag):
-		super().__init__(path_manager, table)
+	def __init__(self, path_manager: PathManager):
+		super().__init__(path_manager, Tag)
 
-		self.title = fields.StringField('Title')
+		self.title = fields.StringField(
+			title='Title',
+			help_text='Название тега.\n\nДолжно быть уникальным т.к. поиск будет производиться именно по этому полю.'
+		)
 		self.emergencies = fields.SelectedList(
 			icon=Emergency.icon,
 			title=Emergency.__tablename__,
@@ -159,10 +162,13 @@ class CreateEntryTag(CreateEntry):
 class CreateEntryRank(CreateEntry):
 	''' Экран создания новой записи в таблицу Rank '''
 
-	def __init__(self, path_manager: PathManager, table: Rank):
-		super().__init__(path_manager, table)
+	def __init__(self, path_manager: PathManager):
+		super().__init__(path_manager, Rank)
 
-		self.title = fields.StringField('Title')
+		self.title = fields.StringField(
+			title='Title',
+			help_text='Название звания.\n\nДолжно быть уникальным т.к. поиск будет производиться именно по этому полю.'
+		)
 		self.humans = fields.SelectedList(
 			icon=Human.icon,
 			title=Human.__tablename__,
@@ -176,10 +182,13 @@ class CreateEntryRank(CreateEntry):
 class CreateEntryPosition(CreateEntry):
 	''' Экран создания новой записи в таблицу Position '''
 
-	def __init__(self, path_manager: PathManager, table: Position):
-		super().__init__(path_manager, table)
+	def __init__(self, path_manager: PathManager):
+		super().__init__(path_manager, Position)
 
-		self.title = fields.StringField('Title')
+		self.title = fields.StringField(
+			title='Title',
+			help_text='Название должности.\n\nДолжно быть уникальным т.к. поиск будет производиться именно по этому полю.'
+		)
 		self.humans = fields.SelectedList(
 			icon=Human.icon,
 			title=Human.__tablename__,
@@ -193,10 +202,13 @@ class CreateEntryPosition(CreateEntry):
 class CreateEntryHuman(CreateEntry):
 	''' Экран создания новой записи в таблицу Human '''
 
-	def __init__(self, path_manager: PathManager, table: Human):
-		super().__init__(path_manager, table)
+	def __init__(self, path_manager: PathManager):
+		super().__init__(path_manager, Human)
 
-		self.title = fields.StringField('Title')
+		self.title = fields.StringField(
+			title='Title',
+			help_text='Название тела.\n\n(!) Поле не может быть пустым.'
+		)
 		self.phone_1 = fields.PhoneField('Phone')
 		self.phone_2 = fields.PhoneField('Addition phone')
 		self.work_day = fields.DateField('calendar-month', 'Work day')
@@ -224,10 +236,13 @@ class CreateEntryHuman(CreateEntry):
 class CreateEntryEmergency(CreateEntry):
 	''' Экран создания новой записи в таблицу Emergency '''
 
-	def __init__(self, path_manager: PathManager, table: Emergency):
-		super().__init__(path_manager, table)
+	def __init__(self, path_manager: PathManager):
+		super().__init__(path_manager, Emergency)
 
-		self.title = fields.StringField('Title')
+		self.title = fields.StringField(
+			title='Title',
+			help_text='Название события.\n\n(!) Поле не может быть пустым.'
+		)
 		self.decription = fields.DescriptionField('Description')
 		self.urgent = fields.BooleanField('truck-fast', 'Urgent')
 		self.humans = fields.SelectedList(
@@ -251,8 +266,8 @@ class CreateEntryEmergency(CreateEntry):
 class CreateEntryWorktype(CreateEntry):
 	''' Экран создания новой записи в таблицу Worktype '''
 
-	def __init__(self, path_manager: PathManager, table: Worktype):
-		super().__init__(path_manager, table)
+	def __init__(self, path_manager: PathManager):
+		super().__init__(path_manager, Worktype)
 
 		self.title = fields.StringField('Title')
 		self.start_work_day = fields.DateTimeField('run-fast', 'Start work day',
@@ -296,10 +311,10 @@ class EditEntryList(CustomScrolledScreen):
 class EditEntry(CustomScrolledScreen):
 	''' Базовый класс редактирования записи базы данных '''
 
-	def __init__(self, path_manager: PathManager, name: str):
+	def __init__(self, path_manager: PathManager, screen_name: str):
 		super().__init__()
 
-		self.name = name
+		self.name = screen_name
 		self.path_manager = path_manager
 
 		self.element = None
@@ -337,12 +352,18 @@ class Application(MDApp):
 		self.current_calls = CurrentCalls(self.path_manager)
 		self.options = Options(self.path_manager)
 
-		self.create_tag = CreateEntryTag(self.path_manager, Tag)
-		self.create_rank = CreateEntryRank(self.path_manager, Rank)
-		self.create_position = CreateEntryPosition(self.path_manager, Position)
-		self.create_human = CreateEntryHuman(self.path_manager, Human)
-		self.create_emergency = CreateEntryEmergency(self.path_manager, Emergency)
-		self.create_worktype = CreateEntryWorktype(self.path_manager, Worktype)
+		# Create screens
+		for screen in (CreateEntryTag, CreateEntryRank, CreateEntryPosition, \
+		               CreateEntryHuman, CreateEntryEmergency, CreateEntryWorktype):
+			self.screen_manager.add_widget(screen(self.path_manager))
+		'''
+		self.create_tag = CreateEntryTag(self.path_manager)
+		self.create_rank = CreateEntryRank(self.path_manager)
+		self.create_position = CreateEntryPosition(self.path_manager)
+		self.create_human = CreateEntryHuman(self.path_manager)
+		self.create_emergency = CreateEntryEmergency(self.path_manager)
+		self.create_worktype = CreateEntryWorktype(self.path_manager)
+		'''
 
 		self.edit_tag_list = EditEntryList(self.path_manager, Tag)
 		self.edit_rank_list = EditEntryList(self.path_manager, Rank)
@@ -354,12 +375,14 @@ class Application(MDApp):
 		self.screen_manager.add_widget(self.current_calls)
 		self.screen_manager.add_widget(self.options)
 
+		'''
 		self.screen_manager.add_widget(self.create_tag)
 		self.screen_manager.add_widget(self.create_rank)
 		self.screen_manager.add_widget(self.create_position)
 		self.screen_manager.add_widget(self.create_human)
 		self.screen_manager.add_widget(self.create_emergency)
 		self.screen_manager.add_widget(self.create_worktype)
+		'''
 
 		self.screen_manager.add_widget(self.edit_tag_list)
 		self.screen_manager.add_widget(self.edit_rank_list)

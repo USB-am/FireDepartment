@@ -9,14 +9,14 @@ class HelpButton(MDIconButton):
 
 	icon = 'chat-question'
 
-	def __init__(self, title: str, text: str):
+	def __init__(self, title: str, text: str, **options):
 		self.title = title
 		self.text = text
 
 		self.display_title = LOCALIZED.translate(title)
-		self.display_text = LOCALIZED.translate(text)
+		self.display_text = text
 
-		super().__init__()
+		super().__init__(**options)
 
 		self.ok_button = MDRaisedButton(text=LOCALIZED.translate('Ok'))
 		self.dialog = MDDialog(

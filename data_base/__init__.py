@@ -33,13 +33,6 @@ class Tag(db.Model):
 	def __str__(self):
 		return self.title
 
-	@staticmethod
-	def get_fields() -> dict:
-		return {
-			'title': 'fields.StringField',
-			'emergencys': 'ManyToManyField'
-		}
-
 
 class Rank(db.Model):
 	icon = 'chevron-triple-up'
@@ -50,12 +43,6 @@ class Rank(db.Model):
 	def __str__(self):
 		return self.title
 
-	@staticmethod
-	def get_fields() -> dict:
-		return {
-			'title': 'fields.StringField',
-		}
-
 
 class Position(db.Model):
 	icon = 'crosshairs-gps'
@@ -65,12 +52,6 @@ class Position(db.Model):
 
 	def __str__(self):
 		return self.title
-
-	@staticmethod
-	def get_fields() -> dict:
-		return {
-			'title': 'fields.StringField',
-		}
 
 
 class Human(db.Model):
@@ -88,18 +69,6 @@ class Human(db.Model):
 	def __str__(self):
 		return self.title
 
-	@staticmethod
-	def get_fields() -> dict:
-		return {
-			'title': 'fields.StringField',
-			'phone_1': 'fields.PhoneField',
-			'phone_2': 'fields.PhoneField',
-			'work_day': 'WorkDayField',
-			'worktype': 'ForeignKeyField',
-			'position': 'ForeignKeyField',
-			'rank': 'ForeignKeyField',
-		}
-
 
 class Emergency(db.Model):
 	icon = 'fire-alert'
@@ -113,16 +82,6 @@ class Emergency(db.Model):
 
 	def __str__(self):
 		return self.title
-
-	@staticmethod
-	def get_fields() -> dict:
-		return {
-			'title': 'fields.StringField',
-			'description': 'fields.DescriptionField',
-			'urgent': 'fields.BooleanField',
-			'humans': 'ManyToManyField',
-			'tags': 'ManyToManyField',
-		}
 
 
 class ColorTheme(db.Model):
@@ -163,14 +122,3 @@ class Worktype(db.Model):
 
 	def __str__(self):
 		return self.title
-
-	def get_fields() -> dict:
-		result = {
-			'title': 'StringField',
-			'start_work_day': 'DateTimeField',
-			'finish_work_day': 'DateTimeField',
-			'work_day_range': 'fields.IntegerField',
-			'week_day_range': 'fields.IntegerField',
-		}
-
-		return result
