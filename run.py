@@ -308,32 +308,6 @@ class EditEntryList(CustomScrolledScreen):
 			self.add_widgets(element)
 
 
-# class EditEntry(CustomScrolledScreen):
-# 	''' Базовый класс редактирования записи базы данных '''
-
-# 	def __init__(self, path_manager: PathManager, screen_name: str):
-# 		super().__init__()
-
-# 		self.name = screen_name
-# 		self.path_manager = path_manager
-
-# 		self.element = None
-
-# 		self.setup()
-# 		self.fill_content()
-
-# 	def setup(self) -> None:
-# 		self.toolbar.title = LOCALIZED.translate(f'Edit {self.name}')
-# 		self.toolbar.add_left_button('arrow-left', lambda e: self.path_manager.back())
-# 		self.toolbar.add_right_button('delete', lambda e: print('Delete this entry'))
-
-# 	def fill_content(self) -> None:
-# 		pass
-
-# 	def fill_fields(self, element: db.Model) -> None:
-# 		self.element = element
-
-
 class EditEntryTag(CreateEntryTag):
 	''' Экран редаектирования тега '''
 
@@ -435,13 +409,13 @@ class Application(MDApp):
 		               CreateEntryHuman, CreateEntryEmergency, CreateEntryWorktype):
 			self.screen_manager.add_widget(screen(self.path_manager))
 
+		# Edit screens_list
 		self.edit_tag_list = EditEntryList(self.path_manager, Tag)
 		self.edit_rank_list = EditEntryList(self.path_manager, Rank)
 		self.edit_position_list = EditEntryList(self.path_manager, Position)
 		self.edit_human_list = EditEntryList(self.path_manager, Human)
 		self.edit_emergency_list = EditEntryList(self.path_manager, Emergency)
-
-		# self.screen_manager.add_widget(EditEntryTag(self.path_manager))
+		self.edit_worktype_list = EditEntryList(self.path_manager, Worktype)
 
 		self.screen_manager.add_widget(self.main_page)
 		self.screen_manager.add_widget(self.current_calls)
@@ -452,14 +426,12 @@ class Application(MDApp):
 		self.screen_manager.add_widget(self.edit_position_list)
 		self.screen_manager.add_widget(self.edit_human_list)
 		self.screen_manager.add_widget(self.edit_emergency_list)
+		self.screen_manager.add_widget(self.edit_worktype_list)
 
-		for edit_screen in (EditEntryTag, EditEntryRank, EditEntryPosition, EditEntryHuman, EditEntryEmergency, EditEntryWorktype):
-			self.screen_manager.add_widget(edit_screen(self.path_manager))
-
-		# for table in (Rank, Position, Human, Emergency, Worktype):
-		# 	name = f'edit_{table.__tablename__}'.lower()
-		# 	screen = EditEntry(self.path_manager, name)
-		# 	self.screen_manager.add_widget(screen)
+		# Edit screens
+		for screen in (EditEntryTag, EditEntryRank, EditEntryPosition, \
+		               EditEntryHuman, EditEntryEmergency, EditEntryWorktype):
+			self.screen_manager.add_widget(screen(self.path_manager))
 
 	def build(self) -> ScreenManager:
 		return self.screen_manager
