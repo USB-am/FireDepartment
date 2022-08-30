@@ -21,3 +21,5 @@ SelectedListElement:
 
 EditWorktype:
 	Отобразить кнопку выбора времени по правому краю
+
+# Test text
