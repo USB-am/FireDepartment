@@ -61,3 +61,7 @@ class CustomScrolledScreen(CustomScreen):
 
 	def add_widgets(self, *widgets: Widget) -> None:
 		self.scrolled_frame.add_widgets(*widgets)
+
+	def clear(self) -> None:
+		container = self.scrolled_frame.ids.content
+		container.clear_widgets()

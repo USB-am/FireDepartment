@@ -136,7 +136,10 @@ class CreateEntry(CustomScrolledScreen):
 	def setup(self) -> None:
 		self.toolbar.title = LOCALIZED.translate(f'Create {self.table.__tablename__}')
 		self.toolbar.add_left_button('arrow-left', lambda e: self.path_manager.back())
-		self.toolbar.add_right_button('plus', lambda e: print('You pressed on "plus"'))
+		self.toolbar.add_right_button('plus', lambda e: self.insert())
+
+	def insert(self) -> None:
+		pass
 
 
 class CreateEntryTag(CreateEntry):
@@ -157,6 +160,13 @@ class CreateEntryTag(CreateEntry):
 
 		self.add_widgets(self.title)
 		self.add_widgets(self.emergencies)
+
+	def insert(self) -> None:
+		tag = Tag(
+			title=self.title.get_value(),
+			emergencys=self.emergencies.get_value())
+		db.session.add(tag)
+		db.session.commit()
 
 
 class CreateEntryRank(CreateEntry):
@@ -295,13 +305,16 @@ class EditEntryList(CustomScrolledScreen):
 		self.table = table
 
 		self.setup()
-		self.fill_content()
+		# self.fill_content()
+		self.bind(on_pre_enter=lambda e: self.fill_content())
 
 	def setup(self) -> None:
 		self.toolbar.title = LOCALIZED.translate(f'Edit {self.name} list')
 		self.toolbar.add_left_button('arrow-left', lambda e: self.path_manager.back())
 
 	def fill_content(self) -> None:
+		self.clear()
+
 		for db_entry in self.table.query.all():
 			element = ExpansionEditListElement(db_entry)
 			element.binding(self.path_manager)
@@ -323,6 +336,12 @@ class EditEntryTag(CreateEntryTag):
 
 		self.title.set_value(self.element.title)
 		self.emergencies.set_value(self.element.emergencys)
+
+	def insert(self) -> None:
+		self.element.title = self.title.get_value()
+		self.element.emergencys = self.emergencies.get_value()
+
+		db.session.commit()
 
 
 class EditEntryRank(CreateEntryRank):
