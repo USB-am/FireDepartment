@@ -55,3 +55,9 @@ class SelectedList(MDBoxLayout):
 		create_screen_name = f'create_{self.title}'.lower()
 		self.ids.redirect_button.bind(
 			on_release=lambda e: path_manager.forward(create_screen_name))
+
+	def get_value(self) -> list:
+		return []
+
+	def set_value(self, value: list) -> None:
+		pass
