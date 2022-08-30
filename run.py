@@ -410,28 +410,17 @@ class Application(MDApp):
 			self.screen_manager.add_widget(screen(self.path_manager))
 
 		# Edit screens_list
-		self.edit_tag_list = EditEntryList(self.path_manager, Tag)
-		self.edit_rank_list = EditEntryList(self.path_manager, Rank)
-		self.edit_position_list = EditEntryList(self.path_manager, Position)
-		self.edit_human_list = EditEntryList(self.path_manager, Human)
-		self.edit_emergency_list = EditEntryList(self.path_manager, Emergency)
-		self.edit_worktype_list = EditEntryList(self.path_manager, Worktype)
-
-		self.screen_manager.add_widget(self.main_page)
-		self.screen_manager.add_widget(self.current_calls)
-		self.screen_manager.add_widget(self.options)
-
-		self.screen_manager.add_widget(self.edit_tag_list)
-		self.screen_manager.add_widget(self.edit_rank_list)
-		self.screen_manager.add_widget(self.edit_position_list)
-		self.screen_manager.add_widget(self.edit_human_list)
-		self.screen_manager.add_widget(self.edit_emergency_list)
-		self.screen_manager.add_widget(self.edit_worktype_list)
+		for table in (Tag, Rank, Position, Human, Emergency, Worktype):
+			self.screen_manager.add_widget(EditEntryList(self.path_manager, table))
 
 		# Edit screens
 		for screen in (EditEntryTag, EditEntryRank, EditEntryPosition, \
 		               EditEntryHuman, EditEntryEmergency, EditEntryWorktype):
 			self.screen_manager.add_widget(screen(self.path_manager))
+
+		self.screen_manager.add_widget(self.main_page)
+		self.screen_manager.add_widget(self.current_calls)
+		self.screen_manager.add_widget(self.options)
 
 	def build(self) -> ScreenManager:
 		return self.screen_manager
