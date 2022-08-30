@@ -21,6 +21,9 @@ class BooleanField(MDBoxLayout):
 		super().__init__()
 
 	def set_value(self, value: bool) -> None:
+		if value is None:
+			value = False
+
 		self.ids.switch.active = value
 
 	def get_value(self) -> bool:

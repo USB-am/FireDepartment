@@ -243,7 +243,7 @@ class CreateEntryEmergency(CreateEntry):
 			title='Title',
 			help_text='Название события.\n\n(!) Поле не может быть пустым.'
 		)
-		self.decription = fields.DescriptionField('Description')
+		self.description = fields.DescriptionField('Description')
 		self.urgent = fields.BooleanField('truck-fast', 'Urgent')
 		self.humans = fields.SelectedList(
 			icon=Human.icon,
@@ -257,7 +257,7 @@ class CreateEntryEmergency(CreateEntry):
 		self.tags.binding(path_manager)
 
 		self.add_widgets(self.title)
-		self.add_widgets(self.decription)
+		self.add_widgets(self.description)
 		self.add_widgets(self.urgent)
 		self.add_widgets(self.humans)
 		self.add_widgets(self.tags)
@@ -313,12 +313,16 @@ class EditEntryTag(CreateEntryTag):
 
 	def __init__(self, path_manager: PathManager):
 		super().__init__(path_manager)
-		
+
 		self.name = 'edit_tag'
+		self.toolbar.title = LOCALIZED.translate(self.name)
 		self.element = None
 
 	def fill_fields(self, element: db.Model) -> None:
 		self.element = element
+
+		self.title.set_value(self.element.title)
+		self.emergencies.set_value(self.element.emergencys)
 
 
 class EditEntryRank(CreateEntryRank):
@@ -326,12 +330,15 @@ class EditEntryRank(CreateEntryRank):
 
 	def __init__(self, path_manager: PathManager):
 		super().__init__(path_manager)
-		
+
 		self.name = 'edit_rank'
+		self.toolbar.title = LOCALIZED.translate(self.name)
 		self.element = None
 
 	def fill_fields(self, element: db.Model) -> None:
 		self.element = element
+
+		self.title.set_value(self.element.title)
 
 
 class EditEntryPosition(CreateEntryPosition):
@@ -339,12 +346,15 @@ class EditEntryPosition(CreateEntryPosition):
 
 	def __init__(self, path_manager: PathManager):
 		super().__init__(path_manager)
-		
+
 		self.name = 'edit_position'
+		self.toolbar.title = LOCALIZED.translate(self.name)
 		self.element = None
 
 	def fill_fields(self, element: db.Model) -> None:
 		self.element = element
+
+		self.title.set_value(self.element.title)
 
 
 class EditEntryHuman(CreateEntryHuman):
@@ -354,11 +364,18 @@ class EditEntryHuman(CreateEntryHuman):
 		super().__init__(path_manager)
 		
 		self.name = 'edit_human'
+		self.toolbar.title = LOCALIZED.translate(self.name)
 		self.element = None
 
 	def fill_fields(self, element: db.Model) -> None:
 		self.element = element
 
+		self.title.set_value(self.element.title)
+		self.phone_1.set_value(self.element.phone_1)
+		self.phone_2.set_value(self.element.phone_2)
+		self.work_day.set_value(self.element.work_day)
+		self.rank.set_value(self.element.rank)
+		self.position.set_value(self.element.position)
 
 class EditEntryEmergency(CreateEntryEmergency):
 	''' Экран редаектирования ЧС '''
@@ -367,19 +384,27 @@ class EditEntryEmergency(CreateEntryEmergency):
 		super().__init__(path_manager)
 		
 		self.name = 'edit_emergency'
+		self.toolbar.title = LOCALIZED.translate(self.name)
 		self.element = None
 
 	def fill_fields(self, element: db.Model) -> None:
 		self.element = element
 
+		self.title.set_value(self.element.title)
+		self.description.set_value(self.element.description)
+		self.urgent.set_value(self.element.urgent)
+		self.humans.set_value(self.element.humans)
+		self.tags.set_value(self.element.tags)
 
-class EditEntryWorktype(CreateEntryTag):
+
+class EditEntryWorktype(CreateEntryWorktype):
 	''' Экран редаектирования графика работы '''
 
 	def __init__(self, path_manager: PathManager):
 		super().__init__(path_manager)
 		
 		self.name = 'edit_worktype'
+		self.toolbar.title = LOCALIZED.translate(self.name)
 		self.element = None
 
 	def fill_fields(self, element: db.Model) -> None:
