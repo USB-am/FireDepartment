@@ -20,6 +20,12 @@ from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype
 db.create_all()
 
 
+def get_id_from_list(foreign_key_field: fields.SelectedList) -> int:
+	selected_element = foreign_key_field.get_value()
+
+	return selected_element[0].id if selected_element else None
+
+
 class PathManager:
 	''' Менеджер путей перехода '''
 
@@ -158,8 +164,7 @@ class CreateEntryTag(CreateEntry):
 			values=Emergency.query.all())
 		self.emergencies.binding(path_manager)
 
-		self.add_widgets(self.title)
-		self.add_widgets(self.emergencies)
+		self.add_widgets(self.title, self.emergencies)
 
 	def insert(self) -> None:
 		tag = Tag(
@@ -185,8 +190,13 @@ class CreateEntryRank(CreateEntry):
 			values=Human.query.all())
 		self.humans.binding(path_manager)
 
-		self.add_widgets(self.title)
-		self.add_widgets(self.humans)
+		self.add_widgets(self.title, self.humans)
+
+	def insert(self) -> None:
+		rank = Rank(title=self.title.get_value())
+
+		db.session.add(rank)
+		db.session.commit()
 
 
 class CreateEntryPosition(CreateEntry):
@@ -205,8 +215,13 @@ class CreateEntryPosition(CreateEntry):
 			values=Human.query.all())
 		self.humans.binding(path_manager)
 
-		self.add_widgets(self.title)
-		self.add_widgets(self.humans)
+		self.add_widgets(self.title, self.humans)
+
+	def insert(self) -> None:
+		position = Position(title=self.title.get_value())
+
+		db.session.add(position)
+		db.session.commit()
 
 
 class CreateEntryHuman(CreateEntry):
@@ -217,11 +232,15 @@ class CreateEntryHuman(CreateEntry):
 
 		self.title = fields.StringField(
 			title='Title',
-			help_text='Название тела.\n\n(!) Поле не может быть пустым.'
-		)
+			help_text='Название тела.\n\n(!) Поле не может быть пустым.')
 		self.phone_1 = fields.PhoneField('Phone')
 		self.phone_2 = fields.PhoneField('Addition phone')
 		self.work_day = fields.DateField('calendar-month', 'Work day')
+		self.work_type = fields.SelectedList(
+			icon=Worktype.icon,
+			title=Worktype.__tablename__,
+			values=Worktype.query.all(),
+			group='worktypes')
 		self.rank = fields.SelectedList(
 			icon=Rank.icon,
 			title=Rank.__tablename__,
@@ -232,15 +251,26 @@ class CreateEntryHuman(CreateEntry):
 			title=Position.__tablename__,
 			values=Position.query.all(),
 			group='positions')
+
+		self.work_type.binding(path_manager)
 		self.rank.binding(path_manager)
 		self.position.binding(path_manager)
 
-		self.add_widgets(self.title)
-		self.add_widgets(self.phone_1)
-		self.add_widgets(self.phone_2)
-		self.add_widgets(self.work_day)
-		self.add_widgets(self.rank)
-		self.add_widgets(self.position)
+		self.add_widgets(self.title, self.phone_1, self.phone_2, self.work_day,
+		                 self.work_type, self.rank, self.position)
+
+	def insert(self) -> None:
+		human = Human(
+			title=self.title.get_value(),
+			phone_1=self.phone_1.get_value(),
+			phone_2=self.phone_2.get_value(),
+			work_day=self.work_day.get_value(),
+			worktype=get_id_from_list(self.work_type),
+			position=get_id_from_list(self.position),
+			rank=get_id_from_list(self.rank))
+
+		db.session.add(human)
+		db.session.commit()
 
 
 class CreateEntryEmergency(CreateEntry):
@@ -266,11 +296,19 @@ class CreateEntryEmergency(CreateEntry):
 		self.humans.binding(path_manager)
 		self.tags.binding(path_manager)
 
-		self.add_widgets(self.title)
-		self.add_widgets(self.description)
-		self.add_widgets(self.urgent)
-		self.add_widgets(self.humans)
-		self.add_widgets(self.tags)
+		self.add_widgets(self.title, self.description, self.urgent, self.humans,
+		                 self.tags)
+
+	def insert(self) -> None:
+		emergency = Emergency(
+			title=self.title.get_value(),
+			description=self.description.get_value(),
+			urgent=self.urgent.get_value(),
+			humans=self.humans.get_value(),
+			tags=self.tags.get_value())
+
+		db.session.add(emergency)
+		db.session.commit()
 
 
 class CreateEntryWorktype(CreateEntry):
@@ -287,11 +325,18 @@ class CreateEntryWorktype(CreateEntry):
 		self.work_day_range = fields.IntegerField('Work day range')
 		self.week_day_range = fields.IntegerField('Week day range')
 
-		self.add_widgets(self.title)
-		self.add_widgets(self.start_work_day)
-		self.add_widgets(self.finish_work_day)
-		self.add_widgets(self.work_day_range)
-		self.add_widgets(self.week_day_range)
+		self.add_widgets(self.title, self.start_work_day, self.finish_work_day,
+		                 self.work_day_range, self.week_day_range)
+
+	def insert(self) -> None:
+		worktype = Worktype(
+			title=self.title.get_value(),
+			start_work_day=self.start_work_day.get_value(),
+			finish_work_day=self.finish_work_day.get_value(),
+			work_day_range=self.work_day_range.get_value(),
+			week_day_range=self.week_day_range.get_value())
+		db.session.add(worktype)
+		db.session.commit()
 
 
 class EditEntryList(CustomScrolledScreen):
@@ -359,6 +404,11 @@ class EditEntryRank(CreateEntryRank):
 
 		self.title.set_value(self.element.title)
 
+	def insert(self) -> None:
+		self.element.title = self.title.get_value()
+
+		db.session.commit()
+
 
 class EditEntryPosition(CreateEntryPosition):
 	''' Экран редаектирования должности '''
@@ -374,6 +424,11 @@ class EditEntryPosition(CreateEntryPosition):
 		self.element = element
 
 		self.title.set_value(self.element.title)
+
+	def insert(self) -> None:
+		self.element.title = self.title.get_value()
+
+		db.session.commit()
 
 
 class EditEntryHuman(CreateEntryHuman):
@@ -396,6 +451,17 @@ class EditEntryHuman(CreateEntryHuman):
 		self.rank.set_value(self.element.rank)
 		self.position.set_value(self.element.position)
 
+	def insert(self) -> None:
+		self.element.title = self.title.get_value()
+		self.element.phone_1 = self.phone_1.get_value()
+		self.element.phone_2 = self.phone_2.get_value()
+		self.element.work_day = self.work_day.get_value()
+		self.element.worktype = get_id_from_list(self.work_type)
+		self.element.rank = get_id_from_list(self.rank)
+		self.element.position = get_id_from_list(self.position)
+
+		db.session.commit()
+
 class EditEntryEmergency(CreateEntryEmergency):
 	''' Экран редаектирования ЧС '''
 
@@ -414,6 +480,15 @@ class EditEntryEmergency(CreateEntryEmergency):
 		self.urgent.set_value(self.element.urgent)
 		self.humans.set_value(self.element.humans)
 		self.tags.set_value(self.element.tags)
+
+	def insert(self) -> None:
+		self.element.title = self.title.get_value()
+		self.element.description = self.description.get_value()
+		self.element.urgent = self.urgent.get_value()
+		self.element.humans = self.humans.get_value()
+		self.element.tags = self.tags.get_value()
+
+		db.session.commit()
 
 
 class EditEntryWorktype(CreateEntryWorktype):
