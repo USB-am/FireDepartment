@@ -19,7 +19,7 @@ class DateField(MDBoxLayout):
 	def __init__(self, icon: str, title: str):
 		self.icon = icon
 		self.title = title
-		self._value = None
+		self._value: datetime.date = None
 
 		self.display_text = LOCALIZED.translate(title)
 		self.date_dialog = MDDatePicker()
@@ -31,11 +31,11 @@ class DateField(MDBoxLayout):
 		self.binding()
 
 	@property
-	def value(self) -> datetime.datetime:
+	def value(self) -> datetime.date:
 		return self._value
 
 	@value.setter
-	def value(self, val: datetime.datetime) -> None:
+	def value(self, val: datetime.date) -> None:
 		self._value = val
 
 		if val is not None:
@@ -46,11 +46,10 @@ class DateField(MDBoxLayout):
 	def binding(self) -> None:
 		self.ids.button.bind(on_release=lambda e: self.date_dialog.open())
 
-	def set_value(self, value: datetime.datetime) -> None:
-		print(f'DateField.set_value get accepted {value}')
+	def set_value(self, value: datetime.date) -> None:
 		self.value = value
 
-	def get_value(self) -> datetime.datetime:
+	def get_value(self) -> datetime.date:
 		return self.value
 
 

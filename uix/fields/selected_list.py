@@ -1,4 +1,5 @@
 import os
+from typing import Union
 
 from kivy.lang import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
@@ -26,6 +27,13 @@ class SelectedListElement(MDBoxLayout):
 
 	def setup(self) -> None:
 		self.ids.button.bind(on_release=lambda e: self.dialog.open())
+
+	@property
+	def active(self) -> bool:
+		return self.ids.checkbox.active
+
+	def activate(self) -> None:
+		self.ids.checkbox.active = True
 
 
 class SelectedList(MDBoxLayout):
@@ -57,7 +65,17 @@ class SelectedList(MDBoxLayout):
 			on_release=lambda e: path_manager.forward(create_screen_name))
 
 	def get_value(self) -> list:
-		return []
+		elements = self.ids.elements.children
+		output = [element.db_entry for element in elements if element.active]
 
-	def set_value(self, value: list) -> None:
-		pass
+		return output
+
+	def set_value(self, value: Union[list, int]) -> None:
+		elements = self.ids.elements.children
+
+		if isinstance(value, list):
+			pass
+
+		if isinstance(value, int):
+			[element.activate() for element in elements \
+			                    if element.db_entry.id == value]
