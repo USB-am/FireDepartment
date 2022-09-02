@@ -74,7 +74,10 @@ class SelectedList(MDBoxLayout):
 		elements = self.ids.elements.children
 
 		if isinstance(value, list):
-			pass
+			for val in value:
+				for element in elements:
+					if element.db_entry.id == val.id:
+						element.activate()
 
 		if isinstance(value, int):
 			[element.activate() for element in elements \

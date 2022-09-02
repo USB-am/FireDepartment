@@ -350,7 +350,6 @@ class EditEntryList(CustomScrolledScreen):
 		self.table = table
 
 		self.setup()
-		# self.fill_content()
 		self.bind(on_pre_enter=lambda e: self.fill_content())
 
 	def setup(self) -> None:
@@ -376,7 +375,14 @@ class EditEntryTag(CreateEntryTag):
 		self.toolbar.title = LOCALIZED.translate(self.name)
 		self.element = None
 
-	def fill_fields(self, element: db.Model) -> None:
+		# self.bind(on_pre_enter=lambda e: self.fill_fields())
+
+	def set_element(self, element: db.Model) -> None:
+		self.element = element
+
+		self.fill_fields()
+
+	def fill_fields(self) -> None:
 		self.element = element
 
 		self.title.set_value(self.element.title)
@@ -399,9 +405,12 @@ class EditEntryRank(CreateEntryRank):
 		self.toolbar.title = LOCALIZED.translate(self.name)
 		self.element = None
 
-	def fill_fields(self, element: db.Model) -> None:
+	def set_element(self, element: db.Model) -> None:
 		self.element = element
 
+		self.fill_fields()
+
+	def fill_fields(self) -> None:
 		self.title.set_value(self.element.title)
 
 	def insert(self) -> None:
@@ -420,9 +429,12 @@ class EditEntryPosition(CreateEntryPosition):
 		self.toolbar.title = LOCALIZED.translate(self.name)
 		self.element = None
 
-	def fill_fields(self, element: db.Model) -> None:
+	def set_element(self, element: db.Model) -> None:
 		self.element = element
 
+		self.fill_fields()
+
+	def fill_fields(self) -> None:
 		self.title.set_value(self.element.title)
 
 	def insert(self) -> None:
@@ -441,9 +453,12 @@ class EditEntryHuman(CreateEntryHuman):
 		self.toolbar.title = LOCALIZED.translate(self.name)
 		self.element = None
 
-	def fill_fields(self, element: db.Model) -> None:
+	def set_element(self, element: db.Model) -> None:
 		self.element = element
 
+		self.fill_fields()
+
+	def fill_fields(self) -> None:
 		self.title.set_value(self.element.title)
 		self.phone_1.set_value(self.element.phone_1)
 		self.phone_2.set_value(self.element.phone_2)
@@ -472,9 +487,12 @@ class EditEntryEmergency(CreateEntryEmergency):
 		self.toolbar.title = LOCALIZED.translate(self.name)
 		self.element = None
 
-	def fill_fields(self, element: db.Model) -> None:
+	def set_element(self, element: db.Model) -> None:
 		self.element = element
 
+		self.fill_fields()
+
+	def fill_fields(self) -> None:
 		self.title.set_value(self.element.title)
 		self.description.set_value(self.element.description)
 		self.urgent.set_value(self.element.urgent)
@@ -501,8 +519,13 @@ class EditEntryWorktype(CreateEntryWorktype):
 		self.toolbar.title = LOCALIZED.translate(self.name)
 		self.element = None
 
-	def fill_fields(self, element: db.Model) -> None:
+	def set_element(self, element: db.Model) -> None:
 		self.element = element
+
+		self.fill_fields()
+
+	def fill_fields(self) -> None:
+		pass
 
 
 class Application(MDApp):
