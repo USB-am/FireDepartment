@@ -79,7 +79,7 @@ class ExpansionEditListElement(MDBoxLayout):
 			screen_name = f'edit_{element.__tablename__}'.lower()
 
 			current_screen = path_manager.forward(screen_name)
-			current_screen.fill_fields(element)
+			current_screen.set_element(element)
 
 		self.ids.button.bind(on_release=lambda e: redirect_with_call(
 		                                          path_manager, self.element))
