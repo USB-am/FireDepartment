@@ -35,6 +35,9 @@ class SelectedListElement(MDBoxLayout):
 	def activate(self) -> None:
 		self.ids.checkbox.active = True
 
+	def deactivate(self) -> None:
+		self.ids.checkbox.active = False
+
 
 class SelectedList(MDBoxLayout):
 	''' Список с возможностью выбора элементов '''
@@ -76,8 +79,11 @@ class SelectedList(MDBoxLayout):
 		if isinstance(value, list):
 			for val in value:
 				for element in elements:
-					if element.db_entry.id == val.id:
+					# if element.db_entry.id == val.id:
+					if element.db_entry is val:
 						element.activate()
+					else:
+						element.deactivate()
 
 		if isinstance(value, int):
 			[element.activate() for element in elements \
