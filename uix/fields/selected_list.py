@@ -77,11 +77,13 @@ class SelectedList(MDBoxLayout):
 		elements = self.ids.elements.children
 
 		if isinstance(value, list):
-			for val in value:
-				for element in elements:
-					# if element.db_entry.id == val.id:
-					if element.db_entry is val:
+			for element in elements:
+				for val in value:
+					# print(f'[{element.db_entry.title}] - [{val.title}] = {element.db_entry.id == val.id}')
+					if element.db_entry.id == val.id:
 						element.activate()
+						value.remove(val)
+						break
 					else:
 						element.deactivate()
 
