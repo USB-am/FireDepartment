@@ -74,18 +74,16 @@ class SelectedList(MDBoxLayout):
 		return output
 
 	def set_value(self, value: Union[list, int]) -> None:
+		print(f'SelectedList.set_value({value}) is started')
 		elements = self.ids.elements.children
+		[element.deactivate() for element in elements]
 
 		if isinstance(value, list):
+			value_ids = list(map(lambda val: val.id, value))
+
 			for element in elements:
-				for val in value:
-					# print(f'[{element.db_entry.title}] - [{val.title}] = {element.db_entry.id == val.id}')
-					if element.db_entry.id == val.id:
-						element.activate()
-						value.remove(val)
-						break
-					else:
-						element.deactivate()
+				if element.db_entry.id in value_ids:
+					element.activate()
 
 		if isinstance(value, int):
 			[element.activate() for element in elements \
