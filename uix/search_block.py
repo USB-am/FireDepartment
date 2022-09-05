@@ -3,7 +3,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.textfield import MDTextField
 
 from config import LOCALIZED
-from data_base import db
+from data_base import db, Emergency, Tag
 
 
 class SearchTextField(MDTextField):
@@ -26,7 +26,7 @@ class SearchTextField(MDTextField):
 class FDSearchBlock(MDBoxLayout):
 	''' Блок поиска '''
 
-	def __init__(self, table: db.Model):
+	def __init__(self):
 		super().__init__(
 			orientation='horizontal',
 			size_hint=(1, None),
@@ -43,19 +43,24 @@ class FDSearchBlock(MDBoxLayout):
 		self.add_widget(self.entry)
 		self.add_widget(self.delete_button)
 
-		self.table = table
-		self.elements = self.table.query.all()
+
+class EmergencySearchBlock(FDSearchBlock):
+	''' Блок поиска ЧС '''
+
+	def _sorted_by_id(self, elements: set) -> list:
+		# print(3)
+		return sorted(elements, key=lambda el: el.id)
 
 	def filter(self) -> list:
 		search_text = self.entry.text
-		like_search_text = f'%{self.entry.text}%'
-		print(like_search_text, search_text)
+		like_search_text = f'%{search_text}%'
+		output = set()
 
-		if search_text:
-			output = self.table.query.filter(
-				self.table.tags.title.like(like_search_text)
-				).all()
-		else:
-			output = self.table.query.all()
+		found_tags = Tag.query.filter(Tag.title.like(like_search_text))
 
-		return output
+		# print(1)
+		for found_tag in found_tags:
+			[output.add(emergency) for emergency in found_tag.emergencys]
+		# print(2)
+
+		return self._sorted_by_id(output)

@@ -1,5 +1,5 @@
 from .scroll_frame import FDScrollFrame
-from .search_block import FDSearchBlock
+from .search_block import FDSearchBlock, EmergencySearchBlock
 from .elements_list import FDExpansionPanel, ExpansionEmergencyElement, \
 	ExpansionOptionsElement, ExpansionEditListElement
 from .notebook import FDNoteBook, FDEmergencyTab
@@ -17,4 +17,5 @@ __all__ = (
 	'FDDialog',
 	'HumanDialogContent',
 	'ExpansionEditListElement',
+	'EmergencySearchBlock',
 	)

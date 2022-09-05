@@ -11,7 +11,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 
 from custom_screen import CustomScreen, CustomScrolledScreen
 from config import LOCALIZED
-from uix import FDSearchBlock, FDExpansionPanel, \
+from uix import EmergencySearchBlock, FDExpansionPanel, \
 	ExpansionEmergencyElement, ExpansionOptionsElement, FDNoteBook, FDEmergencyTab, \
 	ExpansionEditListElement, fields
 from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype
@@ -55,7 +55,7 @@ class MainPage(CustomScrolledScreen):
 	name = 'main_page'
 
 	def __init__(self, path_manager: PathManager):
-		self.filter_ = FDSearchBlock(Emergency)
+		self.filter_ = EmergencySearchBlock()
 
 		super().__init__(self.filter_)
 
@@ -64,6 +64,7 @@ class MainPage(CustomScrolledScreen):
 		self.setup()
 		self.bind(on_pre_enter=lambda e: self.fill_content())
 		self.filter_.entry.binding(self.fill_content)
+		self.filter_.delete_button.bind(on_release=lambda e: self.reset_search())
 
 	def setup(self) -> None:
 		self.toolbar.title = LOCALIZED.translate('Main')
@@ -76,9 +77,12 @@ class MainPage(CustomScrolledScreen):
 		self.clear()
 
 		for emergency in self.filter_.filter():
-			print(emergency.title)
 			element = FDExpansionPanel(emergency, ExpansionEmergencyElement)
 			self.add_widgets(element)
+
+	def reset_search(self) -> None:
+		self.filter_.entry.text = ''
+		self.fill_content()
 
 
 class CurrentCalls(CustomScreen):
