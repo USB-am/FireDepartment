@@ -55,14 +55,15 @@ class MainPage(CustomScrolledScreen):
 	name = 'main_page'
 
 	def __init__(self, path_manager: PathManager):
-		self.search_block = FDSearchBlock()
+		self.filter_ = FDSearchBlock(Emergency)
 
-		super().__init__(self.search_block)
+		super().__init__(self.filter_)
 
 		self.path_manager = path_manager
 
 		self.setup()
-		self.fill_content()
+		self.bind(on_pre_enter=lambda e: self.fill_content())
+		self.filter_.entry.binding(self.fill_content)
 
 	def setup(self) -> None:
 		self.toolbar.title = LOCALIZED.translate('Main')
@@ -72,7 +73,10 @@ class MainPage(CustomScrolledScreen):
 			lambda e: self.path_manager.forward('options'))
 
 	def fill_content(self) -> None:
-		for emergency in Emergency.query.all():
+		self.clear()
+
+		for emergency in self.filter_.filter():
+			print(emergency.title)
 			element = FDExpansionPanel(emergency, ExpansionEmergencyElement)
 			self.add_widgets(element)
 
@@ -537,7 +541,7 @@ class Application(MDApp):
 
 		self.setup()
 
-		self.screen_manager.current = 'options'
+		self.screen_manager.current = 'main_page'
 
 	def setup(self) -> None:
 		self.main_page = MainPage(self.path_manager)
