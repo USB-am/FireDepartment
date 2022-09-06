@@ -48,19 +48,19 @@ class EmergencySearchBlock(FDSearchBlock):
 	''' Блок поиска ЧС '''
 
 	def _sorted_by_id(self, elements: set) -> list:
-		# print(3)
 		return sorted(elements, key=lambda el: el.id)
 
 	def filter(self) -> list:
 		search_text = self.entry.text
-		like_search_text = f'%{search_text}%'
-		output = set()
 
+		if not search_text:
+			return Emergency.query.all()
+
+		output = set()
+		like_search_text = f'%{search_text}%'
 		found_tags = Tag.query.filter(Tag.title.like(like_search_text))
 
-		# print(1)
 		for found_tag in found_tags:
 			[output.add(emergency) for emergency in found_tag.emergencys]
-		# print(2)
 
 		return self._sorted_by_id(output)
