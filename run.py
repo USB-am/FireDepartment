@@ -181,6 +181,8 @@ class CreateEntryTag(CreateEntry):
 		db.session.add(tag)
 		db.session.commit()
 
+		self.path_manager.back()
+
 
 class CreateEntryRank(CreateEntry):
 	''' Экран создания новой записи в таблицу Rank '''
@@ -206,6 +208,8 @@ class CreateEntryRank(CreateEntry):
 		db.session.add(rank)
 		db.session.commit()
 
+		self.path_manager.back()
+
 
 class CreateEntryPosition(CreateEntry):
 	''' Экран создания новой записи в таблицу Position '''
@@ -230,6 +234,8 @@ class CreateEntryPosition(CreateEntry):
 
 		db.session.add(position)
 		db.session.commit()
+
+		self.path_manager.back()
 
 
 class CreateEntryHuman(CreateEntry):
@@ -280,6 +286,8 @@ class CreateEntryHuman(CreateEntry):
 		db.session.add(human)
 		db.session.commit()
 
+		self.path_manager.back()
+
 
 class CreateEntryEmergency(CreateEntry):
 	''' Экран создания новой записи в таблицу Emergency '''
@@ -318,6 +326,8 @@ class CreateEntryEmergency(CreateEntry):
 		db.session.add(emergency)
 		db.session.commit()
 
+		self.path_manager.back()
+
 
 class CreateEntryWorktype(CreateEntry):
 	''' Экран создания новой записи в таблицу Worktype '''
@@ -345,6 +355,8 @@ class CreateEntryWorktype(CreateEntry):
 			week_day_range=self.week_day_range.get_value())
 		db.session.add(worktype)
 		db.session.commit()
+
+		self.path_manager.back()
 
 
 class EditEntryList(CustomScrolledScreen):
@@ -389,8 +401,6 @@ class EditEntryTag(CreateEntryTag):
 		self.fill_fields()
 
 	def fill_fields(self) -> None:
-		self.element = element
-
 		self.title.set_value(self.element.title)
 		self.emergencies.set_value(self.element.emergencys)
 
@@ -399,6 +409,8 @@ class EditEntryTag(CreateEntryTag):
 		self.element.emergencys = self.emergencies.get_value()
 
 		db.session.commit()
+
+		self.path_manager.back()
 
 
 class EditEntryRank(CreateEntryRank):
@@ -424,6 +436,8 @@ class EditEntryRank(CreateEntryRank):
 
 		db.session.commit()
 
+		self.path_manager.back()
+
 
 class EditEntryPosition(CreateEntryPosition):
 	''' Экран редаектирования должности '''
@@ -447,6 +461,8 @@ class EditEntryPosition(CreateEntryPosition):
 		self.element.title = self.title.get_value()
 
 		db.session.commit()
+
+		self.path_manager.back()
 
 
 class EditEntryHuman(CreateEntryHuman):
@@ -483,6 +499,9 @@ class EditEntryHuman(CreateEntryHuman):
 
 		db.session.commit()
 
+		self.path_manager.back()
+
+
 class EditEntryEmergency(CreateEntryEmergency):
 	''' Экран редаектирования ЧС '''
 
@@ -513,6 +532,8 @@ class EditEntryEmergency(CreateEntryEmergency):
 		self.element.tags = self.tags.get_value()
 
 		db.session.commit()
+
+		self.path_manager.back()
 
 
 class EditEntryWorktype(CreateEntryWorktype):
