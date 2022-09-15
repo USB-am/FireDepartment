@@ -25,14 +25,22 @@
 			icon: 'playlist-plus'
 			text: root.create_text
 
-			on_release:
-				print('Create button is pressed')
-
 	MDBoxLayout:
 		MDRectangleFlatIconButton:
 			id: edit_button
 			icon: 'playlist-edit'
 			text: root.edit_text
+
+
+<ExpansionOptionsColorTheme>:
+	size_hint: 1, None
+	size: self.width, 50
+
+	MDBoxLayout:
+		MDRectangleFlatIconButton:
+			id: button
+			icon: 'playlist-edit'
+			text: root.display_text
 
 
 <ExpansionEditListElement>:
