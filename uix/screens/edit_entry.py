@@ -191,4 +191,20 @@ class EditColorTheme(CustomScrolledScreen):
 		self.path_manager = path_manager
 
 		self.name = 'edit_colortheme'
+
+		self.setup()
+		self.fill_content()
+
+	def setup(self) -> None:
 		self.toolbar.title = LOCALIZED.translate(self.name)
+		self.toolbar.add_left_button(
+			'arrow-left', lambda e: self.path_manager.back())
+
+	def fill_content(self) -> None:
+		primary_hue = 'SelectField'
+		primary_palette = 'SelectField'
+		accent_palette = 'SelectField'
+		self.theme_style = fields.BooleanField('theme-light-dark', 'Theme')
+		background_image = 'FileManagerField'
+
+		self.add_widgets(self.theme_style)
