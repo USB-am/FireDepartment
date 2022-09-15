@@ -3,6 +3,7 @@ from data_base import db
 from uix import fields
 from .create_entry import CreateEntryTag, CreateEntryRank, CreateEntryPosition, \
 	CreateEntryHuman, CreateEntryEmergency, CreateEntryWorktype
+from custom_screen import CustomScrolledScreen
 
 
 def get_id_from_list(foreign_key_field: fields.SelectedList) -> int:
@@ -179,3 +180,15 @@ class EditEntryWorktype(CreateEntryWorktype):
 
 	def fill_fields(self) -> None:
 		pass
+
+
+class EditColorTheme(CustomScrolledScreen):
+	''' Экран редактирования цветной схемы '''
+
+	def __init__(self, path_manager):
+		super().__init__()
+
+		self.path_manager = path_manager
+
+		self.name = 'edit_colortheme'
+		self.toolbar.title = LOCALIZED.translate(self.name)

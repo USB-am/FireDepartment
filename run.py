@@ -15,7 +15,7 @@ from uix.screens.create_entry import CreateEntryTag, CreateEntryRank, CreateEntr
 	CreateEntryHuman, CreateEntryEmergency, CreateEntryWorktype
 from uix.screens.edit_entry_list import EditEntryList
 from uix.screens.edit_entry import EditEntryTag, EditEntryRank, EditEntryPosition, \
-	EditEntryHuman, EditEntryEmergency, EditEntryWorktype
+	EditEntryHuman, EditEntryEmergency, EditEntryWorktype, EditColorTheme
 
 
 db.create_all()
@@ -73,7 +73,7 @@ class Application(MDApp):
 
 		# Edit screens
 		for screen in (EditEntryTag, EditEntryRank, EditEntryPosition, \
-		               EditEntryHuman, EditEntryEmergency, EditEntryWorktype):
+		               EditEntryHuman, EditEntryEmergency, EditEntryWorktype, EditColorTheme):
 			self.screen_manager.add_widget(screen(self.path_manager))
 
 		self.screen_manager.add_widget(self.main_page)

@@ -66,6 +66,23 @@ class ExpansionOptionsElement(MDBoxLayout):
 			on_release=lambda e: path_manager.forward(path_to_edit))
 
 
+class ExpansionOptionsColorTheme(MDBoxLayout):
+	''' Выпадающее содержимое элемента списка настроек (Цветовая схема) '''
+
+	def __init__(self, element: db.Model):
+		self.element = element
+		self.display_text = LOCALIZED.translate('Edit')
+
+		super().__init__()
+
+	def binding(self, path_manager) -> None:
+		lower_table_name = self.element.__tablename__.lower()
+		path_to_edit = f'edit_{lower_table_name}'
+
+		self.ids.button.bind(
+			on_release=lambda e: path_manager.forward(path_to_edit))
+
+
 class ExpansionEditListElement(MDBoxLayout):
 	''' Элемент списка экрана редактирования '''
 
@@ -93,9 +110,12 @@ class FDExpansionPanel(MDExpansionPanel):
 		self.icon = element.icon
 		self.content = content(element)
 
-		if isinstance(element.title, str):
-			self.title = element.title
-		else:
+		try:
+			if isinstance(element.title, str):
+				self.title = element.title
+			else:
+				self.title = element.__tablename__
+		except AttributeError:
 			self.title = element.__tablename__
 
 		self.panel_cls = MDExpansionPanelOneLine(text=self.title)

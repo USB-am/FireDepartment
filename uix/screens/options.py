@@ -1,8 +1,9 @@
-from custom_screen import CustomScrolledScreen
+from kivymd.uix.expansionpanel import MDExpansionPanel
 
+from custom_screen import CustomScrolledScreen
 from config import LOCALIZED
-from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype
-from uix import FDExpansionPanel, ExpansionOptionsElement
+from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype, ColorTheme
+from uix import FDExpansionPanel, ExpansionOptionsElement, ExpansionOptionsColorTheme
 
 
 class Options(CustomScrolledScreen):
@@ -27,3 +28,7 @@ class Options(CustomScrolledScreen):
 			element = FDExpansionPanel(data_base_table, ExpansionOptionsElement)
 			element.content.binding(self.path_manager)
 			self.add_widgets(element)
+
+		element = FDExpansionPanel(ColorTheme, ExpansionOptionsColorTheme)
+		element.content.binding(self.path_manager)
+		self.add_widgets(element)
