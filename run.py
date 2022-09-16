@@ -55,7 +55,7 @@ class Application(MDApp):
 
 		self.setup()
 
-		self.screen_manager.current = 'main_page'
+		self.screen_manager.current = 'edit_colortheme'	# 'main_page'
 
 	def setup(self) -> None:
 		self.main_page = MainPage(self.path_manager)
@@ -73,8 +73,9 @@ class Application(MDApp):
 
 		# Edit screens
 		for screen in (EditEntryTag, EditEntryRank, EditEntryPosition, \
-		               EditEntryHuman, EditEntryEmergency, EditEntryWorktype, EditColorTheme):
+		               EditEntryHuman, EditEntryEmergency, EditEntryWorktype):
 			self.screen_manager.add_widget(screen(self.path_manager))
+		self.screen_manager.add_widget(EditColorTheme(self.path_manager, self.theme_cls))
 
 		self.screen_manager.add_widget(self.main_page)
 		self.screen_manager.add_widget(self.current_calls)
