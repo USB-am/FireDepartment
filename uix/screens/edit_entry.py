@@ -1,3 +1,5 @@
+from kivymd.theming import ThemeManager
+
 from config import LOCALIZED
 from data_base import db
 from uix import fields
@@ -185,10 +187,13 @@ class EditEntryWorktype(CreateEntryWorktype):
 class EditColorTheme(CustomScrolledScreen):
 	''' Экран редактирования цветной схемы '''
 
-	def __init__(self, path_manager):
+	def __init__(self, path_manager, theme_cls):
 		super().__init__()
 
 		self.path_manager = path_manager
+		self.theme_cls = theme_cls
+		self.theme_cls.theme_style_switch_animation = True
+		self.theme_cls.theme_style_switch_animation_duration = .3
 
 		self.name = 'edit_colortheme'
 
@@ -200,11 +205,33 @@ class EditColorTheme(CustomScrolledScreen):
 		self.toolbar.add_left_button(
 			'arrow-left', lambda e: self.path_manager.back())
 
-	def fill_content(self) -> None:
-		primary_hue = 'SelectField'
-		primary_palette = 'SelectField'
-		accent_palette = 'SelectField'
-		self.theme_style = fields.BooleanField('theme-light-dark', 'Theme')
+		colors_dict = ThemeManager().colors.copy()
+		print(colors_dict['Red'].items())
+		colors_dict.pop('Light', None)
+		colors_dict.pop('Dark', None)
+		colors = colors_dict.keys()
+
+		primary_hue = fields.DropDown(
+			icon='opacity',
+			title='Primary hue',
+			items=[])	# colors_dict['Red'].keys())
+		primary_palette = fields.DropDown(
+			icon='palette',
+			title='Primary palette',
+			items=colors)
+		accent_palette = fields.DropDown(
+			icon='exclamation-thick',
+			title='Accent palette',
+			items=colors)
+		self.theme_style = fields.BooleanField(
+			icon='theme-light-dark',
+			title='Theme')
 		background_image = 'FileManagerField'
 
+		self.add_widgets(primary_hue)
+		self.add_widgets(primary_palette)
+		self.add_widgets(accent_palette)
 		self.add_widgets(self.theme_style)
+
+	def fill_content(self) -> None:
+		pass

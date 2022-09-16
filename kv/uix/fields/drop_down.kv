@@ -3,4 +3,14 @@
 	size: self.width, 50
 
 	MDIcon:
-		size_hint: 
+		size_hint: None, None
+		size: 50, 50
+		icon: root.icon
+
+	MDLabel:
+		size_hint: 1, 1
+		text: root.display_text
+
+	MDRectangleFlatButton:
+		id: button
+		text: '-'
