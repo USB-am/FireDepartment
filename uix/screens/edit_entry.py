@@ -206,32 +206,37 @@ class EditColorTheme(CustomScrolledScreen):
 			'arrow-left', lambda e: self.path_manager.back())
 
 		colors_dict = ThemeManager().colors.copy()
-		print(colors_dict['Red'].items())
 		colors_dict.pop('Light', None)
-		colors_dict.pop('Dark', None)
-		colors = colors_dict.keys()
+		colors_dict.pop('Dark',  None)
 
-		primary_hue = fields.DropDown(
+		hue_items = fields.gen_hue_items(colors_dict['Red'].keys(), self.update_theme)
+		color_items = fields.gen_color_items(colors_dict.keys(), self.update_theme)
+
+		self.primary_hue = fields.DropDown(
 			icon='opacity',
-			title='Primary hue',
-			items=[])	# colors_dict['Red'].keys())
-		primary_palette = fields.DropDown(
+			title='Primary hue')
+		self.primary_hue.add(hue_items)
+		self.primary_palette = fields.DropDown(
 			icon='palette',
-			title='Primary palette',
-			items=colors)
-		accent_palette = fields.DropDown(
+			title='Primary palette')
+		self.primary_palette.add(color_items)
+		self.accent_palette = fields.DropDown(
 			icon='exclamation-thick',
-			title='Accent palette',
-			items=colors)
+			title='Accent palette')
+		self.accent_palette.add(color_items)
 		self.theme_style = fields.BooleanField(
 			icon='theme-light-dark',
 			title='Theme')
-		background_image = 'FileManagerField'
+		self.background_image = 'FileManagerField'
 
-		self.add_widgets(primary_hue)
-		self.add_widgets(primary_palette)
-		self.add_widgets(accent_palette)
+		self.add_widgets(self.primary_hue)
+		self.add_widgets(self.primary_palette)
+		self.add_widgets(self.accent_palette)
 		self.add_widgets(self.theme_style)
 
 	def fill_content(self) -> None:
+		# self.primary_hue.set_value()
 		pass
+
+	def update_theme(self, value: str) -> None:
+		print(value)
