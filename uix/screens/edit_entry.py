@@ -226,7 +226,8 @@ class EditColorTheme(CustomScrolledScreen):
 		self.accent_palette.add(color_items)
 		self.theme_style = fields.BooleanField(
 			icon='theme-light-dark',
-			title='Theme')
+			title='Dark theme')
+		self.theme_style.ids.switch.bind(on_release=lambda e: self.set_theme_style())
 		self.background_image = 'FileManagerField'
 
 		self.add_widgets(self.primary_hue)
@@ -235,8 +236,14 @@ class EditColorTheme(CustomScrolledScreen):
 		self.add_widgets(self.theme_style)
 
 	def fill_content(self) -> None:
-		# self.primary_hue.set_value()
 		pass
 
 	def update_theme(self, value: str) -> None:
 		print(value)
+
+	def set_theme_style(self) -> None:
+		value = self.theme_style.get_value()
+		if value:
+			self.theme_cls.theme_style = 'Dark'
+		else:
+			self.theme_cls.theme_style = 'Light'
