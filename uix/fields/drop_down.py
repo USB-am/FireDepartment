@@ -24,7 +24,7 @@ def gen_hue_items(items: list, callback) -> list:
 			'text': item,
 			'bg_color': COLORS['Red'][item],
 			'viewclass': 'OneLineListItem',
-			'on_release': lambda e=item.lower(): callback(e)
+			'on_release': lambda e=item: callback(e)
 		})
 
 	return output_items
@@ -38,7 +38,7 @@ def gen_color_items(items: list, callback) -> list:
 			'text': item,
 			'bg_color': COLORS[item]['700'],
 			'viewclass': 'OneLineListItem',
-			'on_release': lambda e=item.lower(): callback(e)
+			'on_release': lambda e=item: callback(e)
 		})
 
 	return output_items
