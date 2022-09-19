@@ -209,8 +209,12 @@ class EditColorTheme(CustomScrolledScreen):
 		colors_dict.pop('Light', None)
 		colors_dict.pop('Dark',  None)
 
-		hue_items = fields.gen_hue_items(colors_dict['Red'].keys(), self.update_theme)
-		color_items = fields.gen_color_items(colors_dict.keys(), self.update_theme)
+		hue_items = fields.gen_hue_items(
+			colors_dict['Red'].keys(), self.change_hue)
+		primary_items = fields.gen_color_items(
+			colors_dict.keys(), self.change_primary)
+		accent_items = fields.gen_color_items(
+			colors_dict.keys(), self.change_accent)
 
 		self.primary_hue = fields.DropDown(
 			icon='opacity',
@@ -219,31 +223,43 @@ class EditColorTheme(CustomScrolledScreen):
 		self.primary_palette = fields.DropDown(
 			icon='palette',
 			title='Primary palette')
-		self.primary_palette.add(color_items)
+		self.primary_palette.add(primary_items)
 		self.accent_palette = fields.DropDown(
 			icon='exclamation-thick',
 			title='Accent palette')
-		self.accent_palette.add(color_items)
+		self.accent_palette.add(accent_items)
 		self.theme_style = fields.BooleanField(
 			icon='theme-light-dark',
 			title='Dark theme')
-		self.theme_style.ids.switch.bind(on_release=lambda e: self.set_theme_style())
-		self.background_image = 'FileManagerField'
+		self.theme_style.ids.switch.bind(
+			on_release=lambda e: self.change_theme_style())
+		self.background_image = fields.FileManager(
+			title='Background image',
+			path='/',
+			select_path=lambda e: print(e),
+			preview=True)
 
 		self.add_widgets(self.primary_hue)
 		self.add_widgets(self.primary_palette)
 		self.add_widgets(self.accent_palette)
 		self.add_widgets(self.theme_style)
+		self.add_widgets(self.background_image)
 
 	def fill_content(self) -> None:
 		pass
 
-	def update_theme(self, value: str) -> None:
-		print(value)
-
-	def set_theme_style(self) -> None:
+	def change_theme_style(self) -> None:
 		value = self.theme_style.get_value()
 		if value:
 			self.theme_cls.theme_style = 'Dark'
 		else:
 			self.theme_cls.theme_style = 'Light'
+
+	def change_hue(self, value: str) -> None:
+		self.theme_cls.primary_hue = value
+
+	def change_primary(self, value: str):
+		self.theme_cls.primary_palette = value
+
+	def change_accent(self, value: str):
+		self.theme_cls.accent_palette = value
