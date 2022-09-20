@@ -18,12 +18,11 @@ class FileManager(MDBoxLayout):
 		self.title = title
 		self.display_text = LOCALIZED.translate(title)
 		self.path = path
-		self.display_path = os.path.basename(path)
+		self.display_path = LOCALIZED.translate('File')
 
 		super().__init__()
 
 		self.manager = MDFileManager(**options)
-		self.add_widget(self.manager)
 
 		self.ids.button.bind(on_release=lambda e: self.open())
 
@@ -36,3 +35,9 @@ class FileManager(MDBoxLayout):
 				self.manager.show(BASE_DIR)
 			except Exception as e:
 				print(e)
+
+	def close_dialog(self) -> None:
+		try:
+			self.manager.close()
+		except:
+			print(dir(self.manager))
