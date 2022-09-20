@@ -5,7 +5,7 @@ from data_base import db
 from uix import fields
 from .create_entry import CreateEntryTag, CreateEntryRank, CreateEntryPosition, \
 	CreateEntryHuman, CreateEntryEmergency, CreateEntryWorktype
-from custom_screen import CustomScrolledScreen
+from custom_screen import CustomScreen, CustomScrolledScreen
 
 
 def get_id_from_list(foreign_key_field: fields.SelectedList) -> int:
@@ -235,8 +235,8 @@ class EditColorTheme(CustomScrolledScreen):
 			on_release=lambda e: self.change_theme_style())
 		self.background_image = fields.FileManager(
 			title='Background image',
-			path='/',
-			select_path=lambda e: print(e),
+			path='\\',
+			select_path=lambda e: self.change_background(e),
 			preview=True)
 
 		self.add_widgets(self.primary_hue)
@@ -263,3 +263,9 @@ class EditColorTheme(CustomScrolledScreen):
 
 	def change_accent(self, value: str):
 		self.theme_cls.accent_palette = value
+
+	def change_background(self, path: str) -> None:
+		self.background_image.close_dialog()
+
+		CustomScreen.bg_color = path
+		print(f'change_background ("{path}") is changed')
