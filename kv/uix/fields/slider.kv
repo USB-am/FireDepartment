@@ -1,0 +1,26 @@
+<FDSlider>:
+	orientation: 'vertical'
+	size_hint: 1, None
+	size: self.width, 75
+
+	MDBoxLayout:
+		orientation: 'horizontal'
+		size_hint: 1, None
+		size: self.width, 50
+
+		MDIcon:
+			size_hint: None, None
+			size: 50, 50
+			icon: root.icon
+
+		MDLabel:
+			size_hint: 1, 1
+			text: root.display_text
+
+	MDBoxLayout:
+		orientation: 'horizontal'
+		size_hint: 1, None
+		size: self.width, 25
+
+		MDSlider:
+			id: slider
