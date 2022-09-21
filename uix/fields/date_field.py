@@ -78,7 +78,7 @@ class DateTimeField(MDBoxLayout):
 
 	def setup(self) -> None:
 		self.ids.top_panel.add_widget(HelpButton(
-			title='Виджет выбора даты и времени.',
+			title='Date and time picker widget.',
 			text=self.help_text))
 
 	@property
