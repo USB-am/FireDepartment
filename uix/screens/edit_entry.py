@@ -206,7 +206,7 @@ class EditColorTheme(CustomScrolledScreen):
 	def setup(self) -> None:
 		self.toolbar.title = LOCALIZED.translate(self.name)
 		self.toolbar.add_left_button(
-			'arrow-left', lambda e: self.path_manager.back())
+			'arrow-left', lambda e: self.save_changes_and_back())
 
 		colors_dict = ThemeManager().colors.copy()
 		colors_dict.pop('Light', None)
@@ -241,16 +241,26 @@ class EditColorTheme(CustomScrolledScreen):
 			path='\\',
 			select_path=lambda e: self.exit_filemanager_and_change_background(e),
 			preview=True)
+		self.background_opacity = fields.FDSlider(
+			icon='window-closed-variant',
+			title='Background opacity')
+		self.background_opacity.set_value(53.574894)
+		self.background_opacity.ids.slider.bind(on_release=lambda e: \
+			print(self.background_opacity.get_value()))
 
 		self.add_widgets(self.primary_hue)
 		self.add_widgets(self.primary_palette)
 		self.add_widgets(self.accent_palette)
 		self.add_widgets(self.theme_style)
 		self.add_widgets(self.background_image)
+		self.add_widgets(self.background_opacity)
 
-		test = fields.BooleanField('image', 'Test')
-		test.ids.switch.bind(on_release=lambda e: self.update_bg_color())
-		self.add_widgets(test)
+	def save_changes(self) -> None:
+		pass
+
+	def save_changes_and_back(self) -> None:
+		self.save_changes()
+		self.path_manager.back()
 
 	def update_bg_color(self) -> None:
 		clr = (1, 1, 1, random())
