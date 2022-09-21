@@ -8,6 +8,9 @@ from .create_entry import CreateEntryTag, CreateEntryRank, CreateEntryPosition, 
 from custom_screen import CustomScreen, CustomScrolledScreen
 
 
+from random import random, randint
+
+
 def get_id_from_list(foreign_key_field: fields.SelectedList) -> int:
 	selected_element = foreign_key_field.get_value()
 
@@ -236,7 +239,7 @@ class EditColorTheme(CustomScrolledScreen):
 		self.background_image = fields.FileManager(
 			title='Background image',
 			path='\\',
-			select_path=lambda e: self.change_background(e),
+			select_path=lambda e: self.exit_filemanager_and_change_background(e),
 			preview=True)
 
 		self.add_widgets(self.primary_hue)
@@ -244,6 +247,14 @@ class EditColorTheme(CustomScrolledScreen):
 		self.add_widgets(self.accent_palette)
 		self.add_widgets(self.theme_style)
 		self.add_widgets(self.background_image)
+
+		test = fields.BooleanField('image', 'Test')
+		test.ids.switch.bind(on_release=lambda e: self.update_bg_color())
+		self.add_widgets(test)
+
+	def update_bg_color(self) -> None:
+		clr = (1, 1, 1, random())
+		self.reboot_styles(rgba=clr)
 
 	def fill_content(self) -> None:
 		pass
@@ -264,8 +275,12 @@ class EditColorTheme(CustomScrolledScreen):
 	def change_accent(self, value: str):
 		self.theme_cls.accent_palette = value
 
-	def change_background(self, path: str) -> None:
+	def exit_filemanager_and_change_background(self, path: str) -> None:
+		self.close_filemanager()
+		self.change_background(path)
+
+	def close_filemanager(self) -> None:
 		self.background_image.close_dialog()
 
-		CustomScreen.bg_color = path
-		print(f'change_background ("{path}") is changed')
+	def change_background(self, path: str) -> None:
+		self.reboot_styles(source=path)

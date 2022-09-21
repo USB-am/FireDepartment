@@ -29,11 +29,10 @@ class FDToolbar(MDToolbar):
 	def add_right_button(self, icon: str, callback) -> None:
 		self.right_action_items.append([icon, callback])
 
-
+from kivy.graphics import Color, Rectangle
 class CustomScreen(Screen):
 	''' Базовый экран '''
 
-	# bg_image = os.path.join(STATIC_DIR, 'bg_01.png')
 	bg_image = None
 	color = (1, 1, 1, .3)
 
@@ -45,6 +44,21 @@ class CustomScreen(Screen):
 
 	def add_widgets(self, *widgets: Widget) -> None:
 		[self.ids.widgets.add_widget(widget) for widget in widgets]
+
+	def reboot_styles(self, rgba: tuple=None, source: str=None) -> None:
+		if rgba is not None:
+			CustomScreen.color = rgba
+
+		if source is not None:
+			CustomScreen.bg_image = source
+
+		with self.canvas.before:
+			c = Color(*CustomScreen.color)
+
+			self.rect = Rectangle(
+				size=self.size,
+				pos=self.pos,
+				source=CustomScreen.bg_image)
 
 
 class CustomScrolledScreen(CustomScreen):
