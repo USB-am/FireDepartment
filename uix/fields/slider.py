@@ -24,4 +24,4 @@ class FDSlider(MDBoxLayout):
 		return self.ids.slider.value / 100
 
 	def set_value(self, value: float) -> None:
-		self.ids.slider.value = value * 100
+		self.ids.slider.value = int(value * 100)
