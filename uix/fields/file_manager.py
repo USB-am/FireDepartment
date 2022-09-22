@@ -36,6 +36,15 @@ class FileManager(MDBoxLayout):
 			except Exception as e:
 				print(e)
 
+	def set_value(self, value: str) -> None:
+		if value is None:
+			value = '-'
+
+		self.ids.button.text = value
+
+	def get_value(self) -> str:
+		return None
+
 	def close_dialog(self) -> None:
 		try:
 			self.manager.close()
