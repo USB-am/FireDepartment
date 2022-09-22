@@ -2,6 +2,7 @@ from kivymd.theming import ThemeManager
 
 from config import LOCALIZED
 from data_base import db, ColorTheme
+from data_base import manager as DBManager
 from uix import fields
 from .create_entry import CreateEntryTag, CreateEntryRank, CreateEntryPosition, \
 	CreateEntryHuman, CreateEntryEmergency, CreateEntryWorktype
@@ -212,41 +213,31 @@ class EditColorTheme(CustomScrolledScreen):
 		colors_dict.pop('Light', None)
 		colors_dict.pop('Dark',  None)
 
-		hue_items = fields.gen_hue_items(
-			colors_dict['Red'].keys(), self.change_hue)
-		primary_items = fields.gen_color_items(
-			colors_dict.keys(), self.change_primary)
-		accent_items = fields.gen_color_items(
-			colors_dict.keys(), self.change_accent)
+		hue_items = fields.gen_hue_items(colors_dict['Red'].keys(), self.change_hue)
+		primary_items = fields.gen_color_items(colors_dict.keys(), self.change_primary)
+		accent_items = fields.gen_color_items(colors_dict.keys(), self.change_accent)
 
-		self.primary_hue = fields.DropDown(
-			icon='opacity',
-			title='Primary hue')
+		# HUE
+		self.primary_hue = fields.DropDown(icon='opacity', title='Primary hue')
 		self.primary_hue.add(hue_items)
-		self.primary_palette = fields.DropDown(
-			icon='palette',
-			title='Primary palette')
+		# PRIMARY
+		self.primary_palette = fields.DropDown( icon='palette', title='Primary palette')
 		self.primary_palette.add(primary_items)
-		self.accent_palette = fields.DropDown(
-			icon='exclamation-thick',
-			title='Accent palette')
+		# ACCENT
+		self.accent_palette = fields.DropDown(icon='exclamation-thick', title='Accent palette')
 		self.accent_palette.add(accent_items)
-		self.theme_style = fields.BooleanField(
-			icon='theme-light-dark',
-			title='Dark theme')
-		self.theme_style.ids.switch.bind(
-			on_release=lambda e: self.change_theme_style())
+		# THEME STYLE
+		self.theme_style = fields.BooleanField(icon='theme-light-dark', title='Dark theme')
+		self.theme_style.ids.switch.bind(on_release=lambda e: self.change_theme_style())
+		# BACKGROUND IMAGE
 		self.background_image = fields.FileManager(
 			title='Background image',
 			path='\\',
 			select_path=lambda e: self.exit_filemanager_and_change_background(e),
 			preview=True)
-		self.background_opacity = fields.FDSlider(
-			icon='window-closed-variant',
-			title='Background opacity')
-		self.background_opacity.set_value(0.53574894)
-		self.background_opacity.ids.slider.bind(on_touch_up=lambda *e: \
-			self.change_opacity())
+		self.background_opacity = fields.FDSlider(icon='window-closed-variant', title='Background opacity')
+		#self.background_opacity.ids.slider.bind(on_touch_up=lambda *e: \
+		#	self.change_opacity())
 
 		self.add_widgets(self.primary_hue)
 		self.add_widgets(self.primary_palette)
@@ -256,7 +247,18 @@ class EditColorTheme(CustomScrolledScreen):
 		self.add_widgets(self.background_opacity)
 
 	def save_changes(self) -> None:
-		pass
+		db_entry = ColorTheme.query.first()
+		values = {
+			'primary_palette': self.primary_palette.get_value(),
+			'accent_palette': self.accent_palette.get_value(),
+			'primary_hue': self.primary_hue.get_value(),
+			'theme_style': 'Dark' if self.theme_style.get_value() else 'Light',
+			'background_image': self.background_image.get_value(),
+		}
+
+		print(values)
+		DBManager.update(db_entry, values)
+		print('All ColorTheme changed is saved!')
 
 	def save_changes_and_back(self) -> None:
 		self.save_changes()
@@ -294,4 +296,10 @@ class EditColorTheme(CustomScrolledScreen):
 
 	def fill_content(self) -> None:
 		db_entry = ColorTheme.query.first()
-		print(db_entry)
+
+		self.primary_hue.set_value(db_entry.primary_hue)
+		self.primary_palette.set_value(db_entry.primary_palette)
+		self.accent_palette.set_value(db_entry.accent_palette)
+		self.theme_style.set_value(db_entry.theme_style == 'Dark')
+		self.background_image.set_value(db_entry.background_image)
+		# self.background_opacity.set_value()
