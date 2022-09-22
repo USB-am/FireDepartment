@@ -245,6 +245,8 @@ class EditColorTheme(CustomScrolledScreen):
 			icon='window-closed-variant',
 			title='Background opacity')
 		self.background_opacity.set_value(0.53574894)
+		self.background_opacity.ids.slider.bind(on_touch_up=lambda *e: \
+			self.change_opacity())
 
 		self.add_widgets(self.primary_hue)
 		self.add_widgets(self.primary_palette)
@@ -291,5 +293,5 @@ class EditColorTheme(CustomScrolledScreen):
 		self.reboot_styles(source=path)
 
 	def fill_content(self) -> None:
-		db_entry = None
-		print('fill_content is started!')
+		db_entry = ColorTheme.query.first()
+		print(db_entry)

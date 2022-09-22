@@ -8,6 +8,7 @@ from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager, Screen
 
 from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype
+from data_base.base_records import write_records
 from uix.screens.main_page import MainPage
 from uix.screens.current_calls import CurrentCalls
 from uix.screens.options import Options
@@ -19,6 +20,8 @@ from uix.screens.edit_entry import EditEntryTag, EditEntryRank, EditEntryPositio
 
 
 db.create_all()
+
+write_records()
 
 
 class PathManager:
