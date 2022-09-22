@@ -1,7 +1,7 @@
 from kivymd.theming import ThemeManager
 
 from config import LOCALIZED
-from data_base import db
+from data_base import db, ColorTheme
 from uix import fields
 from .create_entry import CreateEntryTag, CreateEntryRank, CreateEntryPosition, \
 	CreateEntryHuman, CreateEntryEmergency, CreateEntryWorktype
@@ -244,9 +244,7 @@ class EditColorTheme(CustomScrolledScreen):
 		self.background_opacity = fields.FDSlider(
 			icon='window-closed-variant',
 			title='Background opacity')
-		self.background_opacity.set_value(53.574894)
-		self.background_opacity.ids.slider.bind(on_release=lambda e: \
-			print(self.background_opacity.get_value()))
+		self.background_opacity.set_value(0.53574894)
 
 		self.add_widgets(self.primary_hue)
 		self.add_widgets(self.primary_palette)
@@ -265,9 +263,6 @@ class EditColorTheme(CustomScrolledScreen):
 	def update_bg_color(self) -> None:
 		clr = (1, 1, 1, random())
 		self.reboot_styles(rgba=clr)
-
-	def fill_content(self) -> None:
-		pass
 
 	def change_theme_style(self) -> None:
 		value = self.theme_style.get_value()
@@ -294,3 +289,7 @@ class EditColorTheme(CustomScrolledScreen):
 
 	def change_background(self, path: str) -> None:
 		self.reboot_styles(source=path)
+
+	def fill_content(self) -> None:
+		db_entry = None
+		print('fill_content is started!')
