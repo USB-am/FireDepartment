@@ -112,11 +112,12 @@ class FDExpansionPanel(MDExpansionPanel):
 
 		try:
 			if isinstance(element.title, str):
-				self.title = element.title
+				title = element.title
 			else:
-				self.title = element.__tablename__
+				title = element.__tablename__
 		except AttributeError:
-			self.title = element.__tablename__
+			title = element.__tablename__
+		self.title = LOCALIZED.translate(title)
 
 		self.panel_cls = MDExpansionPanelOneLine(text=self.title)
 

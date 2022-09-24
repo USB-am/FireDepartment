@@ -54,6 +54,9 @@ def write_new_localized_dict(path: str) -> None:
 		'background image': 'Фон',
 		'file': 'Файл',
 		'date and time picker widget.': 'Виджет выбора даты и времени.',
+		'pass': 'Пусто',
+		'colortheme': 'Визуализация',
+		'background opacity': 'Прозрачность фона',
 	}
 
 	with open(path, mode='w') as writed_file:

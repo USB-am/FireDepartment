@@ -58,7 +58,7 @@ class Application(MDApp):
 
 		self.setup()
 
-		self.screen_manager.current = 'edit_colortheme'	# 'main_page'
+		self.screen_manager.current = 'main_page'	# 'edit_colortheme'
 
 	def setup(self) -> None:
 		self.main_page = MainPage(self.path_manager)

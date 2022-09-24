@@ -1,23 +1,10 @@
+from typing import Union
+
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.textfield import MDTextField
 
 from config import LOCALIZED, HELP_MODE
 from uix.help_button import HelpButton
-
-
-class _StringField_(MDTextField):
-	''' Текстовое поле '''
-
-	def add_right_icon(self, icon: str) -> None:
-		self.icon_right = icon
-
-	def set_value(self, value: str) -> None:
-		self.ids.entry.text = '-' if value is None else value
-
-	def get_value(self) -> str:
-		value = self.ids.entry.text
-
-		return None if value == '-' else value
 
 
 class _BaseString(MDTextField):
@@ -43,10 +30,21 @@ class _BaseString(MDTextField):
 		return None if value == '-' else value
 
 
+class _OnlyIntegerString(_BaseString):
+	''' Текстовое поле, содержащее ТОЛЬКО цифры '''
+
+	def insert_text(self, substring: str, from_undo=False) -> None:
+		if substring.isdigit():
+			super().insert_text(substring, from_undo=from_undo)
+
+
 class StringField(MDBoxLayout):
 	''' Текстовое поле '''
 
-	def __init__(self, title: str, help_text: str=None, **options):
+	def __init__(self, title: str, help_text: str=None, 
+		         string_obj: Union[_BaseString, _OnlyIntegerString]=_BaseString,
+		         **options):
+
 		self.title = title
 		options.update({
 			'icon_right': 'form-textbox',
@@ -55,7 +53,7 @@ class StringField(MDBoxLayout):
 
 		super().__init__(size_hint=(1, None),size=(self.width, 50))
 
-		self.base_string = _BaseString(title, **options)
+		self.base_string = string_obj(title, **options)
 		self.add_widget(self.base_string)
 
 		if help_text is not None and HELP_MODE:
@@ -97,10 +95,6 @@ class IntegerField(StringField):
 	''' Поле ввода целых чисел '''
 
 	def __init__(self, title: str, help_text: str=None):
-		super().__init__(title, help_text)
+		super().__init__(title, help_text, _OnlyIntegerString)
 
 		self.add_right_icon('numeric')
-
-	def insert_text(self, substring: str, from_undo=False) -> None:
-		if substring.isdigit():
-			super().insert_text(substring, from_undo=from_undo)
