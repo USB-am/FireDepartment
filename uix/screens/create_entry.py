@@ -63,13 +63,16 @@ class CreateEntryRank(CreateEntry):
 			title='Title',
 			help_text='Название звания.\n\nДолжно быть уникальным т.к. поиск будет производиться именно по этому полю.'
 		)
+		self.priority = fields.IntegerField(
+			title=f'Приоритетность',
+			help_text='Необходима для сортировки званий по приоритетности.')
 		self.humans = fields.SelectedList(
 			icon=Human.icon,
 			title=Human.__tablename__,
 			values=Human.query.all())
 		self.humans.binding(path_manager)
 
-		self.add_widgets(self.title, self.humans)
+		self.add_widgets(self.title, self.priority, self.humans)
 
 	def insert(self) -> None:
 		rank = Rank(title=self.title.get_value())

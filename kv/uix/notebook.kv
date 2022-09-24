@@ -13,28 +13,28 @@
 				size_hint: 1, None
 				size: self.width, 75
 
-				MDLabel:
-					size_hint: .4, 1
-					text: 'Название:'
-					halign: 'left'
+				MDIcon:
+					size_hint: None, 1
+					size: 50, self.height
+					icon: 'form-textbox'
 
 				MDLabel:
-					size_hint: .6, 1
 					text: root.title
 					halign: 'left'
 
 
 <HumansSelectedListElement>:
 	size_hint: 1, None
-	size: self.width, 70
+	size: self.width, 50
 
 	MDCheckbox:
 		id: checkbox
-		size_hint: None, None
-		size: 70, 70
+		size_hint: None, 1
+		size: 50, self.height
 
 	MDExpansionPanelTwoLine:
 		id: expansion_panel
+		size_hint: 1, 1
 		text: root.human.title
 		secondary_text: root.phone_1
 

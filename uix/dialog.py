@@ -5,7 +5,7 @@ from kivymd.uix.dialog import MDDialog
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDFlatButton
 
-from config import UIX_KV_DIR
+from config import UIX_KV_DIR, LOCALIZED
 from data_base import Human
 
 
@@ -34,3 +34,9 @@ class HumanDialogContent(MDBoxLayout):
 		self.human = human
 
 		super().__init__()
+
+	def _check_on_none(self, attr) -> str:
+		if attr is None:
+			return LOCALIZED.translate('Pass')
+
+		return attr

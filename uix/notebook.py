@@ -8,7 +8,7 @@ from kivymd.uix.button import MDRaisedButton
 from kivymd.uix.label import MDLabel
 
 from data_base import Emergency, Human
-from uix import FDScrollFrame#, FDDialog, HumanDialogContent
+from uix import FDScrollFrame
 from uix.dialog import FDDialog, HumanDialogContent
 from config import UIX_KV_DIR
 
