@@ -37,6 +37,7 @@ class Rank(db.Model):
 	__tablename__ = 'Rank'
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), unique=True, nullable=False)
+	priority = db.Column(db.Integer, nullable=False)
 
 	def __str__(self):
 		return self.title
