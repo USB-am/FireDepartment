@@ -60,11 +60,18 @@ class FDEmergencyTab(MDFloatLayout, MDTabsBase):
 		scroll_layout = self.ids.scroll_layout
 		sorted_humans = sorted(
 			self.element.humans,
-			key=lambda human: Rank.query.get(human.rank).priority,
+			key=self.__get_human_rank_priority,
 			reverse=True)
 
 		[scroll_layout.add_widget(HumansSelectedListElement(human)) \
 			for human in sorted_humans]
+
+	def __get_human_rank_priority(self, human: Human) -> int:
+		rank = Rank.query.get(human.rank)
+
+		if rank is None:
+			return 0
+		return rank.priority
 
 
 class FDNoteBook(MDTabs):
