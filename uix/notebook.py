@@ -65,8 +65,6 @@ class FDEmergencyTab(MDFloatLayout, MDTabsBase):
 
 		[scroll_layout.add_widget(HumansSelectedListElement(human)) \
 			for human in sorted_humans]
-		# for human in sorted_humans:
-		# 	scroll_layout.add_widget(HumansSelectedListElement(human))
 
 
 class FDNoteBook(MDTabs):
