@@ -7,7 +7,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRaisedButton
 from kivymd.uix.label import MDLabel
 
-from data_base import Emergency, Human
+from data_base import Emergency, Human, Rank
 from uix import FDScrollFrame
 from uix.dialog import FDDialog, HumanDialogContent
 from config import UIX_KV_DIR
@@ -58,9 +58,15 @@ class FDEmergencyTab(MDFloatLayout, MDTabsBase):
 
 	def setup(self) -> None:
 		scroll_layout = self.ids.scroll_layout
+		sorted_humans = sorted(
+			self.element.humans,
+			key=lambda human: Rank.query.get(human.rank).priority,
+			reverse=True)
 
-		for human in self.element.humans:
-			scroll_layout.add_widget(HumansSelectedListElement(human))
+		[scroll_layout.add_widget(HumansSelectedListElement(human)) \
+			for human in sorted_humans]
+		# for human in sorted_humans:
+		# 	scroll_layout.add_widget(HumansSelectedListElement(human))
 
 
 class FDNoteBook(MDTabs):

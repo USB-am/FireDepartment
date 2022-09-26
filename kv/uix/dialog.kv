@@ -22,7 +22,7 @@
 					icon: root.human.icon
 
 				MDLabel:
-					text: root.human.title
+					text: root.name
 
 			MDBoxLayout:
 				size_hint: 1, None
@@ -34,7 +34,7 @@
 					icon: 'phone'
 
 				MDLabel:
-					text: root._check_on_none(root.human.phone_1)
+					text: root.phone_1
 
 			MDBoxLayout:
 				size_hint: 1, None
@@ -46,7 +46,7 @@
 					icon: 'phone-plus'
 
 				MDLabel:
-					text: root._check_on_none(root.human.phone_2)
+					text: root.phone_2
 
 			MDBoxLayout:
 				size_hint: 1, None
@@ -58,7 +58,7 @@
 					icon: 'crosshairs-gps'
 
 				MDLabel:
-					text: root._check_on_none(root.human.position)
+					text: root.position
 
 			MDBoxLayout:
 				size_hint: 1, None
@@ -70,4 +70,4 @@
 					icon: 'chevron-triple-up'
 
 				MDLabel:
-					text: root._check_on_none(root.human.rank)
+					text: root.rank

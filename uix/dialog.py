@@ -6,7 +6,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDFlatButton
 
 from config import UIX_KV_DIR, LOCALIZED
-from data_base import Human
+from data_base import db, Human, Rank, Position
 
 
 path_to_kv_file = os.path.join(UIX_KV_DIR, 'dialog.kv')
@@ -32,6 +32,11 @@ class HumanDialogContent(MDBoxLayout):
 
 	def __init__(self, human: Human):
 		self.human = human
+		self.name = human.title
+		self.phone_1 = self._check_on_none(human.phone_1)
+		self.phone_2 = self._check_on_none(human.phone_2)
+		self.position = self._get_foreignkey(human.position, Position)
+		self.rank = self._get_foreignkey(human.rank, Rank)
 
 		super().__init__()
 
@@ -39,4 +44,12 @@ class HumanDialogContent(MDBoxLayout):
 		if attr is None:
 			return LOCALIZED.translate('Pass')
 
-		return attr
+		return str(attr)
+
+	def _get_foreignkey(self, attr, table: db.Model) -> str:
+		if attr is None:
+			return LOCALIZED.translate('Pass')
+
+		db_entry = table.query.get(attr)
+
+		return db_entry.title
