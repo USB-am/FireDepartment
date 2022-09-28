@@ -1,3 +1,5 @@
+from typing import Union
+
 from kivymd.uix.button import MDIconButton
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.textfield import MDTextField
@@ -47,14 +49,14 @@ class FDSearchBlock(MDBoxLayout):
 class EmergencySearchBlock(FDSearchBlock):
 	''' Блок поиска ЧС '''
 
-	def _sorted_by_id(self, elements: set) -> list:
-		return sorted(elements, key=lambda el: el.id)
+	def _sorted_by_name(self, elements: Union[set, list]) -> list:
+		return sorted(elements, key=lambda el: el.title)
 
 	def filter(self) -> list:
 		search_text = self.entry.text
 
 		if not search_text:
-			return Emergency.query.all()
+			return self._sorted_by_name(Emergency.query.all())
 
 		output = set()
 		like_search_text = f'%{search_text}%'
@@ -63,4 +65,4 @@ class EmergencySearchBlock(FDSearchBlock):
 		for found_tag in found_tags:
 			[output.add(emergency) for emergency in found_tag.emergencys]
 
-		return self._sorted_by_id(output)
+		return self._sorted_by_name(output)
