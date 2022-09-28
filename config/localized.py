@@ -57,6 +57,8 @@ def write_new_localized_dict(path: str) -> None:
 		'pass': 'Пусто',
 		'colortheme': 'Визуализация',
 		'background opacity': 'Прозрачность фона',
+		'integerfield': 'Поле ввода чисел',
+		'priority': 'Приоритетность',
 	}
 
 	with open(path, mode='w') as writed_file:

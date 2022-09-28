@@ -57,6 +57,7 @@ class SelectedList(MDBoxLayout):
 
 	def fill_content(self, values: list) -> None:
 		container = self.ids.elements
+		container.clear_widgets()
 		sorted_values = sorted(values, key=lambda value: value.title)
 
 		for value in sorted_values:
