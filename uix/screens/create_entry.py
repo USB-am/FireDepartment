@@ -86,7 +86,9 @@ class CreateEntryRank(CreateEntry):
 		self.bind(on_pre_enter=lambda e: self.update_selected_lists())
 
 	def insert(self) -> None:
-		rank = Rank(title=self.title.get_value())
+		rank = Rank(
+			title=self.title.get_value(),
+			priority=self.priority.get_value())
 
 		db.session.add(rank)
 		db.session.commit()
