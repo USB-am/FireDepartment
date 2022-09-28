@@ -19,6 +19,4 @@ def insert_colortheme() -> None:
 
 
 def write_records():
-	print('write_records is started!')
 	insert_colortheme()
-	print('write_records is finished!')

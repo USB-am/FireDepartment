@@ -4,6 +4,12 @@ from uix import fields
 from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype
 
 
+def get_id_from_list(foreign_key_field: fields.SelectedList) -> int:
+	selected_element = foreign_key_field.get_value()
+
+	return selected_element[0].id if selected_element else None
+
+
 class CreateEntry(CustomScrolledScreen):
 	''' Базовый экран создания новой записи в базе данных '''
 
@@ -42,6 +48,7 @@ class CreateEntryTag(CreateEntry):
 		self.emergencies.binding(path_manager)
 
 		self.add_widgets(self.title, self.emergencies)
+		self.bind(on_pre_enter=lambda e: self.update_selected_lists())
 
 	def insert(self) -> None:
 		tag = Tag(
@@ -51,6 +58,9 @@ class CreateEntryTag(CreateEntry):
 		db.session.commit()
 
 		self.path_manager.back()
+
+	def update_selected_lists(self, values: list=None) -> None:
+		self.emergencies.fill_content(Emergency.query.all())
 
 
 class CreateEntryRank(CreateEntry):
@@ -64,7 +74,7 @@ class CreateEntryRank(CreateEntry):
 			help_text='Название звания.\n\nДолжно быть уникальным т.к. поиск будет производиться именно по этому полю.'
 		)
 		self.priority = fields.IntegerField(
-			title=f'Приоритетность',
+			title='Priority',
 			help_text='Необходима для сортировки званий по приоритетности.')
 		self.humans = fields.SelectedList(
 			icon=Human.icon,
@@ -73,6 +83,7 @@ class CreateEntryRank(CreateEntry):
 		self.humans.binding(path_manager)
 
 		self.add_widgets(self.title, self.priority, self.humans)
+		self.bind(on_pre_enter=lambda e: self.update_selected_lists())
 
 	def insert(self) -> None:
 		rank = Rank(title=self.title.get_value())
@@ -81,6 +92,9 @@ class CreateEntryRank(CreateEntry):
 		db.session.commit()
 
 		self.path_manager.back()
+
+	def update_selected_lists(self, values: list=None) -> None:
+		self.humans.fill_content(Human.query.all())
 
 
 class CreateEntryPosition(CreateEntry):
@@ -100,6 +114,7 @@ class CreateEntryPosition(CreateEntry):
 		self.humans.binding(path_manager)
 
 		self.add_widgets(self.title, self.humans)
+		self.bind(on_pre_enter=lambda e: self.update_selected_lists())
 
 	def insert(self) -> None:
 		position = Position(title=self.title.get_value())
@@ -108,6 +123,9 @@ class CreateEntryPosition(CreateEntry):
 		db.session.commit()
 
 		self.path_manager.back()
+
+	def update_selected_lists(self, values: list=None) -> None:
+		self.humans.fill_content(Human.query.all())
 
 
 class CreateEntryHuman(CreateEntry):
@@ -144,6 +162,7 @@ class CreateEntryHuman(CreateEntry):
 
 		self.add_widgets(self.title, self.phone_1, self.phone_2, self.work_day,
 		                 self.work_type, self.rank, self.position)
+		self.bind(on_pre_enter=lambda e: self.update_selected_lists())
 
 	def insert(self) -> None:
 		human = Human(
@@ -159,6 +178,11 @@ class CreateEntryHuman(CreateEntry):
 		db.session.commit()
 
 		self.path_manager.back()
+
+	def update_selected_lists(self, values: list=None) -> None:
+		self.work_type.fill_content(Worktype.query.all())
+		self.rank.fill_content(Rank.query.all())
+		self.position.fill_content(Position.query.all())
 
 
 class CreateEntryEmergency(CreateEntry):
@@ -199,6 +223,11 @@ class CreateEntryEmergency(CreateEntry):
 		db.session.commit()
 
 		self.path_manager.back()
+
+	def update_selected_lists(self) -> None:
+		print('CreateEntryEmergency update_selelcted_lists() is started')
+		self.humans.fill_content(Human.query.all())
+		self.tags.fill_content(Tag.query.all())
 
 
 class CreateEntryWorktype(CreateEntry):
