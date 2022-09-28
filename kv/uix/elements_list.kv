@@ -19,13 +19,19 @@
 	size_hint: 1, None
 	size: self.width, 50
 
-	MDBoxLayout:
+	AnchorLayout:
+		anchor_x: 'left'
+		anchor_y: 'bottom'
+
 		MDRectangleFlatIconButton:
 			id: create_button
 			icon: 'playlist-plus'
 			text: root.create_text
 
-	MDBoxLayout:
+	AnchorLayout:
+		anchor_x: 'right'
+		anchor_y: 'bottom'
+
 		MDRectangleFlatIconButton:
 			id: edit_button
 			icon: 'playlist-edit'

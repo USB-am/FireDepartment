@@ -23,9 +23,6 @@ class SelectedListElement(MDBoxLayout):
 
 		super().__init__()
 
-		self.setup()
-
-	def setup(self) -> None:
 		self.ids.button.bind(on_release=lambda e: self.dialog.open())
 
 	@property
