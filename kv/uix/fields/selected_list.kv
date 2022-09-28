@@ -8,13 +8,14 @@
 		size: self.height, self.height
 		group: root.group
 
-	MDRectangleFlatButton:
+	MDFlatButton:
 		id: button
 		size_hint: None, 1
-		size: root.width - self.height, self.height
+		size: int(root.width - self.height), self.height
+		# text_size: self.size
+		anchor_x: 'left'
 		text: root.db_entry.title
 		text_color: 0, 0, 0, 1
-		line_color: 0, 0, 0, 0
 
 
 <SelectedList>:
