@@ -108,7 +108,7 @@ class EditEntryHuman(CreateEntryHuman):
 		self.toolbar.title = LOCALIZED.translate(self.name)
 		self.element = None
 
-		self.bind(on_pre_enter=lambda e: super().update_selected_lists())
+		# self.bind(on_pre_enter=lambda e: super().update_selected_lists())
 
 	def set_element(self, element: db.Model) -> None:
 		self.element = element
