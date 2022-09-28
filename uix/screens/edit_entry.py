@@ -220,24 +220,30 @@ class EditColorTheme(CustomScrolledScreen):
 		accent_items = fields.gen_color_items(colors_dict.keys(), self.change_accent)
 
 		# HUE
-		self.primary_hue = fields.DropDown(icon='opacity', title='Primary hue')
+		self.primary_hue = fields.DropDown(icon='opacity',
+		                                   title='Primary hue')
 		self.primary_hue.add(hue_items)
 		# PRIMARY
-		self.primary_palette = fields.DropDown( icon='palette', title='Primary palette')
+		self.primary_palette = fields.DropDown(icon='palette',
+		                                       title='Primary palette')
 		self.primary_palette.add(primary_items)
 		# ACCENT
-		self.accent_palette = fields.DropDown(icon='exclamation-thick', title='Accent palette')
+		self.accent_palette = fields.DropDown(icon='exclamation-thick',
+		                                      title='Accent palette')
 		self.accent_palette.add(accent_items)
 		# THEME STYLE
-		self.theme_style = fields.BooleanField(icon='theme-light-dark', title='Dark theme')
-		self.theme_style.ids.switch.bind(on_release=lambda e: self.change_theme_style())
+		self.theme_style = fields.BooleanField(icon='theme-light-dark',
+		                                       title='Dark theme')
+		self.theme_style.ids.switch.bind(
+			on_release=lambda e: self.change_theme_style())
 		# BACKGROUND IMAGE
 		self.background_image = fields.FileManager(
 			title='Background image',
 			path='\\',
 			select_path=lambda e: self.exit_filemanager_and_change_background(e),
 			preview=True)
-		self.background_opacity = fields.FDSlider(icon='window-closed-variant', title='Background opacity')
+		self.background_opacity = fields.FDSlider(icon='window-closed-variant',
+		                                          title='Background opacity')
 		#self.background_opacity.ids.slider.bind(on_touch_up=lambda *e: \
 		#	self.change_opacity())
 

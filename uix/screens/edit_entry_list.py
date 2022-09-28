@@ -23,8 +23,10 @@ class EditEntryList(CustomScrolledScreen):
 
 	def fill_content(self) -> None:
 		self.clear()
+		values = self.table.query.all()
+		sorted_values = sorted(values, key=lambda val: val.title)
 
-		for db_entry in self.table.query.all():
+		for db_entry in sorted_values:
 			element = ExpansionEditListElement(db_entry)
 			element.binding(self.path_manager)
 			self.add_widgets(element)
