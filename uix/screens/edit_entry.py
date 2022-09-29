@@ -38,12 +38,14 @@ class EditEntryTag(CreateEntryTag):
 		self.emergencies.set_value(self.element.emergencys)
 
 	def insert(self) -> None:
-		self.element.title = self.title.get_value()
-		self.element.emergencys = self.emergencies.get_value()
+		values = {
+			'title': self.title.get_value(),
+			'emergencys': self.emergencies.get_value()}
 
-		db.session.commit()
+		successful_entry = DBManager.update(self.element, values)
 
-		self.path_manager.back()
+		if successful_entry:
+			self.path_manager.back()
 
 
 class EditEntryRank(CreateEntryRank):
@@ -65,11 +67,11 @@ class EditEntryRank(CreateEntryRank):
 		self.title.set_value(self.element.title)
 
 	def insert(self) -> None:
-		self.element.title = self.title.get_value()
+		values = {'tite': self.title.get_value()}
+		successful_entry = DBManager.update(self.element, values)
 
-		db.session.commit()
-
-		self.path_manager.back()
+		if successful_entry:
+			self.path_manager.back()
 
 
 class EditEntryPosition(CreateEntryPosition):
@@ -91,11 +93,11 @@ class EditEntryPosition(CreateEntryPosition):
 		self.title.set_value(self.element.title)
 
 	def insert(self) -> None:
-		self.element.title = self.title.get_value()
+		values = {'tite': self.title.get_value()}
+		successful_entry = DBManager.update(self.element, values)
 
-		db.session.commit()
-
-		self.path_manager.back()
+		if successful_entry:
+			self.path_manager.back()
 
 
 class EditEntryHuman(CreateEntryHuman):
@@ -124,17 +126,20 @@ class EditEntryHuman(CreateEntryHuman):
 		self.position.set_value(self.element.position)
 
 	def insert(self) -> None:
-		self.element.title = self.title.get_value()
-		self.element.phone_1 = self.phone_1.get_value()
-		self.element.phone_2 = self.phone_2.get_value()
-		self.element.work_day = self.work_day.get_value()
-		self.element.worktype = get_id_from_list(self.work_type)
-		self.element.rank = get_id_from_list(self.rank)
-		self.element.position = get_id_from_list(self.position)
+		values = {
+			'tite': self.title.get_value(),
+			'phone_1': self.phone_1.get_value(),
+			'phone_2': self.phone_2.get_value(),
+			'work_day': self.work_day.get_value(),
+			'worktype': get_id_from_list(self.work_type),
+			'rank': get_id_from_list(self.rank),
+			'position': get_id_from_list(self.position)
+		}
 
-		db.session.commit()
+		successful_entry = DBManager.update(self.element, values)
 
-		self.path_manager.back()
+		if successful_entry:
+			self.path_manager.back()
 
 
 class EditEntryEmergency(CreateEntryEmergency):
@@ -160,15 +165,18 @@ class EditEntryEmergency(CreateEntryEmergency):
 		self.tags.set_value(self.element.tags)
 
 	def insert(self) -> None:
-		self.element.title = self.title.get_value()
-		self.element.description = self.description.get_value()
-		self.element.urgent = self.urgent.get_value()
-		self.element.humans = self.humans.get_value()
-		self.element.tags = self.tags.get_value()
+		values = {
+			'title': self.title.get_value(),
+			'description': self.description.get_value(),
+			'urgent': self.urgent.get_value(),
+			'humans': self.humans.get_value(),
+			'tags': self.tags.get_value()
+		}
 
-		db.session.commit()
+		successful_entry = DBManager.update(self.element, values)
 
-		self.path_manager.back()
+		if successful_entry:
+			self.path_manager.back()
 
 
 class EditEntryWorktype(CreateEntryWorktype):
@@ -264,9 +272,7 @@ class EditColorTheme(CustomScrolledScreen):
 			'background_image': self.background_image.get_value(),
 		}
 
-		print(values)
 		DBManager.update(db_entry, values)
-		print('All ColorTheme changed is saved!')
 
 	def save_changes_and_back(self) -> None:
 		self.save_changes()

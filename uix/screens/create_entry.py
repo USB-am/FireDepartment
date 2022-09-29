@@ -2,6 +2,7 @@ from custom_screen import CustomScrolledScreen
 from config import LOCALIZED
 from uix import fields
 from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype
+from data_base import manager as DBManager
 
 
 def get_id_from_list(foreign_key_field: fields.SelectedList) -> int:
@@ -27,8 +28,11 @@ class CreateEntry(CustomScrolledScreen):
 		self.toolbar.add_left_button('arrow-left', lambda e: self.path_manager.back())
 		self.toolbar.add_right_button('plus', lambda e: self.insert())
 
-	def insert(self) -> None:
-		pass
+	def insert(self, values: dict) -> None:
+		successful_entry = DBManager.insert(self.table, values)
+
+		if successful_entry:
+			self.path_manager.back()
 
 
 class CreateEntryTag(CreateEntry):
@@ -51,13 +55,11 @@ class CreateEntryTag(CreateEntry):
 		self.bind(on_pre_enter=lambda e: self.update_selected_lists())
 
 	def insert(self) -> None:
-		tag = Tag(
-			title=self.title.get_value(),
-			emergencys=self.emergencies.get_value())
-		db.session.add(tag)
-		db.session.commit()
-
-		self.path_manager.back()
+		values = {
+			'title': self.title.get_value(),
+			'emergencys': self.emergencies.get_value(),
+		}
+		super().insert(values)
 
 	def update_selected_lists(self, values: list=None) -> None:
 		self.emergencies.fill_content(Emergency.query.all())
@@ -86,14 +88,11 @@ class CreateEntryRank(CreateEntry):
 		self.bind(on_pre_enter=lambda e: self.update_selected_lists())
 
 	def insert(self) -> None:
-		rank = Rank(
-			title=self.title.get_value(),
-			priority=self.priority.get_value())
-
-		db.session.add(rank)
-		db.session.commit()
-
-		self.path_manager.back()
+		values = {
+			'title': self.title.get_value(),
+			'priority': self.priority.get_value()
+		}
+		super().insert(values)
 
 	def update_selected_lists(self, values: list=None) -> None:
 		self.humans.fill_content(Human.query.all())
@@ -119,12 +118,8 @@ class CreateEntryPosition(CreateEntry):
 		self.bind(on_pre_enter=lambda e: self.update_selected_lists())
 
 	def insert(self) -> None:
-		position = Position(title=self.title.get_value())
-
-		db.session.add(position)
-		db.session.commit()
-
-		self.path_manager.back()
+		values = {'title': self.title.get_value()}
+		super().insert(values)
 
 	def update_selected_lists(self, values: list=None) -> None:
 		self.humans.fill_content(Human.query.all())
@@ -167,19 +162,16 @@ class CreateEntryHuman(CreateEntry):
 		self.bind(on_pre_enter=lambda e: self.update_selected_lists())
 
 	def insert(self) -> None:
-		human = Human(
-			title=self.title.get_value(),
-			phone_1=self.phone_1.get_value(),
-			phone_2=self.phone_2.get_value(),
-			work_day=self.work_day.get_value(),
-			worktype=get_id_from_list(self.work_type),
-			position=get_id_from_list(self.position),
-			rank=get_id_from_list(self.rank))
-
-		db.session.add(human)
-		db.session.commit()
-
-		self.path_manager.back()
+		values = {
+			'title': self.title.get_value(),
+			'phone_1': self.phone_1.get_value(),
+			'phone_2': self.phone_2.get_value(),
+			'work_day': self.work_day.get_value(),
+			'worktype': get_id_from_list(self.work_type),
+			'position': get_id_from_list(self.position),
+			'rank': get_id_from_list(self.rank)
+		}
+		super().insert(values)
 
 	def update_selected_lists(self, values: list=None) -> None:
 		self.work_type.fill_content(Worktype.query.all())
@@ -214,17 +206,14 @@ class CreateEntryEmergency(CreateEntry):
 		                 self.tags)
 
 	def insert(self) -> None:
-		emergency = Emergency(
-			title=self.title.get_value(),
-			description=self.description.get_value(),
-			urgent=self.urgent.get_value(),
-			humans=self.humans.get_value(),
-			tags=self.tags.get_value())
-
-		db.session.add(emergency)
-		db.session.commit()
-
-		self.path_manager.back()
+		values = {
+			'title': self.title.get_value(),
+			'description': self.description.get_value(),
+			'urgent': self.urgent.get_value(),
+			'humans': self.humans.get_value(),
+			'tags': self.tags.get_value()
+		}
+		super().insert(values)
 
 	def update_selected_lists(self) -> None:
 		print('CreateEntryEmergency update_selelcted_lists() is started')
@@ -250,13 +239,11 @@ class CreateEntryWorktype(CreateEntry):
 		                 self.work_day_range, self.week_day_range)
 
 	def insert(self) -> None:
-		worktype = Worktype(
-			title=self.title.get_value(),
-			start_work_day=self.start_work_day.get_value(),
-			finish_work_day=self.finish_work_day.get_value(),
-			work_day_range=self.work_day_range.get_value(),
-			week_day_range=self.week_day_range.get_value())
-		db.session.add(worktype)
-		db.session.commit()
-
-		self.path_manager.back()
+		values = {
+			'title': self.title.get_value(),
+			'start_work_day': self.start_work_day.get_value(),
+			'finish_work_day': self.finish_work_day.get_value(),
+			'work_day_range': self.work_day_range.get_value(),
+			'week_day_range': self.week_day_range.get_value()
+		}
+		super().insert(values)
