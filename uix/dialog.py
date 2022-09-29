@@ -53,3 +53,12 @@ class HumanDialogContent(MDBoxLayout):
 		db_entry = table.query.get(attr)
 
 		return db_entry.title
+
+
+class ExceptionDialogContent(MDBoxLayout):
+	''' Всплывающее окно с информацией об ошибке '''
+
+	def __init__(self, text: str):
+		self.exception_text = text
+
+		super().__init__()
