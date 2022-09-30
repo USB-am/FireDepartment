@@ -58,7 +58,7 @@ class Application(MDApp):
 
 		self.setup()
 
-		self.screen_manager.current = 'main_page'	# 'edit_colortheme'
+		self.screen_manager.current = 'options'
 
 	def setup(self) -> None:
 		self.main_page = MainPage(self.path_manager)
@@ -72,13 +72,17 @@ class Application(MDApp):
 
 		# Edit screens_list
 		for table in (Tag, Rank, Position, Human, Emergency, Worktype):
-			self.screen_manager.add_widget(EditEntryList(self.path_manager, table))
+			self.screen_manager.add_widget(EditEntryList(
+				self.path_manager, table
+			))
 
 		# Edit screens
 		for screen in (EditEntryTag, EditEntryRank, EditEntryPosition, \
 		               EditEntryHuman, EditEntryEmergency, EditEntryWorktype):
 			self.screen_manager.add_widget(screen(self.path_manager))
-		self.screen_manager.add_widget(EditColorTheme(self.path_manager, self.theme_cls))
+		self.screen_manager.add_widget(EditColorTheme(
+			self.path_manager, self.theme_cls
+		))
 
 		self.screen_manager.add_widget(self.main_page)
 		self.screen_manager.add_widget(self.current_calls)
