@@ -65,7 +65,7 @@ class StringField(MDBoxLayout):
 		self.base_string.icon_right = icon
 
 	def set_value(self, value: str) -> None:
-		self.base_string.text = '-' if value is None else value
+		self.base_string.text = '-' if value is None else str(value)
 
 	def get_value(self) -> str:
 		value = self.base_string.text

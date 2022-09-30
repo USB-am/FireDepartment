@@ -195,7 +195,25 @@ class EditEntryWorktype(CreateEntryWorktype):
 		self.fill_fields()
 
 	def fill_fields(self) -> None:
-		pass
+		self.title.set_value(self.element.title)
+		self.start_work_day.set_value(self.element.start_work_day)
+		self.finish_work_day.set_value(self.element.finish_work_day)
+		self.work_day_range.set_value(self.element.work_day_range)
+		self.week_day_range.set_value(self.element.week_day_range)
+
+	def insert(self) -> None:
+		values = {
+			'title': self.title.get_value(),
+			'start_work_day': self.start_work_day.get_value(),
+			'finish_work_day': self.finish_work_day.get_value(),
+			'work_day_range': self.work_day_range.get_value(),
+			'week_day_range': self.week_day_range.get_value()
+		}
+
+		successful_entry = DBManager.update(self.element, values)
+
+		if successful_entry:
+			self.path_manager.back()
 
 
 class EditColorTheme(CustomScrolledScreen):
