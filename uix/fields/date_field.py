@@ -13,6 +13,13 @@ path_to_kv_file = os.path.join(FIELDS_KV_DIR, 'date_field.kv')
 Builder.load_file(path_to_kv_file)
 
 
+def string_to_datetime(datetime_: str) -> datetime.datetime:
+	try:
+		return datetime.datetime.strptime(datetime_, '%d.%m.%Y %H:%M:%S')
+	except ValueError:
+		return None
+
+
 class DateField(MDBoxLayout):
 	''' Поле выбора даты '''
 
@@ -112,4 +119,6 @@ class DateTimeField(MDBoxLayout):
 		self.value = value
 
 	def get_value(self) -> datetime.datetime:
-		return self.value
+		datetime_str = f'{self.ids.date_button.text} {self.ids.time_button.text}'
+
+		return string_to_datetime(datetime_str)
