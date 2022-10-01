@@ -5,7 +5,9 @@ from .date_field import DateField, DateTimeField
 from .drop_down import DropDown, gen_hue_items, gen_color_items
 from .file_manager import FileManager
 from .slider import FDSlider
+from .triple_checkbox import TripleCheckbox
 
 
 __all__ = ('StringField', 'PhoneField', 'DescriptionField', 'IntegerField', 'BooleanField', 
-	'SelectedList', 'DateField', 'DateTimeField', 'DropDown', 'get_items', 'FDSlider')
+	'SelectedList', 'DateField', 'DateTimeField', 'DropDown', 'get_items', 'FDSlider',
+	'TripleCheckbox')

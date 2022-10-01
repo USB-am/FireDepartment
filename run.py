@@ -58,7 +58,7 @@ class Application(MDApp):
 
 		self.setup()
 
-		self.screen_manager.current = 'options'
+		self.screen_manager.current = 'main_page'
 
 	def setup(self) -> None:
 		self.main_page = MainPage(self.path_manager)

@@ -1,3 +1,5 @@
+#:import TripleCheckbox uix.fields.triple_checkbox
+
 <FDEmergencyTab>:
 	ScrollView:
 		GridLayout:
@@ -27,8 +29,8 @@
 	size_hint: 1, None
 	size: self.width, 50
 
-	MDCheckbox:
-		id: checkbox
+	MDBoxLayout:
+		id: checkbox_container
 		size_hint: None, 1
 		size: 50, self.height
 
