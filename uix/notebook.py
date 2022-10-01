@@ -10,6 +10,7 @@ from kivymd.uix.label import MDLabel
 from data_base import Emergency, Human, Rank
 from uix import FDScrollFrame
 from uix.dialog import FDDialog, HumanDialogContent
+from uix.fields import TripleCheckbox
 from config import UIX_KV_DIR
 
 
@@ -25,14 +26,25 @@ class HumansSelectedListElement(MDBoxLayout):
 
 		super().__init__()
 
+		self.setup()
+
+	def setup(self) -> None:
+		# Init dialog
 		dialog_button = MDRaisedButton(text='Ok')
 		self.dialog = FDDialog(
-			title=human.title,
-			content=HumanDialogContent(human),
+			title=self.human.title,
+			content=HumanDialogContent(self.human),
 			buttons=[dialog_button,])
 
 		dialog_button.bind(on_release=lambda e: self.dialog.dismiss())
 		self.ids.expansion_panel.bind(on_release=lambda e: self.dialog.open())
+
+		# Init TripleCheckbox
+		self.triple_checkbox = TripleCheckbox(
+			state_normal='phone-settings-outline',
+			state_ok='phone-in-talk',
+			state_cancel='phone-cancel')
+		self.ids.checkbox_container.add_widget(self.triple_checkbox)
 
 	@property
 	def phone_1(self) -> str:

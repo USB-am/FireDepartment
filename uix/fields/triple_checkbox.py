@@ -12,20 +12,20 @@ class TripleCheckbox(MDIconButton):
 			state_ok,	# phone-in-talk
 			state_cancel	# phone-cancel
 		]
-		self._state = 0
+		self._increment = 0
+		self.icon = self.states[self.increment]
 
 		self.bind(on_release=lambda e: self.click())
 
 	@property
-	def state(self) -> int:
-		return self._state
+	def increment(self) -> int:
+		return self._increment
 
-	@state.setter
-	def state(self, value: int) -> None:
-		self._state = (self.state + value) % 3
+	@increment.setter
+	def increment(self, *_) -> None:
+		self._increment = (self.increment + 1) % 3
 
 	def click(self) -> None:
-		self.state += 1
+		self.increment += 1
 
-		self.icon = self.states[self.state]
-		# TODO: Update color
+		self.icon = self.states[self.increment]
