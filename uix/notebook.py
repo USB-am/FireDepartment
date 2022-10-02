@@ -11,7 +11,7 @@ from data_base import Emergency, Human, Rank
 from uix import FDScrollFrame
 from uix.dialog import FDDialog, HumanDialogContent
 from uix.fields import TripleCheckbox
-from config import UIX_KV_DIR
+from config import UIX_KV_DIR, LOCALIZED
 
 
 path_to_kv_file = os.path.join(UIX_KV_DIR, 'notebook.kv')
@@ -30,7 +30,7 @@ class HumansSelectedListElement(MDBoxLayout):
 
 	def setup(self) -> None:
 		# Init dialog
-		dialog_button = MDRaisedButton(text='Ok')
+		dialog_button = MDRaisedButton(text=LOCALIZED.translate('Ok'))
 		self.dialog = FDDialog(
 			title=self.human.title,
 			content=HumanDialogContent(self.human),
@@ -45,6 +45,7 @@ class HumansSelectedListElement(MDBoxLayout):
 			state_ok='phone-in-talk',
 			state_cancel='phone-cancel')
 		self.ids.checkbox_container.add_widget(self.triple_checkbox)
+		self.triple_checkbox.bind(on_release=lambda e: self.update_color())
 
 	@property
 	def phone_1(self) -> str:
@@ -55,6 +56,18 @@ class HumansSelectedListElement(MDBoxLayout):
 	def phone_2(self) -> str:
 		phone = self.human.phone_2
 		return '-' if phone is None else phone
+
+	def update_color(self) -> None:
+		now_state = self.triple_checkbox.increment
+
+		if now_state == 0:
+			self.md_bg_color = (0, 1, 0, .3)
+		elif now_state == 1:
+			self.md_bg_color = (1, 0, 0, .3)
+		else:
+			self.md_bg_color = (1, 1, 1, 0)
+
+		print(now_state)
 
 
 class FDEmergencyTab(MDFloatLayout, MDTabsBase):
