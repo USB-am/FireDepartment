@@ -73,7 +73,6 @@ class SelectedList(MDBoxLayout):
 		return output
 
 	def set_value(self, value: Union[list, int]) -> None:
-		print(f'SelectedList.set_value({value}) is started')
 		elements = self.ids.elements.children
 		[element.deactivate() for element in elements]
 

@@ -30,7 +30,6 @@ class FileManager(MDBoxLayout):
 		try:
 			self.manager.show(self.path)
 		except Exception as e:
-			print(e)
 			try:
 				self.manager.show(BASE_DIR)
 			except Exception as e:
@@ -46,7 +45,4 @@ class FileManager(MDBoxLayout):
 		return None
 
 	def close_dialog(self) -> None:
-		try:
-			self.manager.close()
-		except:
-			print(dir(self.manager))
+		self.manager.close()

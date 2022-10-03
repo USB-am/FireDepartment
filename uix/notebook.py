@@ -67,8 +67,6 @@ class HumansSelectedListElement(MDBoxLayout):
 		else:
 			self.md_bg_color = (1, 1, 1, 0)
 
-		print(now_state)
-
 
 class FDEmergencyTab(MDFloatLayout, MDTabsBase):
 	''' Вкладка с информацией о вызовах '''
