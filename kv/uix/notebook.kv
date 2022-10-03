@@ -34,8 +34,11 @@
 		size_hint: None, 1
 		size: 50, self.height
 
-	MDExpansionPanelTwoLine:
+	# MDExpansionPanelTwoLine:
+	MDFlatButton:
 		id: expansion_panel
 		size_hint: 1, 1
-		text: root.human.title
-		secondary_text: root.phone_1
+		text_size: self.size
+		text: f'[b]{root.human.title}[/b]\n[i]{root.phone_1}[/i]'
+		anchor_x: 'left'
+		padding: [10, 0]
