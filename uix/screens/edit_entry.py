@@ -110,8 +110,6 @@ class EditEntryHuman(CreateEntryHuman):
 		self.toolbar.title = LOCALIZED.translate(self.name)
 		self.element = None
 
-		# self.bind(on_pre_enter=lambda e: super().update_selected_lists())
-
 	def set_element(self, element: db.Model) -> None:
 		self.element = element
 
@@ -127,7 +125,7 @@ class EditEntryHuman(CreateEntryHuman):
 
 	def insert(self) -> None:
 		values = {
-			'tite': self.title.get_value(),
+			'title': self.title.get_value(),
 			'phone_1': self.phone_1.get_value(),
 			'phone_2': self.phone_2.get_value(),
 			'work_day': self.work_day.get_value(),
