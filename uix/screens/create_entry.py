@@ -216,7 +216,6 @@ class CreateEntryEmergency(CreateEntry):
 		super().insert(values)
 
 	def update_selected_lists(self) -> None:
-		print('CreateEntryEmergency update_selelcted_lists() is started')
 		self.humans.fill_content(Human.query.all())
 		self.tags.fill_content(Tag.query.all())
 
