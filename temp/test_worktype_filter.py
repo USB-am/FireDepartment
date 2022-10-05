@@ -56,7 +56,7 @@ class Filter():
 
 	'''
 	TODO:
-		1. Сделать смещение графика работы относительно рабочего дня работника;
+		+ 1. Сделать смещение графика работы относительно рабочего дня работника;
 		2. Найти диапазон недели, в которую будет входить необходимая дата;
 		3. Из диапазона недели определить, является ли день рабочим;
 		4. Из дня (п.3) сделать выборку по времени работы
@@ -72,48 +72,48 @@ class Filter():
 		wt = human.worktype	# Worktype.query.get(human.worktype)
 
 		week_bias = self.__calc_week_bias(wt, work_day)
-		now_week = self.__find_now_week(week_bias, datetime_)
+		today_week = self.__get_today_week(datetime_, week_bias)
+		work_days = self.__get_work_days(wt, today_week)
 
-		return int(human.title[-1]) % 2
+		return datetime_.date() in work_days
 
 	def __calc_week_bias(self, work_type: Worktype, work_day: datetime) -> tuple:
-		swd = work_type.start_work_day
-		fwd = work_type.finish_work_day
-		week_length = work_type.work_day_range + work_type.week_day_range
-		wd_count = work_day.toordinal()
+		swd = work_day
+		work_week_length = work_type.work_day_range + work_type.week_day_range
+		fwd = swd + timedelta(days=work_week_length)
 
-		out_swd_count = swd + timedelta(days=wd_count - swd.toordinal())
-		out_fwd_count = out_swd_count + timedelta(days=week_length)
+		return (swd, fwd)
 
-		return (out_swd_count, out_fwd_count)
+	def __get_today_week(self, day: datetime, bias_week: tuple) -> tuple:
+		swd, fwd = bias_week
 
-	def __find_now_week(self, week_range: tuple, search_day: datetime) -> tuple:
-		swd, fwd = week_range
 		swd_count = swd.toordinal()
 		fwd_count = fwd.toordinal()
-		day_count = search_day.toordinal()
+		day_count = day.toordinal()
 		week_length = fwd_count - swd_count
 
-		out_day_count = swd_count + day_count % week_length
+		bias = (day_count - swd_count) // week_length
 
-		return week_range
+		out_swd = swd + timedelta(days=bias * week_length)
+		out_fwd = out_swd + timedelta(days=week_length)
 
-	def __is_work_day(self, week_range: tuple, graph: tuple, day: datetime) -> bool:
-		''' Arguments:
-		`week_range: tuple[datetime, datetime]
-		`graph: tuple[int, int]
-			graph[0] - work_day_range
-			graph[1] - week_day_range
-		`day: datetime'''
+		return (out_swd, out_fwd)
 
-		return True
+	def __get_work_days(self, work_type: Worktype, work_week: tuple) -> tuple:
+		swd, fwd = work_week
+		wd_count = work_type.work_day_range
+
+		output = tuple([swd + timedelta(days=day_count) \
+			for day_count in range(wd_count)])
+
+		return output
 
 
 def main():
 	humans = list(init_humans())
 	filter_ = Filter(humans)
 	today_workers = filter_.get_on_date(datetime.now())
-	# [print(worker) for worker in today_workers]
+	[print(worker) for worker in today_workers]
 
 
 if __name__ == '__main__':
