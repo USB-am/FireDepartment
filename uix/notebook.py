@@ -19,53 +19,63 @@ path_to_kv_file = os.path.join(UIX_KV_DIR, 'notebook.kv')
 Builder.load_file(path_to_kv_file)
 
 
-class FilterWorkingHuman():
-	''' Фильтр работающих людей '''
-
+class Filter():
+	''' Фильтр работников '''
 	def __init__(self, humans: list):
 		self.humans = humans
 
-	def filter(self) -> list:
-		output = []
-
-		for human in self.humans:
-			if human.worktype is None:
-				continue
-
-			print(human.title, human.work_day)
-			if self._is_works(human):
-				output.append(human)
+	def get_on_date(self, datetime_: datetime) -> list:
+		output = [human for human in self.humans if self._is_works(datetime_, human)]
 
 		return output
 
-	def _is_works(self, human: Human) -> bool:
-		work_type = Worktype.query.get(human.worktype)
+	def _is_works(self, datetime_: datetime, human: Human) -> bool:
 		work_day = human.work_day
-		start_workday, finish_workday = self.__calc_work_day(work_type, work_day)
 
-		is_work = start_workday <= datetime.now() < finish_workday
+		if human.worktype is None:
+			return False
 
-		return is_work
+		wt = Worktype.query.get(human.worktype)
 
-	def __calc_work_day(self, work_type: Worktype, work_day: datetime) -> tuple:
-		def get_wk_bias(datetime_: datetime) -> int:
-			''' Возвращает количество дней до текущей даты '''
+		week_bias = self.__calc_week_bias(wt, work_day)
+		today_week = self.__get_today_week(datetime_, week_bias)
+		work_days = self.__get_work_days(wt, today_week)
+		# print(work_days, datetime_, sep='->')
+		output = work_days[0] <= datetime_ < work_days[-1]
 
-			now_td = datetime.now().toordinal()
-			acc_td = datetime_.toordinal()
+		# return datetime_ in work_days
+		return output
 
-			bias_value = (now_td - acc_td) - (now_td - acc_td) % 7
+	def __calc_week_bias(self, work_type: Worktype, work_day: datetime) -> tuple:
+		swd = work_day
+		work_week_length = work_type.work_day_range + work_type.week_day_range
+		fwd = swd + timedelta(days=work_week_length)
 
-			return timedelta(days=bias_value)
+		return (swd, fwd)
 
-		start_wd = work_type.start_work_day + get_wk_bias(work_day)
-		start_a_work = start_wd + get_wk_bias(start_wd)
-		finish_a_work = 1
-		start_a_week = start_a_work + timedelta(days=work_type.work_day_range)
+	def __get_today_week(self, day: datetime, bias_week: tuple) -> tuple:
+		swd, fwd = bias_week
 
-		print(start_a_work, start_a_week, end='\n'*2)
+		swd_count = swd.toordinal()
+		fwd_count = fwd.toordinal()
+		day_count = day.toordinal()
+		week_length = fwd_count - swd_count
 
-		return start_a_work, start_a_week
+		bias = (day_count - swd_count) // week_length
+
+		out_swd = swd + timedelta(days=bias * week_length)
+		out_fwd = out_swd + timedelta(days=week_length)
+
+		return (out_swd, out_fwd)
+
+	def __get_work_days(self, work_type: Worktype, work_week: tuple) -> tuple:
+		swd, fwd = work_week
+		wd_count = work_type.work_day_range
+
+		output = tuple([swd + timedelta(days=day_count) \
+			for day_count in range(wd_count)])
+
+		return output
 
 
 class HumansSelectedListElement(MDBoxLayout):
@@ -131,14 +141,11 @@ class FDEmergencyTab(MDFloatLayout, MDTabsBase):
 
 	def setup(self) -> None:
 		scroll_layout = self.ids.scroll_layout
-		today_workers = FilterWorkingHuman(self.element.humans)
-		#sorted_humans = sorted(
-		#	self.element.humans,
-		#	key=self.__get_human_rank_priority,
-		#	reverse=True)
+		workers_filter = Filter(self.element.humans)
 
+		today_workers = workers_filter.get_on_date(datetime.now())
 		[scroll_layout.add_widget(HumansSelectedListElement(human)) \
-			for human in today_workers.filter()]
+			for human in today_workers]
 
 	def get_today_workers(self) -> list:
 		output = []
