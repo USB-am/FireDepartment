@@ -90,7 +90,8 @@ class CreateEntryRank(CreateEntry):
 	def insert(self) -> None:
 		values = {
 			'title': self.title.get_value(),
-			'priority': self.priority.get_value()
+			'priority': self.priority.get_value(),
+			'humans': self.humans.get_value()
 		}
 		super().insert(values)
 
@@ -118,7 +119,11 @@ class CreateEntryPosition(CreateEntry):
 		self.bind(on_pre_enter=lambda e: self.update_selected_lists())
 
 	def insert(self) -> None:
-		values = {'title': self.title.get_value()}
+		values = {
+			'title': self.title.get_value(),
+			'humans': self.humans.get_value()
+		}
+
 		super().insert(values)
 
 	def update_selected_lists(self, values: list=None) -> None:
