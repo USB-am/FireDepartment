@@ -38,6 +38,7 @@ class Rank(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), unique=True, nullable=False)
 	priority = db.Column(db.Integer, nullable=False)
+	humans = db.relationship('Human', backref='humans_rank', lazy=True)
 
 	def __str__(self):
 		return self.title
@@ -48,6 +49,7 @@ class Position(db.Model):
 	__tablename__ = 'Position'
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), unique=True, nullable=False)
+	humans = db.relationship('Human', backref='humans_position', lazy=True)
 
 	def __str__(self):
 		return self.title

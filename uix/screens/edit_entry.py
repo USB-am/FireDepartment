@@ -65,6 +65,8 @@ class EditEntryRank(CreateEntryRank):
 
 	def fill_fields(self) -> None:
 		self.title.set_value(self.element.title)
+		print(dir(self.element))
+		self.emergencies.set_value(self.element.emergencys)
 
 	def insert(self) -> None:
 		values = {'tite': self.title.get_value()}
@@ -120,6 +122,7 @@ class EditEntryHuman(CreateEntryHuman):
 		self.phone_1.set_value(self.element.phone_1)
 		self.phone_2.set_value(self.element.phone_2)
 		self.work_day.set_value(self.element.work_day)
+		self.work_type.set_value(self.element.worktype)
 		self.rank.set_value(self.element.rank)
 		self.position.set_value(self.element.position)
 
