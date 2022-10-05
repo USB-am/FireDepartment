@@ -290,6 +290,7 @@ class EditColorTheme(CustomScrolledScreen):
 			'theme_style': 'Dark' if self.theme_style.get_value() else 'Light',
 			'background_image': self.background_image.get_value(),
 		}
+		print(values)
 
 		DBManager.update(db_entry, values)
 
@@ -310,12 +311,15 @@ class EditColorTheme(CustomScrolledScreen):
 
 	def change_hue(self, value: str) -> None:
 		self.theme_cls.primary_hue = value
+		self.primary_hue.set_value(value)
 
 	def change_primary(self, value: str):
 		self.theme_cls.primary_palette = value
+		self.primary_palette.set_value(value)
 
 	def change_accent(self, value: str):
 		self.theme_cls.accent_palette = value
+		self.accent_palette.set_value(value)
 
 	def exit_filemanager_and_change_background(self, path: str) -> None:
 		self.close_filemanager()

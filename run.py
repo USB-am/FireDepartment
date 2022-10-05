@@ -7,7 +7,7 @@ Config.set('graphics', 'width', '350')
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager, Screen
 
-from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype
+from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype, ColorTheme
 from data_base.base_records import write_records
 from uix.screens.main_page import MainPage
 from uix.screens.current_calls import CurrentCalls
@@ -57,13 +57,18 @@ class Application(MDApp):
 		self.path_manager = PathManager(self.screen_manager)
 
 		self.setup()
-
-		self.screen_manager.current = 'main_page'
+		self.set_theme()
 
 	def setup(self) -> None:
 		self.main_page = MainPage(self.path_manager)
+		self.screen_manager.add_widget(self.main_page)
+		self.screen_manager.current = 'main_page'
+
 		self.current_calls = CurrentCalls(self.path_manager)
+		self.screen_manager.add_widget(self.current_calls)
+
 		self.options = Options(self.path_manager)
+		self.screen_manager.add_widget(self.options)
 
 		# Create screens
 		for screen in (CreateEntryTag, CreateEntryRank, CreateEntryPosition, \
@@ -84,9 +89,13 @@ class Application(MDApp):
 			self.path_manager, self.theme_cls
 		))
 
-		self.screen_manager.add_widget(self.main_page)
-		self.screen_manager.add_widget(self.current_calls)
-		self.screen_manager.add_widget(self.options)
+	def set_theme(self) -> None:
+		theme = ColorTheme.query.first()
+
+		self.theme_cls.primary_palette = theme.primary_palette
+		self.theme_cls.accent_palette = theme.accent_palette
+		self.theme_cls.primary_hue = theme.primary_hue
+		self.theme_cls.theme_style = theme.theme_style
 
 	def build(self) -> ScreenManager:
 		return self.screen_manager
