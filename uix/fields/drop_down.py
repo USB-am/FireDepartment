@@ -65,6 +65,7 @@ class DropDown(MDBoxLayout):
 		self.ids.button.text = value
 
 	def get_value(self) -> str:
+		print(f'{self.display_text} is {self.ids.button.text}')
 		return self.ids.button.text
 
 	def add(self, items: list) -> None:
