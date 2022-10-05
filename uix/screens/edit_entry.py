@@ -271,8 +271,6 @@ class EditColorTheme(CustomScrolledScreen):
 			preview=True)
 		self.background_opacity = fields.FDSlider(icon='window-closed-variant',
 		                                          title='Background opacity')
-		#self.background_opacity.ids.slider.bind(on_touch_up=lambda *e: \
-		#	self.change_opacity())
 
 		self.add_widgets(self.primary_hue)
 		self.add_widgets(self.primary_palette)
@@ -322,11 +320,12 @@ class EditColorTheme(CustomScrolledScreen):
 		self.accent_palette.set_value(value)
 
 	def exit_filemanager_and_change_background(self, path: str) -> None:
-		self.close_filemanager()
+		self.close_filemanager(path)
 		self.change_background(path)
 
-	def close_filemanager(self) -> None:
+	def close_filemanager(self, path: str) -> None:
 		self.background_image.close_dialog()
+		self.background_image.set_value(path)
 
 	def change_background(self, path: str) -> None:
 		self.reboot_styles(source=path)

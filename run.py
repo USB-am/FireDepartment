@@ -9,6 +9,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 
 from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype, ColorTheme
 from data_base.base_records import write_records
+from custom_screen import CustomScreen
 from uix.screens.main_page import MainPage
 from uix.screens.current_calls import CurrentCalls
 from uix.screens.options import Options
@@ -56,8 +57,8 @@ class Application(MDApp):
 		self.screen_manager = ScreenManager()
 		self.path_manager = PathManager(self.screen_manager)
 
-		self.setup()
 		self.set_theme()
+		self.setup()
 
 	def setup(self) -> None:
 		self.main_page = MainPage(self.path_manager)
@@ -96,6 +97,9 @@ class Application(MDApp):
 		self.theme_cls.accent_palette = theme.accent_palette
 		self.theme_cls.primary_hue = theme.primary_hue
 		self.theme_cls.theme_style = theme.theme_style
+
+		CustomScreen.bg_image = theme.background_image
+		print(CustomScreen.bg_image)
 
 	def build(self) -> ScreenManager:
 		return self.screen_manager

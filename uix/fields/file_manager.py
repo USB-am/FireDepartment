@@ -22,6 +22,7 @@ class FileManager(MDBoxLayout):
 
 		super().__init__()
 
+		self._value = ''
 		self.manager = MDFileManager(**options)
 
 		self.ids.button.bind(on_release=lambda e: self.open())
@@ -42,7 +43,13 @@ class FileManager(MDBoxLayout):
 		self.ids.button.text = value
 
 	def get_value(self) -> str:
-		return None
+		if self._value is None or self._value == '':
+			return None
+
+		return self._value
 
 	def close_dialog(self) -> None:
 		self.manager.close()
+
+	def __select_path(self, path: str) -> None:
+		self._path = path
