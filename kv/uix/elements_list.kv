@@ -59,9 +59,12 @@
 		size: root.width, self.height
 		icon: root.element.icon
 		text: root.element.title
-		text_color: 0, 0, 0, 1
-		icon_color: 0, 0, 0, 1
+		text_color: root.text_color
+		icon_color: root.text_color
 		line_color: 0, 0, 0, 0
+
+		on_release:
+			print('Color is', app.theme_cls.theme_style)
 
 
 <EmergencyContentElement>:

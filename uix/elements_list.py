@@ -5,7 +5,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRectangleFlatIconButton
 from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelOneLine
 
-from data_base import db, Emergency
+from data_base import db, Emergency, ColorTheme
 from config import LOCALIZED, UIX_KV_DIR
 
 
@@ -90,6 +90,18 @@ class ExpansionEditListElement(MDBoxLayout):
 		self.element = element
 
 		super().__init__()
+
+	@property
+	def text_color(self) -> tuple:
+		theme = ColorTheme.query.first()
+		style = theme.theme_style
+
+		if style == 'Light':
+			color = (0, 0, 0, 1)
+		else:
+			color = (1, 1, 1, 1)
+
+		return color
 
 	def binding(self, path_manager) -> None:
 		def redirect_with_call(path_manager, element: db.Model) -> None:
