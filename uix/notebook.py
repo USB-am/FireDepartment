@@ -25,7 +25,8 @@ class Filter():
 		self.humans = humans
 
 	def get_on_date(self, datetime_: datetime) -> list:
-		output = [human for human in self.humans if self._is_works(datetime_, human)]
+		output = [human for human in self.humans \
+			if self._is_works(datetime_, human)]
 
 		return output
 
@@ -40,7 +41,6 @@ class Filter():
 		week_bias = self.__calc_week_bias(wt, work_day)
 		today_week = self.__get_today_week(datetime_, week_bias)
 		work_days = self.__get_work_days(wt, today_week)
-		# print(work_days, datetime_, sep='->')
 		output = work_days[0] <= datetime_ < work_days[-1]
 
 		# return datetime_ in work_days
@@ -147,31 +147,24 @@ class FDEmergencyTab(MDFloatLayout, MDTabsBase):
 		[scroll_layout.add_widget(HumansSelectedListElement(human)) \
 			for human in today_workers]
 
-	def get_today_workers(self) -> list:
-		output = []
-		humans = Human.query.all()
-
-		for human in humans:
-			worktype_id = human.worktype
-
-			if worktype_id is None:
-				continue
-
-			wt = Worktype.query.get(worktype_id)
-			start_work_day = wt.start_work_day
-			finish_work_day = wt.finish_work_day
-
-			if start_work_day <= datetime.now() < finish_work_day:
-				print(human.title)
-			yield human
-
-	def __get_human_rank_priority(self, human: Human) -> int:
-		rank = Rank.query.get(human.rank)
-
-		if rank is None:
-			return 0
-		return rank.priority
-
 
 class FDNoteBook(MDTabs):
 	''' Виджет с вкладками '''
+
+	def __init__(self, **options):
+		super().__init__(**options)
+
+		self._current_tab = None
+		self.bind(on_tab_switch=lambda tabs, tab, tab_label, tab_text:
+		          self.update_current_tab(tab))
+
+	def update_current_tab(self, tab: MDTabsBase) -> None:
+		self.current_tab = tab
+
+	@property
+	def current_tab(self) -> MDTabsBase:
+		return self._current_tab
+
+	@current_tab.setter
+	def current_tab(self, tab: MDTabsBase) -> None:
+		self._current_tab = tab
