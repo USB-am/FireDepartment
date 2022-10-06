@@ -65,11 +65,14 @@ class EditEntryRank(CreateEntryRank):
 
 	def fill_fields(self) -> None:
 		self.title.set_value(self.element.title)
-		print(dir(self.element))
-		self.emergencies.set_value(self.element.emergencys)
+		# self.emergencies.set_value(self.element.emergencys)
+		self.humans.set_value(self.element.humans)
 
 	def insert(self) -> None:
-		values = {'tite': self.title.get_value()}
+		values = {
+			'title': self.title.get_value(),
+			'humans': self.humans.get_value(),
+		}
 		successful_entry = DBManager.update(self.element, values)
 
 		if successful_entry:
@@ -93,9 +96,13 @@ class EditEntryPosition(CreateEntryPosition):
 
 	def fill_fields(self) -> None:
 		self.title.set_value(self.element.title)
+		self.humans.set_value(self.element.humans)
 
 	def insert(self) -> None:
-		values = {'tite': self.title.get_value()}
+		values = {
+			'title': self.title.get_value(),
+			'humans': self.humans.get_value(),
+		}
 		successful_entry = DBManager.update(self.element, values)
 
 		if successful_entry:
