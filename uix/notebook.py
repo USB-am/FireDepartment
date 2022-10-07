@@ -128,6 +128,16 @@ class HumansSelectedListElement(MDBoxLayout):
 			self.md_bg_color = (1, 1, 1, 0)
 
 
+class FDEmptyTab(MDFloatLayout, MDTabsBase):
+	''' Пуская вкладка '''
+
+	def __init__(self, title_: str):
+		self.title = 'Empty'
+		self.display_text = LOCALIZED.translate(f'[b]Empty[/b]\n[i]{title_}[/i]')
+
+		super().__init__()
+
+
 class FDEmergencyTab(MDFloatLayout, MDTabsBase):
 	''' Вкладка с информацией о вызовах '''
 
