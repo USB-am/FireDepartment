@@ -1,7 +1,7 @@
 from custom_screen import CustomScreen
 
 from config import LOCALIZED
-from uix import FDNoteBook, FDEmergencyTab
+from uix import FDNoteBook, FDEmergencyTab, FDEmptyTab
 from data_base import db
 
 
@@ -16,16 +16,15 @@ class CurrentCalls(CustomScreen):
 		self.path_manager = path_manager
 
 		self.setup()
-		self.fill_content()
 
 	def setup(self) -> None:
 		self.toolbar.title = LOCALIZED.translate('Current calls')
 		self.toolbar.add_left_button('arrow-left', lambda e: self.path_manager.back())
 		self.toolbar.add_right_button('check-outline', lambda e: self.close_tab())
 
-	def fill_content(self) -> None:
 		self.notebook = FDNoteBook()
 		self.add_widgets(self.notebook)
+		self.notebook.add_widget(FDEmptyTab('There are no ongoing calls.'))
 
 	def add_tab(self, element: db.Model) -> None:
 		self.notebook.add_widget(FDEmergencyTab(element))
@@ -37,4 +36,5 @@ class CurrentCalls(CustomScreen):
 			self.notebook.remove_widget(current_tab)
 
 		else:
-			print(':c')
+			self.notebook.add_widget(FDEmptyTab('There are no ongoing calls.'))
+			self.close_tab()
