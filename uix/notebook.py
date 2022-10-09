@@ -164,12 +164,14 @@ class FDNoteBook(MDTabs):
 	def __init__(self, empty_tab_text: str='', **options):
 		super().__init__(**options)
 
+		self.empty_tab_text = empty_tab_text
+
 		self._current_tab = None
 		self.bind(on_tab_switch=lambda tabs, tab, tab_label, tab_text:
 		          self.update_current_tab(tab))
 
-		self.add_widget(FDEmptyTab(empty_tab_text))
-		self.switch_tab(self.get_tab_list()[-1])
+		self.add_widget(FDEmptyTab(self.empty_tab_text))
+		self.switch_to_last_tab()
 
 	def add_tab(self, tab: MDTabsBase) -> None:
 		self.add_widget(tab)
@@ -177,6 +179,20 @@ class FDNoteBook(MDTabs):
 		empty_tabs = self.get_empty_tabs()
 		if empty_tabs:
 			[self.remove_widget(tab) for tab in empty_tabs]
+
+	def close_tab(self, tab: MDTabsBase) -> None:
+		if len(self.get_tab_list()) > 1:
+			self.remove_widget(tab)
+
+		else:
+			self.add_widget(FDEmptyTab(self.empty_tab_text))
+			self.switch_to_last_tab()
+			# self.remove_widget(tab)
+
+	def switch_to_last_tab(self) -> None:
+		last_tab = self.get_tab_list()[-1]
+		self.switch_tab(last_tab)
+		self.current_tab = last_tab
 
 	def get_empty_tabs(self) -> list:
 		tabs = self.get_tab_list()

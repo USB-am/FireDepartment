@@ -24,12 +24,12 @@ class CurrentCalls(CustomScreen):
 
 		self.notebook = FDNoteBook()
 		self.add_widgets(self.notebook)
-		# self.notebook.add_widget(FDEmptyTab('There are no ongoing calls.'))
 
 	def add_tab(self, element: db.Model) -> None:
 		self.notebook.add_tab(FDEmergencyTab(element))
-		self.notebook.switch_tab(self.notebook.get_tab_list()[-1])
+		# self.notebook.switch_tab(self.notebook.get_tab_list()[-1])
+		self.notebook.switch_to_last_tab()
 
 	def close_tab(self) -> None:
 		current_tab = self.notebook.current_tab
-		self.notebook.remove_widget(current_tab)
+		self.notebook.close_tab(current_tab)
