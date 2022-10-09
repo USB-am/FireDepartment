@@ -99,7 +99,6 @@ class Application(MDApp):
 		self.theme_cls.theme_style = theme.theme_style
 
 		CustomScreen.bg_image = theme.background_image
-		print(CustomScreen.bg_image)
 
 	def build(self) -> ScreenManager:
 		return self.screen_manager

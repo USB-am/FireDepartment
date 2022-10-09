@@ -161,12 +161,28 @@ class FDEmergencyTab(MDFloatLayout, MDTabsBase):
 class FDNoteBook(MDTabs):
 	''' Виджет с вкладками '''
 
-	def __init__(self, **options):
+	def __init__(self, empty_tab_text: str='', **options):
 		super().__init__(**options)
 
 		self._current_tab = None
 		self.bind(on_tab_switch=lambda tabs, tab, tab_label, tab_text:
 		          self.update_current_tab(tab))
+
+		self.add_widget(FDEmptyTab(empty_tab_text))
+		self.switch_tab(self.get_tab_list()[-1])
+
+	def add_tab(self, tab: MDTabsBase) -> None:
+		self.add_widget(tab)
+
+		empty_tabs = self.get_empty_tabs()
+		if empty_tabs:
+			[self.remove_widget(tab) for tab in empty_tabs]
+
+	def get_empty_tabs(self) -> list:
+		tabs = self.get_tab_list()
+		empties = [tab for tab in tabs if isinstance(tab.tab, FDEmptyTab)]
+
+		return empties
 
 	def update_current_tab(self, tab: MDTabsBase) -> None:
 		self.current_tab = tab
