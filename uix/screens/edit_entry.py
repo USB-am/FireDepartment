@@ -65,7 +65,6 @@ class EditEntryRank(CreateEntryRank):
 
 	def fill_fields(self) -> None:
 		self.title.set_value(self.element.title)
-		# self.emergencies.set_value(self.element.emergencys)
 		self.humans.set_value(self.element.humans)
 
 	def insert(self) -> None:
@@ -108,6 +107,10 @@ class EditEntryPosition(CreateEntryPosition):
 		if successful_entry:
 			self.path_manager.back()
 
+	def update_selected_lists(self) -> None:
+		super().update_selected_lists()
+		self.humans.set_value(self.element.humans)
+
 
 class EditEntryHuman(CreateEntryHuman):
 	''' Экран редаектирования человека '''
@@ -149,6 +152,12 @@ class EditEntryHuman(CreateEntryHuman):
 		if successful_entry:
 			self.path_manager.back()
 
+	def update_selected_lists(self) -> None:
+		super().update_selected_lists()
+		self.work_type.set_value(self.element.worktype)
+		self.rank.set_value(self.element.rank)
+		self.position.set_value(self.element.position)
+
 
 class EditEntryEmergency(CreateEntryEmergency):
 	''' Экран редаектирования ЧС '''
@@ -185,6 +194,14 @@ class EditEntryEmergency(CreateEntryEmergency):
 
 		if successful_entry:
 			self.path_manager.back()
+
+	def update_selected_lists(self) -> None:
+		if self.element is None:
+			return
+
+		super().update_selected_lists()
+		self.humans.set_value(self.element.humans)
+		self.tags.set_value(self.element.tags)
 
 
 class EditEntryWorktype(CreateEntryWorktype):

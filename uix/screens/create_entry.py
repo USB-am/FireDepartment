@@ -210,6 +210,8 @@ class CreateEntryEmergency(CreateEntry):
 		self.add_widgets(self.title, self.description, self.urgent, self.humans,
 		                 self.tags)
 
+		self.bind(on_pre_enter=lambda e: self.update_selected_lists())
+
 	def insert(self) -> None:
 		values = {
 			'title': self.title.get_value(),
