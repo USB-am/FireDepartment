@@ -63,7 +63,7 @@ class Application(MDApp):
 	def setup(self) -> None:
 		self.main_page = MainPage(self.path_manager)
 		self.screen_manager.add_widget(self.main_page)
-		self.screen_manager.current = 'main_page'
+		# self.screen_manager.current = 'main_page'
 
 		self.current_calls = CurrentCalls(self.path_manager)
 		self.screen_manager.add_widget(self.current_calls)
@@ -89,6 +89,7 @@ class Application(MDApp):
 		self.screen_manager.add_widget(EditColorTheme(
 			self.path_manager, self.theme_cls
 		))
+		self.screen_manager.current = 'edit_colortheme'
 
 	def set_theme(self) -> None:
 		theme = ColorTheme.query.first()
