@@ -40,7 +40,7 @@ class FileManager(MDBoxLayout):
 		if value is None:
 			value = '-'
 
-		self.ids.button.text = value
+		# self.ids.button.text = value
 
 	def get_value(self) -> str:
 		if self._value is None or self._value == '':

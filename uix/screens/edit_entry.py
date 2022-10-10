@@ -47,6 +47,13 @@ class EditEntryTag(CreateEntryTag):
 		if successful_entry:
 			self.path_manager.back()
 
+	def update_selected_lists(self) -> None:
+		if self.element is None:
+			return
+
+		super().update_selected_lists()
+		self.emergencies.set_value(self.element.emergencys)
+
 
 class EditEntryRank(CreateEntryRank):
 	''' Экран редаектирования звания '''
@@ -76,6 +83,13 @@ class EditEntryRank(CreateEntryRank):
 
 		if successful_entry:
 			self.path_manager.back()
+
+	def update_selected_lists(self) -> None:
+		if self.element is None:
+			return
+
+		super().update_selected_lists()
+		self.humans.set_value(self.element.humans)
 
 
 class EditEntryPosition(CreateEntryPosition):
@@ -108,6 +122,9 @@ class EditEntryPosition(CreateEntryPosition):
 			self.path_manager.back()
 
 	def update_selected_lists(self) -> None:
+		if self.element is None:
+			return
+
 		super().update_selected_lists()
 		self.humans.set_value(self.element.humans)
 
@@ -153,6 +170,9 @@ class EditEntryHuman(CreateEntryHuman):
 			self.path_manager.back()
 
 	def update_selected_lists(self) -> None:
+		if self.element is None:
+			return
+
 		super().update_selected_lists()
 		self.work_type.set_value(self.element.worktype)
 		self.rank.set_value(self.element.rank)
@@ -312,7 +332,6 @@ class EditColorTheme(CustomScrolledScreen):
 			'theme_style': 'Dark' if self.theme_style.get_value() else 'Light',
 			'background_image': self.background_image.get_value(),
 		}
-		print(values)
 
 		DBManager.update(db_entry, values)
 
