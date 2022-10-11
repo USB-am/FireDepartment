@@ -17,7 +17,8 @@ from uix.screens.create_entry import CreateEntryTag, CreateEntryRank, CreateEntr
 	CreateEntryHuman, CreateEntryEmergency, CreateEntryWorktype
 from uix.screens.edit_entry_list import EditEntryList
 from uix.screens.edit_entry import EditEntryTag, EditEntryRank, EditEntryPosition, \
-	EditEntryHuman, EditEntryEmergency, EditEntryWorktype, EditColorTheme
+	EditEntryHuman, EditEntryEmergency, EditEntryWorktype
+from uix.screens.edit_color_theme import EditColorTheme
 
 
 db.create_all()

@@ -1,0 +1,20 @@
+<FDColor>:
+	orientation: 'horizontal'
+	size_hint: 1, None
+	size: self.width, 50
+
+	MDIcon:
+		size_hint: None, 1
+		size: self.height, self.height
+		icon: root.icon
+
+	MDLabel:
+		size_hint: 1, 1
+		text: root.display_text
+
+	MDIconButton:
+		id: button
+		icon: 'palette'
+
+		on_release:
+			root.open_picker()
