@@ -3,6 +3,7 @@ import os
 from kivy.lang import Builder
 from kivy.uix.widget import Widget
 from kivy.uix.screenmanager import Screen
+from kivy.graphics import Color, Rectangle
 from kivymd.uix.toolbar import MDToolbar
 
 from uix import FDScrollFrame
@@ -29,7 +30,7 @@ class FDToolbar(MDToolbar):
 	def add_right_button(self, icon: str, callback) -> None:
 		self.right_action_items.append([icon, callback])
 
-from kivy.graphics import Color, Rectangle
+
 class CustomScreen(Screen):
 	''' Базовый экран '''
 

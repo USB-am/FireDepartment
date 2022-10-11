@@ -21,7 +21,7 @@ class FDSlider(MDBoxLayout):
 		super().__init__()
 
 	def get_value(self) -> float:
-		return self.ids.slider.value / 100
+		return self.current_value / 100
 
 	def set_value(self, value: float) -> None:
 		self.ids.slider.value = int(value * 100)

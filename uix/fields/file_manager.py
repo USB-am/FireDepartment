@@ -37,10 +37,7 @@ class FileManager(MDBoxLayout):
 				print(e)
 
 	def set_value(self, value: str) -> None:
-		if value is None:
-			value = '-'
-
-		# self.ids.button.text = value
+		self._value = value
 
 	def get_value(self) -> str:
 		if self._value is None or self._value == '':
@@ -50,6 +47,3 @@ class FileManager(MDBoxLayout):
 
 	def close_dialog(self) -> None:
 		self.manager.close()
-
-	def __select_path(self, path: str) -> None:
-		self._path = path
