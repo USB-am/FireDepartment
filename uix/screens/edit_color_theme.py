@@ -102,6 +102,8 @@ class EditColorTheme(CustomScrolledScreen):
 		color = (*self.color[:-1], self.background_opacity.get_value())
 		self.reboot_styles(rgba=color)
 
+		self.background_color.set_value(self.color)
+
 	def change_theme_style(self) -> None:
 		value = self.theme_style.get_value()
 		if value:

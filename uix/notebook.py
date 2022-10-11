@@ -133,7 +133,9 @@ class FDEmptyTab(MDFloatLayout, MDTabsBase):
 
 	def __init__(self, title_: str):
 		self.title = 'Empty'
-		self.display_text = LOCALIZED.translate(f'[b]Empty[/b]\n[i]{title_}[/i]')
+		self.display_text = '[b]{empty}[/b]\n[i]{comment}[/i]'.format(
+			empty=LOCALIZED.translate('Empty'),
+			comment=LOCALIZED.translate(title_))
 
 		super().__init__()
 
