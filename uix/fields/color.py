@@ -21,8 +21,11 @@ class ColorDialog(FDDialog):
 
 		self.display_title = LOCALIZED.translate('Color selection.')
 
-		content = MDBoxLayout()
-		content.add_widget(ColorPicker())
+		self.picker = ColorPicker()
+		content = MDBoxLayout(
+			size_hint=(1, None),
+			size=(self.width, 400))
+		content.add_widget(self.picker)
 
 		ok_button = MDRaisedButton(text=LOCALIZED.translate('Ok'))
 		ok_button.bind(on_release=self._dismiss_and_callback)
@@ -39,20 +42,44 @@ class ColorDialog(FDDialog):
 
 	def _dismiss_and_callback(self, event):
 		self.dismiss()
-		# self.callback()
+
+		if self.callback is not None:
+			self.callback(self.picker.color)
 
 
 class FDColor(MDBoxLayout):
 	''' Виджет для выбора цвета '''
 
-	def __init__(self, icon: str, title: str):
+	def __init__(self, icon: str, title: str, on_color=None):
 		self.icon = icon
 		self.title = title
+		self.on_color = on_color
 		self.display_text = LOCALIZED.translate(title)
 
-		self.color_dialog = ColorDialog()
+		self._value = [1.0, 1.0, 1.0, 1.0]
+
+		self.color_dialog = ColorDialog(self.change_current_color)
 
 		super().__init__()
 
-	def open_picker(self) -> None:
-		self.color_dialog.open()
+	@property
+	def value(self) -> list:
+		return self._value
+
+	@value.setter
+	def value(self, color: list) -> None:
+		self._value = color
+		self.color_dialog.picker.color = color
+
+	def change_current_color(self, color: list) -> None:
+		self.set_value(color)
+		self.ids.button.md_bg_color = color
+
+		if self.on_color is not None:
+			self.on_color(color)
+
+	def get_value(self) -> list:
+		return self.value
+
+	def set_value(self, value: list) -> None:
+		self.value = value

@@ -60,12 +60,15 @@ class EditColorTheme(CustomScrolledScreen):
 			path=STATIC_DIR,
 			select_path=lambda e: self.exit_filemanager_and_change_background(e),
 			preview=True)
-		self.background_opacity = fields.FDSlider(icon='window-closed-variant',
-		                                          title='Background opacity')
+		self.background_opacity = fields.FDSlider(icon='opacity',
+			title=LOCALIZED.translate('Opacity'))
+		self.background_opacity.ids.slider.bind(value=lambda instance, value: \
+			self.update_bg_color_opacity())
 		# BACKGROUND COLOR
 		self.background_color = fields.FDColor(
 			icon='format-color-fill',
-			title='Background color'
+			title='Background color',
+			on_color=self.update_bg_color
 		)
 
 		self.add_widgets(self.primary_hue)
@@ -92,9 +95,12 @@ class EditColorTheme(CustomScrolledScreen):
 		self.save_changes()
 		self.path_manager.back()
 
-	def update_bg_color(self) -> None:
-		clr = (1, 1, 1, random())
-		self.reboot_styles(rgba=clr)
+	def update_bg_color(self, color: list) -> None:
+		self.reboot_styles(rgba=color)
+
+	def update_bg_color_opacity(self) -> None:
+		color = (*self.color[:-1], self.background_opacity.get_value())
+		self.reboot_styles(rgba=color)
 
 	def change_theme_style(self) -> None:
 		value = self.theme_style.get_value()
