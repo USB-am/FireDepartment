@@ -43,6 +43,8 @@ class CustomScreen(Screen):
 		self.toolbar = FDToolbar('Base')
 		self.ids.widgets.add_widget(self.toolbar)
 
+		self.bind(on_enter=lambda e: self.reboot_styles())
+
 	def add_widgets(self, *widgets: Widget) -> None:
 		[self.ids.widgets.add_widget(widget) for widget in widgets]
 

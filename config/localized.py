@@ -4,6 +4,7 @@ import json
 
 def write_new_localized_dict(path: str) -> None:
 	dict_for_write = {
+		'': '',
 		'search': 'Поиск',
 		'main': 'Главная',
 		'options': 'Настройки',
@@ -16,6 +17,7 @@ def write_new_localized_dict(path: str) -> None:
 		'human': 'Человек',
 		'emergency': 'Вызов',
 		'ok': 'Ок',
+		'cancel': 'Отмена',
 		'title': 'Название',
 		'stringfield': 'Поле ввода',
 		'create tag': 'Добавить тег',
@@ -55,10 +57,14 @@ def write_new_localized_dict(path: str) -> None:
 		'file': 'Файл',
 		'date and time picker widget.': 'Виджет выбора даты и времени.',
 		'pass': 'Пусто',
+		'empty': 'Пусто',
 		'colortheme': 'Визуализация',
 		'background opacity': 'Прозрачность фона',
+		'opacity': 'Прозрачность',
+		'background color': 'Цвет заднего фона',
 		'integerfield': 'Поле ввода чисел',
 		'priority': 'Приоритетность',
+		'color selection.': 'Выбор цвета.',
 	}
 
 	with open(path, mode='w') as writed_file:

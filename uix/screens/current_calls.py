@@ -27,7 +27,6 @@ class CurrentCalls(CustomScreen):
 
 	def add_tab(self, element: db.Model) -> None:
 		self.notebook.add_tab(FDEmergencyTab(element))
-		# self.notebook.switch_tab(self.notebook.get_tab_list()[-1])
 		self.notebook.switch_to_last_tab()
 
 	def close_tab(self) -> None:
