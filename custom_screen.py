@@ -46,7 +46,14 @@ class CustomScreen(Screen):
 	def add_widgets(self, *widgets: Widget) -> None:
 		[self.ids.widgets.add_widget(widget) for widget in widgets]
 
+	def clear_styles(self) -> None:
+		with self.canvas.before:
+			c = Color(1, 1, 1, 1)
+			self.rect = Rectangle(size=self.size, pos=self.pos, source=None)
+
 	def reboot_styles(self, rgba: tuple=None, source: str=None) -> None:
+		self.clear_styles()
+
 		if rgba is not None:
 			CustomScreen.color = rgba
 
@@ -59,7 +66,8 @@ class CustomScreen(Screen):
 			self.rect = Rectangle(
 				size=self.size,
 				pos=self.pos,
-				source=CustomScreen.bg_image)
+				source=CustomScreen.bg_image
+			)
 
 
 class CustomScrolledScreen(CustomScreen):
