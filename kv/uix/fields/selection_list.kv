@@ -1,0 +1,13 @@
+<EditSelectionElement>:
+	text: root.entry.title
+
+	on_release:
+		print(f'You press on {root.entry.title}')
+
+	IconLeftWidget:
+		icon: root.entry.icon
+
+
+<SelectionList>:
+	overlay_color: app.theme_cls.accent_color
+	icon_bg_color: app.theme_cls.accent_color
