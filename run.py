@@ -90,7 +90,7 @@ class Application(MDApp):
 		self.screen_manager.add_widget(EditColorTheme(
 			self.path_manager, self.theme_cls
 		))
-		self.screen_manager.current = 'edit_colortheme'
+		self.screen_manager.current = 'options'
 
 	def set_theme(self) -> None:
 		theme = ColorTheme.query.first()
