@@ -1,4 +1,5 @@
 import os
+from types import MethodType
 
 from kivy.lang import Builder
 from kivymd.uix.selection import MDSelectionList
@@ -18,6 +19,9 @@ class EditSelectionElement(OneLineIconListItem):
 		self.entry = entry
 
 		super().__init__()
+
+	def binding(self, callback: MethodType) -> None:
+		self.bind(on_release=lambda e: callback(self.entry))
 
 
 class SelectionList(MDSelectionList):

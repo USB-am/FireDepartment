@@ -9,5 +9,6 @@
 
 
 <SelectionList>:
-	overlay_color: app.theme_cls.accent_color
-	icon_bg_color: app.theme_cls.accent_color
+	overlay_color: app.theme_cls.accent_color[:-1] + [.2]
+	icon_bg_color: app.theme_cls.accent_color[:-1] + [.2]
+	spacing: 10
