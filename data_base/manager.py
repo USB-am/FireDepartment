@@ -62,3 +62,9 @@ def update(entry: db.Model, values: dict) -> None:
 		setattr(entry, attr, value)
 
 	return entry
+
+
+@check_insert_exception
+@save_changes
+def delete(entry: db.Model) -> None:
+	db.session.delete(entry)
