@@ -1,7 +1,7 @@
 from custom_screen import CustomScrolledScreen
 from data_base import db
+from data_base import manager as DBManager
 from config import LOCALIZED
-# from uix import ExpansionEditListElement
 from uix.fields.selection_list import SelectionList, EditSelectionElement
 
 
@@ -14,19 +14,17 @@ class EditEntryList(CustomScrolledScreen):
 		self.name = f'edit_{table.__tablename__}_list'.lower()
 		self.path_manager = path_manager
 		self.table = table
-		# self.selection_list = MDSelectionList()
 
 		self.setup()
 		self.bind(on_pre_enter=lambda e: self.fill_content())
 
 	def setup(self) -> None:
-		self.setup_normal_toolbar()
-
 		self.selection_list = SelectionList()
-		# self.selection_list.bind(on_selected_mode=self.set_selection_mode)
-		self.selection_list.bind(on_selected=self.on_selected)
-		self.selection_list.bind(on_unselected=self.on_unselected)
+		self.selection_list.bind(on_selected=lambda *e: self.on_select())
+		self.selection_list.bind(on_unselected=lambda *e: self.on_unselect())
 		self.add_widgets(self.selection_list)
+
+		self.setup_normal_toolbar()
 
 	def setup_normal_toolbar(self) -> None:
 		self.toolbar.title = LOCALIZED.translate(f'Edit {self.name} list')
@@ -34,16 +32,43 @@ class EditEntryList(CustomScrolledScreen):
 			['arrow-left', lambda e: self.path_manager.back()]
 		]
 		self.toolbar.right_action_items = [
-			['delete', lambda e: print('Delete method')]
+			['delete', lambda e: self.on_select()]
 		]
+		self.selection_list.selected_mode = False
 
 	def setup_selection_toolbar(self) -> None:
+		self.toolbar.title = str(len(self.selection_list.\
+			get_selected_list_items()))
 		self.toolbar.left_action_items = [
-			['close', lambda e: self.selection_list.unselected_all()]
+			['close', lambda e: self.on_unselected_all()]
 		]
 		self.toolbar.right_action_items = [
-			['delete', lambda e: print('Delete method')]
+			['delete', lambda e: self.delete_selected_items()]
 		]
+
+	def on_select(self) -> None:
+		self.selection_list.selected_mode = True
+		self.setup_selection_toolbar()
+
+	def on_unselect(self) -> None:
+		if len(self.selection_list.get_selected_list_items()):
+			self.setup_selection_toolbar()
+		else:
+			self.setup_normal_toolbar()
+
+	def on_unselected_all(self) -> None:
+		self.selection_list.unselected_all()
+		self.setup_normal_toolbar()
+
+	def delete_selected_items(self) -> None:
+		items = self.selection_list.get_selected_list_items()
+
+		for item in items:
+			DBManager.delete(item.instance_item.entry)
+			print(f'{item.instance_item.entry.title} is deleted!')
+
+		self.fill_content()
+		self.setup_normal_toolbar()
 
 	def fill_content(self) -> None:
 		self.selection_list.clear_widgets()
@@ -55,25 +80,8 @@ class EditEntryList(CustomScrolledScreen):
 			self.selection_list.add_widget(selection_list_elem)
 			selection_list_elem.binding(self.redirect_and_call)
 
-	def set_selection_mode(self) -> None:
-		if self.selection_list.selected_mode:
-			self.setup_selection_toolbar()
-		else:
-			self.setup_normal_toolbar()
-
-	def on_selected(self, instance: SelectionList, item: EditSelectionElement) -> None:
-		self.toolbar.title = str(len(instance.get_selected_list_items()))
-		self.set_selection_mode()
-
-	def on_unselected(self, instance: SelectionList, item: EditSelectionElement) -> None:
-		self.toolbar.title = str(len(instance.get_selected_list_items()))
-		self.set_selection_mode()
-
 	def redirect_and_call(self, db_entry: db.Model) -> None:
-		if self.selection_list.selected_mode:
-			# print('selected_mode is True')
-			pass
-		else:
+		if not self.selection_list.selected_mode:
 			screen_name = f'edit_{db_entry.__tablename__}'.lower()
 			next_screen = self.path_manager.forward(screen_name)
 			next_screen.set_element(db_entry)
