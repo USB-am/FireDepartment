@@ -23,32 +23,22 @@ class EditColorTheme(CustomScrolledScreen):
 
 		self.setup()
 		self.fill_content()
+		self.update_dropdown_fields()
 
 	def setup(self) -> None:
 		self.toolbar.title = LOCALIZED.translate(self.name)
 		self.toolbar.add_left_button(
 			'arrow-left', lambda e: self.save_changes_and_back())
 
-		colors_dict = ThemeManager().colors.copy()
-		colors_dict.pop('Light', None)
-		colors_dict.pop('Dark',  None)
-
-		hue_items = fields.gen_hue_items(colors_dict['Red'].keys(), self.change_hue)
-		primary_items = fields.gen_color_items(colors_dict.keys(), self.change_primary)
-		accent_items = fields.gen_color_items(colors_dict.keys(), self.change_accent)
-
 		# HUE
 		self.primary_hue = fields.DropDown(icon='opacity',
 		                                   title='Primary hue')
-		self.primary_hue.add(hue_items)
 		# PRIMARY
 		self.primary_palette = fields.DropDown(icon='palette',
 		                                       title='Primary palette')
-		self.primary_palette.add(primary_items)
 		# ACCENT
 		self.accent_palette = fields.DropDown(icon='exclamation-thick',
 		                                      title='Accent palette')
-		self.accent_palette.add(accent_items)
 		# THEME STYLE
 		self.theme_style = fields.BooleanField(icon='theme-light-dark',
 		                                       title='Dark theme')
@@ -60,7 +50,8 @@ class EditColorTheme(CustomScrolledScreen):
 			path=STATIC_DIR,
 			select_path=lambda e: self.exit_filemanager_and_change_background(e),
 			preview=True)
-		self.background_opacity = fields.FDSlider(icon='opacity',
+		self.background_opacity = fields.FDSlider(
+			icon='opacity',
 			title=LOCALIZED.translate('Opacity'))
 		self.background_opacity.ids.slider.bind(value=lambda instance, value: \
 			self.update_bg_color_opacity())
@@ -90,6 +81,7 @@ class EditColorTheme(CustomScrolledScreen):
 		}
 
 		DBManager.update(db_entry, values)
+		self.update_dropdown_fields()
 
 	def save_changes_and_back(self) -> None:
 		self.save_changes()
@@ -97,6 +89,7 @@ class EditColorTheme(CustomScrolledScreen):
 
 	def update_bg_color(self, color: list) -> None:
 		self.reboot_styles(rgba=color)
+		self.save_changes()
 
 	def update_bg_color_opacity(self) -> None:
 		color = (*self.color[:-1], self.background_opacity.get_value())
@@ -111,17 +104,25 @@ class EditColorTheme(CustomScrolledScreen):
 		else:
 			self.theme_cls.theme_style = 'Light'
 
+		self.save_changes()
+
 	def change_hue(self, value: str) -> None:
 		self.theme_cls.primary_hue = value
 		self.primary_hue.set_value(value)
+
+		self.save_changes()
 
 	def change_primary(self, value: str):
 		self.theme_cls.primary_palette = value
 		self.primary_palette.set_value(value)
 
+		self.save_changes()
+
 	def change_accent(self, value: str):
 		self.theme_cls.accent_palette = value
 		self.accent_palette.set_value(value)
+
+		self.save_changes()
 
 	def exit_filemanager_and_change_background(self, path: str) -> None:
 		self.close_filemanager(path)
@@ -138,6 +139,8 @@ class EditColorTheme(CustomScrolledScreen):
 		except PermissionError:
 			return
 
+		self.save_changes()
+
 	def fill_content(self) -> None:
 		db_entry = ColorTheme.query.first()
 
@@ -146,4 +149,22 @@ class EditColorTheme(CustomScrolledScreen):
 		self.accent_palette.set_value(db_entry.accent_palette)
 		self.theme_style.set_value(db_entry.theme_style == 'Dark')
 		self.background_image.set_value(db_entry.background_image)
-		# self.background_opacity.set_value()
+
+	def update_dropdown_fields(self) -> None:
+		colors_dict = ThemeManager().colors.copy()
+		colors_dict.pop('Light', None)
+		colors_dict.pop('Dark',  None)
+
+		hue_items = fields.gen_hue_items(
+			colors_dict['Red'].keys(),
+			self.change_hue)
+		primary_items = fields.gen_color_items(
+			colors_dict.keys(),
+			self.change_primary)
+		accent_items = fields.gen_color_items(
+			colors_dict.keys(),
+			self.change_accent)
+
+		self.primary_hue.update_items(hue_items)
+		self.primary_palette.update_items(primary_items)
+		self.accent_palette.update_items(accent_items)

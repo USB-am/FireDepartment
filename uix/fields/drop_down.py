@@ -69,3 +69,6 @@ class DropDown(MDBoxLayout):
 
 	def add(self, items: list) -> None:
 		self.dialog.items.extend(items)
+
+	def update_items(self, new_items: list) -> None:
+		self.dialog.items = new_items

@@ -7,17 +7,19 @@ Config.set('graphics', 'width', '350')
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager, Screen
 
-from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype, ColorTheme
+from data_base import db, Tag, Rank, Position, Human, Emergency, \
+	Worktype, ColorTheme
 from data_base.base_records import write_records
 from custom_screen import CustomScreen
 from uix.screens.main_page import MainPage
 from uix.screens.current_calls import CurrentCalls
 from uix.screens.options import Options
-from uix.screens.create_entry import CreateEntryTag, CreateEntryRank, CreateEntryPosition, \
-	CreateEntryHuman, CreateEntryEmergency, CreateEntryWorktype
+from uix.screens.create_entry import CreateEntryTag, CreateEntryRank, \
+	CreateEntryPosition, CreateEntryHuman, CreateEntryEmergency, \
+	CreateEntryWorktype
 from uix.screens.edit_entry_list import EditEntryList
-from uix.screens.edit_entry import EditEntryTag, EditEntryRank, EditEntryPosition, \
-	EditEntryHuman, EditEntryEmergency, EditEntryWorktype
+from uix.screens.edit_entry import EditEntryTag, EditEntryRank, \
+	EditEntryPosition, EditEntryHuman, EditEntryEmergency, EditEntryWorktype
 from uix.screens.edit_color_theme import EditColorTheme
 
 
@@ -73,8 +75,10 @@ class Application(MDApp):
 		self.screen_manager.add_widget(self.options)
 
 		# Create screens
-		for screen in (CreateEntryTag, CreateEntryRank, CreateEntryPosition, \
-		               CreateEntryHuman, CreateEntryEmergency, CreateEntryWorktype):
+		for screen in (CreateEntryTag, CreateEntryRank, \
+		               CreateEntryPosition, CreateEntryHuman, \
+		               CreateEntryEmergency, CreateEntryWorktype
+			):
 			self.screen_manager.add_widget(screen(self.path_manager))
 
 		# Edit screens_list
@@ -85,7 +89,8 @@ class Application(MDApp):
 
 		# Edit screens
 		for screen in (EditEntryTag, EditEntryRank, EditEntryPosition, \
-		               EditEntryHuman, EditEntryEmergency, EditEntryWorktype):
+		               EditEntryHuman, EditEntryEmergency, EditEntryWorktype
+			):
 			self.screen_manager.add_widget(screen(self.path_manager))
 		self.screen_manager.add_widget(EditColorTheme(
 			self.path_manager, self.theme_cls
