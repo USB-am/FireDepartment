@@ -48,7 +48,8 @@ class EditColorTheme(CustomScrolledScreen):
 		self.background_image = fields.FileManager(
 			title='Background image',
 			path=STATIC_DIR,
-			select_path=lambda e: self.exit_filemanager_and_change_background(e),
+			select_path=self.exit_filemanager_and_change_background,
+			selector='file',
 			preview=True)
 		self.background_opacity = fields.FDSlider(
 			icon='opacity',
