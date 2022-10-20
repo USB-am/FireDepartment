@@ -8,6 +8,7 @@ from kivymd.uix.toolbar import MDToolbar
 
 from uix import FDScrollFrame
 from config import STATIC_DIR
+from data_base import ColorTheme
 
 
 path_to_kv_file = os.path.join(os.getcwd(), 'kv', 'custom_screen.kv')
@@ -49,8 +50,10 @@ class CustomScreen(Screen):
 		[self.ids.widgets.add_widget(widget) for widget in widgets]
 
 	def clear_styles(self) -> None:
+		is_light_theme = ColorTheme.query.first().theme_style == 'Light'
+
 		with self.canvas.before:
-			c = Color(1, 1, 1, 1)
+			c = Color(1, 1, 1, 1) if is_light_theme else Color(.5, .5, .5, 1)
 			self.rect = Rectangle(size=self.size, pos=self.pos, source=None)
 
 	def reboot_styles(self, rgba: tuple=None, source: str=None) -> None:

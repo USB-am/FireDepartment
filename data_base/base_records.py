@@ -12,7 +12,8 @@ def insert_colortheme() -> None:
 		accent_palette='Amber',
 		primary_hue='500',
 		theme_style='Light',
-		background_image=None
+		background_image=None,
+		background_color='[1, 1, 1, 1]',
 	)
 	db.session.add(base_theme)
 	db.session.commit()

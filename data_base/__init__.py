@@ -94,7 +94,7 @@ class ColorTheme(db.Model):
 	primary_hue = db.Column(db.String(255), nullable=False)	# Оттенок
 	theme_style = db.Column(db.String(255), nullable=False)	# Light/Dark
 	background_image = db.Column(db.Text(), nullable=True)	# Path to file
-	# background_color = db.Column()
+	background_color = db.Column(db.String(255), nullable=False)
 
 
 class Worktype(db.Model):
