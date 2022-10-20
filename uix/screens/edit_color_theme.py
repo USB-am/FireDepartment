@@ -1,3 +1,5 @@
+import json
+
 from kivymd.theming import ThemeManager
 
 from custom_screen import CustomScrolledScreen
@@ -72,6 +74,8 @@ class EditColorTheme(CustomScrolledScreen):
 		self.add_widgets(self.background_color)
 
 	def save_changes(self) -> None:
+		bg_color = json.dumps(self.background_color.get_value())
+
 		db_entry = ColorTheme.query.first()
 		values = {
 			'primary_palette': self.primary_palette.get_value(),
@@ -79,6 +83,7 @@ class EditColorTheme(CustomScrolledScreen):
 			'primary_hue': self.primary_hue.get_value(),
 			'theme_style': 'Dark' if self.theme_style.get_value() else 'Light',
 			'background_image': self.background_image.get_value(),
+			'background_color': bg_color,
 		}
 
 		DBManager.update(db_entry, values)
@@ -93,7 +98,7 @@ class EditColorTheme(CustomScrolledScreen):
 		self.save_changes()
 
 	def update_bg_color_opacity(self) -> None:
-		color = (*self.color[:-1], self.background_opacity.get_value())
+		color = [*self.color[:-1], self.background_opacity.get_value()]
 		self.reboot_styles(rgba=color)
 
 		self.background_color.set_value(self.color)
@@ -106,6 +111,7 @@ class EditColorTheme(CustomScrolledScreen):
 			self.theme_cls.theme_style = 'Light'
 
 		self.save_changes()
+		self.reboot_styles()
 
 	def change_hue(self, value: str) -> None:
 		self.theme_cls.primary_hue = value
@@ -150,6 +156,8 @@ class EditColorTheme(CustomScrolledScreen):
 		self.accent_palette.set_value(db_entry.accent_palette)
 		self.theme_style.set_value(db_entry.theme_style == 'Dark')
 		self.background_image.set_value(db_entry.background_image)
+		bg_color_obj = json.loads(db_entry.background_color)
+		self.background_color.set_value(bg_color_obj)
 
 	def update_dropdown_fields(self) -> None:
 		colors_dict = ThemeManager().colors.copy()

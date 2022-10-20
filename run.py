@@ -4,6 +4,8 @@ from kivy.config import Config
 Config.set('graphics', 'width', '350')
 
 
+import json
+
 from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager, Screen
 
@@ -105,6 +107,7 @@ class Application(MDApp):
 		self.theme_cls.primary_hue = theme.primary_hue
 		self.theme_cls.theme_style = theme.theme_style
 
+		CustomScreen.color = json.loads(theme.background_color)
 		CustomScreen.bg_image = theme.background_image
 
 	def build(self) -> ScreenManager:
