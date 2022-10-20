@@ -93,22 +93,8 @@ class ColorTheme(db.Model):
 	accent_palette = db.Column(db.String(255), nullable=False)
 	primary_hue = db.Column(db.String(255), nullable=False)	# Оттенок
 	theme_style = db.Column(db.String(255), nullable=False)	# Light/Dark
-	background_image = db.Column(db.Text(), nullable=True)
-
-	def __str__(self):
-		return f'<ColorTheme {self.id}>'
-
-	@staticmethod
-	def get_fields() -> dict:
-		result = {
-			'primary_hue': 'SelectField',
-			'primary_palette': 'SelectField',
-			'accent_palette': 'SelectField',
-			'theme_style': 'StyleRadioField',
-			'background_image': 'FileManagerField'
-		}
-
-		return result
+	background_image = db.Column(db.Text(), nullable=True)	# Path to file
+	# background_color = db.Column()
 
 
 class Worktype(db.Model):
