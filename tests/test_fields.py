@@ -72,5 +72,42 @@ class TestDateField(unittest.TestCase):
 		self.assertEqual(self.widget.ids.button.text, string_date)
 
 
+class TestDateTimeField(unittest.TestCase):
+	''' Тесты для видже выбора даты и времени '''
+
+	@classmethod
+	def setUpClass(self):
+		self.widget = fields.DateTimeField(icon='test', title='Test', help_text='Test')
+		APP.get_screen().add_widget(self.widget)
+
+	@classmethod
+	def tearDownClass(self):
+		APP.get_screen().clear_widgets()
+
+	def test_get_value(self):
+		self.assertEqual(self.widget.get_value(), None)
+
+	def test_set_value(self):
+		date = datetime.datetime.strptime(
+			'01.01.1970 01:00:00', '%d.%m.%Y %H:%M:%S')
+		self.widget.set_value(date)
+
+		self.assertEqual(self.widget.get_value(), date)
+
+	def test_set_date(self):
+		date = datetime.datetime.now().date()
+		button_date = date.strftime('%d.%m.%Y')
+		self.widget.set_date(date)
+
+		self.assertEqual(self.widget.ids.date_button.text, button_date)
+
+	def test_set_time(self):
+		time = datetime.datetime.now().time()
+		button_time = time.strftime('%H:%M:%S')
+		self.widget.set_time(time)
+
+		self.assertEqual(self.widget.ids.time_button.text, button_time)
+
+
 if __name__ == '__main__':
 	unittest.main()
