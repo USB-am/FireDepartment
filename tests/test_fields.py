@@ -10,6 +10,7 @@ from kivy.uix.screenmanager import ScreenManager, Screen
 
 from uix import fields
 from custom_screen import CustomScreen
+from data_base import Emergency
 
 
 class ApplicationForTests(MDApp):
@@ -107,6 +108,59 @@ class TestDateTimeField(unittest.TestCase):
 		self.widget.set_time(time)
 
 		self.assertEqual(self.widget.ids.time_button.text, button_time)
+
+
+class TestSelectedList(unittest.TestCase):
+	''' Тесты для SelectedList '''
+
+	@classmethod
+	def setUpClass(self):
+		self.widget = fields.SelectedList(
+			icon='test',
+			title='Test',
+			values=Emergency.query.all()
+		)
+		APP.get_screen().add_widget(self.widget)
+
+	@classmethod
+	def tearDownClass(self):
+		APP.get_screen().clear_widgets()
+
+	def test_get_value(self):
+		self.assertEqual(self.widget.get_value(), [])
+
+	def test_set_value(self):
+		values = Emergency.query.all()
+		self.widget.set_value([values[0], values[2]])
+
+		self.assertEqual(self.widget.get_value(), [values[2], values[0]])
+
+
+class TestSelectedListGroup(unittest.TestCase):
+	''' Тесты для SelectedList с аргументом group '''
+
+	@classmethod
+	def setUpClass(self):
+		self.widget = fields.SelectedList(
+			icon='test',
+			title='Test',
+			values=Emergency.query.all(),
+			group='test_group'
+		)
+		APP.get_screen().add_widget(self.widget)
+
+	@classmethod
+	def tearDownClass(self):
+		APP.get_screen().clear_widgets()
+
+	def test_get_value(self):
+		self.assertEqual(self.widget.get_value(), [])
+
+	def test_set_value(self):
+		values = Emergency.query.all()
+		self.widget.set_value([values[0], values[2]])
+
+		self.assertEqual(self.widget.get_value(), [values[0],])
 
 
 if __name__ == '__main__':
