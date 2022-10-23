@@ -83,6 +83,6 @@ class SelectedList(MDBoxLayout):
 				if element.db_entry.id in value_ids:
 					element.activate()
 
-		if isinstance(value, int):
+		elif isinstance(value, int):
 			[element.activate() for element in elements \
 			                    if element.db_entry.id == value]
