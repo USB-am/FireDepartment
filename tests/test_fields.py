@@ -9,7 +9,6 @@ from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager, Screen
 
 from uix import fields
-from custom_screen import CustomScreen
 from data_base import Emergency
 
 
