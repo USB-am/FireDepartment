@@ -31,6 +31,7 @@ class Filter():
 		return output
 
 	def _is_works(self, datetime_: datetime, human: Human) -> bool:
+		''' Возвращает True, если datetime_ попадает на рабочий день human '''
 		work_day = human.work_day
 
 		if human.worktype is None:
@@ -42,11 +43,12 @@ class Filter():
 		today_week = self.__get_today_week(datetime_, week_bias)
 		work_days = self.__get_work_days(wt, today_week)
 		output = work_days[0] <= datetime_ < work_days[-1]
+		print(f'{work_days[0]} <= {datetime_} < {work_days[-1]} = {output}')
 
-		# return datetime_ in work_days
 		return output
 
 	def __calc_week_bias(self, work_type: Worktype, work_day: datetime) -> tuple:
+		''' Возвращает кортеж (Начало рабочей недели, конец рабочей недели) '''
 		swd = work_day
 		work_week_length = work_type.work_day_range + work_type.week_day_range
 		fwd = swd + timedelta(days=work_week_length)
@@ -54,6 +56,7 @@ class Filter():
 		return (swd, fwd)
 
 	def __get_today_week(self, day: datetime, bias_week: tuple) -> tuple:
+		''' Приведение bias_week к промежутку между day '''
 		swd, fwd = bias_week
 
 		swd_count = swd.toordinal()
@@ -65,10 +68,12 @@ class Filter():
 
 		out_swd = swd + timedelta(days=bias * week_length)
 		out_fwd = out_swd + timedelta(days=week_length)
+		print(out_swd, out_fwd)
 
 		return (out_swd, out_fwd)
 
 	def __get_work_days(self, work_type: Worktype, work_week: tuple) -> tuple:
+		''' Возвращает рабочие дни недели '''
 		swd, fwd = work_week
 		wd_count = work_type.work_day_range
 
