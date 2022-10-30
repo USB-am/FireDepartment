@@ -38,6 +38,7 @@ class Filter():
 		wk = self._get_wk(human)
 		working_wk = self._get_working_wk(wk, human.work_day)
 		working_days = self._get_working_days(working_wk, human.work_type)
+		working_time = self._get_working_time(working_days, human.work_type)
 
 		return True
 
@@ -70,6 +71,17 @@ class Filter():
 		output = (swk, swk + timedelta(days=length))
 
 		return output
+
+	def _get_working_time(self, dt: date, work_type: Worktype) -> tuple:
+		''' Возвращает рабочее время на день dt '''
+		swd: datetime = work_type.start_work_day
+		fwd: datetime = work_type.finish_work_day
+
+		wd_length = fwd - swd
+		dt_start = datetime(dt.year, dt.month, dt.day, swd.hour, swd.minute)
+		dt_finish = dt_start + wd_length
+
+		return (dt_start, dt_finish)
 
 
 work_graphs = {
@@ -148,6 +160,18 @@ class TestFilter(unittest.TestCase):
 		working_days = self.filter._get_working_days(working_wk, self.human2.work_type)
 
 		self.assertEqual(working_days, h_val)
+
+	def test_get_working_time_human1(self):
+		h_val = (datetime(2022, 11, 14, 9), datetime(2022, 11, 15, 9))
+		working_time = self.filter._get_working_time(date(2022, 11, 14), self.human1.work_type)
+
+		self.assertEqual(working_time, h_val)
+
+	def test_get_working_time_human2(self):
+		h_val = (datetime(2022, 11, 14, 8), datetime(2022, 11, 14, 17))
+		working_time = self.filter._get_working_time(date(2022, 11, 14), self.human2.work_type)
+
+		self.assertEqual(working_time, h_val)
 
 
 if __name__ == '__main__':
