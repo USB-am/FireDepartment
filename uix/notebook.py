@@ -1,5 +1,6 @@
 import os
-from datetime import datetime, timedelta
+from datetime import *
+from dataclasses import dataclass
 
 from kivy.lang import Builder
 from kivymd.uix.tab import MDTabs, MDTabsBase
@@ -19,66 +20,94 @@ path_to_kv_file = os.path.join(UIX_KV_DIR, 'notebook.kv')
 Builder.load_file(path_to_kv_file)
 
 
+# @dataclass
+# class Worktype():
+# 	title: str
+# 	start_work_day: datetime
+# 	finish_work_day: datetime
+# 	work_day_range: int
+# 	week_day_range: int
+
+# 	def __str__(self):
+# 		return self.title
+
+
+# @dataclass
+# class Human():
+# 	title: str
+# 	work_day: date
+# 	work_type: Worktype
+
+# 	def __str__(self):
+# 		return self.title
+
+
+class Week(list):
+	def __init__(self, start_day: date, finish_day: date):
+		super().__init__()
+
+		self.start_day = start_day
+		self.finish_day = finish_day
+		self.setup()
+
+	def setup(self):
+		days_count = (self.finish_day - self.start_day).days + 1
+
+		for i in range(days_count):
+			self.append(self.start_day + timedelta(days=i))
+
+	def __str__(self):
+		return f'{self.start_day} -> {self.finish_day}'
+
+
+@dataclass
+class WorkingDay():
+	start: datetime
+	finish: datetime
+
+
 class Filter():
-	''' Фильтр работников '''
 	def __init__(self, humans: list):
 		self.humans = humans
 
-	def get_on_date(self, datetime_: datetime) -> list:
-		output = [human for human in self.humans \
-			if self._is_works(datetime_, human)]
+	def get_working(self, dt: datetime) -> list:
+		return [human for human in self.humans if self.is_working(dt, human)]
 
-		return output
+	def is_working(self, dt: datetime, human: Human) -> bool:
+		human_wk_default = self._get_default_wk(human)
+		working_wk = self._get_bias_wk(human_wk_default, dt.date())
+		working_days = self._get_working_days(working_wk, Worktype.query.get(human.worktype))
 
-	def _is_works(self, datetime_: datetime, human: Human) -> bool:
-		''' Возвращает True, если datetime_ попадает на рабочий день human '''
-		work_day = human.work_day
+		return working_days
 
-		if human.worktype is None:
-			return False
+	def _get_default_wk(self, human: Human) -> Week:
+		''' Возвращает неделю, начинающуюся с human.work_day '''
+		wt: Worktype = Worktype.query.get(human.worktype)
+		wd: date = human.work_day
+		wk_length = wt.work_day_range + wt.week_day_range
 
-		wt = Worktype.query.get(human.worktype)
+		return Week(wd, wd + timedelta(days=wk_length - 1))
 
-		week_bias = self.__calc_week_bias(wt, work_day)
-		today_week = self.__get_today_week(datetime_, week_bias)
-		work_days = self.__get_work_days(wt, today_week)
-		output = work_days[0] <= datetime_ < work_days[-1]
-		print(f'{work_days[0]} <= {datetime_} < {work_days[-1]} = {output}')
+	def _get_bias_wk(self, wk: Week, dt: date) -> Week:
+		''' Смещает неделю (wk) так, чтобы она включала в себя дату dt '''
+		wk_length = len(wk)
+		bias = (dt.toordinal() - wk.start_day.toordinal()) // wk_length
 
-		return output
+		swk = wk.start_day + timedelta(days=bias*wk_length)
+		fwk = swk + timedelta(days=wk_length-1)
 
-	def __calc_week_bias(self, work_type: Worktype, work_day: datetime) -> tuple:
-		''' Возвращает кортеж (Начало рабочей недели, конец рабочей недели) '''
-		swd = work_day
-		work_week_length = work_type.work_day_range + work_type.week_day_range
-		fwd = swd + timedelta(days=work_week_length)
+		return Week(swk, fwk)
 
-		return (swd, fwd)
+	def _get_working_days(self, wk: Week, work_type: Worktype) -> list:
+		work_days = range(work_type.work_day_range)
+		output = []
 
-	def __get_today_week(self, day: datetime, bias_week: tuple) -> tuple:
-		''' Приведение bias_week к промежутку между day '''
-		swd, fwd = bias_week
-
-		swd_count = swd.toordinal()
-		fwd_count = fwd.toordinal()
-		day_count = day.toordinal()
-		week_length = fwd_count - swd_count
-
-		bias = (day_count - swd_count) // week_length
-
-		out_swd = swd + timedelta(days=bias * week_length)
-		out_fwd = out_swd + timedelta(days=week_length)
-		print(out_swd, out_fwd)
-
-		return (out_swd, out_fwd)
-
-	def __get_work_days(self, work_type: Worktype, work_week: tuple) -> tuple:
-		''' Возвращает рабочие дни недели '''
-		swd, fwd = work_week
-		wd_count = work_type.work_day_range
-
-		output = tuple([swd + timedelta(days=day_count) \
-			for day_count in range(wd_count)])
+		for num, day in zip(work_days, wk):
+			swd = work_type.start_work_day.time()
+			start = datetime(day.year, day.month, day.day, swd.hour, swd.minute)
+			finish = start + (work_type.finish_work_day - work_type.start_work_day)
+			working_day = WorkingDay(start, finish)
+			output.append(working_day)
 
 		return output
 
@@ -160,7 +189,7 @@ class FDEmergencyTab(MDFloatLayout, MDTabsBase):
 		scroll_layout = self.ids.scroll_layout
 		workers_filter = Filter(self.element.humans)
 
-		today_workers = workers_filter.get_on_date(datetime.now())
+		today_workers = workers_filter.get_working(datetime.now())
 		[scroll_layout.add_widget(HumansSelectedListElement(human)) \
 			for human in today_workers]
 
