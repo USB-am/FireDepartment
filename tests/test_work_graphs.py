@@ -36,11 +36,18 @@ class Filter():
 
 	def is_working(self, dt: datetime, human: Human) -> bool:
 		wk = self._get_wk(human)
-		working_wk = self._get_working_wk(wk, human.work_day)
+		working_wk = self._get_working_wk(wk, dt.date())
 		working_days = self._get_working_days(working_wk, human.work_type)
-		working_time = self._get_working_time(working_days, human.work_type)
 
-		return True
+		wd_length = (working_days[1] - working_days[0]).days
+		for i in range(wd_length + 1):
+			day = working_days[0] + timedelta(days=i)
+			swt, fwt = self._get_working_time(day, human.work_type)
+
+			if swt <= dt < fwt:
+				return True
+
+		return False
 
 	def _get_wk(self, human: Human) -> tuple:
 		''' Возвращает все дни в соответствии с work_type '''
@@ -51,14 +58,13 @@ class Filter():
 
 		return (start_wk, finish_wk)
 
-	def _get_working_wk(self, wk: tuple, work_day: date) -> tuple:
-		''' Смещает рабочую неделю (wk) так, чтобы work_day находился в ней '''
+	def _get_working_wk(self, wk: tuple, day: date) -> tuple:
 		swk, fwk = wk
-		wd = work_day
-		wk_length = (fwk-swk).days
-		wk_bias = abs(wd.toordinal()-swk.toordinal()) // wk_length
+		wk_length = (fwk - swk).days
 
-		first_work_day = swk + timedelta(days=wk_bias * wk_length)
+		bias = abs(day.toordinal() - swk.toordinal()) // wk_length
+
+		first_work_day = swk + timedelta(days=wk_length * bias + 1)	# ?
 		last_work_day = first_work_day + timedelta(days=wk_length)
 
 		return (first_work_day, last_work_day)
@@ -98,6 +104,13 @@ work_graphs = {
 		finish_work_day=datetime(2022, 10, 3, 17),
 		work_day_range=5,
 		week_day_range=2
+	),
+	'All': Worktype(
+		title='All',
+		start_work_day=datetime(2022, 10, 3, 0),
+		finish_work_day=datetime(2022, 10, 4, 0),
+		work_day_range=1,
+		week_day_range=0
 	)
 }
 humans = [
@@ -111,6 +124,11 @@ humans = [
 		work_day=date(2022, 11, 14),
 		work_type=work_graphs['5/2']
 	),
+	Human(
+		title='Human #3',
+		work_day=date(2022, 11, 14),
+		work_type=work_graphs['All']
+	)
 ]
 
 
@@ -119,6 +137,7 @@ class TestFilter(unittest.TestCase):
 	def setUpClass(self):
 		self.human1 = humans[0]
 		self.human2 = humans[1]
+		self.human3 = humans[2]
 		self.filter = Filter(humans)
 
 	def test_get_wk_human_1(self):
@@ -126,22 +145,10 @@ class TestFilter(unittest.TestCase):
 		h_val = (date(2022, 11, 10), date(2022, 11, 13))
 		self.assertEqual(h_wk, h_val)
 
-	def test_get_wk_human_2(self):
-		h_wk = self.filter._get_wk(self.human2)
-		h_val = (date(2022, 11, 14), date(2022, 11, 20))
-		self.assertEqual(h_wk, h_val)
-
 	def test_wk_bias_human_1(self):
 		wk = self.filter._get_wk(self.human1)
-		h_val = (date(2022, 11, 10), date(2022, 11, 13))
-		working_wk = self.filter._get_working_wk(wk, date(2022, 11, 12))
-
-		self.assertEqual(working_wk, h_val)
-
-	def test_wk_bias_human_2(self):
-		wk = self.filter._get_wk(self.human2)
-		h_val = (date(2022, 11, 14), date(2022, 11, 20))
-		working_wk = self.filter._get_working_wk(wk, date(2022, 11, 19))
+		h_val = (date(2022, 11, 14), date(2022, 11, 17))
+		working_wk = self.filter._get_working_wk(wk, date(2022, 11, 15))
 
 		self.assertEqual(working_wk, h_val)
 
@@ -153,25 +160,16 @@ class TestFilter(unittest.TestCase):
 
 		self.assertEqual(working_days, h_val)
 
-	def test_get_working_days_human2(self):
-		wk = self.filter._get_wk(self.human2)
-		h_val = (date(2022, 11, 14), date(2022, 11, 18))
-		working_wk = self.filter._get_working_wk(wk, date(2022, 11, 19))
-		working_days = self.filter._get_working_days(working_wk, self.human2.work_type)
-
-		self.assertEqual(working_days, h_val)
-
 	def test_get_working_time_human1(self):
 		h_val = (datetime(2022, 11, 14, 9), datetime(2022, 11, 15, 9))
 		working_time = self.filter._get_working_time(date(2022, 11, 14), self.human1.work_type)
 
 		self.assertEqual(working_time, h_val)
 
-	def test_get_working_time_human2(self):
-		h_val = (datetime(2022, 11, 14, 8), datetime(2022, 11, 14, 17))
-		working_time = self.filter._get_working_time(date(2022, 11, 14), self.human2.work_type)
+	def test_is_working_human1(self):
+		is_working = self.filter.is_working(datetime(2022, 11, 14, 10), self.human1)
 
-		self.assertEqual(working_time, h_val)
+		self.assertEqual(is_working, False)
 
 
 if __name__ == '__main__':
