@@ -65,6 +65,9 @@ def write_new_localized_dict(path: str) -> None:
 		'integerfield': 'Поле ввода чисел',
 		'priority': 'Приоритетность',
 		'color selection.': 'Выбор цвета.',
+		'global': 'Общие',
+		'off/on hints': 'Выкл./Вкл. подсказки',
+		'language': 'Язык',
 	}
 
 	with open(path, mode='w') as writed_file:
