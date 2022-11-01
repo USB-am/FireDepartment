@@ -20,28 +20,6 @@ path_to_kv_file = os.path.join(UIX_KV_DIR, 'notebook.kv')
 Builder.load_file(path_to_kv_file)
 
 
-# @dataclass
-# class Worktype():
-# 	title: str
-# 	start_work_day: datetime
-# 	finish_work_day: datetime
-# 	work_day_range: int
-# 	week_day_range: int
-
-# 	def __str__(self):
-# 		return self.title
-
-
-# @dataclass
-# class Human():
-# 	title: str
-# 	work_day: date
-# 	work_type: Worktype
-
-# 	def __str__(self):
-# 		return self.title
-
-
 class Week(list):
 	def __init__(self, start_day: date, finish_day: date):
 		super().__init__()

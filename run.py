@@ -23,6 +23,7 @@ from uix.screens.edit_entry_list import EditEntryList
 from uix.screens.edit_entry import EditEntryTag, EditEntryRank, \
 	EditEntryPosition, EditEntryHuman, EditEntryEmergency, EditEntryWorktype
 from uix.screens.edit_color_theme import EditColorTheme
+from uix.screens.global_options import GlobalOptions
 
 
 db.create_all()
@@ -68,13 +69,16 @@ class Application(MDApp):
 	def setup(self) -> None:
 		self.main_page = MainPage(self.path_manager)
 		self.screen_manager.add_widget(self.main_page)
-		self.screen_manager.current = 'main_page'
+		# self.screen_manager.current = 'main_page'
 
 		self.current_calls = CurrentCalls(self.path_manager)
 		self.screen_manager.add_widget(self.current_calls)
 
 		self.options = Options(self.path_manager)
 		self.screen_manager.add_widget(self.options)
+
+		self.global_options = GlobalOptions(self.path_manager)
+		self.screen_manager.add_widget(self.global_options)
 
 		# Create screens
 		for screen in (CreateEntryTag, CreateEntryRank, \
@@ -97,7 +101,7 @@ class Application(MDApp):
 		self.screen_manager.add_widget(EditColorTheme(
 			self.path_manager, self.theme_cls
 		))
-		# self.screen_manager.current = 'options'
+		self.screen_manager.current = 'global_options'
 
 	def set_theme(self) -> None:
 		theme = ColorTheme.query.first()
