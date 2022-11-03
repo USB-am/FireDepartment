@@ -56,7 +56,9 @@ class Filter():
 		working_wk = self._get_bias_wk(human_wk_default, dt.date())
 		working_days = self._get_working_days(working_wk, Worktype.query.get(human.worktype))
 
-		return working_days
+		# print(f'working_days = {working_days}')
+		# return working_days
+		return self._is_date_in_working_wk(dt, working_days)
 
 	def _get_default_wk(self, human: Human) -> Week:
 		''' Возвращает неделю, начинающуюся с human.work_day '''
@@ -76,7 +78,7 @@ class Filter():
 
 		return Week(swk, fwk)
 
-	def _get_working_days(self, wk: Week, work_type: Worktype) -> list:
+	def _get_working_days(self, wk: Week, work_type: Worktype) -> list:	# list[WorkingDay]
 		work_days = range(work_type.work_day_range)
 		output = []
 
@@ -88,6 +90,13 @@ class Filter():
 			output.append(working_day)
 
 		return output
+
+	def _is_date_in_working_wk(self, dt: datetime, week: list) -> bool:
+		for working_day in week:
+			if working_day.start <= dt < working_day.finish:
+				return True
+
+		return False
 
 
 class HumansSelectedListElement(MDBoxLayout):
@@ -167,7 +176,8 @@ class FDEmergencyTab(MDFloatLayout, MDTabsBase):
 		scroll_layout = self.ids.scroll_layout
 		workers_filter = Filter(self.element.humans)
 
-		today_workers = workers_filter.get_working(datetime.now())
+		now_date = datetime.now()
+		today_workers = workers_filter.get_working(now_date)
 		[scroll_layout.add_widget(HumansSelectedListElement(human)) \
 			for human in today_workers]
 
