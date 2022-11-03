@@ -160,6 +160,10 @@ class FDEmptyTab(MDFloatLayout, MDTabsBase):
 
 		super().__init__()
 
+	def update(self) -> None:
+		# print(dir(self.ids.scroll_layout))
+		pass
+
 
 class FDEmergencyTab(MDFloatLayout, MDTabsBase):
 	''' Вкладка с информацией о вызовах '''
@@ -167,6 +171,7 @@ class FDEmergencyTab(MDFloatLayout, MDTabsBase):
 	def __init__(self, element: Emergency):
 		self.element = element
 		self.title = element.title
+		self.workers_filter = Filter(element.humans)
 
 		super().__init__()
 
@@ -174,12 +179,18 @@ class FDEmergencyTab(MDFloatLayout, MDTabsBase):
 
 	def setup(self) -> None:
 		scroll_layout = self.ids.scroll_layout
-		workers_filter = Filter(self.element.humans)
 
 		now_date = datetime.now()
-		today_workers = workers_filter.get_working(now_date)
+		today_workers = self.workers_filter.get_working(now_date)
 		[scroll_layout.add_widget(HumansSelectedListElement(human)) \
 			for human in today_workers]
+
+	def update(self) -> None:
+		now_date = datetime.now()
+
+		for child in self.ids.scroll_layout.children[:-1]:
+			if not self.workers_filter.is_working(now_date, child.human):
+				self.ids.scroll_layout.remove_widget(child)
 
 
 class FDNoteBook(MDTabs):
