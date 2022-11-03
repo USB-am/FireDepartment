@@ -1,3 +1,5 @@
+import time
+
 from custom_screen import CustomScreen
 
 from config import LOCALIZED
@@ -16,6 +18,7 @@ class CurrentCalls(CustomScreen):
 		self.path_manager = path_manager
 
 		self.setup()
+		self.bind(on_enter=lambda e: self.update_tabs())
 
 	def setup(self) -> None:
 		self.toolbar.title = LOCALIZED.translate('Current calls')
@@ -25,6 +28,12 @@ class CurrentCalls(CustomScreen):
 		self.notebook = FDNoteBook()
 		self.add_widgets(self.notebook)
 
+	def update_tabs(self) -> None:
+		try:
+			self.notebook.current_tab.tab.update()
+		except AttributeError:
+			pass
+
 	def add_tab(self, element: db.Model) -> None:
 		self.notebook.add_tab(FDEmergencyTab(element))
 		self.notebook.switch_to_last_tab()
@@ -32,3 +41,4 @@ class CurrentCalls(CustomScreen):
 	def close_tab(self) -> None:
 		current_tab = self.notebook.current_tab
 		self.notebook.close_tab(current_tab)
+		time.sleep(.2)	# Fucking fix IndexError is pressed double-click :D

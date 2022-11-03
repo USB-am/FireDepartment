@@ -12,3 +12,6 @@ SelectionList:
 
 Tests:
 	Написать тесты для ВСЕГО!
+
+FDEmergencyTab:
+	Обновлять работающих сотрудников
