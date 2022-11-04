@@ -5,7 +5,6 @@ from .localized import Localized
 
 # DIRS
 BASE_DIR = os.getcwd()
-
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 
 KV_DIR = os.path.join(BASE_DIR, 'kv')

@@ -95,8 +95,7 @@ class Application(MDApp):
 
 		# Edit screens
 		for screen in (EditEntryTag, EditEntryRank, EditEntryPosition, \
-		               EditEntryHuman, EditEntryEmergency, EditEntryWorktype
-			):
+		               EditEntryHuman, EditEntryEmergency, EditEntryWorktype):
 			self.screen_manager.add_widget(screen(self.path_manager))
 		self.screen_manager.add_widget(EditColorTheme(
 			self.path_manager, self.theme_cls
