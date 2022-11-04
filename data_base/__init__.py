@@ -109,3 +109,11 @@ class Worktype(db.Model):
 
 	def __str__(self):
 		return self.title
+
+
+class UserSettings(db.Model):
+	icon = 'account-wrench'
+	__tablename__ = 'UserSettings'
+	id = db.Column(db.Integer, primary_key=True)
+	help_mode = db.Column(db.Boolean(), nullable=False)
+	language = db.Column(db.String(255), nullable=False)

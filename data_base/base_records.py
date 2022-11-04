@@ -1,4 +1,4 @@
-from . import db, ColorTheme
+from . import db, ColorTheme, UserSettings
 
 
 def insert_colortheme() -> None:
@@ -19,5 +19,20 @@ def insert_colortheme() -> None:
 	db.session.commit()
 
 
+def insert_usersettings() -> None:
+	db_entry = UserSettings.query.first()
+
+	if db_entry is not None:
+		return
+
+	base_settings = UserSettings(
+		help_mode=True,
+		language='ru',
+	)
+	db.session.add(base_settings)
+	db.session.commit()
+
+
 def write_records():
 	insert_colortheme()
+	insert_usersettings()
