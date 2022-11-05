@@ -1,6 +1,8 @@
 from custom_screen import CustomScrolledScreen
 from config import LOCALIZED
 from uix import fields
+from data_base import UserSettings
+from data_base import manager as DBManager
 
 
 class GlobalOptions(CustomScrolledScreen):
@@ -25,6 +27,8 @@ class GlobalOptions(CustomScrolledScreen):
 			icon='chat-question',
 			title='Off/On hints'
 		)
+		self.help_mode.ids.switch.bind(on_release=lambda e: self._update_help_mode())
+
 		language_items = [
 			{
 				'text': 'RU',
@@ -45,5 +49,14 @@ class GlobalOptions(CustomScrolledScreen):
 		self.add_widgets(self.help_mode)
 		self.add_widgets(self.language)
 
+	def _update_help_mode(self) -> None:
+		entry = UserSettings.query.first()
+		values = {'help_mode': self.help_mode.get_value()}
+
+		DBManager.update(entry, values)
+
 	def _update_language(self, lang: str) -> None:
-		print(f'Update language to {lang}')
+		entry = UserSettings.query.first()
+		values = {'language': lang.lower()}
+
+		DBManager.update(entry, values)
