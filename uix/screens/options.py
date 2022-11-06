@@ -21,7 +21,10 @@ class Options(CustomScrolledScreen):
 
 	def setup(self) -> None:
 		self.toolbar.title = LOCALIZED.translate('Options')
-		self.toolbar.add_left_button('arrow-left', lambda e: self.path_manager.back())
+		self.toolbar.add_left_button('arrow-left', lambda e: self.path_manager
+			.back())
+		self.toolbar.add_right_button('palette', lambda e: self.path_manager
+			.forward('global_options'))
 
 	def fill_content(self) -> None:
 		for data_base_table in (Tag, Rank, Position, Human, Emergency, Worktype):
@@ -29,6 +32,6 @@ class Options(CustomScrolledScreen):
 			element.content.binding(self.path_manager)
 			self.add_widgets(element)
 
-		element = FDExpansionPanel(ColorTheme, ExpansionOptionsColorTheme)
-		element.content.binding(self.path_manager)
-		self.add_widgets(element)
+		# element = FDExpansionPanel(ColorTheme, ExpansionOptionsColorTheme)
+		# element.content.binding(self.path_manager)
+		# self.add_widgets(element)
