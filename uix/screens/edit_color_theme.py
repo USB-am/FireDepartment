@@ -13,6 +13,8 @@ from custom_screen import CustomScrolledScreen
 class EditColorTheme(CustomScrolledScreen):
 	''' Экран редактирования цветной схемы '''
 
+	name = 'edit_colortheme'
+
 	def __init__(self, path_manager, theme_cls):
 		super().__init__()
 
@@ -20,8 +22,6 @@ class EditColorTheme(CustomScrolledScreen):
 		self.theme_cls = theme_cls
 		self.theme_cls.theme_style_switch_animation = True
 		self.theme_cls.theme_style_switch_animation_duration = .3
-
-		self.name = 'edit_colortheme'
 
 		self.setup()
 		self.fill_content()

@@ -1,8 +1,18 @@
+from kivymd.uix.button import MDRectangleFlatIconButton
+
 from custom_screen import CustomScrolledScreen
 from config import LOCALIZED
 from uix import fields
 from data_base import UserSettings
 from data_base import manager as DBManager
+
+
+class CustomButton(MDRectangleFlatIconButton):
+	''' Кнопка для открытия окна кастомизации '''
+	def __init__(self, **options):
+		line_color = (0, 0, 0, 0)
+
+		super().__init__(**options)
 
 
 class GlobalOptions(CustomScrolledScreen):
@@ -46,8 +56,14 @@ class GlobalOptions(CustomScrolledScreen):
 		)
 		self.language.add(language_items)
 
+		self.custom_screen_button = CustomButton(text=LOCALIZED
+			.translate('Customization'))
+		self.custom_screen_button.bind(on_release=lambda e: \
+			self.path_manager.forward('edit_colortheme'))
+
 		self.add_widgets(self.help_mode)
 		self.add_widgets(self.language)
+		self.add_widgets(self.custom_screen_button)
 
 	def _update_help_mode(self) -> None:
 		entry = UserSettings.query.first()
