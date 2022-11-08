@@ -1,3 +1,4 @@
+from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.button import MDRectangleFlatIconButton
 
 from custom_screen import CustomScrolledScreen
@@ -7,12 +8,19 @@ from data_base import UserSettings
 from data_base import manager as DBManager
 
 
-class CustomButton(MDRectangleFlatIconButton):
+class CustomButton(MDFloatLayout):
 	''' Кнопка для открытия окна кастомизации '''
 	def __init__(self, **options):
-		line_color = (0, 0, 0, 0)
+		super().__init__(
+			size_hint=(1, None),
+			size=(self.width, 50)
+		)
 
-		super().__init__(**options)
+		self.button = MDRectangleFlatIconButton(
+			pos_hint={'center_x': .5, 'center_y': .5},
+			**options
+		)
+		self.add_widget(self.button)
 
 
 class GlobalOptions(CustomScrolledScreen):
@@ -56,8 +64,9 @@ class GlobalOptions(CustomScrolledScreen):
 		)
 		self.language.add(language_items)
 
-		self.custom_screen_button = CustomButton(text=LOCALIZED
-			.translate('Customization'))
+		self.custom_screen_button = CustomButton(
+			text=LOCALIZED.translate('Customization')
+		)
 		self.custom_screen_button.bind(on_release=lambda e: \
 			self.path_manager.forward('edit_colortheme'))
 
