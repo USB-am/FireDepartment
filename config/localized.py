@@ -96,7 +96,7 @@ class Localized:
 		output = self.vocabulary.get(text.lower())
 
 		if output is None:
-			print(text)
+			# print(text)
 			return text
 
 		return output

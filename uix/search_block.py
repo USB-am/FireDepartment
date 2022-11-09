@@ -3,6 +3,7 @@ from typing import Union
 from kivymd.uix.button import MDIconButton
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.textfield import MDTextField
+from sqlalchemy import func
 
 from config import LOCALIZED
 from data_base import db, Emergency, Tag
@@ -60,9 +61,16 @@ class EmergencySearchBlock(FDSearchBlock):
 
 		output = set()
 		like_search_text = f'%{search_text}%'
+
 		found_tags = Tag.query.filter(Tag.title.like(like_search_text))
+		found_emergencies = Emergency.query.filter(
+			Emergency.title.ilike(like_search_text)
+		)
 
 		for found_tag in found_tags:
 			[output.add(emergency) for emergency in found_tag.emergencys]
+		output |= set(found_emergencies)
 
-		return self._sorted_by_name(output)
+		sorted_elements = self._sorted_by_name(output)
+
+		return sorted_elements
