@@ -10,8 +10,5 @@ SelectionList:
 Tests:
 	Написать тесты для ВСЕГО!
 
-FDEmergencyTab:
-	Обновлять работающих сотрудников
-
 SearchBlock:
 	Сделатьь фильтр по именам ЧС
