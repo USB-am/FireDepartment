@@ -20,9 +20,7 @@ class SearchTextField(MDTextField):
 	def binding(self, callback) -> None:
 		self.callback = callback
 
-	def insert_text(self, substring: str, from_undo: bool=False) -> None:
-		super().insert_text(substring, from_undo=from_undo)
-
+	def on_text(self, instance, value):
 		self.callback()
 
 
@@ -59,18 +57,21 @@ class EmergencySearchBlock(FDSearchBlock):
 		if not search_text:
 			return self._sorted_by_name(Emergency.query.all())
 
-		output = set()
 		like_search_text = f'%{search_text}%'
+		found_tags = self._filter_from_tags(like_search_text)
+		found_emergencies = self._filter_from_emergencies(like_search_text)
+		finded_emergencies = set([*found_tags, *found_emergencies])
 
-		found_tags = Tag.query.filter(Tag.title.like(like_search_text))
-		found_emergencies = Emergency.query.filter(
-			Emergency.title.ilike(like_search_text)
-		)
-
-		for found_tag in found_tags:
-			[output.add(emergency) for emergency in found_tag.emergencys]
-		output |= set(found_emergencies)
-
-		sorted_elements = self._sorted_by_name(output)
+		sorted_elements = self._sorted_by_name(finded_emergencies)
 
 		return sorted_elements
+
+	def _filter_from_tags(self, like_search_text: str) -> list:
+		tags = Tag.query.filter(Tag.title.like(like_search_text))
+		emergencies = []
+		[emergencies.extend(tag.emergencys) for tag in tags]
+
+		return emergencies
+
+	def _filter_from_emergencies(self, like_search_text: str) -> list:
+		return Emergency.query.filter(Emergency.title.ilike(like_search_text))
