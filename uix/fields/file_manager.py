@@ -23,7 +23,10 @@ class FileManager(MDBoxLayout):
 		super().__init__()
 
 		self._value = ''
-		self.manager = MDFileManager(**options)
+		self.manager = MDFileManager(
+			exit_manager=lambda e: self.close(),
+			**options
+		)
 
 		self.ids.button.bind(on_release=lambda e: self.open())
 
@@ -35,6 +38,10 @@ class FileManager(MDBoxLayout):
 				self.manager.show(BASE_DIR)
 			except Exception as e:
 				print(e)
+
+	def close(self) -> None:
+		print(f'FileManager.close() is started')
+		self.manager.close()
 
 	def set_value(self, value: str) -> None:
 		self._value = value

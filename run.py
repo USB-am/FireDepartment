@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
 from kivy.config import Config
-Config.set('graphics', 'width', '350')
+Config.set('graphics', 'width', '360')
+Config.set('graphics', 'height', '650')
 
 
 import json
@@ -40,8 +41,10 @@ class PathManager:
 		self.path = ['main_page', ]
 
 	def forward(self, screen_name: str) -> Screen:
+		print(f'{self.path[-1]} -> ', end='')
 		self.__screen_manager.current = screen_name
 		self.path.append(screen_name)
+		print(screen_name)
 
 		return self.__screen_manager.current_screen
 
