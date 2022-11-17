@@ -67,7 +67,7 @@ class GlobalOptions(CustomScrolledScreen):
 		self.custom_screen_button = CustomButton(
 			text=LOCALIZED.translate('Customization')
 		)
-		self.custom_screen_button.bind(on_release=lambda e: \
+		self.custom_screen_button.button.bind(on_release=lambda e: \
 			self.path_manager.forward('edit_colortheme'))
 
 		self.add_widgets(self.help_mode)
