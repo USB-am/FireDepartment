@@ -65,7 +65,6 @@ class EditEntryList(CustomScrolledScreen):
 
 		for item in items:
 			DBManager.delete(item.instance_item.entry)
-			print(f'{item.instance_item.entry.title} is deleted!')
 
 		self.fill_content()
 		self.setup_normal_toolbar()

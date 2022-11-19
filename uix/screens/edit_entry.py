@@ -1,12 +1,9 @@
 from config import LOCALIZED
-from data_base import db, ColorTheme
+from data_base import db
 from data_base import manager as DBManager
 from uix import fields
 from .create_entry import CreateEntryTag, CreateEntryRank, CreateEntryPosition, \
 	CreateEntryHuman, CreateEntryEmergency, CreateEntryWorktype
-
-
-from random import random, randint
 
 
 def get_id_from_list(foreign_key_field: fields.SelectedList) -> int:
