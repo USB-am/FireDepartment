@@ -4,9 +4,10 @@ from typing import Union
 from kivy.lang import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
 
-from config import FIELDS_KV_DIR, LOCALIZED
-from data_base import db
+from config import FIELDS_KV_DIR, LOCALIZED, HELP_MODE
+from uix.help_button import HelpButton
 from uix.dialog import FDDialog
+from data_base import db
 
 
 path_to_kv_file = os.path.join(FIELDS_KV_DIR, 'selected_list.kv')
@@ -40,7 +41,7 @@ class SelectedList(MDBoxLayout):
 	''' Список с возможностью выбора элементов '''
 
 	def __init__(self, icon: str, title: str, values: list, group: str=None,
-	             **options):
+	             help_text: str=None, **options):
 		self.icon = icon
 		self.title = title
 		self.values = values
@@ -49,6 +50,12 @@ class SelectedList(MDBoxLayout):
 		self.display_text = LOCALIZED.translate(title)
 
 		super().__init__(**options)
+
+		if help_text is not None and HELP_MODE:
+			self.ids.label.add_widget(HelpButton(
+				title=self.__class__.__name__,
+				text=help_text
+			))
 
 		self.fill_content(values)
 

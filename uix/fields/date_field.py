@@ -5,7 +5,7 @@ from kivy.lang import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.picker import MDDatePicker, MDTimePicker
 
-from config import FIELDS_KV_DIR, LOCALIZED
+from config import FIELDS_KV_DIR, LOCALIZED, HELP_MODE
 from uix.help_button import HelpButton
 
 
@@ -23,7 +23,7 @@ def string_to_datetime(datetime_: str) -> datetime.datetime:
 class DateField(MDBoxLayout):
 	''' Поле выбора даты '''
 
-	def __init__(self, icon: str, title: str):
+	def __init__(self, icon: str, title: str, help_text: str=None):
 		self.icon = icon
 		self.title = title
 		self._value: datetime.date = None
@@ -34,6 +34,12 @@ class DateField(MDBoxLayout):
 			self.set_value(date))
 
 		super().__init__()
+
+		if help_text is not None and HELP_MODE:
+			self.ids.label.add_widget(HelpButton(
+				title=self.__class__.__name__,
+				text=help_text
+			))
 
 		self.binding()
 
@@ -66,7 +72,6 @@ class DateTimeField(MDBoxLayout):
 	def __init__(self, icon: str, title: str, help_text: str=None):
 		self.icon = icon
 		self.title = title
-		self.help_text = help_text
 		self._value = None
 
 		self.display_text = LOCALIZED.translate(title)
@@ -79,14 +84,13 @@ class DateTimeField(MDBoxLayout):
 		self.date_dialog.bind(on_save=lambda instance, date, date_range: \
 			self.set_date(date))
 
-		if self.help_text is not None:
-			self.setup()
-		self.binding()
+		if help_text is not None and HELP_MODE:
+			self.ids.top_panel.add_widget(HelpButton(
+				title=self.__class__.__name__,
+				text=help_text
+			))
 
-	def setup(self) -> None:
-		self.ids.top_panel.add_widget(HelpButton(
-			title='Date and time picker widget.',
-			text=self.help_text))
+		self.binding()
 
 	@property
 	def value(self) -> datetime.datetime:

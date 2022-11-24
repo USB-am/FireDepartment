@@ -43,7 +43,8 @@ class GlobalOptions(CustomScrolledScreen):
 	def fill_content(self) -> None:
 		self.help_mode = fields.BooleanField(
 			icon='chat-question',
-			title='Off/On hints'
+			title='Off/On hints',
+			help_text='Выключить/Включить подсказки'
 		)
 		self.help_mode.ids.switch.bind(on_release=lambda e: self._update_help_mode())
 
@@ -60,7 +61,8 @@ class GlobalOptions(CustomScrolledScreen):
 		]
 		self.language = fields.DropDown(
 			icon='translate',
-			title='Language'
+			title='Language',
+			help_text='Выбор языка'
 		)
 		self.language.add(language_items)
 

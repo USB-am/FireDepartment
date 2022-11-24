@@ -10,5 +10,5 @@ SelectionList:
 Tests:
 	Написать тесты для ВСЕГО!
 
-HelpButton:
-	Добавить ко всем виджетам
+CreateEntry.insert:
+	Сделать обработку пустых строк
