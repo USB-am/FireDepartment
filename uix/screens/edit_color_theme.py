@@ -33,17 +33,17 @@ class EditColorTheme(CustomScrolledScreen):
 			'arrow-left', lambda e: self.save_changes_and_back())
 
 		# HUE
-		self.primary_hue = fields.DropDown(icon='opacity',
-		                                   title='Primary hue')
+		self.primary_hue = fields.DropDown(icon='opacity', title='Primary hue',
+			help_text='Выбор оттенка цветовой темы')
 		# PRIMARY
-		self.primary_palette = fields.DropDown(icon='palette',
-		                                       title='Primary palette')
+		self.primary_palette = fields.DropDown(icon='palette', title='Primary palette',
+			help_text='Выбор основного цвета темы')
 		# ACCENT
-		self.accent_palette = fields.DropDown(icon='exclamation-thick',
-		                                      title='Accent palette')
+		self.accent_palette = fields.DropDown(icon='exclamation-thick', title='Accent palette',
+			help_text='Выбор акцентирующего цвета')
 		# THEME STYLE
 		self.theme_style = fields.BooleanField(icon='theme-light-dark',
-		                                       title='Dark theme')
+			title='Dark theme', help_text='Светлая/Темная тема')
 		self.theme_style.ids.switch.bind(
 			on_release=lambda e: self.change_theme_style())
 		# BACKGROUND IMAGE
@@ -52,17 +52,25 @@ class EditColorTheme(CustomScrolledScreen):
 			path=STATIC_DIR,
 			select_path=self.exit_filemanager_and_change_background,
 			selector='file',
-			preview=True)
+			preview=True,
+			help_text='Выбор картинки заднего фона\n'
+				'Если цвет фона - черный, картинка отображаться не будет!'
+			)
 		self.background_opacity = fields.FDSlider(
 			icon='opacity',
-			title=LOCALIZED.translate('Opacity'))
+			title=LOCALIZED.translate('Opacity'),
+			help_text='Управление прозрачностью изображения заднего фона')
 		self.background_opacity.ids.slider.bind(value=lambda instance, value: \
 			self.update_bg_color_opacity())
 		# BACKGROUND COLOR
 		self.background_color = fields.FDColor(
 			icon='format-color-fill',
 			title='Background color',
-			on_color=self.update_bg_color
+			on_color=self.update_bg_color,
+			help_text='Устанавливает цвет и прозрачность фона.\n\n'
+				'Если установить черный цвет, не будет отображаться '
+				'картинка заднего фона т.к. он влияет еще и на '
+				'ее прозрачность!'
 		)
 
 		self.add_widgets(self.primary_hue)

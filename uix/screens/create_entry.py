@@ -48,7 +48,8 @@ class CreateEntryTag(CreateEntry):
 		self.emergencies = fields.SelectedList(
 			icon=Emergency.icon,
 			title=Emergency.__tablename__,
-			values=Emergency.query.all())
+			values=Emergency.query.all(),
+			help_text='Выбор [b]Вызовов[/b], к которым будет привязан этот [b]Тег[/b]')
 		self.emergencies.binding(path_manager)
 
 		self.add_widgets(self.title, self.emergencies)
@@ -81,7 +82,9 @@ class CreateEntryRank(CreateEntry):
 		self.humans = fields.SelectedList(
 			icon=Human.icon,
 			title=Human.__tablename__,
-			values=Human.query.all())
+			values=Human.query.all(),
+			help_text='Выбор [b]Человеков[/b], к которым будет привязано это [b]Звание[/b]'
+		)
 		self.humans.binding(path_manager)
 
 		self.add_widgets(self.title, self.priority, self.humans)
@@ -112,7 +115,9 @@ class CreateEntryPosition(CreateEntry):
 		self.humans = fields.SelectedList(
 			icon=Human.icon,
 			title=Human.__tablename__,
-			values=Human.query.all())
+			values=Human.query.all(),
+			help_text='Выбор [b]Человеков[/b], к которым будет привязана эта [b]Должность[/b]'
+		)
 		self.humans.binding(path_manager)
 
 		self.add_widgets(self.title, self.humans)
@@ -139,24 +144,39 @@ class CreateEntryHuman(CreateEntry):
 		self.title = fields.StringField(
 			title='Title',
 			help_text='Название тела.\n\n(!) Поле не может быть пустым.')
-		self.phone_1 = fields.PhoneField('Phone')
-		self.phone_2 = fields.PhoneField('Addition phone')
-		self.work_day = fields.DateField('calendar-month', 'Work day')
+		self.phone_1 = fields.PhoneField(
+			title='Phone',
+			help_text='Поле ввода номера телефона'
+		)
+		self.phone_2 = fields.PhoneField(
+			title='Addition phone',
+			help_text='Поле ввода дополнительного номера телефона'
+		)
+		self.work_day = fields.DateField('calendar-month', 'Work day',
+			help_text='Первый рабочий день.\n'
+				'От него будут вычисляться следующие рабочие дни.'
+		)
 		self.work_type = fields.SelectedList(
 			icon=Worktype.icon,
 			title=Worktype.__tablename__,
 			values=Worktype.query.all(),
-			group='worktypes')
+			group='worktypes',
+			help_text='Выбор [b]Графика работы[/b], к которому будет привязан этот [b]Человек[/b]'
+		)
 		self.rank = fields.SelectedList(
 			icon=Rank.icon,
 			title=Rank.__tablename__,
 			values=Rank.query.all(),
-			group='ranks')
+			group='ranks',
+			help_text='Выбор [b]Звания[/b], к которому будет привязан этот [b]Человек[/b]'
+		)
 		self.position = fields.SelectedList(
 			icon=Position.icon,
 			title=Position.__tablename__,
 			values=Position.query.all(),
-			group='positions')
+			group='positions',
+			help_text='Выбор [b]Должности[/b], к которой будет привязан этот [b]Человек[/b]'
+		)
 
 		self.work_type.binding(path_manager)
 		self.rank.binding(path_manager)
@@ -194,16 +214,26 @@ class CreateEntryEmergency(CreateEntry):
 			title='Title',
 			help_text='Название события.\n\n(!) Поле не может быть пустым.'
 		)
-		self.description = fields.DescriptionField('Description')
-		self.urgent = fields.BooleanField('truck-fast', 'Urgent')
+		self.description = fields.DescriptionField(
+			title='Description',
+			help_text='Описание выезда'
+		)
+		self.urgent = fields.BooleanField('truck-fast', 'Urgent',
+			help_text='Если включено, отображает ВСЕХ человеков выбранных'
+				'для этого вызова.\n'
+				'Даже если они не работают в этот день/в это время!!!')
 		self.humans = fields.SelectedList(
 			icon=Human.icon,
 			title=Human.__tablename__,
-			values=Human.query.all())
+			values=Human.query.all(),
+			help_text='Выбор [b]Человеков[/b], которые будут привязаны к этому [b]Вызову[/b]'
+		)
 		self.tags = fields.SelectedList(
 			icon=Tag.icon,
 			title=Tag.__tablename__,
-			values=Tag.query.all())
+			values=Tag.query.all(),
+			help_text='Выбор [b]Тегов[/b], которые будут привязаны к этому [b]Вызову[/b]'
+		)
 		self.humans.binding(path_manager)
 		self.tags.binding(path_manager)
 
@@ -235,11 +265,19 @@ class CreateEntryWorktype(CreateEntry):
 
 		self.title = fields.StringField('Title')
 		self.start_work_day = fields.DateTimeField('run-fast', 'Start work day',
-			'Дата и время начала рабочего дня')
+			help_text='Дата и время начала рабочего дня')
 		self.finish_work_day = fields.DateTimeField('exit-run', 'Finish work day',
-			'Дата и время конца рабочего дня')
-		self.work_day_range = fields.IntegerField('Work day range')
-		self.week_day_range = fields.IntegerField('Week day range')
+			help_text='Дата и время конца рабочего дня')
+		self.work_day_range = fields.IntegerField(
+			title='Work day range',
+			help_text='Сколько [b]Человек[/b] работает дней подряд.\n'
+				'При графике 5/2 число будет равно [b]5[/b]'
+		)
+		self.week_day_range = fields.IntegerField(
+			title='Week day range',
+			help_text='Сколько [b]Человек[/b] отдыхает дней подряд.\n'
+				'При графике 5/2 число будет равно [b]2[/b]'
+		)
 
 		self.add_widgets(self.title, self.start_work_day, self.finish_work_day,
 		                 self.work_day_range, self.week_day_range)

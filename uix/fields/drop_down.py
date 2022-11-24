@@ -5,7 +5,8 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.theming import ThemeManager
 
-from config import LOCALIZED, FIELDS_KV_DIR
+from config import LOCALIZED, FIELDS_KV_DIR, HELP_MODE
+from uix.help_button import HelpButton
 from data_base import ColorTheme
 
 
@@ -47,7 +48,7 @@ def gen_color_items(items: list, callback) -> list:
 
 
 class DropDown(MDBoxLayout):
-	def __init__(self, icon: str, title: str):
+	def __init__(self, icon: str, title: str, help_text: str=None):
 		self.icon = icon
 		self.title = title
 		self.display_text = LOCALIZED.translate(title)
@@ -59,6 +60,13 @@ class DropDown(MDBoxLayout):
 			max_height=280,
 			width_mult=4
 		)
+
+		if help_text is not None and HELP_MODE:
+			self.ids.label.add_widget(HelpButton(
+				title=self.__class__.__name__,
+				text=help_text
+			))
+
 		self.ids.button.bind(on_release=lambda e: self.dialog.open())
 
 	def set_value(self, value) -> None:

@@ -59,7 +59,8 @@ class StringField(MDBoxLayout):
 		if help_text is not None and HELP_MODE:
 			self.add_widget(HelpButton(
 				title=self.__class__.__name__,
-				text=help_text))
+				text=help_text
+			))
 
 	def add_right_icon(self, icon: str) -> None:
 		self.base_string.icon_right = icon

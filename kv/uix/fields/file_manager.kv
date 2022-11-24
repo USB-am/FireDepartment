@@ -2,13 +2,16 @@
 	size_hint: 1, None
 	size: self.width, 50
 
-	MDIcon:
-		size_hint: None, None
-		size: 50, 50
-		icon: 'image'
+	MDBoxLayout:
+		id: label
 
-	MDLabel:
-		text: root.display_text
+		MDIcon:
+			size_hint: None, None
+			size: 50, 50
+			icon: 'image'
+
+		MDLabel:
+			text: root.display_text
 
 	MDFloatingActionButton:
 		id: button

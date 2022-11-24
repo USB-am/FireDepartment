@@ -5,8 +5,9 @@ from kivy.uix.colorpicker import ColorPicker
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRaisedButton
 
-from config import LOCALIZED, FIELDS_KV_DIR
 from uix.dialog import FDDialog
+from uix.help_button import HelpButton
+from config import LOCALIZED, FIELDS_KV_DIR, HELP_MODE
 
 
 path_to_kv_file = os.path.join(FIELDS_KV_DIR, 'color.kv')
@@ -50,7 +51,7 @@ class ColorDialog(FDDialog):
 class FDColor(MDBoxLayout):
 	''' Виджет для выбора цвета '''
 
-	def __init__(self, icon: str, title: str, on_color=None):
+	def __init__(self, icon: str, title: str, on_color=None, help_text: str=None):
 		self.icon = icon
 		self.title = title
 		self.on_color = on_color
@@ -61,6 +62,12 @@ class FDColor(MDBoxLayout):
 		self.color_dialog = ColorDialog(self.change_current_color)
 
 		super().__init__()
+
+		if help_text is not None and HELP_MODE:
+			self.ids.label.add_widget(HelpButton(
+				title=self.__class__.__name__,
+				text=help_text
+			))
 
 	@property
 	def value(self) -> list:
