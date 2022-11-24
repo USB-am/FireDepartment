@@ -9,3 +9,6 @@ SelectionList:
 
 Tests:
 	Написать тесты для ВСЕГО!
+
+HelpButton:
+	Добавить ко всем виджетам
