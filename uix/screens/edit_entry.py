@@ -32,8 +32,9 @@ class EditEntryTag(CreateEntryTag):
 		self.emergencies.set_value(self.element.emergencys)
 
 	def insert(self) -> None:
+		title = self.title.get_value()
 		values = {
-			'title': self.title.get_value(),
+			'title': title if title else None,
 			'emergencys': self.emergencies.get_value()}
 
 		successful_entry = DBManager.update(self.element, values)
@@ -69,8 +70,9 @@ class EditEntryRank(CreateEntryRank):
 		self.humans.set_value(self.element.humans)
 
 	def insert(self) -> None:
+		title = self.title.get_value()
 		values = {
-			'title': self.title.get_value(),
+			'title': title if title else None,
 			'humans': self.humans.get_value(),
 		}
 		successful_entry = DBManager.update(self.element, values)
@@ -106,8 +108,9 @@ class EditEntryPosition(CreateEntryPosition):
 		self.humans.set_value(self.element.humans)
 
 	def insert(self) -> None:
+		title = self.title.get_value()
 		values = {
-			'title': self.title.get_value(),
+			'title': title if title else None,
 			'humans': self.humans.get_value(),
 		}
 		successful_entry = DBManager.update(self.element, values)
@@ -148,8 +151,9 @@ class EditEntryHuman(CreateEntryHuman):
 		self.position.set_value(self.element.position)
 
 	def insert(self) -> None:
+		title = self.title.get_value()
 		values = {
-			'title': self.title.get_value(),
+			'title': title if title else None,
 			'phone_1': self.phone_1.get_value(),
 			'phone_2': self.phone_2.get_value(),
 			'work_day': self.work_day.get_value(),
@@ -196,8 +200,9 @@ class EditEntryEmergency(CreateEntryEmergency):
 		self.tags.set_value(self.element.tags)
 
 	def insert(self) -> None:
+		title = self.title.get_value()
 		values = {
-			'title': self.title.get_value(),
+			'title': title if title else None,
 			'description': self.description.get_value(),
 			'urgent': self.urgent.get_value(),
 			'humans': self.humans.get_value(),
@@ -241,8 +246,9 @@ class EditEntryWorktype(CreateEntryWorktype):
 		self.week_day_range.set_value(self.element.week_day_range)
 
 	def insert(self) -> None:
+		title = self.title.get_value()
 		values = {
-			'title': self.title.get_value(),
+			'title': title if title else None,
 			'start_work_day': self.start_work_day.get_value(),
 			'finish_work_day': self.finish_work_day.get_value(),
 			'work_day_range': self.work_day_range.get_value(),
