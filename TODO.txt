@@ -9,6 +9,3 @@ SelectionList:
 
 Tests:
 	Написать тесты для ВСЕГО!
-
-EditEntry.insert:
-	Сделать обработку пустых строк
