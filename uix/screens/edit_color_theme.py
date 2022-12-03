@@ -1,9 +1,11 @@
 import json
 
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.button import MDRaisedButton
 from kivymd.theming import ThemeManager
 
 from custom_screen import CustomScrolledScreen
-from config import LOCALIZED, STATIC_DIR
+from config import LOCALIZED, STATIC_DIR, HELP_MODE
 from data_base import ColorTheme
 from data_base import manager as DBManager
 from uix import fields
@@ -100,6 +102,20 @@ class EditColorTheme(CustomScrolledScreen):
 	def save_changes_and_back(self) -> None:
 		self.save_changes()
 		self.path_manager.back()
+		self.show_info()
+
+	def show_info(self) -> None:
+		if not HELP_MODE:
+			return
+
+		ok_button = MDRaisedButton(text=LOCALIZED.translate('Ok'))
+		dialog = MDDialog(
+			title='Информация',
+			text='Изменения изображения заднего фона активируются при повторном запуске приложения!',
+			buttons=[ok_button, ]
+		)
+		ok_button.bind(on_release=lambda e: dialog.dismiss())
+		dialog.open()
 
 	def update_bg_color(self, color: list) -> None:
 		self.reboot_styles(rgba=color)

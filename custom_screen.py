@@ -35,7 +35,7 @@ class FDToolbar(MDToolbar):
 class CustomScreen(Screen):
 	''' Базовый экран '''
 
-	bg_image = None
+	bg_image = ColorTheme.query.first().background_image
 	color = (1, 1, 1, .3)
 
 	def __init__(self):
@@ -43,8 +43,6 @@ class CustomScreen(Screen):
 
 		self.toolbar = FDToolbar('Base')
 		self.ids.widgets.add_widget(self.toolbar)
-
-		self.bind(on_enter=lambda e: self.reboot_styles())
 
 	def add_widgets(self, *widgets: Widget) -> None:
 		[self.ids.widgets.add_widget(widget) for widget in widgets]
@@ -55,6 +53,7 @@ class CustomScreen(Screen):
 		with self.canvas.before:
 			c = Color(1, 1, 1, 1) if is_light_theme else Color(.5, .5, .5, 1)
 			self.rect = Rectangle(size=self.size, pos=self.pos, source=None)
+		print('clear_styles is finished')
 
 	def reboot_styles(self, rgba: tuple=None, source: str=None) -> None:
 		self.clear_styles()
