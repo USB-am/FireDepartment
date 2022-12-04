@@ -67,14 +67,21 @@ class GlobalOptions(CustomScrolledScreen):
 		self.language.add(language_items)
 
 		self.custom_screen_button = CustomButton(
-			text=LOCALIZED.translate('Customization')
+			text=LOCALIZED.translate('Customization'),
+			icon='palette'
 		)
 		self.custom_screen_button.button.bind(on_release=lambda e: \
 			self.path_manager.forward('edit_colortheme'))
 
+		self.calls_list = CustomButton(
+			text=LOCALIZED.translate('Calls list'))
+		self.calls_list.button.bind(on_release=lambda e: \
+			self.path_manager.forward('calls_list'))
+
 		self.add_widgets(self.help_mode)
 		self.add_widgets(self.language)
 		self.add_widgets(self.custom_screen_button)
+		self.add_widgets(self.calls_list)
 
 	def _update_help_mode(self) -> None:
 		entry = UserSettings.query.first()

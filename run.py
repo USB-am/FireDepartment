@@ -25,6 +25,7 @@ from uix.screens.edit_entry import EditEntryTag, EditEntryRank, \
 	EditEntryPosition, EditEntryHuman, EditEntryEmergency, EditEntryWorktype
 from uix.screens.edit_color_theme import EditColorTheme
 from uix.screens.global_options import GlobalOptions
+from uix.screens.calls_list import CallsList
 
 
 db.create_all()
@@ -103,6 +104,9 @@ class Application(MDApp):
 		self.screen_manager.add_widget(EditColorTheme(
 			self.path_manager, self.theme_cls
 		))
+
+		# Calls list
+		self.screen_manager.add_widget(CallsList(self.path_manager))
 
 	def set_theme(self) -> None:
 		theme = ColorTheme.query.first()

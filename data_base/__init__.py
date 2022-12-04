@@ -117,3 +117,10 @@ class UserSettings(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	help_mode = db.Column(db.Boolean(), nullable=False)
 	language = db.Column(db.String(255), nullable=False)
+
+
+class Calls(db.Model):
+	icon = 'firebase'
+	__tablename__ = 'Calls'
+	id = db.Column(db.Integer, primary_key=True)
+	
