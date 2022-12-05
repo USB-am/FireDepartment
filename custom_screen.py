@@ -35,7 +35,7 @@ class FDToolbar(MDToolbar):
 class CustomScreen(Screen):
 	''' Базовый экран '''
 
-	bg_image = ColorTheme.query.first().background_image
+	bg_image = None
 	color = (1, 1, 1, .3)
 
 	def __init__(self):
@@ -43,6 +43,8 @@ class CustomScreen(Screen):
 
 		self.toolbar = FDToolbar('Base')
 		self.ids.widgets.add_widget(self.toolbar)
+
+		self.bg_image = ColorTheme.query.first().background_image
 
 	def add_widgets(self, *widgets: Widget) -> None:
 		[self.ids.widgets.add_widget(widget) for widget in widgets]
