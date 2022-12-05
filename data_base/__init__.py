@@ -123,4 +123,10 @@ class Calls(db.Model):
 	icon = 'firebase'
 	__tablename__ = 'Calls'
 	id = db.Column(db.Integer, primary_key=True)
-	
+	start = db.Column(db.DateTime(), nullable=False)
+	finish = db.Column(db.DateTime(), nullable=True)
+	emergency = db.Column(db.Integer, db.ForeignKey('Emergency.id'), nullable=False)
+	info = db.Column(db.Text(), nullable=True)
+
+	def __str__(self):
+		return f'[{self.start}, {self.finish}] {self.emergency.title}'
