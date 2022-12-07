@@ -9,7 +9,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRaisedButton
 from kivymd.uix.label import MDLabel
 
-from data_base import Emergency, Human, Rank, Worktype
+from data_base import Emergency, Human, Rank, Worktype, Calls
 from uix import FDScrollFrame
 from uix.dialog import FDDialog, HumanDialogContent
 from uix.fields import TripleCheckbox
@@ -161,17 +161,17 @@ class FDEmptyTab(MDFloatLayout, MDTabsBase):
 		super().__init__()
 
 	def update(self) -> None:
-		# print(dir(self.ids.scroll_layout))
 		pass
 
 
 class FDEmergencyTab(MDFloatLayout, MDTabsBase):
 	''' Вкладка с информацией о вызовах '''
 
-	def __init__(self, element: Emergency):
-		self.element = element
-		self.title = element.title
-		self.workers_filter = Filter(element.humans)
+	def __init__(self, call: Calls):
+		self.call = call
+		self.element = Emergency.query.get(call.emergency)
+		self.title = self.element.title
+		self.workers_filter = Filter(self.element.humans)
 
 		super().__init__()
 
