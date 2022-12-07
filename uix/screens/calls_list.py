@@ -1,5 +1,4 @@
 from typing import Union
-# from datetime import strftime
 
 from kivy.metrics import dp
 from kivymd.uix.datatables import MDDataTable
@@ -24,8 +23,6 @@ class CallsTable(MDDataTable):
 	def add_table(self, data: Union[list, tuple]) -> None:
 		self.clear()
 		valid_data = self._convert_to_valid_data(data)
-		print(dir(self))
-		print(dir(self.pagination))
 		[self.row_data.append(_d) for _d in valid_data]
 
 	def clear(self) -> None:

@@ -129,4 +129,4 @@ class Calls(db.Model):
 	info = db.Column(db.Text(), nullable=True)
 
 	def __str__(self):
-		return f'[{self.start}, {self.finish}] {self.emergency.title}'
+		return f'[{self.start}, {self.finish}] {self.emergency}'
