@@ -68,6 +68,20 @@ def write_new_localized_dict(path: str) -> None:
 		'global': 'Общие',
 		'off/on hints': 'Выкл./Вкл. подсказки',
 		'language': 'Язык',
+		'start': 'Начало',
+		'finish': 'Конец',
+		'booleanfield': 'Переключатель',
+		'dropdown': 'Выпадающий список',
+		'customization': 'Кастомизация',
+		'calls list': 'Список вызовов',
+		'selectedlist': 'Выбор',
+		'phonefield': 'Поле ввода номера телефона',
+		'datefield': 'Поле выбора даты',
+		'descriptionfield': 'Описание',
+		'datetimefield': 'Поле выбора времени и даты',
+		'filemanager': 'Файловый менеджер',
+		'fdslider': 'Слайдер',
+		'fdcolor': 'Палитра',
 	}
 
 	with open(path, mode='w') as writed_file:
@@ -96,7 +110,7 @@ class Localized:
 		output = self.vocabulary.get(text.lower())
 
 		if output is None:
-			# print(text)
+			print(text)
 			return text
 
 		return output
