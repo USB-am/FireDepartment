@@ -8,11 +8,12 @@ from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRaisedButton
 from kivymd.uix.label import MDLabel
+from kivymd.uix.textfield import MDTextField
 
 from data_base import Emergency, Human, Rank, Worktype, Calls
 from uix import FDScrollFrame
 from uix.dialog import FDDialog, HumanDialogContent
-from uix.fields import TripleCheckbox
+from uix.fields import TripleCheckbox, DescriptionField
 from config import UIX_KV_DIR, LOCALIZED
 
 
@@ -164,7 +165,31 @@ class FDEmptyTab(MDFloatLayout, MDTabsBase):
 		pass
 
 
-class FDEmergencyTab(MDFloatLayout, MDTabsBase):
+class EmergencyDecriptionField(MDTextField):
+	''' Многострочное поле для описания вызова '''
+
+	def __init__(self, title: str):
+		self.title = title
+		self.display_text = LOCALIZED.translate(title)
+
+		super().__init__(
+			size_hint=(1, 1),
+			hint_text=self.display_text,
+			multiline=True,
+			mode='rectangle'
+		)
+
+
+class DropupLayout(MDBoxLayout):
+	''' Выдвигающийся снизу список '''
+
+	def __init__(self, title: str, content: MDBoxLayout):
+		self.title = title
+		self.display_text = LOCALIZED.translate(title)
+		self.content = content
+
+
+class FDEmergencyTab(MDBoxLayout, MDTabsBase):
 	''' Вкладка с информацией о вызовах '''
 
 	def __init__(self, call: Calls):
@@ -173,17 +198,32 @@ class FDEmergencyTab(MDFloatLayout, MDTabsBase):
 		self.title = self.element.title
 		self.workers_filter = Filter(self.element.humans)
 
-		super().__init__()
+		super().__init__(orientation='vertical')
 
 		self.setup()
 
 	def setup(self) -> None:
-		scroll_layout = self.ids.scroll_layout
+		# scroll_layout = self.ids.scroll_layout
 
-		now_date = datetime.now()
-		today_workers = self.workers_filter.get_working(now_date)
-		[scroll_layout.add_widget(HumansSelectedListElement(human)) \
-			for human in today_workers]
+		# now_date = datetime.now()
+		# today_workers = self.workers_filter.get_working(now_date)
+		# [scroll_layout.add_widget(HumansSelectedListElement(human)) \
+		# 	for human in today_workers]
+
+		# Description layout
+		texts_layout = self.ids.texts
+		texts_layout.add_widget(EmergencyDecriptionField(
+			title=LOCALIZED.translate('Description field')
+		))
+
+		# Dropup layout
+		self.ids.participants_title.text = LOCALIZED.translate('Participants')
+		self.ids.open_button.bind(on_release=lambda e: self.open_dropup_layout())
+
+	def open_dropup_layout(self) -> None:
+		self.ids.open_button.icon = 'chevron-down'
+		layout = self.ids.dropup_layout
+		layout.height = 400
 
 	def update(self) -> None:
 		now_date = datetime.now()
