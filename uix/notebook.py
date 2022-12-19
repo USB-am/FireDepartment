@@ -57,8 +57,6 @@ class Filter():
 		working_wk = self._get_bias_wk(human_wk_default, dt.date())
 		working_days = self._get_working_days(working_wk, Worktype.query.get(human.worktype))
 
-		# print(f'working_days = {working_days}')
-		# return working_days
 		return self._is_date_in_working_wk(dt, working_days)
 
 	def _get_default_wk(self, human: Human) -> Week:
@@ -188,6 +186,25 @@ class DropupLayout(MDBoxLayout):
 		self.display_text = LOCALIZED.translate(title)
 		self.content = content
 
+		super().__init__()
+		self.add_widget(self.content)
+
+		self.state = False
+
+		self.ids.button.bind(on_release=lambda e: self._open_layout())
+
+	def _open_layout(self) -> None:
+		button = self.ids.button
+
+		if self.state:
+			self.state = False
+			button.icon = 'chevron-up'
+			self.height = 50
+		else:
+			self.state = True
+			button.icon = 'chevron-down'
+			self.height = 400
+
 
 class FDEmergencyTab(MDBoxLayout, MDTabsBase):
 	''' Вкладка с информацией о вызовах '''
@@ -211,14 +228,15 @@ class FDEmergencyTab(MDBoxLayout, MDTabsBase):
 		# 	for human in today_workers]
 
 		# Description layout
-		texts_layout = self.ids.texts
-		texts_layout.add_widget(EmergencyDecriptionField(
+		self.add_widget(EmergencyDecriptionField(
 			title=LOCALIZED.translate('Description field')
 		))
 
 		# Dropup layout
-		self.ids.participants_title.text = LOCALIZED.translate('Participants')
-		self.ids.open_button.bind(on_release=lambda e: self.open_dropup_layout())
+		self.add_widget(DropupLayout(
+			title=LOCALIZED.translate('Participants'),
+			content=MDBoxLayout()
+		))
 
 	def open_dropup_layout(self) -> None:
 		self.ids.open_button.icon = 'chevron-down'

@@ -22,33 +22,10 @@
 
 		MDLabel:
 			size_hint: 1, 1
-			text: parent.display_text
+			text: root.display_text
 
 		MDIconButton:
 			id: button
-			size_hint: None, 1
-			size: 50, self.height
-
-
-<FDEmergencyTab>:
-	pos_hint: {'x': 0, 'y': 0}
-
-	MDBoxLayout:
-		id: texts
-		orientation: 'vertical'
-
-	MDBoxLayout:
-		id: dropup_layout
-		size_hint: 1, None
-		size: self.width, 50
-		orientation: 'horizontal'
-
-		MDLabel:
-			id: participants_title
-			size_hint: 1, 1
-
-		MDIconButton:
-			id: open_button
 			size_hint: None, None
 			size: 50, 50
 			icon: 'chevron-up'
