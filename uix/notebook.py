@@ -148,6 +148,18 @@ class HumansSelectedListElement(MDBoxLayout):
 			self.md_bg_color = (1, 1, 1, 0)
 
 
+class HumansList(MDBoxLayout):
+	''' Область отображения людей на вызове '''
+
+	def fill_humans(self, humans: list) -> None:
+		container = self.ids.container
+		container.clear_widgets()
+
+		[container.add_widget(HumansSelectedListElement(human))]
+		for human in humans:
+			container.add_widget(HumansSelectedListElement(human))
+
+
 class FDEmptyTab(MDFloatLayout, MDTabsBase):
 	''' Пуская вкладка '''
 
@@ -166,15 +178,15 @@ class FDEmptyTab(MDFloatLayout, MDTabsBase):
 class EmergencyDecriptionField(MDTextField):
 	''' Многострочное поле для описания вызова '''
 
-	def __init__(self, title: str):
+	def __init__(self, title: str, **options):
 		self.title = title
 		self.display_text = LOCALIZED.translate(title)
 
 		super().__init__(
-			size_hint=(1, 1),
 			hint_text=self.display_text,
 			multiline=True,
-			mode='rectangle'
+			mode='rectangle',
+			**options
 		)
 
 
@@ -193,17 +205,20 @@ class DropupLayout(MDBoxLayout):
 
 		self.ids.button.bind(on_release=lambda e: self._open_layout())
 
-	def _open_layout(self) -> None:
-		button = self.ids.button
+	def open(self) -> None:
+		self.state = True
+		self.ids.button.icon = 'chevron-down'
+		self.height = 400
+		self.md_bg_color = (1, 1, 1, .8)
 
-		if self.state:
-			self.state = False
-			button.icon = 'chevron-up'
-			self.height = 50
-		else:
-			self.state = True
-			button.icon = 'chevron-down'
-			self.height = 400
+	def close(self) -> None:
+		self.state = False
+		self.ids.button.icon = 'chevron-up'
+		self.height = 50
+		self.md_bg_color = (1, 1, 1, .5)
+
+	def _open_layout(self) -> None:
+		self.close() if self.state else self.open()
 
 
 class FDEmergencyTab(MDBoxLayout, MDTabsBase):
@@ -229,8 +244,10 @@ class FDEmergencyTab(MDBoxLayout, MDTabsBase):
 
 		# Description layout
 		self.add_widget(EmergencyDecriptionField(
-			title=LOCALIZED.translate('Description field')
+			title=LOCALIZED.translate('Description field'),
+			pos_hint={'x': 0, 'y': 0}
 		))
+		self.add_widget(MDBoxLayout())
 
 		# Dropup layout
 		self.add_widget(DropupLayout(
