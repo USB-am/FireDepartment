@@ -155,7 +155,7 @@ class HumansList(MDBoxLayout):
 		container = self.ids.container
 		container.clear_widgets()
 
-		[container.add_widget(HumansSelectedListElement(human))]
+		# [container.add_widget(HumansSelectedListElement(human))]
 		for human in humans:
 			container.add_widget(HumansSelectedListElement(human))
 
@@ -237,10 +237,12 @@ class FDEmergencyTab(MDBoxLayout, MDTabsBase):
 	def setup(self) -> None:
 		# scroll_layout = self.ids.scroll_layout
 
-		# now_date = datetime.now()
-		# today_workers = self.workers_filter.get_working(now_date)
+		now_date = datetime.now()
+		today_workers = self.workers_filter.get_working(now_date)
 		# [scroll_layout.add_widget(HumansSelectedListElement(human)) \
 		# 	for human in today_workers]
+		humans_list = HumansList()
+		humans_list.fill_humans(today_workers)
 
 		# Description layout
 		self.add_widget(EmergencyDecriptionField(
@@ -252,7 +254,7 @@ class FDEmergencyTab(MDBoxLayout, MDTabsBase):
 		# Dropup layout
 		self.add_widget(DropupLayout(
 			title=LOCALIZED.translate('Participants'),
-			content=MDBoxLayout()
+			content=humans_list
 		))
 
 	def open_dropup_layout(self) -> None:

@@ -49,3 +49,15 @@
 		text: f'[b]{root.human.title}[/b]\n[i]{root.phone_1}[/i]'
 		anchor_x: 'left'
 		padding: [10, 0]
+
+
+<HumansList>:
+	ScrollView:
+		GridLayout:
+			id: container
+			cols: 1
+			size_hint: 1, None
+			height: self.minimum_height
+			do_scroll_x: False
+			padding: 15, 10
+			spacing: 10
