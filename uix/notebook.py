@@ -7,13 +7,12 @@ from kivymd.uix.tab import MDTabs, MDTabsBase
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRaisedButton
-from kivymd.uix.label import MDLabel
 from kivymd.uix.textfield import MDTextField
 
 from data_base import Emergency, Human, Rank, Worktype, Calls
 from uix import FDScrollFrame
 from uix.dialog import FDDialog, HumanDialogContent
-from uix.fields import TripleCheckbox, DescriptionField
+from uix.fields import TripleCheckbox
 from config import UIX_KV_DIR, LOCALIZED
 
 
@@ -155,7 +154,6 @@ class HumansList(MDBoxLayout):
 		container = self.ids.container
 		container.clear_widgets()
 
-		# [container.add_widget(HumansSelectedListElement(human))]
 		for human in humans:
 			container.add_widget(HumansSelectedListElement(human))
 
