@@ -187,6 +187,21 @@ class EmergencyDecriptionField(MDTextField):
 			**options
 		)
 
+		self.text = self._gen_start_text()
+
+	def _gen_start_text(self) -> str:
+		now_date = datetime.now().strftime('%H:%M:%S %d.%m.%Y')
+		text = f'Вызов начат в {now_date}.\n\nВ вызове участвуют:'
+
+		return text
+
+	def add_people(self, human: Human) -> None:
+		rank = human.rank
+		if rank is None:
+			rank = ''
+
+		self.text += f'{human.title} [{human.rank}]'
+
 
 class DropupLayout(MDBoxLayout):
 	''' Выдвигающийся снизу список '''
@@ -237,16 +252,18 @@ class FDEmergencyTab(MDBoxLayout, MDTabsBase):
 
 		now_date = datetime.now()
 		today_workers = self.workers_filter.get_working(now_date)
-		# [scroll_layout.add_widget(HumansSelectedListElement(human)) \
-		# 	for human in today_workers]
+
 		humans_list = HumansList()
 		humans_list.fill_humans(today_workers)
 
 		# Description layout
-		self.add_widget(EmergencyDecriptionField(
+		self.description = EmergencyDecriptionField(
 			title=LOCALIZED.translate('Description field'),
 			pos_hint={'x': 0, 'y': 0}
-		))
+		)
+		[self.description.add_people(worker) for worker in today_workers]
+
+		self.add_widget(self.description)
 		self.add_widget(MDBoxLayout())
 
 		# Dropup layout
