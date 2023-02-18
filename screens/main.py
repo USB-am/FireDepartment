@@ -1,14 +1,11 @@
 from kivy.lang.builder import Builder
+from kivymd.uix.label import MDLabel
 
-from . import BaseScreen
+from . import BaseScrolledScreen
 from app.path_manager import PathManager
-from config import paths
 
 
-Builder.load_file(paths.MAIN_SCREEN)
-
-
-class MainScreen(BaseScreen):
+class MainScreen(BaseScrolledScreen):
 	''' Главная страница '''
 
 	name = 'main'
@@ -17,3 +14,4 @@ class MainScreen(BaseScreen):
 		super().__init__()
 
 		self.path_manager = path_manager
+		self.add_widgets(*[MDLabel(text=f'Row #{i}') for i in range(10)])
