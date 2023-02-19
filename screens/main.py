@@ -14,4 +14,5 @@ class MainScreen(BaseScrolledScreen):
 		super().__init__()
 
 		self.path_manager = path_manager
-		self.add_widgets(*[MDLabel(text=f'Row #{i}') for i in range(10)])
+		self.add_widgets(*[MDLabel(text=f'Row #{i}', size_hint=(1, None), size=(self.width, 75))\
+			for i in range(10)])
