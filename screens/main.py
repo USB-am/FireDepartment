@@ -1,8 +1,8 @@
 from kivy.lang.builder import Builder
-from kivymd.uix.label import MDLabel
 
 from . import BaseScrolledScreen
 from app.path_manager import PathManager
+from ui.fields.entry import FDTextInput, FDNumInput
 
 
 class MainScreen(BaseScrolledScreen):
@@ -14,5 +14,22 @@ class MainScreen(BaseScrolledScreen):
 		super().__init__()
 
 		self.path_manager = path_manager
-		self.add_widgets(*[MDLabel(text=f'Row #{i}', size_hint=(1, None), size=(self.width, 75))\
-			for i in range(10)])
+		self.__fill_toolbar()
+		self.__fill_content()
+
+	def __fill_toolbar(self) -> None:
+		self.toolbar.add_left_button(
+			icon='fire-truck',
+			callback=lambda event: print('fire-truck')
+		)
+		self.toolbar.add_right_button(
+			icon='face-agent',
+			callback=lambda event: self.path_manager.forward('options')
+		)
+
+	def __fill_content(self) -> None:
+		ws = []
+		for i in range(10):
+			w = FDTextInput(hint_text=f'BaseTextInput #{i+1}')
+			ws.append(w)
+		self.add_widgets(*ws)

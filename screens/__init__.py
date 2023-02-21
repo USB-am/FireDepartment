@@ -1,5 +1,3 @@
-import os
-
 from kivy.uix.screenmanager import Screen
 from kivy.lang.builder import Builder
 from kivy.uix.widget import Widget
@@ -10,8 +8,7 @@ from ui.widgets.toolbar import FDToolbar
 from ui.frames.scrolled import FDScrolledFrame
 
 
-path_to_kv_file = os.path.join(paths.BASE_SCREEN)
-Builder.load_file(path_to_kv_file)
+Builder.load_file(paths.BASE_SCREEN)
 
 
 class BaseScreen(Screen):
@@ -34,6 +31,12 @@ class BaseScreen(Screen):
 		'''
 
 		[self.ids.widgets.add_widget(widget) for widget in widgets]
+
+	def clear(self) -> None:
+		''' Очищает все содержимое '''
+
+		container = self.id.widgets
+		container.clear_widgets()
 
 
 class BaseScrolledScreen(BaseScreen):
