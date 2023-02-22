@@ -1,0 +1,28 @@
+<FDSelectList>:
+	orientation: 'vertical'
+	size_hint: 1, None
+	height: dp(400)
+	md_bg_color: app.theme_cls.accent_color
+
+	MDBoxLayout:
+		size_hint: 1, None
+		height: dp(50)
+		padding: dp(10), 0
+
+		MDIcon:
+			icon: root.icon
+			size_hint: None, 1
+			width: dp(50)
+
+		MDLabel:
+			text: root.title
+
+	ScrollView:
+		GridLayout:
+			id: lst
+			cols: 1
+			size_hint: 1, None
+			height: self.minimum_height
+			do_scroll_x: False
+			padding: dp(15), dp(5)
+			spacing: dp(10)

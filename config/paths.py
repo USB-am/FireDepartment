@@ -17,3 +17,4 @@ SCROLLED_FRAME = os.path.join(__FRAMES_DIR, 'scrolled_frame.kv')
 __FIELDS_DIR = os.path.join(__KV_DIR, 'fields')
 
 TEXT_INPUT_FIELD = os.path.join(__FIELDS_DIR, 'entry.kv')
+SELECTED_LIST_FIELD = os.path.join(__FIELDS_DIR, 'select_list.kv')

@@ -3,6 +3,7 @@ from kivy.lang.builder import Builder
 from . import BaseScrolledScreen
 from app.path_manager import PathManager
 from ui.fields.entry import FDTextInput, FDNumInput
+from ui.fields.select_list import FDSelectList
 
 
 class MainScreen(BaseScrolledScreen):
@@ -29,7 +30,8 @@ class MainScreen(BaseScrolledScreen):
 
 	def __fill_content(self) -> None:
 		ws = []
-		for i in range(10):
-			w = FDTextInput(hint_text=f'BaseTextInput #{i+1}')
-			ws.append(w)
+		# for i in range(10):
+		# 	w = FDTextInput(hint_text=f'BaseTextInput #{i+1}')
+		# 	ws.append(w)
+		self.add_widgets(FDSelectList(icon='account', title='Title'))
 		self.add_widgets(*ws)
