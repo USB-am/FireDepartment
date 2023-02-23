@@ -3,17 +3,15 @@
 	height: dp(50)
 
 	MDCheckbox:
-		size_hint: None, None
-		size: dp(50), dp(50)
-		text_size: self.size
-		valign: 'bottom'
+		id: checkbox
+		size_hint: None, 1
+		size: self.height, self.height
+		group: root.group
 
-	MDTextButton:
-		size_hint: 1, None
-		height: dp(50)
+	MDFlatButton:
+		size_hint: 1, 1
 		text: root.db_entry.title
-		text_size: self.size
-		halign: 'left'
+		anchor_x: 'left'
 
 		on_release:
 			print(f'You pressed on "{root.db_entry.title}"')
@@ -23,7 +21,6 @@
 	orientation: 'vertical'
 	size_hint: 1, None
 	height: dp(400)
-	md_bg_color: app.theme_cls.accent_color
 
 	MDBoxLayout:
 		size_hint: 1, None
