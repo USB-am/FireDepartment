@@ -5,6 +5,8 @@ from app.path_manager import PathManager
 from ui.fields.entry import FDTextInput, FDNumInput
 from ui.fields.select_list import FDSelectList
 
+from data_base import db, Human
+
 
 class MainScreen(BaseScrolledScreen):
 	''' Главная страница '''
@@ -29,9 +31,7 @@ class MainScreen(BaseScrolledScreen):
 		)
 
 	def __fill_content(self) -> None:
-		ws = []
-		# for i in range(10):
-		# 	w = FDTextInput(hint_text=f'BaseTextInput #{i+1}')
-		# 	ws.append(w)
-		self.add_widgets(FDSelectList(icon='account', title='Title'))
-		self.add_widgets(*ws)
+		sl = FDSelectList(icon='account', title='Title')
+		humans = Human.query.all()
+		[sl.add(human) for human in humans]
+		self.add_widgets(sl)

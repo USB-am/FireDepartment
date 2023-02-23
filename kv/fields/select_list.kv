@@ -1,3 +1,24 @@
+<_SelectListItem>:
+	size_hint: 1, None
+	height: dp(50)
+
+	MDCheckbox:
+		size_hint: None, None
+		size: dp(50), dp(50)
+		text_size: self.size
+		valign: 'bottom'
+
+	MDTextButton:
+		size_hint: 1, None
+		height: dp(50)
+		text: root.db_entry.title
+		text_size: self.size
+		halign: 'left'
+
+		on_release:
+			print(f'You pressed on "{root.db_entry.title}"')
+
+
 <FDSelectList>:
 	orientation: 'vertical'
 	size_hint: 1, None

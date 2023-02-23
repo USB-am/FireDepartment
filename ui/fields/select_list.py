@@ -1,12 +1,22 @@
 from kivy.lang.builder import Builder
+from kivy.properties import StringProperty
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.label import MDLabel
-from kivy.properties import StringProperty
 
 from config import paths
+from data_base import db
 
 
 Builder.load_file(paths.SELECTED_LIST_FIELD)
+
+
+class _SelectListItem(MDBoxLayout):
+	''' Элемент списка FDSelectList '''
+
+	def __init__(self, db_entry: db.Model):
+		self.db_entry = db_entry
+
+		super().__init__()
 
 
 class FDSelectList(MDBoxLayout):
@@ -14,8 +24,8 @@ class FDSelectList(MDBoxLayout):
 
 	icon = StringProperty()
 	title = StringProperty()
+	group = StringProperty(None)
 
-	def add(self, text: str) -> None:
-		lst = self.ids.lst
-
-		lst.add_widget(MDLabel(text=text, size_hint=(1, None), size=(self.width, 50)))
+	def add(self, row_data: db.Model) -> None:
+		element = _SelectListItem(row_data)
+		self.ids.lst.add_widget(element)
