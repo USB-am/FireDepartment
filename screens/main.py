@@ -2,12 +2,6 @@ from kivy.lang.builder import Builder
 
 from . import BaseScrolledScreen
 from app.path_manager import PathManager
-from ui.fields.entry import FDTextInput, FDNumInput
-from ui.fields.select_list import FDSelectList
-from ui.fields.switch import FDSwitch
-
-from data_base import db, Human
-from kivymd.uix.button import MDFlatButton
 
 
 class MainScreen(BaseScrolledScreen):

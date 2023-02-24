@@ -1,0 +1,21 @@
+<FDDate>:
+	orientation: 'horizontal'
+	size_hint: 1, None
+	height: dp(50)
+
+	MDIcon:
+		icon: root.icon
+		size_hint: None, 1
+		width: self.height
+
+	MDLabel:
+		text: root.title
+
+	MDRaisedButton:
+		id: btn
+		size_hint: None, 1
+		width: self.height * 2
+		text: 'dd.mm.yyyy'
+
+		on_release:
+			root._open_date_dialog()
