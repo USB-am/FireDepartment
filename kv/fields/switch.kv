@@ -1,0 +1,17 @@
+<FDSwitch>:
+	orientation: 'horizontal'
+	size_hint: 1, None
+	height: dp(50)
+
+	MDIcon:
+		icon: root.icon
+		size_hint: None, 1
+		width: self.height
+
+	MDLabel:
+		text: root.title
+
+	MDSwitch:
+		id: switch
+		size_hint: None, 1
+		width: dp(35)
