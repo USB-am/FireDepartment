@@ -32,12 +32,4 @@ class MainScreen(BaseScrolledScreen):
 		)
 
 	def __fill_content(self) -> None:
-		sl = FDSelectList(icon='account', title='Title')#, group='test')
-		humans = Human.query.all()
-		[sl.add(human) for human in humans]
-		sl.set_value([humans[1], humans[3], humans[8]])
-		self.add_widgets(sl)
-
-		btn = MDFlatButton(text='Test')
-		btn.bind(on_release=lambda e: print(sl.get_value()))
-		self.add_widgets(btn)
+		pass
