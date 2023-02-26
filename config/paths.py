@@ -12,6 +12,7 @@ BASE_SCREEN = os.path.join(__SCREENS_DIR, 'base_screen.kv')
 __FRAMES_DIR = os.path.join(__KV_DIR, 'frames')
 
 SCROLLED_FRAME = os.path.join(__FRAMES_DIR, 'scrolled_frame.kv')
+SELECTION_FRAME = os.path.join(__FRAMES_DIR, 'selection_frame.kv')
 
 # Fields paths
 __FIELDS_DIR = os.path.join(__KV_DIR, 'fields')
