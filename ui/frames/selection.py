@@ -4,11 +4,11 @@ from kivy.uix.scrollview import ScrollView
 from config import paths
 
 
-Builder.load_file(paths.SCROLLED_FRAME)
+Builder.load_file(paths.SELECTION_FRAME)
 
 
-class FDScrolledFrame(ScrollView):
-	''' Область прокрутки '''
+class FDSelectionFrame(ScrollView):
+	''' Область выбора '''
 
 	def add_widgets(self, *widgets) -> None:
 		[self.ids.content.add_widget(widget) for widget in widgets]

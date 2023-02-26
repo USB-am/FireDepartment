@@ -4,7 +4,11 @@ from . import BaseScrolledScreen
 from app.path_manager import PathManager
 
 
-class MainScreen(BaseScrolledScreen):
+from . import SelectedScrollScreen
+from ui.widgets import selection_elements
+
+
+class MainScreen(SelectedScrollScreen):
 	''' Главная страница '''
 
 	name = 'main'
@@ -27,4 +31,8 @@ class MainScreen(BaseScrolledScreen):
 		)
 
 	def __fill_content(self) -> None:
-		pass
+		elems = []
+		for i in range(5):
+			elems.append(selection_elements.FDOneLineElement(text=f'Element #{i+1}'))
+
+		self.add_widgets(*elems)
