@@ -62,7 +62,7 @@ class Human(db.Model):
 	title = db.Column(db.String(255), nullable=False)
 	phone_1 = db.Column(db.String(255), nullable=True)
 	phone_2 = db.Column(db.String(255), nullable=True)
-	work_day = db.Column(db.DateTime(), nullable=True)
+	work_day = db.Column(db.Date(), nullable=True)
 	worktype = db.Column(db.Integer, db.ForeignKey('Worktype.id'), nullable=True)
 	position = db.Column(db.Integer, db.ForeignKey('Position.id'), nullable=True)
 	rank = db.Column(db.Integer, db.ForeignKey('Rank.id'), nullable=True)
