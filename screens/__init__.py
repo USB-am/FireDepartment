@@ -79,7 +79,6 @@ class SelectedScrollScreen(BaseScreen):
 
 	def _set_selected_mode(self, instance_list: FDSelectionFrame,
 		                  mode: bool) -> None:
-		print(f'Mode is {mode}')
 		if mode:
 			left_items = [
 				['close', lambda e: self.selection_frame.unselected_all()],
@@ -87,7 +86,7 @@ class SelectedScrollScreen(BaseScreen):
 			right_items = []
 		else:
 			left_items = [
-				['bus', lambda e: print('All good!')],
+				['bus', lambda e: None],
 			]
 			right_items = []
 			self.toolbar.title = 'All good!'
