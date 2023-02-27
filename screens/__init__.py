@@ -1,12 +1,15 @@
 from kivy.lang.builder import Builder
 from kivy.uix.screenmanager import Screen
 from kivy.uix.widget import Widget
+from kivymd.uix.bottomnavigation import MDBottomNavigationItem
 
 from app.path_manager import PathManager
 from config import paths
 from ui.widgets.toolbar import FDToolbar
 from ui.frames.scrolled import FDScrolledFrame
 from ui.frames.selection import FDSelectionFrame
+
+from kivymd.uix.boxlayout import MDBoxLayout
 
 
 Builder.load_file(paths.BASE_SCREEN)
@@ -37,6 +40,27 @@ class BaseScreen(Screen):
 		''' Очищает все содержимое '''
 
 		container = self.id.widgets
+		container.clear_widgets()
+
+
+class FDBottomNavigation(MDBoxLayout):
+	pass
+
+class BaseBottomNavigationScreen(BaseScreen):
+	''' Базовый экран с нижней полосой навигации '''
+
+	def __init__(self):
+		super().__init__()
+
+		self.bottom_navigation = FDBottomNavigation()
+		super().add_widgets(self.bottom_navigation)
+
+	def add_widgets(self, *navigation_items: MDBottomNavigationItem) -> None:
+		[self.bottom_navigation.ids.nav.add_widget(item) \
+			for item in navigation_items]
+
+	def clear(self) -> None:
+		container = self.bottom_navigation.ids.nav
 		container.clear_widgets()
 
 

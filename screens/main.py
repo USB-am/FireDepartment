@@ -1,14 +1,10 @@
 from kivy.lang.builder import Builder
 
-from . import BaseScrolledScreen
+from . import BaseScrolledScreen, BaseBottomNavigationScreen
 from app.path_manager import PathManager
 
 
-from . import SelectedScrollScreen
-from ui.widgets import selection_elements
-
-
-class MainScreen(SelectedScrollScreen):
+class MainScreen(BaseBottomNavigationScreen):
 	''' Главная страница '''
 
 	name = 'main'
@@ -17,6 +13,9 @@ class MainScreen(SelectedScrollScreen):
 		super().__init__()
 
 		self.path_manager = path_manager
+		self.bind(on_pre_enter=lambda e: self.__fill())
+
+	def __fill(self) -> None:
 		self.__fill_toolbar()
 		self.__fill_content()
 
@@ -31,8 +30,4 @@ class MainScreen(SelectedScrollScreen):
 		)
 
 	def __fill_content(self) -> None:
-		elems = []
-		for i in range(5):
-			elems.append(selection_elements.FDOneLineElement(text=f'Element #{i+1}'))
-
-		self.add_widgets(*elems)
+		pass

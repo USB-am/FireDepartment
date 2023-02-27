@@ -21,3 +21,6 @@ TEXT_INPUT_FIELD = os.path.join(__FIELDS_DIR, 'entry.kv')
 SELECTED_LIST_FIELD = os.path.join(__FIELDS_DIR, 'select_list.kv')
 SWITCH_FIELD = os.path.join(__FIELDS_DIR, 'switch.kv')
 DATE_FIELD = os.path.join(__FIELDS_DIR, 'date.kv')
+
+# Widgets paths
+__WIDGETS_DIR = os.path.join(__KV_DIR, 'widgets')
