@@ -72,24 +72,25 @@ class SelectedScrollScreen(BaseScreen):
 		self.selection_frame = FDSelectionFrame()
 		self.selection_frame.ids.content.bind(
 			on_selected=self._on_selected,
-			on_unselected=self._on_unselected,
-			on_selected_mode=self._set_selected_mode
+			on_unselected=self._on_unselected
 		)
 		self.ids.widgets.add_widget(self.selection_frame)
+		self.__toolbar_data = {
+			'title': self.toolbar.title,
+			'left_action_items': self.toolbar.left_action_items,
+			'right_action_items': self.toolbar.right_action_items,
+		}
 
-	def _set_selected_mode(self, instance_list: FDSelectionFrame,
-		                  mode: bool) -> None:
+	def _set_selected_mode(self, mode: bool) -> None:
 		if mode:
 			left_items = [
 				['close', lambda e: self.selection_frame.unselected_all()],
 			]
 			right_items = []
 		else:
-			left_items = [
-				['bus', lambda e: None],
-			]
-			right_items = []
-			self.toolbar.title = 'All good!'
+			left_items = self.__toolbar_data['left_action_items']
+			right_items = self.__toolbar_data['right_action_items']
+			self.toolbar.title = self.__toolbar_data['title']
 
 		self.toolbar.left_action_items = left_items
 		self.toolbar.right_action_items = right_items
@@ -99,12 +100,15 @@ class SelectedScrollScreen(BaseScreen):
 		self.toolbar.title = str(
 			len(instance_list.get_selected_list_items())
 		)
+		self._set_selected_mode(True)
 
 	def _on_unselected(self, instance_list: FDSelectionFrame,
 	                   instance_item) -> None:
 		items_count = instance_list.get_selected_list_items()
 		if items_count:
 			self.toolbar.title = str(len(items_count))
+		
+		self._set_selected_mode(bool(items_count))
 
 	def add_widgets(self, *widgets: Widget) -> None:
 		self.selection_frame.add_widgets(*widgets)
