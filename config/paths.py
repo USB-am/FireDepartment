@@ -24,3 +24,5 @@ DATE_FIELD = os.path.join(__FIELDS_DIR, 'date.kv')
 
 # Widgets paths
 __WIDGETS_DIR = os.path.join(__KV_DIR, 'widgets')
+
+BOTTOM_NAVIGATION_WIDGET = os.path.join(__WIDGETS_DIR, 'bottom_navigation.kv')

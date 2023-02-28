@@ -6,10 +6,9 @@ from kivymd.uix.bottomnavigation import MDBottomNavigationItem
 from app.path_manager import PathManager
 from config import paths
 from ui.widgets.toolbar import FDToolbar
+from ui.widgets.bottom_navigation import FDBottomNavigation
 from ui.frames.scrolled import FDScrolledFrame
 from ui.frames.selection import FDSelectionFrame
-
-from kivymd.uix.boxlayout import MDBoxLayout
 
 
 Builder.load_file(paths.BASE_SCREEN)
@@ -42,9 +41,6 @@ class BaseScreen(Screen):
 		container = self.id.widgets
 		container.clear_widgets()
 
-
-class FDBottomNavigation(MDBoxLayout):
-	pass
 
 class BaseBottomNavigationScreen(BaseScreen):
 	''' Базовый экран с нижней полосой навигации '''
