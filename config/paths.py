@@ -13,6 +13,7 @@ __FRAMES_DIR = os.path.join(__KV_DIR, 'frames')
 
 SCROLLED_FRAME = os.path.join(__FRAMES_DIR, 'scrolled_frame.kv')
 SELECTION_FRAME = os.path.join(__FRAMES_DIR, 'selection_frame.kv')
+BOTTOM_NAVIGATION_ITEMS = os.path.join(__FRAMES_DIR, 'bottom_navigation_items.kv')
 
 # Fields paths
 __FIELDS_DIR = os.path.join(__KV_DIR, 'fields')

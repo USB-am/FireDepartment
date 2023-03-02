@@ -3,6 +3,8 @@ from kivy.lang.builder import Builder
 from . import BaseScrolledScreen, BaseBottomNavigationScreen
 from app.path_manager import PathManager
 
+from ui.frames.bottom_navigation_items import EmergenciesNavigationItem
+
 
 class MainScreen(BaseBottomNavigationScreen):
 	''' Главная страница '''
@@ -30,4 +32,9 @@ class MainScreen(BaseBottomNavigationScreen):
 		)
 
 	def __fill_content(self) -> None:
-		pass
+		self.emergencies_item = EmergenciesNavigationItem(
+			name='emergencies_item',
+			text='Вызовы',
+			icon='phone-alert'
+		)
+		self.add_widgets(self.emergencies_item)
