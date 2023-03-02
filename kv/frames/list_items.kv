@@ -1,0 +1,21 @@
+<EmergencyContentItem>:
+	size_hint: None, 1
+	width: self.height
+
+	MDIcon:
+		icon: root.icon
+		size_hint: None, 1
+		width: dp(25)
+
+	MDLabel:
+		size_hint: None, 1
+		width: dp(25)
+		text: root.value
+
+
+<EmergencyContent>:
+	orientation: 'horizontal'
+	size_hint: 1, None
+	height: dp(50)
+	spacing: dp(15)
+	padding: [dp(20), 0]
