@@ -4,6 +4,7 @@ from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelTwoLine
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton
 
+from app.path_manager import PathManager
 from config import paths
 import data_base
 
@@ -52,7 +53,7 @@ class EmergencyContent(MDBoxLayout):
 			size_hint=(None, None),
 			size=(self.height, self.height)
 		)
-		submit.bind(on_release=lambda e: print(f'Go to {model.title}'))
+		submit.bind(on_release=lambda e: PathManager(None).forward('options'))
 		self.add_widget(submit)
 
 
@@ -60,13 +61,14 @@ class FDEmergencyListItem(MDExpansionPanel):
 	''' Элемент списка Вызовов '''
 
 	def __init__(self, model: data_base.Emergency):
-		self._emergency_content = EmergencyContent(model)
+		self.model = model
+		self._emergency_content = EmergencyContent(self.model)
 
 		super().__init__(
-			icon=model.icon,
+			icon=self.model.icon,
 			content=self._emergency_content,
 			panel_cls=MDExpansionPanelTwoLine(
-				text=model.title,
-				secondary_text=model.description
+				text=self.model.title,
+				secondary_text=self.model.description
 			)
 		)

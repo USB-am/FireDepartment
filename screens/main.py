@@ -12,10 +12,10 @@ class MainScreen(BaseBottomNavigationScreen):
 	name = 'main'
 
 	def __init__(self, path_manager: PathManager):
+		self.path_manager = path_manager
 		super().__init__()
 
-		self.path_manager = path_manager
-		self.bind(on_pre_enter=lambda e: self.__fill())
+		self.__fill()
 
 	def __fill(self) -> None:
 		self.__fill_toolbar()

@@ -25,5 +25,5 @@ class EmergenciesNavigationItem(MDBottomNavigationItem):
 	def add_list_items(self, *emergencies: data_base.Emergency) -> None:
 		container = self.ids.content
 
-		for emergency in emergencies:
-			container.add_widget(FDEmergencyListItem(model=emergency))
+		[container.add_widget(FDEmergencyListItem(model=emergency)) \
+			for emergency in emergencies]
