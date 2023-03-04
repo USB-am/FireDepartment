@@ -19,3 +19,22 @@
 	height: dp(50)
 	spacing: dp(15)
 	padding: [dp(20), 0]
+
+
+<FDHumanListItem>:
+	orientation: 'horizontal'
+	size_hint: 1, None
+	size: self.width, dp(50)
+
+	MDIconButton:
+		id: icon_btn
+		icon: root.model.icon
+
+	MDTextButton:
+		id: text_btn
+		text: root.model.title
+		size_hint: None, None
+		size: root.width, dp(50)
+		text_size: root.width, dp(50)
+		halign: 'left'
+		valign: 'middle'
