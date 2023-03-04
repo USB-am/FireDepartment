@@ -3,7 +3,8 @@ from kivy.lang.builder import Builder
 from . import BaseScrolledScreen, BaseBottomNavigationScreen
 from app.path_manager import PathManager
 
-from ui.frames.bottom_navigation_items import EmergenciesNavigationItem
+from ui.frames.bottom_navigation_items import EmergenciesNavigationItem, \
+	ContactsNavigationItem
 
 
 class MainScreen(BaseBottomNavigationScreen):
@@ -37,4 +38,11 @@ class MainScreen(BaseBottomNavigationScreen):
 			text='Вызовы',
 			icon='phone-alert'
 		)
+
+		self.contacts_item = ContactsNavigationItem(
+			name='contacts_item',
+			text='Контакты',
+			icon='card-account-phone'
+		)
+		self.add_widgets(self.contacts_item)
 		self.add_widgets(self.emergencies_item)
