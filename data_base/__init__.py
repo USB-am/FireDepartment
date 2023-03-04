@@ -62,6 +62,7 @@ class Human(db.Model):
 	title = db.Column(db.String(255), nullable=False)
 	phone_1 = db.Column(db.String(255), nullable=True)
 	phone_2 = db.Column(db.String(255), nullable=True)
+	is_firefigher = db.Column(db.Boolean(), nullable=False)
 	work_day = db.Column(db.Date(), nullable=True)
 	worktype = db.Column(db.Integer, db.ForeignKey('Worktype.id'), nullable=True)
 	position = db.Column(db.Integer, db.ForeignKey('Position.id'), nullable=True)
