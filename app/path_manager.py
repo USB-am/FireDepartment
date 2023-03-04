@@ -18,7 +18,6 @@ class PathManager:
 		else:
 			self.__screen_manager = screen_manager
 		self._path = ['main',]
-		print(f'self._instance = {self._instance}\n{self}')
 
 	def forward(self, screen_name: str) -> Screen:
 		self.__screen_manager.current = screen_name
