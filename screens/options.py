@@ -24,6 +24,10 @@ class OptionsScreen(BaseScrolledScreen):
 			icon='arrow-left',
 			callback=lambda event: self.path_manager.back()
 		)
+		self.toolbar.add_right_button(
+			icon='palette',
+			callback=lambda event: self.path_manager.forward('color_theme_edit')
+		)
 
 	def __fill_content(self) -> None:
 		models = (Tag, Rank, Position, Human, Emergency,)
