@@ -2,7 +2,8 @@ from typing import Union
 
 from kivy.lang.builder import Builder
 from kivy.properties import StringProperty
-from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelTwoLine
+from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelOneLine, \
+	MDExpansionPanelTwoLine
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDIconButton, MDTextButton, MDRaisedButton
 from kivymd.uix.dialog import MDDialog
@@ -110,3 +111,34 @@ class FDHumanListItem(MDBoxLayout):
 			close_btn.bind(on_release=lambda e: self._dialog.dismiss())
 
 		self._dialog.open()
+
+
+class OptionsContent(MDBoxLayout):
+	''' Содержимое элемента списка FDOptionsListItem '''
+
+	def __init__(self, table_name: str):
+		self.table_name = table_name.lower()
+
+		super().__init__()
+
+		self.ids.create_btn.bind(
+			on_release=lambda e: PathManager(None)\
+				.forward(f'create_{self.table_name}')
+		)
+		self.ids.edit_btn.bind(
+			on_release=lambda e: PathManager(None)\
+				.forward(f'edit_{self.table_name}')
+		)
+
+
+class FDOptionsListItem(MDExpansionPanel):
+	''' Элемент списка в настройках '''
+
+	def __init__(self, model: data_base.db.Model):
+		self.model = model
+
+		super().__init__(
+			icon=self.model.icon,
+			content=OptionsContent(self.model.__tablename__),
+			panel_cls=MDExpansionPanelOneLine(text=self.model.__tablename__)
+		)

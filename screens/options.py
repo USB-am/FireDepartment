@@ -1,8 +1,10 @@
 from kivy.lang.builder import Builder
 from kivymd.uix.label import MDLabel
 
+from data_base import Tag, Rank, Position, Human, Emergency
 from . import BaseScrolledScreen
 from app.path_manager import PathManager
+from ui.frames.list_items import FDOptionsListItem
 
 
 class OptionsScreen(BaseScrolledScreen):
@@ -15,9 +17,20 @@ class OptionsScreen(BaseScrolledScreen):
 
 		self.path_manager = path_manager
 		self.__fill_toolbar()
+		self.__fill_content()
 
 	def __fill_toolbar(self) -> None:
 		self.toolbar.add_left_button(
 			icon='arrow-left',
 			callback=lambda event: self.path_manager.back()
 		)
+
+	def __fill_content(self) -> None:
+		models = (Tag, Rank, Position, Human, Emergency,)
+		items = []
+
+		for model in models:
+			item = FDOptionsListItem(model)
+			items.append(item)
+
+		self.add_widgets(*items)

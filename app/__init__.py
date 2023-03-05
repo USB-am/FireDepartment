@@ -25,7 +25,7 @@ class Application(MDApp):
 		self.options_screen = OptionsScreen(self.path_manager)
 		self.screen_manager.add_widget(self.options_screen)
 
-		self.screen_manager.current = 'main'
+		self.screen_manager.current = 'options'
 
 	def build(self) -> ScreenManager:
 		return self.screen_manager

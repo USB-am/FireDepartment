@@ -38,3 +38,20 @@
 		text_size: root.width, dp(50)
 		halign: 'left'
 		valign: 'middle'
+
+
+<OptionsContent>:
+	orientation: 'horizontal'
+	size_hint: 1, None
+	size: self.width, dp(50)
+	padding: [dp(20), 0]
+
+	MDRectangleFlatButton:
+		id: create_btn
+		text: 'Создать'
+
+	MDBoxLayout:
+
+	MDRectangleFlatButton:
+		id: edit_btn
+		text: 'Редактировать'
