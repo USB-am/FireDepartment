@@ -1,0 +1,12 @@
+<FDLabel>:
+	orientation: 'horizontal'
+	size_hint: 1, None
+	height: dp(50)
+
+	MDLabel:
+		size_hint: .4, 1
+		text: f'{root.title.capitalize()}:'
+
+	MDLabel:
+		size_hint: .6, 1
+		text: root.value
