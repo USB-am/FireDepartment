@@ -1,0 +1,12 @@
+<ModelDialogContenet>:
+	size_hint: 1, None
+	height: dp(400)
+
+	ScrollView:
+		GridLayout:
+			id: content
+			size_hint: 1, None
+			height: self.minimum_height
+			cols: 1
+			do_scroll_x: False
+			padding: dp(10)

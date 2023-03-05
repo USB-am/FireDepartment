@@ -4,11 +4,13 @@ from kivy.lang.builder import Builder
 from kivy.properties import StringProperty
 from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelTwoLine
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.button import MDIconButton, MDTextButton
+from kivymd.uix.button import MDIconButton, MDTextButton, MDRaisedButton
+from kivymd.uix.dialog import MDDialog
 
 from app.path_manager import PathManager
 from config import paths
 import data_base
+from ui.frames.dialogs.model_content import ModelDialogContenet
 
 
 Builder.load_file(paths.LIST_ITEMS)
@@ -88,8 +90,23 @@ class FDHumanListItem(MDBoxLayout):
 
 		super().__init__()
 
+		self._dialog = None
 		self.ids.icon_btn.bind(on_release=self._show_info)
 		self.ids.text_btn.bind(on_release=self._show_info)
 
+
 	def _show_info(self, instance: Union[MDIconButton, MDTextButton]) -> None:
-		print(f'You pressed on {self.model.title} button')
+		if self._dialog is None:
+			close_btn = MDRaisedButton(text='Ок')
+
+			self._dialog = MDDialog(
+				title=self.model.title,
+				type='custom',
+				content_cls=ModelDialogContenet(self.model),
+				buttons=[
+					close_btn,
+				]
+			)
+			close_btn.bind(on_release=lambda e: self._dialog.dismiss())
+
+		self._dialog.open()
