@@ -1,0 +1,2 @@
+ui.frames.model_content:
+	Сделать красивое отображение
