@@ -57,3 +57,12 @@
 		id: edit_btn
 		icon: 'pencil-plus'
 		text: 'Редактировать'
+
+
+<FDEditModelListItem>:
+	size_hint: 1, None
+	size: self.width, dp(50)
+	text: root.model.title
+
+	IconLeftWidget:
+		icon: root.model.icon

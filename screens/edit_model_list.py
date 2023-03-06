@@ -2,6 +2,7 @@ from . import SelectedScrollScreen
 from app.path_manager import PathManager
 
 import data_base
+from ui.frames.list_items import FDEditModelListItem
 
 
 class _BaseEditModelListScreen(SelectedScrollScreen):
@@ -15,7 +16,6 @@ class _BaseEditModelListScreen(SelectedScrollScreen):
 		self.__fill_toolbar()
 
 		self.bind(on_pre_enter=lambda *e: self.__fill_content())
-		# self.__fill_content()
 
 	def __fill_toolbar(self) -> None:
 		self.toolbar.add_left_button(
@@ -24,8 +24,9 @@ class _BaseEditModelListScreen(SelectedScrollScreen):
 		)
 
 	def __fill_content(self) -> None:
-		for entry in self.table.query.all():
-			print(entry.title)
+		self.add_widgets(*[FDEditModelListItem(entry) \
+			for entry in self.table.query.all()])
+
 
 class EditTagListScreen(_BaseEditModelListScreen):
 	''' Список редактируемых Тегов '''
