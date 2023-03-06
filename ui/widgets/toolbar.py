@@ -1,11 +1,13 @@
 from kivymd.uix.toolbar import MDToolbar
 
+from config.localizer import LOCALIZE
+
 
 class FDToolbar(MDToolbar):
 	''' Верхняя понель на экране '''
 
 	def __init__(self, title: str):
-		self.title = title.capitalize()
+		self.title = LOCALIZE(title).capitalize()
 		super().__init__()
 
 	def add_left_button(self, icon: str, callback) -> None:
