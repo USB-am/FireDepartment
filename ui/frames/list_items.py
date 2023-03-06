@@ -127,7 +127,7 @@ class OptionsContent(MDBoxLayout):
 		)
 		self.ids.edit_btn.bind(
 			on_release=lambda e: PathManager(None)\
-				.forward(f'edit_{self.table_name}')
+				.forward(f'edit_{self.table_name}_list')
 		)
 
 
