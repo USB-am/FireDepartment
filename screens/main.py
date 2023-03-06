@@ -1,6 +1,4 @@
-from kivy.lang.builder import Builder
-
-from . import BaseScrolledScreen, BaseBottomNavigationScreen
+from . import BaseBottomNavigationScreen
 from app.path_manager import PathManager
 
 from ui.frames.bottom_navigation_items import EmergenciesNavigationItem, \
