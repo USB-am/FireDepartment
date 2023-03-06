@@ -142,3 +142,20 @@ class FDOptionsListItem(MDExpansionPanel):
 			content=OptionsContent(self.model.__tablename__),
 			panel_cls=MDExpansionPanelOneLine(text=self.model.__tablename__)
 		)
+
+
+class FDEditModelListItem(MDExpansionPanelOneLine):
+	''' Элемент списка для редактирования '''
+
+	def __init__(self, model: data_base.db.Model):
+		self.model = model
+
+		super().__init__()
+
+		self.bind(on_release=self.move_to_edit_screen)
+
+	def move_to_edit_screen(self, instance: MDExpansionPanelOneLine) -> None:
+		next_screen_name = f'edit_{self.model.__tablename__.lower()}'
+		next_screen = PathManager(None).forward(next_screen_name)
+
+		next_screen.fill_content(self.model)
