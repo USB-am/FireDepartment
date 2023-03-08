@@ -35,8 +35,29 @@ class EditTagListScreen(_BaseEditModelListScreen):
 	table = data_base.Tag
 
 
+class EditRankListScreen(_BaseEditModelListScreen):
+	''' Список редактируемых Званий '''
+
+	name = 'edit_rank_list'
+	table = data_base.Rank
+
+
+class EditPositionListScreen(_BaseEditModelListScreen):
+	''' Список редактируемых Должностей '''
+
+	name = 'edit_position_list'
+	table = data_base.Position
+
+
 class EditHumanListScreen(_BaseEditModelListScreen):
 	''' Список редактируемых Людей '''
 
 	name = 'edit_human_list'
 	table = data_base.Human
+
+
+class EditEmergencyListScreen(_BaseEditModelListScreen):
+	''' Список редактируемых Вызовов '''
+
+	name = 'edit_emergency_list'
+	table = data_base.Emergency
