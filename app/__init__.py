@@ -4,7 +4,8 @@ from kivy.uix.screenmanager import ScreenManager
 from .path_manager import PathManager
 from screens.main import MainScreen
 from screens.options import OptionsScreen
-from screens.edit_model_list import EditTagListScreen, EditHumanListScreen
+from screens.edit_model_list import EditTagListScreen, EditRankListScreen, \
+	EditPositionListScreen, EditHumanListScreen, EditEmergencyListScreen
 
 
 class Application(MDApp):
@@ -29,8 +30,17 @@ class Application(MDApp):
 		self.edit_tag_list_screen = EditTagListScreen(self.path_manager)
 		self.screen_manager.add_widget(self.edit_tag_list_screen)
 
+		self.edit_rank_list_screen = EditRankListScreen(self.path_manager)
+		self.screen_manager.add_widget(self.edit_rank_list_screen)
+
+		self.edit_position_list_screen = EditPositionListScreen(self.path_manager)
+		self.screen_manager.add_widget(self.edit_position_list_screen)
+
 		self.edit_human_list_screen = EditHumanListScreen(self.path_manager)
 		self.screen_manager.add_widget(self.edit_human_list_screen)
+
+		self.edit_emergency_list_screen = EditEmergencyListScreen(self.path_manager)
+		self.screen_manager.add_widget(self.edit_emergency_list_screen)
 
 		self.screen_manager.current = 'options'
 
