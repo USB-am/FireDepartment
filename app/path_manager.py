@@ -1,27 +1,27 @@
 from kivy.uix.screenmanager import ScreenManager, Screen
 
 
-class PathManager:
-	''' Менеджер путей '''
-
+class _Singleton(type):
 	_instance = None
 
-	def __new__(cls, *args):
+	def __call__(cls, *args, **kwargs):
 		if cls._instance is None:
-			cls._instance = super(PathManager, cls).__new__(cls)
+			cls._instance = super(_Singleton, cls).__call__(*args, **kwargs)
 
 		return cls._instance
 
+
+class PathManager(metaclass=_Singleton):
+	''' Менеджер путей '''
+
 	def __init__(self, screen_manager: ScreenManager):
-		if screen_manager is None:
-			self.__screen_manager = self._instance.__screen_manager
-		else:
-			self.__screen_manager = screen_manager
+		self.__screen_manager = screen_manager
 		self._path = ['main',]
 
 	def forward(self, screen_name: str) -> Screen:
 		self.__screen_manager.current = screen_name
 		self._path.append(screen_name)
+		print(self._path)
 
 		return self.__screen_manager.current_screen
 
@@ -30,5 +30,6 @@ class PathManager:
 			self._path.pop(-1)
 
 		self.__screen_manager.current = self._path[-1]
+		print(self._path)
 
 		return self.__screen_manager.current_screen
