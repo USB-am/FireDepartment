@@ -35,9 +35,10 @@ class FDSelectList(MDBoxLayout):
 	title = StringProperty()
 	group = StringProperty(None)
 
-	def add(self, row_data: db.Model) -> None:
-		element = _SelectListItem(row_data, group=self.group)
-		self.ids.lst.add_widget(element)
+	def add(self, *row_data: db.Model) -> None:
+		for row in row_data:
+			element = _SelectListItem(row, group=self.group)
+			self.ids.lst.add_widget(element)
 
 	def get_value(self) -> list:
 		container = self.ids.lst

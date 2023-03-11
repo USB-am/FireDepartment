@@ -46,7 +46,7 @@ class Application(MDApp):
 		self.edit_emergency_list_screen = EditEmergencyListScreen(self.path_manager)
 		self.screen_manager.add_widget(self.edit_emergency_list_screen)
 
-		self.screen_manager.current = 'options'
+		self.screen_manager.current = 'create_tag'
 
 	def build(self) -> ScreenManager:
 		return self.screen_manager
