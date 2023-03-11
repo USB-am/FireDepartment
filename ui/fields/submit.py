@@ -19,4 +19,3 @@ class FDSubmit(MDBoxLayout):
 
 	def bind_btn(self, callback) -> None:
 		self.ids.btn.bind(on_release=callback)
-		# pass

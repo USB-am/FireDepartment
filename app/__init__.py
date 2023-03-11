@@ -4,7 +4,8 @@ from kivy.uix.screenmanager import ScreenManager
 from .path_manager import PathManager
 from screens.main import MainScreen
 from screens.options import OptionsScreen
-from screens.create_model import CreateTagScreen
+from screens.create_model import CreateTagScreen, CreateRankScreen, \
+	CreatePositionScreen, CreateHumanScreen, CreateEmergencyScreen
 from screens.edit_model_list import EditTagListScreen, EditRankListScreen, \
 	EditPositionListScreen, EditHumanListScreen, EditEmergencyListScreen
 
@@ -28,25 +29,25 @@ class Application(MDApp):
 		self.options_screen = OptionsScreen(self.path_manager)
 		self.screen_manager.add_widget(self.options_screen)
 
-		self.create_tag_screen = CreateTagScreen(self.path_manager)
-		self.screen_manager.add_widget(self.create_tag_screen)
+		# Create screens
+		_create_screens_objects = (CreateTagScreen, CreateRankScreen,
+			CreatePositionScreen, CreateHumanScreen, CreateEmergencyScreen)
 
-		self.edit_tag_list_screen = EditTagListScreen(self.path_manager)
-		self.screen_manager.add_widget(self.edit_tag_list_screen)
+		for create_screen in _create_screens_objects:
+			scr = create_screen(self.path_manager)
+			self.screen_manager.add_widget(scr)
 
-		self.edit_rank_list_screen = EditRankListScreen(self.path_manager)
-		self.screen_manager.add_widget(self.edit_rank_list_screen)
+		# Edit list screens
+		_edit_list_screen_objects = (EditTagListScreen, EditRankListScreen,
+			EditPositionListScreen, EditHumanListScreen,
+			EditEmergencyListScreen
+		)
 
-		self.edit_position_list_screen = EditPositionListScreen(self.path_manager)
-		self.screen_manager.add_widget(self.edit_position_list_screen)
+		for edit_list_screen in _edit_list_screen_objects:
+			scr = edit_list_screen(self.path_manager)
+			self.screen_manager.add_widget(scr)
 
-		self.edit_human_list_screen = EditHumanListScreen(self.path_manager)
-		self.screen_manager.add_widget(self.edit_human_list_screen)
-
-		self.edit_emergency_list_screen = EditEmergencyListScreen(self.path_manager)
-		self.screen_manager.add_widget(self.edit_emergency_list_screen)
-
-		self.screen_manager.current = 'create_tag'
+		self.screen_manager.current = 'options'
 
 	def build(self) -> ScreenManager:
 		return self.screen_manager
