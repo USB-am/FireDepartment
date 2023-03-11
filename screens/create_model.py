@@ -40,7 +40,7 @@ class CreateTagScreen(_BaseCreateModelScreen):
 		self.emergencies.add(*data_base.Emergency.query.all())
 		self.submit = FDSubmit(text='Создать')
 		self.submit.bind_btn(
-			on_release=lambda e: print('All good!')
+			callback=lambda e: print('All good!')
 		)
 
 		self.add_widgets(self.title, self.emergencies, self.submit)
