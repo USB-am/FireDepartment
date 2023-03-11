@@ -9,7 +9,10 @@
 		group: root.group
 
 	MDFlatButton:
-		size_hint: 1, 1
+		# size_hint: 1, 1
+		size_hint: None, None
+		size: root.size
+		text_size: root.size
 		text: root.db_entry.title
 		anchor_x: 'left'
 
