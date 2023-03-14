@@ -39,6 +39,9 @@ class CreateTagScreen(_BaseCreateModelScreen):
 			icon=self.table.icon,
 			title='Вызовы'
 		)
+		self.emergencies.add_right_button(
+			callback=lambda e: self.path_manager.forward('create_emergency')
+		)
 		self.emergencies.add(*data_base.Emergency.query.all())
 		self.submit = FDSubmit(text='Создать')
 		self.submit.bind_btn(
@@ -61,6 +64,9 @@ class CreateRankScreen(_BaseCreateModelScreen):
 			icon=data_base.Human.icon,
 			title='Люди'
 		)
+		self.humans.add_right_button(
+			callback=lambda e: self.path_manager.forward('create_human')
+		)
 		self.humans.add(*data_base.Human.query.all())
 		self.submit = FDSubmit(text='Создать')
 		self.submit.bind_btn(callback=lambda e: print('All good!'))
@@ -79,6 +85,9 @@ class CreatePositionScreen(_BaseCreateModelScreen):
 		self.humans = FDSelectList(
 			icon=data_base.Human.icon,
 			title='Люди'
+		)
+		self.humans.add_right_button(
+			callback=lambda e: self.path_manager.forward('create_human')
 		)
 		self.humans.add(*data_base.Human.query.all())
 		self.submit = FDSubmit(text='Создать')
@@ -108,15 +117,24 @@ class CreateHumanScreen(_BaseCreateModelScreen):
 			icon=data_base.Worktype.icon,
 			title='График работы'
 		)
+		self.worktype.add_right_button(
+			callback=lambda e: self.path_manager.forward('create_worktype')
+		)
 		self.worktype.add(*data_base.Worktype.query.all())
 		self.position = FDSelectList(
 			icon=data_base.Position.icon,
 			title='Должжность'
 		)
+		self.position.add_right_button(
+			callback=lambda e: self.path_manager.forward('create_position')
+		)
 		self.position.add(*data_base.Position.query.all())
 		self.rank = FDSelectList(
 			icon=data_base.Rank.icon,
 			title='Звание'
+		)
+		self.rank.add_right_button(
+			callback=lambda e: self.path_manager.forward('create_rank')
 		)
 		self.rank.add(*data_base.Rank.query.all())
 		self.submit = FDSubmit(text='Создать')
@@ -141,10 +159,16 @@ class CreateEmergencyScreen(_BaseCreateModelScreen):
 			icon=data_base.Human.icon,
 			title='Люди'
 		)
+		self.humans.add_right_button(
+			callback=lambda e: self.path_manager.forward('create_human')
+		)
 		self.humans.add(*data_base.Human.query.all())
 		self.tags = FDSelectList(
 			icon=data_base.Tag.icon,
 			title='Теги'
+		)
+		self.tags.add_right_button(
+			callback=lambda e: self.path_manager.forward('create_tag')
 		)
 		self.tags.add(*data_base.Tag.query.all())
 		self.submit = FDSubmit(text='Создать')
