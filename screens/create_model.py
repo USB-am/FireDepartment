@@ -4,7 +4,7 @@ from . import BaseScrolledScreen
 from ui.fields.entry import FDTextInput, FDNumInput
 from ui.fields.select_list import FDSelectList
 from ui.fields.submit import FDSubmit
-from ui.fields.switch import FDSwitch
+from ui.fields.switch import FDSwitch, FDStatusSwitch
 from ui.fields.date import FDDate
 
 
@@ -97,7 +97,12 @@ class CreateHumanScreen(_BaseCreateModelScreen):
 		self.title = FDTextInput(hint_text='ФИО')
 		self.phone_1 = FDTextInput(hint_text='Телефон')
 		self.phone_2 = FDTextInput(hint_text='Дополнительный телефон')
-		self.is_firefigher = FDSwitch(icon='fire-truck', title='Пожарный?')
+		self.is_firefigher = FDStatusSwitch(
+			active_icon='fire-truck',
+			active_title='Пожарный',
+			deactive_icon='card-account-phone',
+			deactive_title='Контакт'
+		)
 		self.work_day = FDDate(icon='calendar-month', title='Рабочий день')
 		self.worktype = FDSelectList(
 			icon=data_base.Worktype.icon,
