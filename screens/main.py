@@ -42,5 +42,4 @@ class MainScreen(BaseBottomNavigationScreen):
 			text='Контакты',
 			icon='card-account-phone'
 		)
-		self.add_widgets(self.contacts_item)
-		self.add_widgets(self.emergencies_item)
+		self.add_widgets(self.emergencies_item, self.contacts_item)

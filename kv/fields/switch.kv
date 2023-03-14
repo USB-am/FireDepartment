@@ -15,3 +15,27 @@
 		id: switch
 		size_hint: None, 1
 		width: dp(35)
+
+
+<FDStatusSwitch>:
+	orientation: 'horizontal'
+	size_hint: 1, None
+	height: dp(50)
+
+	MDIcon:
+		id: icon
+		icon: root.deactive_icon
+		size_hint: None, 1
+		width: self.height
+
+	MDLabel:
+		id: title
+		text: root.deactive_title
+
+	MDSwitch:
+		id: switch
+		size_hint: None, 1
+		width: dp(35)
+
+		on_release:
+			root.update()
