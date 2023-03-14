@@ -1,7 +1,10 @@
+from typing import Callable
+
 from kivy.lang.builder import Builder
 from kivy.properties import StringProperty
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.label import MDLabel
+from kivymd.uix.button import MDIconButton
 
 from config import paths
 from data_base import db
@@ -39,6 +42,12 @@ class FDSelectList(MDBoxLayout):
 		for row in row_data:
 			element = _SelectListItem(row, group=self.group)
 			self.ids.lst.add_widget(element)
+
+	def add_right_button(self, callback: Callable[[], None]) -> None:
+		right_button = MDIconButton(icon='plus')
+		right_button.bind(on_release=callback)
+
+		self.ids.btn_layout.add_widget(right_button)
 
 	def get_value(self) -> list:
 		container = self.ids.lst
