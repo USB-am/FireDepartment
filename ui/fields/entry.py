@@ -1,3 +1,5 @@
+from typing import Union
+
 from kivy.lang.builder import Builder
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.boxlayout import MDBoxLayout
@@ -32,6 +34,11 @@ class BaseInput(MDBoxLayout):
 
 		self.entry = self._INPUT(**options)
 		self.add_widget(self.entry)
+
+	def get_value(self) -> Union[str, None]:
+		inner_text = self.entry.text
+
+		return inner_text if inner_text else None
 
 
 class FDTextInput(BaseInput):

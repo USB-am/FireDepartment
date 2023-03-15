@@ -1,5 +1,6 @@
 from app.path_manager import PathManager
 import data_base
+from data_base import manager
 from . import BaseScrolledScreen
 from ui.fields.entry import FDTextInput, FDNumInput
 from ui.fields.select_list import FDSelectList
@@ -45,10 +46,19 @@ class CreateTagScreen(_BaseCreateModelScreen):
 		self.emergencies.add(*data_base.Emergency.query.all())
 		self.submit = FDSubmit(text='Создать')
 		self.submit.bind_btn(
-			callback=lambda e: print('All good!')
+			callback=lambda e: self.insert()
 		)
 
 		self.add_widgets(self.title, self.emergencies, self.submit)
+
+	def insert(self) -> None:
+		values = {
+			'title': self.title.get_value(),
+			# 'emergencies': self.emergencies.get_value()
+		}
+		request_status = manager.insert(self.table, **values)
+
+		print(f'insert is {request_status}')
 
 
 class CreateRankScreen(_BaseCreateModelScreen):
