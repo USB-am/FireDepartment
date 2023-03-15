@@ -1,49 +1,34 @@
+from typing import Union, Callable
+
 from . import db
 
-from exceptions import Dialog
 
-
-def check_insert_exception(func):
-	def wrapper(*args, **kwargs):
+def check_exceptions(func: Callable[[db.Model, dict], None]) -> bool:
+	def wrapper(*args, **kwargs) -> bool:
 		try:
-			return func(*args, **kwargs)
-		except Exception as error:
+			func(*args, **kwargs)
+			return True
+		except:
 			db.session.rollback()
-			Dialog(error).open()
 			return False
 
 	return wrapper
 
 
-def save_changes(func):
-	def wrapper(*args, **kwargs):
-		entry = func(*args, **kwargs)
+def commit(func) -> None:
+	def wrapper(*args, **kwargs) -> None:
+		value = func(*args, **kwargs)
 
-		db.session.commit()
-		return True
+		if value:
+			db.session.commit()
+
+		return value
 
 	return wrapper
 
 
-@check_insert_exception
-@save_changes
-def insert(model: db.Model, values: dict) -> None:
-	entry = model(**values)
-	db.session.add(entry)
-
-	return entry
-
-
-@check_insert_exception
-@save_changes
-def update(entry: db.Model, values: dict) -> None:
-	for attr, value in values.items():
-		setattr(entry, attr, value)
-
-	return entry
-
-
-@check_insert_exception
-@save_changes
-def delete(entry: db.Model) -> None:
-	db.session.delete(entry)
+@commit
+@check_exceptions
+def insert(model: db.Model, **values) -> bool:
+	new_entry = model(**values)
+	db.session.add(new_entry)
