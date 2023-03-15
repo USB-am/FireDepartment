@@ -18,12 +18,9 @@ def check_exceptions(func: Callable[[db.Model, dict], None]) -> bool:
 def commit(func) -> None:
 	def wrapper(*args, **kwargs) -> None:
 		value = func(*args, **kwargs)
-
-		if value:
-			db.session.commit()
+		db.session.commit()
 
 		return value
-
 	return wrapper
 
 
