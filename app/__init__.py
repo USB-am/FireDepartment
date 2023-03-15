@@ -8,7 +8,8 @@ from screens.create_model import CreateTagScreen, CreateRankScreen, \
 	CreatePositionScreen, CreateHumanScreen, CreateEmergencyScreen, \
 	CreateWorktypeScreen
 from screens.edit_model_list import EditTagListScreen, EditRankListScreen, \
-	EditPositionListScreen, EditHumanListScreen, EditEmergencyListScreen
+	EditPositionListScreen, EditHumanListScreen, EditEmergencyListScreen, \
+	EditWorktypeListScreen
 
 
 class Application(MDApp):
@@ -42,7 +43,7 @@ class Application(MDApp):
 		# Edit list screens
 		_edit_list_screen_objects = (EditTagListScreen, EditRankListScreen,
 			EditPositionListScreen, EditHumanListScreen,
-			EditEmergencyListScreen
+			EditEmergencyListScreen, EditWorktypeListScreen,
 		)
 
 		for edit_list_screen in _edit_list_screen_objects:
