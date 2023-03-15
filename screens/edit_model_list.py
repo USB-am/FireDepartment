@@ -61,3 +61,10 @@ class EditEmergencyListScreen(_BaseEditModelListScreen):
 
 	name = 'edit_emergency_list'
 	table = data_base.Emergency
+
+
+class EditWorktypeListScreen(_BaseEditModelListScreen):
+	''' Список редактируемых Графиков работ '''
+
+	name = 'edit_worktype_list'
+	table = data_base.Worktype
