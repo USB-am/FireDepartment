@@ -1,7 +1,7 @@
 from kivy.lang.builder import Builder
 from kivymd.uix.label import MDLabel
 
-from data_base import Tag, Rank, Position, Human, Emergency
+from data_base import Tag, Rank, Position, Human, Emergency, Worktype
 from . import BaseScrolledScreen
 from app.path_manager import PathManager
 from ui.frames.list_items import FDOptionsListItem
@@ -30,7 +30,7 @@ class OptionsScreen(BaseScrolledScreen):
 		)
 
 	def __fill_content(self) -> None:
-		models = (Tag, Rank, Position, Human, Emergency,)
+		models = (Tag, Rank, Position, Human, Emergency, Worktype)
 		items = []
 
 		for model in models:

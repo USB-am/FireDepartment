@@ -5,7 +5,8 @@ from .path_manager import PathManager
 from screens.main import MainScreen
 from screens.options import OptionsScreen
 from screens.create_model import CreateTagScreen, CreateRankScreen, \
-	CreatePositionScreen, CreateHumanScreen, CreateEmergencyScreen
+	CreatePositionScreen, CreateHumanScreen, CreateEmergencyScreen, \
+	CreateWorktypeScreen
 from screens.edit_model_list import EditTagListScreen, EditRankListScreen, \
 	EditPositionListScreen, EditHumanListScreen, EditEmergencyListScreen
 
@@ -31,7 +32,8 @@ class Application(MDApp):
 
 		# Create screens
 		_create_screens_objects = (CreateTagScreen, CreateRankScreen,
-			CreatePositionScreen, CreateHumanScreen, CreateEmergencyScreen)
+			CreatePositionScreen, CreateHumanScreen, CreateEmergencyScreen,
+			CreateWorktypeScreen)
 
 		for create_screen in _create_screens_objects:
 			scr = create_screen(self.path_manager)
