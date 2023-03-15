@@ -5,7 +5,7 @@ from ui.fields.entry import FDTextInput, FDNumInput
 from ui.fields.select_list import FDSelectList
 from ui.fields.submit import FDSubmit
 from ui.fields.switch import FDSwitch, FDStatusSwitch
-from ui.fields.date import FDDate
+from ui.fields.date import FDDate, FDDateTime
 
 
 class _BaseCreateModelScreen(BaseScrolledScreen):
@@ -176,3 +176,28 @@ class CreateEmergencyScreen(_BaseCreateModelScreen):
 
 		self.add_widgets(self.title, self.description, self.urgent,
 			self.humans, self.tags, self.submit)
+
+
+class CreateWorktypeScreen(_BaseCreateModelScreen):
+	''' Экран создания Графика работы '''
+
+	name = 'create_worktype'
+	table = data_base.Worktype
+
+	def _fill_content(self) -> None:
+		self.title = FDTextInput(hint_text='Название')
+		self.start_work_day = FDDateTime(
+			icon='run-fast',
+			title='Начало рабочего дня'
+		)
+		self.finish_work_day = FDDateTime(
+			icon='exit-run',
+			title='Конец рабочего дня'
+		)
+		self.work_day_range = FDNumInput(hint_text='Количество рабочих дней')
+		self.week_day_range = FDNumInput(hint_text='Количество выходных дней')
+		self.submit = FDSubmit(text='Создать')
+		self.submit.bind_btn(callback=lambda e: print('All good!'))
+
+		self.add_widgets(self.title, self.start_work_day, self.finish_work_day,
+			self.work_day_range, self.week_day_range, self.submit)
