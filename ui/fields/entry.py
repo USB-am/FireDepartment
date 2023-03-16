@@ -1,6 +1,7 @@
 from typing import Union
 
 from kivy.lang.builder import Builder
+from kivy.properties import StringProperty
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.boxlayout import MDBoxLayout
 
@@ -32,7 +33,10 @@ class BaseInput(MDBoxLayout):
 	def __init__(self, **options):
 		super().__init__()
 
-		self.entry = self._INPUT(**options)
+		self.entry = self._INPUT(
+			icon_right=self.right_icon,
+			**options
+		)
 		self.add_widget(self.entry)
 
 	def get_value(self) -> Union[str, None]:
@@ -45,9 +49,18 @@ class FDTextInput(BaseInput):
 	''' Виджет ввода текста '''
 
 	_INPUT = BaseTextInput
+	right_icon = StringProperty('format-text')
 
 
 class FDNumInput(BaseInput):
 	''' Виджет ввода цифр '''
 
 	_INPUT = BaseNumInput
+	right_icon = StringProperty('numeric')
+
+
+class FDDescriptionInput(BaseInput):
+	''' Виджет ввода многострочного текста '''
+
+	_INPUT = BaseTextInput
+	right_icon = StringProperty('text')
