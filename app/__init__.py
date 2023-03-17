@@ -10,6 +10,7 @@ from screens.create_model import CreateTagScreen, CreateRankScreen, \
 from screens.edit_model_list import EditTagListScreen, EditRankListScreen, \
 	EditPositionListScreen, EditHumanListScreen, EditEmergencyListScreen, \
 	EditWorktypeListScreen
+from screens.edit_model import EditTagScreen
 
 
 class Application(MDApp):
@@ -48,6 +49,13 @@ class Application(MDApp):
 
 		for edit_list_screen in _edit_list_screen_objects:
 			scr = edit_list_screen(self.path_manager)
+			self.screen_manager.add_widget(scr)
+
+		# Edit screens
+		_edit_screens_objects = (EditTagScreen,)
+
+		for edit_screen in _edit_screens_objects:
+			scr = edit_screen(self.path_manager)
 			self.screen_manager.add_widget(scr)
 
 		self.screen_manager.current = 'options'
