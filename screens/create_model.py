@@ -19,13 +19,20 @@ class _BaseCreateModelScreen(BaseScrolledScreen):
 
 		self.__fill_toolbar()
 
-		self.bind(on_pre_enter=lambda *e: self._fill_content())
+		self.bind(on_pre_enter=lambda *e: self.pre_enter(())
+
+	def pre_enter(self) -> None:
+		self.__fill_content()
+		self.update()
 
 	def __fill_toolbar(self) -> None:
 		self.toolbar.add_left_button(
 			icon='arrow-left',
 			callback=lambda e: self.path_manager.back()
 		)
+
+	def update(self) -> None:
+		pass
 
 
 class CreateTagScreen(_BaseCreateModelScreen):
@@ -43,7 +50,6 @@ class CreateTagScreen(_BaseCreateModelScreen):
 		self.emergencies.add_right_button(
 			callback=lambda e: self.path_manager.forward('create_emergency')
 		)
-		self.emergencies.add(*data_base.Emergency.query.all())
 		self.submit = FDSubmit(text='Создать')
 		self.submit.bind_btn(
 			callback=lambda e: self.insert()
@@ -59,6 +65,9 @@ class CreateTagScreen(_BaseCreateModelScreen):
 		request_status = manager.insert(self.table, **values)
 
 		print(f'insert is {request_status}')
+
+	def update(self) -> None:
+		self.emergencies.add(*data_base.Emergency.query.all())
 
 
 class CreateRankScreen(_BaseCreateModelScreen):
