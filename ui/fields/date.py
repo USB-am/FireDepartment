@@ -52,7 +52,8 @@ class FDDate(MDBoxLayout):
 		return self.value
 
 	def set_value(self, date: datetime.date) -> None:
-		self._on_save(None, date, [])
+		if date is not None:
+			self._on_save(None, date, [])
 
 
 class FDDateTime(MDBoxLayout):

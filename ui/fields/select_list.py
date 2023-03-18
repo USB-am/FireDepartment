@@ -64,3 +64,7 @@ class FDSelectList(MDBoxLayout):
 
 			if child.db_entry in values:
 				child.checkbox = True
+
+	def clear(self) -> None:
+		container = self.id.lst
+		container.clear_widgets()
