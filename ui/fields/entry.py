@@ -45,6 +45,9 @@ class BaseInput(MDBoxLayout):
 		return inner_text if inner_text else None
 
 	def set_value(self, value: str) -> None:
+		if value is None:
+			value = ''
+
 		self.entry.text = value
 
 
