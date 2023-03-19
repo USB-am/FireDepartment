@@ -13,9 +13,18 @@ class FDSubmit(MDBoxLayout):
 	''' Кнопка отправки формы '''
 
 	def __init__(self, text: str):
-		self.text = text
+		self._text = text
 
 		super().__init__()
+
+	@property
+	def text(self) -> str:
+		return self._text
+
+	@text.setter
+	def text(self, value: str) -> None:
+		self._text = value
+		self.ids.btn.text = value
 
 	def bind_btn(self, callback) -> None:
 		self.ids.btn.bind(on_release=callback)

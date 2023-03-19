@@ -18,6 +18,7 @@ class EditTagScreen(_BaseEditModelScreen, create_model.CreateTagScreen):
 
 	def fill_content(self, entry: data_base.Tag) -> None:
 		self.title.set_value(entry.title)
+		self.submit.text = 'Редактировать'
 		self.submit.bind_btn(
 			callback=lambda e: print('Edit Tag')
 		)
@@ -32,6 +33,7 @@ class EditRankScreen(_BaseEditModelScreen, create_model.CreateRankScreen):
 	def fill_content(self, entry: data_base.Rank) -> None:
 		self.title.set_value(entry.title)
 		self.priority.set_value(entry.priority)
+		self.submit.text = 'Редактировать'
 		self.submit.bind_btn(
 			callback=lambda e: print('Edit Rank')
 		)
@@ -45,6 +47,7 @@ class EditPositionScreen(_BaseEditModelScreen, create_model.CreatePositionScreen
 
 	def fill_content(self, entry: data_base.Position) -> None:
 		self.title.set_value(entry.title)
+		self.submit.text = 'Редактировать'
 		self.submit.bind_btn(
 			callback=lambda e: print('Edit Position')
 		)
@@ -65,6 +68,7 @@ class EditHumanScreen(_BaseEditModelScreen, create_model.CreateHumanScreen):
 		self.worktype.set_value(entry.worktype)
 		self.position.set_value(entry.position)
 		self.rank.set_value(entry.rank)
+		self.submit.text = 'Редактировать'
 		self.submit.bind_btn(
 			callback=lambda e: print('Edit Human')
 		)
@@ -82,6 +86,7 @@ class EditEmergencyScreen(_BaseEditModelScreen, create_model.CreateEmergencyScre
 		self.urgent.set_value(entry.urgent)
 		self.humans.set_value(entry.humans)
 		self.tags.set_value(entry.tags)
+		self.submit.text = 'Редактировать'
 		self.submit.bind_btn(
 			callback=lambda e: print('Edit Emergency')
 		)
