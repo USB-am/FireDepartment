@@ -19,10 +19,10 @@ class _BaseCreateModelScreen(BaseScrolledScreen):
 
 		self.__fill_toolbar()
 
-		self.bind(on_pre_enter=lambda *e: self.pre_enter(())
+		self.bind(on_pre_enter=lambda *e: self.pre_enter())
 
 	def pre_enter(self) -> None:
-		self.__fill_content()
+		self._fill_content()
 		self.update()
 
 	def __fill_toolbar(self) -> None:
