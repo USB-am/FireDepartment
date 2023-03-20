@@ -27,6 +27,7 @@ class Tag(db.Model):
 	__tablename__ = 'Tag'
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), unique=True, nullable=False)
+	emergencys = db.relationship('Emergency', secondary=post_tags, back_populates='tags')
 
 	def __str__(self):
 		return self.title
@@ -79,7 +80,7 @@ class Emergency(db.Model):
 	title = db.Column(db.String(255), nullable=False)
 	description = db.Column(db.Text(), nullable=True)
 	urgent = db.Column(db.Boolean(), nullable=True)
-	tags = db.relationship('Tag', secondary=post_tags, backref='emergencys')
+	tags = db.relationship('Tag', secondary=post_tags, back_populates='emergencys')
 	humans = db.relationship('Human', secondary=post_humans, backref='emergencys')
 
 	def __str__(self):
