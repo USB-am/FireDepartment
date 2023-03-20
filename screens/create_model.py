@@ -88,9 +88,19 @@ class CreateRankScreen(_BaseCreateModelScreen):
 		)
 		self.humans.add(*data_base.Human.query.all())
 		self.submit = FDSubmit(text='Создать')
-		self.submit.bind_btn(callback=lambda e: print('All good!'))
+		self.submit.bind_btn(callback=lambda e: self.insert())
 
 		self.add_widgets(self.title, self.priority, self.humans, self.submit)
+
+	def insert(self) -> None:
+		values = {
+			'title': self.title.get_value(),
+			'priority': self.priority.get_value(),
+			# 'humans': self.humans.get_value(),
+		}
+		request_status = manager.insert(self.table, **values)
+
+		print(f'CreateRankScreen.insert is {request_status}')
 
 
 class CreatePositionScreen(_BaseCreateModelScreen):
@@ -110,9 +120,18 @@ class CreatePositionScreen(_BaseCreateModelScreen):
 		)
 		self.humans.add(*data_base.Human.query.all())
 		self.submit = FDSubmit(text='Создать')
-		self.submit.bind_btn(callback=lambda e: print('All good!'))
+		self.submit.bind_btn(callback=lambda e: self.insert())
 
 		self.add_widgets(self.title, self.humans, self.submit)
+
+	def insert(self) -> None:
+		values = {
+			'title': self.title.get_value(),
+			# 'humans': self.humans.get_value(),
+		}
+		request_status = manager.insert(self.table, **values)
+
+		print(f'CreatePositionScreen.insert is {request_status}')
 
 
 class CreateHumanScreen(_BaseCreateModelScreen):
@@ -157,11 +176,26 @@ class CreateHumanScreen(_BaseCreateModelScreen):
 		)
 		self.rank.add(*data_base.Rank.query.all())
 		self.submit = FDSubmit(text='Создать')
-		self.submit.bind_btn(callback=lambda e: print('All good!'))
+		self.submit.bind_btn(callback=lambda e: self.insert())
 
 		self.add_widgets(self.title, self.phone_1, self.phone_2,
 			self.is_firefigher, self.work_day, self.worktype, self.position,
 			self.rank, self.submit)
+
+	def insert(self) -> None:
+		values = {
+			'title': self.title.get_value(),
+			'phone_1': self.phone_1.get_value(),
+			'phone_2': self.phone_2.get_value(),
+			'is_firefigher': self.is_firefigher.get_value(),
+			'work_day': self.work_day.get_value(),
+			'worktype': self.worktype.get_value(),
+			'position': self.position.get_value(),
+			'rank': self.rank.get_value(),
+		}
+		request_status = manager.insert(self.table, **values)
+
+		print(f'CreateHumanScreen.insert is {request_status}')
 
 
 class CreateEmergencyScreen(_BaseCreateModelScreen):
@@ -191,10 +225,22 @@ class CreateEmergencyScreen(_BaseCreateModelScreen):
 		)
 		self.tags.add(*data_base.Tag.query.all())
 		self.submit = FDSubmit(text='Создать')
-		self.submit.bind_btn(callback=lambda e: print('All good!'))
+		self.submit.bind_btn(callback=lambda e: self.insert())
 
 		self.add_widgets(self.title, self.description, self.urgent,
 			self.humans, self.tags, self.submit)
+
+	def insert(self) -> None:
+		values = {
+			'title': self.title.get_value(),
+			'description': self.description.get_value(),
+			'urgent': self.urgent.get_value(),
+			'humans': self.humans.get_value(),
+			'tags': self.tags.get_value()
+		}
+		request_status = manager.insert(self.table, **values)
+
+		print(f'CreateEmergencyScreen.insert is {request_status}')
 
 
 class CreateWorktypeScreen(_BaseCreateModelScreen):
@@ -216,7 +262,19 @@ class CreateWorktypeScreen(_BaseCreateModelScreen):
 		self.work_day_range = FDNumInput(hint_text='Количество рабочих дней')
 		self.week_day_range = FDNumInput(hint_text='Количество выходных дней')
 		self.submit = FDSubmit(text='Создать')
-		self.submit.bind_btn(callback=lambda e: print('All good!'))
+		self.submit.bind_btn(callback=lambda e: self.insert())
 
 		self.add_widgets(self.title, self.start_work_day, self.finish_work_day,
 			self.work_day_range, self.week_day_range, self.submit)
+
+	def insert(self) -> None:
+		values = {
+			'title': self.title.get_value(),
+			'start_work_day': self.start_work_day.get_value(),
+			'finish_work_day': self.finish_work_day.get_value(),
+			'work_day_range': self.work_day_range.get_value(),
+			'week_day_range': self.week_day_range.get_value(),
+		}
+		request_status = manager.insert(self.table, **values)
+
+		print(f'CreateWorktypeScreen.insert is {request_status}')

@@ -24,6 +24,8 @@ class _BaseEditModelListScreen(SelectedScrollScreen):
 		)
 
 	def __fill_content(self) -> None:
+		self.clear()
+
 		self.add_widgets(*[FDEditModelListItem(entry) \
 			for entry in self.table.query.all()])
 
