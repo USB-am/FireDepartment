@@ -14,6 +14,7 @@ class FDSubmit(MDBoxLayout):
 
 	def __init__(self, text: str):
 		self._text = text
+		self.__callback = None
 
 		super().__init__()
 
@@ -27,4 +28,6 @@ class FDSubmit(MDBoxLayout):
 		self.ids.btn.text = value
 
 	def bind_btn(self, callback) -> None:
-		self.ids.btn.bind(on_release=callback)
+		self.ids.btn.unbind(on_release=self.__callback)
+		self.__callback = callback
+		self.ids.btn.bind(on_release=self.__callback)
