@@ -22,6 +22,7 @@ class _BaseCreateModelScreen(BaseScrolledScreen):
 		self.bind(on_pre_enter=lambda *e: self.pre_enter())
 
 	def pre_enter(self) -> None:
+		self.clear()
 		self._fill_content()
 		self.update()
 
