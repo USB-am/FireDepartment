@@ -61,7 +61,7 @@ class CreateTagScreen(_BaseCreateModelScreen):
 	def insert(self) -> None:
 		values = {
 			'title': self.title.get_value(),
-			# 'emergencies': self.emergencies.get_value()
+			'emergencys': self.emergencies.get_value()
 		}
 		request_status = manager.insert(self.table, **values)
 
