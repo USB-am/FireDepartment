@@ -1,10 +1,18 @@
+from sqlalchemy.orm.collections import InstrumentedList
+
 import data_base
+from app.path_manager import PathManager
 from data_base import manager
 from . import create_model
 
 
 class _BaseEditModelScreen:
 	''' Базовое представление экрана редактирования '''
+
+	def __init__(self, path_manager: PathManager):
+		super().__init__(path_manager)
+
+		self._entry = None
 
 	def fill_content(self, entry: data_base.db.Model) -> None:
 		raise AttributeError('Class _BaseEditModelScreen is hasn\'t "fill_content" method!')
@@ -17,11 +25,23 @@ class EditTagScreen(_BaseEditModelScreen, create_model.CreateTagScreen):
 	table = data_base.Tag
 
 	def fill_content(self, entry: data_base.Tag) -> None:
+		self._entry = entry
+
 		self.title.set_value(entry.title)
+		self.emergencies.set_value(entry.emergencys)
 		self.submit.text = 'Редактировать'
 		self.submit.bind_btn(
-			callback=lambda e: print('Edit Tag')
+			callback=lambda e: self.update_entry()
 		)
+
+	def update_entry(self) -> None:
+		values = {
+			'title': self.title.get_value(),
+			'emergencys': InstrumentedList(self.emergencies.get_value())
+		}
+		request_status = manager.update(self._entry, **values)
+
+		print(f'EditTagScreen is {request_status}')
 
 
 class EditRankScreen(_BaseEditModelScreen, create_model.CreateRankScreen):
