@@ -27,7 +27,8 @@ class Tag(db.Model):
 	__tablename__ = 'Tag'
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), unique=True, nullable=False)
-	emergencys = db.relationship('Emergency', secondary=post_tags, back_populates='tags')
+	emergencys = db.relationship('Emergency', secondary=post_tags,
+	                             back_populates='tags')
 
 	def __str__(self):
 		return self.title

@@ -37,7 +37,7 @@ class EditTagScreen(_BaseEditModelScreen, create_model.CreateTagScreen):
 	def update_entry(self) -> None:
 		values = {
 			'title': self.title.get_value(),
-			'emergencys': InstrumentedList(self.emergencies.get_value())
+			'emergencys': self.emergencies.get_value()
 		}
 		request_status = manager.update(self._entry, **values)
 
@@ -51,12 +51,24 @@ class EditRankScreen(_BaseEditModelScreen, create_model.CreateRankScreen):
 	table = data_base.Rank
 
 	def fill_content(self, entry: data_base.Rank) -> None:
+		self._entry = entry
+
 		self.title.set_value(entry.title)
 		self.priority.set_value(entry.priority)
 		self.submit.text = 'Редактировать'
 		self.submit.bind_btn(
-			callback=lambda e: print('Edit Rank')
+			callback=lambda e: self.update_entry()
 		)
+
+	def update_entry(self) -> None:
+		values = {
+			'title': self.title.get_value(),
+			'priority': self.priority.get_value(),
+			'humans': self.humans.get_value()
+		}
+		request_status = manager.update(self._entry, **values)
+
+		print(f'EditRankScreen is {request_status}')
 
 
 class EditPositionScreen(_BaseEditModelScreen, create_model.CreatePositionScreen):
