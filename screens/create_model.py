@@ -194,6 +194,7 @@ class CreateHumanScreen(_BaseCreateModelScreen):
 			'position': self.position.get_value(),
 			'rank': self.rank.get_value(),
 		}
+		input(f'work day type is {type(values["work_day"])}')
 		request_status = manager.insert(self.table, **values)
 
 		print(f'CreateHumanScreen.insert is {request_status}')
