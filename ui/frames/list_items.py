@@ -58,8 +58,13 @@ class EmergencyContent(MDBoxLayout):
 			size_hint=(None, None),
 			size=(self.height, self.height)
 		)
-		submit.bind(on_release=lambda e: PathManager(None).forward('options'))
+		submit.bind(on_release=lambda e: self.move_to_current_calls_screen())
 		self.add_widget(submit)
+
+	def move_to_current_calls_screen(self) -> None:
+		path_manager = PathManager(None)
+		current_calls_screen = path_manager.forward('current_calls')
+		current_calls_screen.add_tab(self.model)
 
 
 class FDEmergencyListItem(MDExpansionPanel):
