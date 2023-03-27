@@ -16,6 +16,10 @@ class BaseTextInput(MDTextField):
 	''' Базовое поле ввода текста '''
 
 
+class MultilineTextInput(MDTextField):
+	''' Поле ввода многострочного текста '''
+
+
 class BaseNumInput(MDTextField):
 	''' Базовое поле ввода цифр '''
 
@@ -29,6 +33,32 @@ class BaseInput(MDBoxLayout):
 	''' Базовая область отображения полей ввода '''
 
 	_INPUT = BaseTextInput
+
+	def __init__(self, **options):
+		super().__init__()
+
+		self.entry = self._INPUT(
+			icon_right=self.right_icon,
+			**options
+		)
+		self.add_widget(self.entry)
+
+	def get_value(self) -> Union[str, None]:
+		inner_text = self.entry.text
+
+		return inner_text if inner_text else None
+
+	def set_value(self, value: str) -> None:
+		if value is None:
+			value = ''
+
+		self.entry.text = value
+
+
+class AdaptiveInput(MDBoxLayout):
+	''' Адаптивная область отображения полей ввода '''
+
+	_INPUT = MultilineTextInput
 
 	def __init__(self, **options):
 		super().__init__()
@@ -65,8 +95,8 @@ class FDNumInput(BaseInput):
 	right_icon = StringProperty('numeric')
 
 
-class FDDescriptionInput(BaseInput):
+class FDDescriptionInput(AdaptiveInput):
 	''' Виджет ввода многострочного текста '''
 
-	_INPUT = BaseTextInput
+	_INPUT = MultilineTextInput
 	right_icon = StringProperty('text')
