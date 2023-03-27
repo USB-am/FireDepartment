@@ -2,7 +2,7 @@ from app.path_manager import PathManager
 import data_base
 from data_base import manager
 from . import BaseScrolledScreen
-from ui.fields.entry import FDTextInput, FDNumInput
+from ui.fields.entry import FDTextInput, FDNumInput, FDDescriptionInput
 from ui.fields.select_list import FDSelectList
 from ui.fields.submit import FDSubmit
 from ui.fields.switch import FDSwitch, FDStatusSwitch
@@ -208,7 +208,7 @@ class CreateEmergencyScreen(_BaseCreateModelScreen):
 
 	def _fill_content(self) -> None:
 		self.title = FDTextInput(hint_text='Название')
-		self.description = FDTextInput(hint_text='Описание')
+		self.description = FDDescriptionInput(hint_text='Описание')
 		self.urgent = FDSwitch(icon='truck-fast', title='Срочный')
 		self.humans = FDSelectList(
 			icon=data_base.Human.icon,
