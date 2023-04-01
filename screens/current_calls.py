@@ -2,6 +2,8 @@ from . import BaseScreen
 from app.path_manager import PathManager
 from data_base import Emergency
 
+from kivymd.uix.boxlayout import MDBoxLayout
+
 
 class CurrentCallsScreen(BaseScreen):
 	''' Экран текущих вызовов '''
@@ -15,3 +17,4 @@ class CurrentCallsScreen(BaseScreen):
 
 	def add_tab(self, entry: Emergency):
 		print(f'Add tag {entry.title}')
+		self.add_widgets(MDBoxLayout())
