@@ -56,7 +56,7 @@ class FDSelectList(MDBoxLayout):
 
 		return values
 
-	def set_value(self, values: Union[db.Model, list]) -> None:
+	def set_value(self, values: Union[int, list]) -> None:
 		container = self.ids.lst
 
 		for child in container.children:
@@ -65,7 +65,7 @@ class FDSelectList(MDBoxLayout):
 			if isinstance(values, list):
 				if child.db_entry in values:
 					child.checkbox = True
-			elif child.db_entry is values:
+			elif child.db_entry.id == values:
 				child.checkbox = True
 
 	def clear(self) -> None:
