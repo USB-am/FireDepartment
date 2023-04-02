@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, Union
 
 from kivy.lang.builder import Builder
 from kivy.properties import StringProperty
@@ -56,13 +56,16 @@ class FDSelectList(MDBoxLayout):
 
 		return values
 
-	def set_value(self, values: list) -> None:
+	def set_value(self, values: Union[db.Model, list]) -> None:
 		container = self.ids.lst
 
 		for child in container.children:
 			child.checkbox = False
 
-			if child.db_entry in values:
+			if isinstance(values, list):
+				if child.db_entry in values:
+					child.checkbox = True
+			elif child.db_entry is values:
 				child.checkbox = True
 
 	def clear(self) -> None:
