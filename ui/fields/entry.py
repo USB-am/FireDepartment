@@ -52,7 +52,7 @@ class BaseInput(MDBoxLayout):
 		if value is None:
 			value = ''
 
-		self.entry.text = value
+		self.entry.text = str(value)
 
 
 class AdaptiveInput(MDBoxLayout):
@@ -78,7 +78,7 @@ class AdaptiveInput(MDBoxLayout):
 		if value is None:
 			value = ''
 
-		self.entry.text = value
+		self.entry.text = str(value)
 
 
 class FDTextInput(BaseInput):
