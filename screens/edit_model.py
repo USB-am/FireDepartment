@@ -62,6 +62,7 @@ class EditRankScreen(_BaseEditModelScreen, create_model.CreateRankScreen):
 
 		self.title.set_value(entry.title)
 		self.priority.set_value(entry.priority)
+		self.humans.set_value(entry.humans)
 		self.submit.text = 'Редактировать'
 		self.submit.bind_btn(
 			callback=self.save
@@ -88,6 +89,7 @@ class EditPositionScreen(_BaseEditModelScreen, create_model.CreatePositionScreen
 		self._entry = entry
 
 		self.title.set_value(entry.title)
+		self.humans.set_value(entry.humans)
 		self.submit.text = 'Редактировать'
 		self.submit.bind_btn(
 			callback=self.save
@@ -126,12 +128,9 @@ class EditHumanScreen(_BaseEditModelScreen, create_model.CreateHumanScreen):
 		)
 
 	def update_entry(self) -> None:
-		worktype_obj = self.worktype.get_value()[0] if self.worktype.get_value() else None
-		position_obj = self.position.get_value()[0] if self.position.get_value() else None
-		rank_obj = self.rank.get_value()[0] if self.rank.get_value() else None
-		# worktype_obj = self.worktype.get_value()
-		# position_obj = self.position.get_value()
-		# rank_obj = self.rank.get_value()
+		worktype_obj = self.worktype.get_value()[0].id if self.worktype.get_value() else None
+		position_obj = self.position.get_value()[0].id if self.position.get_value() else None
+		rank_obj = self.rank.get_value()[0].id if self.rank.get_value() else None
 
 		values = {
 			'title': self.title.get_value(),
@@ -143,9 +142,6 @@ class EditHumanScreen(_BaseEditModelScreen, create_model.CreateHumanScreen):
 			'position': position_obj,
 			'rank': rank_obj,
 		}
-		# for key, value in values.items():
-		# 	print(f'{key}: {value} [{type(value)}]')
-		# print('\n'*10)
 		request_status = manager.update(self._entry, **values)
 
 		return request_status
@@ -158,6 +154,8 @@ class EditEmergencyScreen(_BaseEditModelScreen, create_model.CreateEmergencyScre
 	table = data_base.Emergency
 
 	def fill_content(self, entry: data_base.Emergency) -> None:
+		self._entry = entry
+
 		self.title.set_value(entry.title)
 		self.description.set_value(entry.description)
 		self.urgent.set_value(entry.urgent)
@@ -165,5 +163,17 @@ class EditEmergencyScreen(_BaseEditModelScreen, create_model.CreateEmergencyScre
 		self.tags.set_value(entry.tags)
 		self.submit.text = 'Редактировать'
 		self.submit.bind_btn(
-			callback=lambda e: print('Edit Emergency')
+			callback=super().save
 		)
+
+	def update_entry(self) -> None:
+		values = {
+			'title': self.title.get_value(),
+			'description': self.description.get_value(),
+			'urgent': self.urgent.get_value(),
+			'tags': self.tags.get_value(),
+			'humans': self.humans.get_value(),
+		}
+		request_status = manager.update(self._entry, **values)
+
+		return request_status
