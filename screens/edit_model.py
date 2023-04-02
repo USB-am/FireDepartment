@@ -4,6 +4,7 @@ import data_base
 from app.path_manager import PathManager
 from data_base import manager
 from . import create_model
+from ui.fields.submit import FDSubmit
 
 
 class _BaseEditModelScreen:
@@ -16,6 +17,12 @@ class _BaseEditModelScreen:
 
 	def fill_content(self, entry: data_base.db.Model) -> None:
 		raise AttributeError('Class _BaseEditModelScreen is hasn\'t "fill_content" method!')
+
+	def save(self, instance: FDSubmit) -> None:
+		update_status = self.update_entry()
+
+		if update_status:
+			self.path_manager.back()
 
 
 class EditTagScreen(_BaseEditModelScreen, create_model.CreateTagScreen):
@@ -31,7 +38,7 @@ class EditTagScreen(_BaseEditModelScreen, create_model.CreateTagScreen):
 		self.emergencies.set_value(entry.emergencys)
 		self.submit.text = 'Редактировать'
 		self.submit.bind_btn(
-			callback=lambda e: self.update_entry()
+			callback=self.save
 		)
 
 	def update_entry(self) -> None:
@@ -41,7 +48,7 @@ class EditTagScreen(_BaseEditModelScreen, create_model.CreateTagScreen):
 		}
 		request_status = manager.update(self._entry, **values)
 
-		print(f'EditTagScreen is {request_status}')
+		return request_status
 
 
 class EditRankScreen(_BaseEditModelScreen, create_model.CreateRankScreen):
@@ -57,7 +64,7 @@ class EditRankScreen(_BaseEditModelScreen, create_model.CreateRankScreen):
 		self.priority.set_value(entry.priority)
 		self.submit.text = 'Редактировать'
 		self.submit.bind_btn(
-			callback=lambda e: self.update_entry()
+			callback=self.save
 		)
 
 	def update_entry(self) -> None:
@@ -68,7 +75,7 @@ class EditRankScreen(_BaseEditModelScreen, create_model.CreateRankScreen):
 		}
 		request_status = manager.update(self._entry, **values)
 
-		print(f'EditRankScreen is {request_status}')
+		return request_status
 
 
 class EditPositionScreen(_BaseEditModelScreen, create_model.CreatePositionScreen):
@@ -78,11 +85,22 @@ class EditPositionScreen(_BaseEditModelScreen, create_model.CreatePositionScreen
 	table = data_base.Position
 
 	def fill_content(self, entry: data_base.Position) -> None:
+		self._entry = entry
+
 		self.title.set_value(entry.title)
 		self.submit.text = 'Редактировать'
 		self.submit.bind_btn(
-			callback=lambda e: print('Edit Position')
+			callback=self.save
 		)
+
+	def update_entry(self) -> None:
+		values = {
+			'title': self.title.get_value(),
+			'humans': self.humans.get_value(),
+		}
+		request_status = manager.update(self._entry, **values)
+
+		return request_status
 
 
 class EditHumanScreen(_BaseEditModelScreen, create_model.CreateHumanScreen):
@@ -92,6 +110,8 @@ class EditHumanScreen(_BaseEditModelScreen, create_model.CreateHumanScreen):
 	table = data_base.Human
 
 	def fill_content(self, entry: data_base.Human) -> None:
+		self._entry = entry
+
 		self.title.set_value(entry.title)
 		self.phone_1.set_value(entry.phone_1)
 		self.phone_2.set_value(entry.phone_2)
@@ -102,8 +122,33 @@ class EditHumanScreen(_BaseEditModelScreen, create_model.CreateHumanScreen):
 		self.rank.set_value(entry.rank)
 		self.submit.text = 'Редактировать'
 		self.submit.bind_btn(
-			callback=lambda e: print('Edit Human')
+			callback=self.save
 		)
+
+	def update_entry(self) -> None:
+		worktype_obj = self.worktype.get_value()[0] if self.worktype.get_value() else None
+		position_obj = self.position.get_value()[0] if self.position.get_value() else None
+		rank_obj = self.rank.get_value()[0] if self.rank.get_value() else None
+		# worktype_obj = self.worktype.get_value()
+		# position_obj = self.position.get_value()
+		# rank_obj = self.rank.get_value()
+
+		values = {
+			'title': self.title.get_value(),
+			'phone_1': self.phone_1.get_value(),
+			'phone_2': self.phone_2.get_value(),
+			'is_firefigher': self.is_firefigher.get_value(),
+			'work_day': self.work_day.get_value(),
+			'worktype': worktype_obj,
+			'position': position_obj,
+			'rank': rank_obj,
+		}
+		# for key, value in values.items():
+		# 	print(f'{key}: {value} [{type(value)}]')
+		# print('\n'*10)
+		request_status = manager.update(self._entry, **values)
+
+		return request_status
 
 
 class EditEmergencyScreen(_BaseEditModelScreen, create_model.CreateEmergencyScreen):
