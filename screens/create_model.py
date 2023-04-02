@@ -154,7 +154,8 @@ class CreateHumanScreen(_BaseCreateModelScreen):
 		self.work_day = FDDate(icon='calendar-month', title='Рабочий день')
 		self.worktype = FDSelectList(
 			icon=data_base.Worktype.icon,
-			title='График работы'
+			title='График работы',
+			group='human_worktypes'
 		)
 		self.worktype.add_right_button(
 			callback=lambda e: self.path_manager.forward('create_worktype')
@@ -162,7 +163,8 @@ class CreateHumanScreen(_BaseCreateModelScreen):
 		self.worktype.add(*data_base.Worktype.query.all())
 		self.position = FDSelectList(
 			icon=data_base.Position.icon,
-			title='Должжность'
+			title='Должжность',
+			group='human_positions'
 		)
 		self.position.add_right_button(
 			callback=lambda e: self.path_manager.forward('create_position')
@@ -170,7 +172,8 @@ class CreateHumanScreen(_BaseCreateModelScreen):
 		self.position.add(*data_base.Position.query.all())
 		self.rank = FDSelectList(
 			icon=data_base.Rank.icon,
-			title='Звание'
+			title='Звание',
+			group='human_ranks'
 		)
 		self.rank.add_right_button(
 			callback=lambda e: self.path_manager.forward('create_rank')
@@ -184,17 +187,20 @@ class CreateHumanScreen(_BaseCreateModelScreen):
 			self.rank, self.submit)
 
 	def insert(self) -> None:
+		worktype_obj = self.worktype.get_value()[0] if self.worktype.get_value() else None
+		position_obj = self.position.get_value()[0] if self.position.get_value() else None
+		rank_obj = self.rank.get_value()[0] if self.rank.get_value() else None
+
 		values = {
 			'title': self.title.get_value(),
 			'phone_1': self.phone_1.get_value(),
 			'phone_2': self.phone_2.get_value(),
 			'is_firefigher': self.is_firefigher.get_value(),
 			'work_day': self.work_day.get_value(),
-			'worktype': self.worktype.get_value(),
-			'position': self.position.get_value(),
-			'rank': self.rank.get_value(),
+			'worktype': worktype_obj,
+			'position': position_obj,
+			'rank': rank_obj
 		}
-		input(f'work day type is {type(values["work_day"])}')
 		request_status = manager.insert(self.table, **values)
 
 		print(f'CreateHumanScreen.insert is {request_status}')
