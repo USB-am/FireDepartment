@@ -35,6 +35,12 @@ class _BaseCreateModelScreen(BaseScrolledScreen):
 	def update(self) -> None:
 		pass
 
+	def create(self, instance: FDSubmit) -> None:
+		create_status = self.insert()
+
+		if create_status:
+			self.path_manager.back()
+
 
 class CreateTagScreen(_BaseCreateModelScreen):
 	''' Экран создания тега '''
@@ -53,7 +59,7 @@ class CreateTagScreen(_BaseCreateModelScreen):
 		)
 		self.submit = FDSubmit(text='Создать')
 		self.submit.bind_btn(
-			callback=lambda e: self.insert()
+			callback=super().create
 		)
 
 		self.add_widgets(self.title, self.emergencies, self.submit)
@@ -65,7 +71,7 @@ class CreateTagScreen(_BaseCreateModelScreen):
 		}
 		request_status = manager.insert(self.table, **values)
 
-		print(f'insert is {request_status}')
+		return request_status
 
 	def update(self) -> None:
 		self.emergencies.add(*data_base.Emergency.query.all())
@@ -89,7 +95,9 @@ class CreateRankScreen(_BaseCreateModelScreen):
 		)
 		self.humans.add(*data_base.Human.query.all())
 		self.submit = FDSubmit(text='Создать')
-		self.submit.bind_btn(callback=lambda e: self.insert())
+		self.submit.bind_btn(
+			callback=super().create
+		)
 
 		self.add_widgets(self.title, self.priority, self.humans, self.submit)
 
@@ -97,11 +105,11 @@ class CreateRankScreen(_BaseCreateModelScreen):
 		values = {
 			'title': self.title.get_value(),
 			'priority': self.priority.get_value(),
-			# 'humans': self.humans.get_value(),
+			'humans': self.humans.get_value(),
 		}
 		request_status = manager.insert(self.table, **values)
 
-		print(f'CreateRankScreen.insert is {request_status}')
+		return request_status
 
 
 class CreatePositionScreen(_BaseCreateModelScreen):
@@ -121,18 +129,20 @@ class CreatePositionScreen(_BaseCreateModelScreen):
 		)
 		self.humans.add(*data_base.Human.query.all())
 		self.submit = FDSubmit(text='Создать')
-		self.submit.bind_btn(callback=lambda e: self.insert())
+		self.submit.bind_btn(
+			callback=super().create
+		)
 
 		self.add_widgets(self.title, self.humans, self.submit)
 
 	def insert(self) -> None:
 		values = {
 			'title': self.title.get_value(),
-			# 'humans': self.humans.get_value(),
+			'humans': self.humans.get_value(),
 		}
 		request_status = manager.insert(self.table, **values)
 
-		print(f'CreatePositionScreen.insert is {request_status}')
+		return request_status
 
 
 class CreateHumanScreen(_BaseCreateModelScreen):
@@ -180,16 +190,18 @@ class CreateHumanScreen(_BaseCreateModelScreen):
 		)
 		self.rank.add(*data_base.Rank.query.all())
 		self.submit = FDSubmit(text='Создать')
-		self.submit.bind_btn(callback=lambda e: self.insert())
+		self.submit.bind_btn(
+			callback=super().create
+		)
 
 		self.add_widgets(self.title, self.phone_1, self.phone_2,
 			self.is_firefigher, self.work_day, self.worktype, self.position,
 			self.rank, self.submit)
 
 	def insert(self) -> None:
-		worktype_obj = self.worktype.get_value()[0] if self.worktype.get_value() else None
-		position_obj = self.position.get_value()[0] if self.position.get_value() else None
-		rank_obj = self.rank.get_value()[0] if self.rank.get_value() else None
+		worktype_obj = self.worktype.get_value()[0].id if self.worktype.get_value() else None
+		position_obj = self.position.get_value()[0].id if self.position.get_value() else None
+		rank_obj = self.rank.get_value()[0].id if self.rank.get_value() else None
 
 		values = {
 			'title': self.title.get_value(),
@@ -203,7 +215,7 @@ class CreateHumanScreen(_BaseCreateModelScreen):
 		}
 		request_status = manager.insert(self.table, **values)
 
-		print(f'CreateHumanScreen.insert is {request_status}')
+		return request_status
 
 
 class CreateEmergencyScreen(_BaseCreateModelScreen):
@@ -233,7 +245,9 @@ class CreateEmergencyScreen(_BaseCreateModelScreen):
 		)
 		self.tags.add(*data_base.Tag.query.all())
 		self.submit = FDSubmit(text='Создать')
-		self.submit.bind_btn(callback=lambda e: self.insert())
+		self.submit.bind_btn(
+			callback=super().create
+		)
 
 		self.add_widgets(self.title, self.description, self.urgent,
 			self.humans, self.tags, self.submit)
@@ -248,7 +262,7 @@ class CreateEmergencyScreen(_BaseCreateModelScreen):
 		}
 		request_status = manager.insert(self.table, **values)
 
-		print(f'CreateEmergencyScreen.insert is {request_status}')
+		return request_status
 
 
 class CreateWorktypeScreen(_BaseCreateModelScreen):
@@ -270,7 +284,9 @@ class CreateWorktypeScreen(_BaseCreateModelScreen):
 		self.work_day_range = FDNumInput(hint_text='Количество рабочих дней')
 		self.week_day_range = FDNumInput(hint_text='Количество выходных дней')
 		self.submit = FDSubmit(text='Создать')
-		self.submit.bind_btn(callback=lambda e: self.insert())
+		self.submit.bind_btn(
+			callback=super().create
+		)
 
 		self.add_widgets(self.title, self.start_work_day, self.finish_work_day,
 			self.work_day_range, self.week_day_range, self.submit)
@@ -285,4 +301,4 @@ class CreateWorktypeScreen(_BaseCreateModelScreen):
 		}
 		request_status = manager.insert(self.table, **values)
 
-		print(f'CreateWorktypeScreen.insert is {request_status}')
+		return request_status
