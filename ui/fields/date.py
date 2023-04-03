@@ -49,7 +49,6 @@ class FDDate(MDBoxLayout):
 		self.value = None
 
 	def get_value(self) -> datetime.date:
-		print(f'FDDate.get_value() returns is [{type(self.value)}]{self.value}', end='\n'*10)
 		return self.value
 
 	def set_value(self, date: datetime.date) -> None:
