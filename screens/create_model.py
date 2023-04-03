@@ -283,13 +283,21 @@ class CreateWorktypeScreen(_BaseCreateModelScreen):
 		)
 		self.work_day_range = FDNumInput(hint_text='Количество рабочих дней')
 		self.week_day_range = FDNumInput(hint_text='Количество выходных дней')
+		self.humans = FDSelectList(
+			icon=data_base.Human.icon,
+			title='Люди'
+		)
+		self.humans.add_right_button(
+			callback=lambda e: self.path_manager.forward('create_human')
+		)
+		self.humans.add(*data_base.Human.query.all())
 		self.submit = FDSubmit(text='Создать')
 		self.submit.bind_btn(
 			callback=super().create
 		)
 
 		self.add_widgets(self.title, self.start_work_day, self.finish_work_day,
-			self.work_day_range, self.week_day_range, self.submit)
+			self.work_day_range, self.week_day_range, self.humans, self.submit)
 
 	def insert(self) -> None:
 		values = {
