@@ -12,7 +12,7 @@ from screens.edit_model_list import EditTagListScreen, EditRankListScreen, \
 	EditPositionListScreen, EditHumanListScreen, EditEmergencyListScreen, \
 	EditWorktypeListScreen
 from screens.edit_model import EditTagScreen, EditRankScreen, \
-	EditPositionScreen, EditHumanScreen, EditEmergencyScreen
+	EditPositionScreen, EditHumanScreen, EditEmergencyScreen, EditWorktypeScreen
 
 
 class Application(MDApp):
@@ -58,7 +58,8 @@ class Application(MDApp):
 
 		# Edit screens
 		_edit_screens_objects = (EditTagScreen, EditRankScreen,
-			EditPositionScreen, EditHumanScreen, EditEmergencyScreen)
+			EditPositionScreen, EditHumanScreen, EditEmergencyScreen,
+			EditWorktypeScreen)
 
 		for edit_screen in _edit_screens_objects:
 			scr = edit_screen(self.path_manager)

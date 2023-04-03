@@ -41,7 +41,7 @@ class EditTagScreen(_BaseEditModelScreen, create_model.CreateTagScreen):
 			callback=self.save
 		)
 
-	def update_entry(self) -> None:
+	def update_entry(self) -> bool:
 		values = {
 			'title': self.title.get_value(),
 			'emergencys': self.emergencies.get_value()
@@ -68,7 +68,7 @@ class EditRankScreen(_BaseEditModelScreen, create_model.CreateRankScreen):
 			callback=self.save
 		)
 
-	def update_entry(self) -> None:
+	def update_entry(self) -> bool:
 		values = {
 			'title': self.title.get_value(),
 			'priority': self.priority.get_value(),
@@ -95,7 +95,7 @@ class EditPositionScreen(_BaseEditModelScreen, create_model.CreatePositionScreen
 			callback=self.save
 		)
 
-	def update_entry(self) -> None:
+	def update_entry(self) -> bool:
 		values = {
 			'title': self.title.get_value(),
 			'humans': self.humans.get_value(),
@@ -127,7 +127,7 @@ class EditHumanScreen(_BaseEditModelScreen, create_model.CreateHumanScreen):
 			callback=self.save
 		)
 
-	def update_entry(self) -> None:
+	def update_entry(self) -> bool:
 		worktype_obj = self.worktype.get_value()[0].id if self.worktype.get_value() else None
 		position_obj = self.position.get_value()[0].id if self.position.get_value() else None
 		rank_obj = self.rank.get_value()[0].id if self.rank.get_value() else None
@@ -166,13 +166,46 @@ class EditEmergencyScreen(_BaseEditModelScreen, create_model.CreateEmergencyScre
 			callback=super().save
 		)
 
-	def update_entry(self) -> None:
+	def update_entry(self) -> bool:
 		values = {
 			'title': self.title.get_value(),
 			'description': self.description.get_value(),
 			'urgent': self.urgent.get_value(),
 			'tags': self.tags.get_value(),
 			'humans': self.humans.get_value(),
+		}
+		request_status = manager.update(self._entry, **values)
+
+		return request_status
+
+
+class EditWorktypeScreen(_BaseEditModelScreen, create_model.CreateWorktypeScreen):
+	''' Экран редактирования графика работы '''
+
+	name = 'edit_worktype'
+	table = data_base.Worktype
+
+	def fill_content(self, entry: data_base.Worktype) -> None:
+		self._entry = entry
+
+		self.title.set_value(entry.title)
+		self.start_work_day.set_value(entry.start_work_day)
+		self.finish_work_day.set_value(entry.finish_work_day)
+		self.work_day_range.set_value(entry.work_day_range)
+		self.week_day_range.set_value(entry.week_day_range)
+		self.humans.set_value(entry.humans)
+		self.submit.text = 'Редактировать'
+		self.submit.bind_btn(
+			callback=super().save
+		)
+
+	def update_entry(self) -> bool:
+		values = {
+				'title': self.title.get_value(),
+				'start_work_day': self.start_work_day.get_value(),
+				'finish_work_day': self.finish_work_day.get_value(),
+				'work_day_range': self.work_day_range.get_value(),
+				'week_day_range': self.week_day_range.get_value()
 		}
 		request_status = manager.update(self._entry, **values)
 
