@@ -109,6 +109,7 @@ class Worktype(db.Model):
 	finish_work_day = db.Column(db.DateTime(), nullable=False)
 	work_day_range = db.Column(db.Integer, nullable=False)
 	week_day_range = db.Column(db.Integer, nullable=False)
+	humans = db.relationship('Human', backref='humans_worktype', lazy=True)
 
 	def __str__(self):
 		return self.title
