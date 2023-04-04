@@ -9,6 +9,7 @@
 		group: root.group
 
 	MDFlatButton:
+		id: btn
 		size_hint: None, None
 		size: root.size
 		text_size: root.size
@@ -16,7 +17,8 @@
 		anchor_x: 'left'
 
 		on_release:
-			print(f'You pressed on "{root.db_entry.title}"')
+			# print(f'You pressed on "{root.db_entry.title}"')
+			root.open_dialog()
 
 
 <FDSelectList>:
