@@ -8,6 +8,8 @@ from kivymd.uix.button import MDIconButton
 
 from config import paths
 from data_base import db
+from ui.frames.dialogs import FDDialog
+from ui.frames.dialogs.model_content import ModelDialogContenet
 
 
 Builder.load_file(paths.SELECTED_LIST_FIELD)
@@ -22,6 +24,8 @@ class _SelectListItem(MDBoxLayout):
 
 		super().__init__()
 
+		self.dialog = None
+
 	@property
 	def checkbox(self) -> bool:
 		return self.ids.checkbox.active
@@ -29,6 +33,13 @@ class _SelectListItem(MDBoxLayout):
 	@checkbox.setter
 	def checkbox(self, value: bool) -> None:
 		self.ids.checkbox.active = value
+
+	def open_dialog(self) -> None:
+		if self.dialog is None:
+			content = ModelDialogContenet(self.db_entry)
+			self.dialog = FDDialog(content)
+
+		self.dialog.open()
 
 
 class FDSelectList(MDBoxLayout):

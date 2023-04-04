@@ -20,11 +20,12 @@ class ModelDialogContenet(MDBoxLayout):
 		self.__fill()
 
 	def __fill(self) -> None:
-		columns = self.model.__table__.columns
+		columns = self.model.__table__.columns.keys()
+		columns.pop(0)	# Delete 'id' column name
 		content = self.ids.content
 
 		for column in columns:
-			value = getattr(self.model, column.key)
+			value = getattr(self.model, column)
 
 			if value is None:
 				continue
@@ -33,7 +34,7 @@ class ModelDialogContenet(MDBoxLayout):
 				value = str(value)
 
 			label = FDLabel(
-				title=column.key,
+				title=column,
 				value=value
 			)
 			content.add_widget(label)
