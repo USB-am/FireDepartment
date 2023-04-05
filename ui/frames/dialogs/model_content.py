@@ -3,7 +3,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 
 from config import paths
 import data_base
-from ui.fields.label import FDLabel
+from ui.fields.label import FDLabelTwoLine
 
 
 Builder.load_file(paths.MODEL_CONTENT_DIALOG)
@@ -33,7 +33,7 @@ class ModelDialogContenet(MDBoxLayout):
 			if not isinstance(value, str):
 				value = str(value)
 
-			label = FDLabel(
+			label = FDLabelTwoLine(
 				title=column,
 				value=value
 			)

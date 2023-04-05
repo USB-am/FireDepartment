@@ -13,3 +13,10 @@ class FDLabel(MDBoxLayout):
 
 	title = StringProperty()
 	value = StringProperty()
+
+
+class FDLabelTwoLine(MDBoxLayout):
+	''' Поле с текстом и описанием '''
+
+	title = StringProperty()
+	value = StringProperty()
