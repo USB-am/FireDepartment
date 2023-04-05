@@ -6,3 +6,4 @@ ui.fields.selected_list:
 
 screens.edit_model/screens.create_model:
 	Выводить ошибки при нерпавильных данных
+	Заполнять виджеты при редиректе
