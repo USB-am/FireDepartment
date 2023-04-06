@@ -3,6 +3,7 @@ from app.path_manager import PathManager
 
 import data_base
 from ui.frames.list_items import FDEditModelListItem
+from ui.fields.search import FDSearch
 
 
 class _BaseEditModelListScreen(SelectedScrollScreen):
@@ -10,8 +11,9 @@ class _BaseEditModelListScreen(SelectedScrollScreen):
 
 	def __init__(self, path_manager: PathManager):
 		self.path_manager = path_manager
+		self.search = FDSearch()
 
-		super().__init__()
+		super().__init__(self.search)
 
 		self.__fill_toolbar()
 
