@@ -28,6 +28,7 @@ SWITCH_FIELD = os.path.join(__FIELDS_DIR, 'switch.kv')
 DATE_FIELD = os.path.join(__FIELDS_DIR, 'date.kv')
 LABEL_FIELD = os.path.join(__FIELDS_DIR, 'label.kv')
 SUBMIT_BUTTON = os.path.join(__FIELDS_DIR, 'submit.kv')
+SEARCH_FIELD = os.path.join(__FIELDS_DIR, 'search.kv')
 
 # Widgets paths
 __WIDGETS_DIR = os.path.join(__KV_DIR, 'widgets')
