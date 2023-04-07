@@ -8,12 +8,12 @@ class FDDialog(MDDialog):
 
 	type = 'custom'
 
-	def __init__(self, content: MDBoxLayout):
+	def __init__(self, title: str, content: MDBoxLayout):
 		self.content = content
 
 		self.ok_button = MDRaisedButton(text='OK')
 		self.buttons = [self.ok_button,]
 
-		super().__init__(content_cls=content)
+		super().__init__(title=title, content_cls=content)
 
 		self.ok_button.bind(on_release=lambda e: self.dismiss())

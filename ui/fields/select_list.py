@@ -37,7 +37,7 @@ class _SelectListItem(MDBoxLayout):
 	def open_dialog(self) -> None:
 		if self.dialog is None:
 			content = ModelDialogContenet(self.db_entry)
-			self.dialog = FDDialog(content)
+			self.dialog = FDDialog(self.db_entry.__tablename__, content)
 
 		self.dialog.open()
 
