@@ -1,9 +1,3 @@
-ui.frames.model_content:
-	Сделать красивое отображение
-
-ui.fields.selected_list:
-	Выводить информацию оп модели
-
 screens.edit_model/screens.create_model:
 	Выводить ошибки при нерпавильных данных
 	Заполнять виджеты при редиректе
