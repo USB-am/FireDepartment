@@ -13,6 +13,7 @@
 
 		MDIconButton:
 			id: search_btn
-			# size_hint: None, None
-			# size: dp(50), dp(50)
 			icon: 'magnify'
+
+			on_release:
+				root.find(self)
