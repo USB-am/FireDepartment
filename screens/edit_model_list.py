@@ -18,6 +18,7 @@ class _BaseEditModelListScreen(SelectedScrollScreen):
 		self.__fill_toolbar()
 
 		self.bind(on_pre_enter=lambda *e: self.__fill_content())
+		self.search.bind_on_enter(self.search_entries)
 
 	def __fill_toolbar(self) -> None:
 		self.toolbar.add_left_button(
@@ -30,6 +31,17 @@ class _BaseEditModelListScreen(SelectedScrollScreen):
 
 		self.add_widgets(*[FDEditModelListItem(entry) \
 			for entry in self.table.query.all()])
+
+	def search_entries(self) -> None:
+		search_text = f'%{self.search.text}%'
+		entries = self.table.query.filter(
+			self.table.title.like(search_text)
+		).all()
+		
+		self.clear()
+
+		self.add_widgets(*[FDEditModelListItem(entry) \
+			for entry in entries])
 
 
 class EditTagListScreen(_BaseEditModelListScreen):

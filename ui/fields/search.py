@@ -19,9 +19,15 @@ class FDSearch(MDBoxLayout):
 			hint_text='Search...'
 		)
 		self.ids.text_input_container.add_widget(self.search_text)
+
+	def bind_on_enter(self, callback) -> None:
 		self.search_text.entry.bind(
-			on_text_validate=self.find
+			on_text_validate=lambda e: callback()
+		)
+		self.ids.search_btn.bind(
+			on_release=lambda e: callback()
 		)
 
-	def find(self, instance: MDTextField):
-		print('find method is started')
+	@property
+	def text(self) -> str:
+		return self.search_text.get_value()
