@@ -1,6 +1,7 @@
 from kivy.lang.builder import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.textfield import MDTextField
+from kivymd.uix.button import MDIconButton
 
 from config.paths import SEARCH_FIELD
 from .entry import FDTextInput
@@ -15,19 +16,22 @@ class FDSearch(MDBoxLayout):
 	def __init__(self):
 		super().__init__()
 
-		self.search_text = FDTextInput(
+		self.search_text = MDTextField(
 			hint_text='Search...'
 		)
-		self.ids.text_input_container.add_widget(self.search_text)
+		self.search_btn = MDIconButton(icon='magnify')
+
+		self.add_widget(self.search_text)
+		self.add_widget(self.search_btn)
 
 	def bind_on_enter(self, callback) -> None:
-		self.search_text.entry.bind(
+		self.search_text.bind(
 			on_text_validate=lambda e: callback()
 		)
-		self.ids.search_btn.bind(
+		self.search_btn.bind(
 			on_release=lambda e: callback()
 		)
 
 	@property
 	def text(self) -> str:
-		return self.search_text.get_value()
+		return self.search_text.text
