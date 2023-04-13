@@ -35,3 +35,7 @@ class FDSearch(MDBoxLayout):
 	@property
 	def text(self) -> str:
 		return self.search_text.text
+
+	@text.setter
+	def text(self, text: str) -> None:
+		self.search_text.text = text
