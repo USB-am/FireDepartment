@@ -16,6 +16,12 @@ class MainScreen(BaseBottomNavigationScreen):
 
 		self.__fill()
 
+		self.bind(on_pre_enter=lambda e: self.update_navigation_tabs())
+
+	def update_navigation_tabs(self) -> None:
+		self.emergencies_item.update()
+		self.contacts_item.update()
+
 	def __fill(self) -> None:
 		self.__fill_toolbar()
 		self.__fill_content()
