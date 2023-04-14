@@ -15,11 +15,13 @@ class EmergenciesNavigationItem(MDBottomNavigationItem):
 	def __init__(self, **options):
 		super().__init__(**options)
 
-		self.__fill_content()
+		self.update()
+		print(dir(self))
 
-	def __fill_content(self) -> None:
+	def update(self) -> None:
+		self.ids.content.clear_widgets()
+
 		emergencies = data_base.Emergency.query.all()
-
 		self.add_list_items(*emergencies)
 
 	def add_list_items(self, *emergencies: data_base.Emergency) -> None:
@@ -35,11 +37,12 @@ class ContactsNavigationItem(MDBottomNavigationItem):
 	def __init__(self, **options):
 		super().__init__(**options)
 
-		self.__fill_content()
+		self.update()
 
-	def __fill_content(self) -> None:
+	def update(self) -> None:
+		self.ids.content.clear_widgets()
+
 		humans = data_base.Human.query.filter(data_base.Human.is_firefigher==True)
-
 		self.add_list_items(*humans)
 
 	def add_list_items(self, *humans: data_base.Human) -> None:

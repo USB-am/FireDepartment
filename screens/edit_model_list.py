@@ -55,7 +55,7 @@ class _BaseEditModelListScreen(SelectedScrollScreen):
 		if self._search_status:
 			self.toolbar.remove_left_button()
 			self.toolbar.add_left_button(
-				icon='bus',
+				icon='close',
 				callback=lambda e: self.reset_search()
 			)
 		else:
