@@ -51,3 +51,33 @@ class FDStatusSwitch(MDBoxLayout):
 		else:
 			self.ids.icon.icon = self.deactive_icon
 			self.ids.title.text = self.deactive_title
+
+
+class FDTripleCheckbox(MDBoxLayout):
+	''' Checkbox с тремя состояниями '''
+
+	normal_icon = StringProperty('phone-settings')
+	active_icon = StringProperty('phone-check')
+	deactive_icon = StringProperty('phone-cancel')
+	title = StringProperty()
+	substring = StringProperty('')
+	_state = 0
+
+	def click(self) -> None:
+		self._state = (self._state + 1) % 3
+
+		if self._state == 0:
+			self.md_bg_color = [0, 0, 0, 0]
+		elif self._state == 1:
+			self.md_bg_color = [0, 1, 0, .3]
+		elif self._state == 2:
+			self.md_bg_color = [1, 0, 0, .3]
+
+	def get_value(self) -> int:
+		return self._state
+
+	def set_value(self, value: int) -> None:
+		if value is None:
+			return
+
+		self._state = value % 3
