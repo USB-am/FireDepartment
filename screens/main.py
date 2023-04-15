@@ -29,7 +29,7 @@ class MainScreen(BaseBottomNavigationScreen):
 	def __fill_toolbar(self) -> None:
 		self.toolbar.add_left_button(
 			icon='fire-truck',
-			callback=lambda event: print('fire-truck')
+			callback=lambda event: self.path_manager.forward('current_calls')
 		)
 		self.toolbar.add_right_button(
 			icon='face-agent',
