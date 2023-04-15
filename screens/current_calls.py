@@ -1,11 +1,11 @@
-from . import BaseScreen
+from . import BaseScrolledScreen
 from app.path_manager import PathManager
 from data_base import Emergency
 
-from kivymd.uix.boxlayout import MDBoxLayout
+from ui.fields.switch import FDTripleCheckbox
 
 
-class CurrentCallsScreen(BaseScreen):
+class CurrentCallsScreen(BaseScrolledScreen):
 	''' Экран текущих вызовов '''
 
 	name = 'current_calls'
@@ -15,6 +15,19 @@ class CurrentCallsScreen(BaseScreen):
 
 		super().__init__()
 
+		self.__fill_toolbar()
+
+	def __fill_toolbar(self) -> None:
+		self.toolbar.add_left_button(
+			icon='arrow-left',
+			callback=lambda e: self.path_manager.back()
+		)
+
 	def add_tab(self, entry: Emergency):
-		print(f'Add tag {entry.title}')
-		self.add_widgets(MDBoxLayout())
+		humans = entry.humans
+
+		for human in humans:
+			self.add_widgets(FDTripleCheckbox(
+				title=human.title,
+				substring=human.phone_1
+			))
