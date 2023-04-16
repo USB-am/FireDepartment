@@ -16,7 +16,6 @@ class EmergenciesNavigationItem(MDBottomNavigationItem):
 		super().__init__(**options)
 
 		self.update()
-		print(dir(self))
 
 	def update(self) -> None:
 		self.ids.content.clear_widgets()
@@ -42,7 +41,7 @@ class ContactsNavigationItem(MDBottomNavigationItem):
 	def update(self) -> None:
 		self.ids.content.clear_widgets()
 
-		humans = data_base.Human.query.filter(data_base.Human.is_firefigher==True)
+		humans = data_base.Human.query.filter(data_base.Human.is_firefigher==False)
 		self.add_list_items(*humans)
 
 	def add_list_items(self, *humans: data_base.Human) -> None:
