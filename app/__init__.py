@@ -13,6 +13,7 @@ from screens.edit_model_list import EditTagListScreen, EditRankListScreen, \
 	EditWorktypeListScreen
 from screens.edit_model import EditTagScreen, EditRankScreen, \
 	EditPositionScreen, EditHumanScreen, EditEmergencyScreen, EditWorktypeScreen
+from screens.edit_color_theme import EditColorTheme
 
 
 class Application(MDApp):
@@ -36,6 +37,9 @@ class Application(MDApp):
 
 		self.current_calls = CurrentCallsScreen(self.path_manager)
 		self.screen_manager.add_widget(self.current_calls)
+
+		self.edit_color_theme = EditColorTheme(self.path_manager)
+		self.screen_manager.add_widget(self.edit_color_theme)
 
 		# Create screens
 		_create_screens_objects = (CreateTagScreen, CreateRankScreen,
