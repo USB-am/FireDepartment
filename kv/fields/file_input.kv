@@ -1,0 +1,19 @@
+<FDFileInput>:
+	orientation: 'horizontal'
+	size_hint: 1, None
+	height: dp(50)
+
+	MDIcon:
+		icon: root.icon
+		size_hint: None, 1
+		width: dp(50)
+
+	MDLabel:
+		text: root.title
+
+	MDRectangleFlatButton:
+		id: btn
+		text: 'Файл...'
+
+		on_release:
+			root.open_file_manager()
