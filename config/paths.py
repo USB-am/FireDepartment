@@ -2,6 +2,7 @@ import os
 
 
 __KV_DIR = os.path.join(os.getcwd(), 'kv')
+STATIC_DIR = os.path.join(os.getcwd(), 'static')
 
 # Screens paths
 __SCREENS_DIR = os.path.join(__KV_DIR, 'screens')
@@ -29,6 +30,7 @@ DATE_FIELD = os.path.join(__FIELDS_DIR, 'date.kv')
 LABEL_FIELD = os.path.join(__FIELDS_DIR, 'label.kv')
 SUBMIT_BUTTON = os.path.join(__FIELDS_DIR, 'submit.kv')
 SEARCH_FIELD = os.path.join(__FIELDS_DIR, 'search.kv')
+FILE_INPUT_FIELD = os.path.join(__FIELDS_DIR, 'file_input.kv')
 
 # Widgets paths
 __WIDGETS_DIR = os.path.join(__KV_DIR, 'widgets')
