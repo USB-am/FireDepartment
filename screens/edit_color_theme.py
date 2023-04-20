@@ -1,8 +1,11 @@
+from kivy.metrics import dp
+
 from . import BaseScrolledScreen
 from app.path_manager import PathManager
 from data_base import ColorTheme
 from ui.fields.file_input import FDFileInput
 from ui.fields.submit import FDSubmit
+from ui.fields.colors import FDColor
 
 
 class EditColorTheme(BaseScrolledScreen):
@@ -13,6 +16,7 @@ class EditColorTheme(BaseScrolledScreen):
 
 	def __init__(self, path_manager: PathManager):
 		super().__init__()
+		self.scrolled_frame.ids.content.spacing = dp(10)
 
 		self.path_manager = path_manager
 		self.__fill_toolbar()
@@ -29,13 +33,17 @@ class EditColorTheme(BaseScrolledScreen):
 			icon='image-edit',
 			title='Задний фон'
 		)
+		self.bg_color = FDColor(
+			icon='flip-to-back',
+			title='Цвет заднего фона'
+		)
 
 		self.submit = FDSubmit(text='Изменить')
 		self.submit.bind_btn(
 			callback=lambda e: self.update_theme()
 		)
 
-		self.add_widgets(self.file_input, self.submit)
+		self.add_widgets(self.file_input, self.bg_color, self.submit)
 
 	def update_theme(self) -> None:
 		pass
