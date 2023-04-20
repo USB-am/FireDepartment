@@ -31,6 +31,7 @@ LABEL_FIELD = os.path.join(__FIELDS_DIR, 'label.kv')
 SUBMIT_BUTTON = os.path.join(__FIELDS_DIR, 'submit.kv')
 SEARCH_FIELD = os.path.join(__FIELDS_DIR, 'search.kv')
 FILE_INPUT_FIELD = os.path.join(__FIELDS_DIR, 'file_input.kv')
+COLORS_FIELD = os.path.join(__FIELDS_DIR, 'colors.kv')
 
 # Widgets paths
 __WIDGETS_DIR = os.path.join(__KV_DIR, 'widgets')
