@@ -46,4 +46,7 @@ class EditColorTheme(BaseScrolledScreen):
 		self.add_widgets(self.file_input, self.bg_color, self.submit)
 
 	def update_theme(self) -> None:
-		pass
+		self.bg_image = self.file_input.get_value()
+
+		self.reboot_bg_image(source=self.bg_image)
+		print(self.bg_image)

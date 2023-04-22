@@ -1,6 +1,7 @@
 from kivy.lang.builder import Builder
 from kivy.uix.screenmanager import Screen
 from kivy.uix.widget import Widget
+from kivy.graphics import Color, Rectangle
 from kivymd.uix.bottomnavigation import MDBottomNavigationItem
 
 from app.path_manager import PathManager
@@ -40,6 +41,30 @@ class BaseScreen(Screen):
 
 		container = self.id.widgets
 		container.clear_widgets()
+
+	def reboot_bg_image(self, source: str) -> None:
+		''' Обновление картинки заднего фона '''
+
+		self._clear_styles()
+
+		with self.canvas.before:
+			c = Color(.5, .5, .5, 1)
+			self.rect = Rectangle(
+				size=self.size,
+				pos=self.pos,
+				source=source
+			)
+
+	def _clear_styles(self) -> None:
+		''' Очистка стилей (картинки и цвета заднего фона) '''
+
+		with self.canvas.before:
+			c = Color(*self.color)
+			self.rect = Rectangle(
+				size=self.size,
+				pos=self.pos,
+				source=None
+			)
 
 
 class BaseBottomNavigationScreen(BaseScreen):
