@@ -49,4 +49,3 @@ class EditColorTheme(BaseScrolledScreen):
 		self.bg_image = self.file_input.get_value()
 
 		self.reboot_bg_image(source=self.bg_image)
-		print(self.bg_image)

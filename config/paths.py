@@ -19,6 +19,7 @@ LIST_ITEMS = os.path.join(__FRAMES_DIR, 'list_items.kv')
 
 __DIALOGS_DIR = os.path.join(__FRAMES_DIR, 'dialogs')
 MODEL_CONTENT_DIALOG = os.path.join(__DIALOGS_DIR, 'model_content.kv')
+COLOR_CONTENT_DIALOG = os.path.join(__DIALOGS_DIR, 'color_content.kv')
 
 # Fields paths
 __FIELDS_DIR = os.path.join(__KV_DIR, 'fields')
