@@ -34,6 +34,7 @@ class FDColor(MDBoxLayout):
 			self._dialog.ok_button.bind(
 				on_release=lambda e: self.update_button_color()
 			)
+			# self.update_button_color()
 
 		self._dialog.open()
 
