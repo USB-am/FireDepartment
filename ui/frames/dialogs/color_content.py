@@ -23,3 +23,4 @@ class ColorDialogContent(MDBoxLayout):
 
 	def set_value(self, color: list) -> None:
 		self._color = color
+		self.ids.color_picker.color = self._color
