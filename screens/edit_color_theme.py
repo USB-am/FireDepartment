@@ -47,5 +47,7 @@ class EditColorTheme(BaseScrolledScreen):
 
 	def update_theme(self) -> None:
 		self.bg_image = self.file_input.get_value()
+		self.color = self.bg_color.get_value()
 
 		self.reboot_bg_image(source=self.bg_image)
+		self.reboot_bg_color(color=self.color)

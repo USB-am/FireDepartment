@@ -18,7 +18,7 @@ Builder.load_file(paths.BASE_SCREEN)
 class BaseScreen(Screen):
 	''' Базовый экран '''
 
-	color = (1, 1, 1, 1)
+	color = [1, 1, 1, 1]
 	bg_image = None
 
 	def __init__(self):
@@ -53,6 +53,19 @@ class BaseScreen(Screen):
 				size=self.size,
 				pos=self.pos,
 				source=source
+			)
+
+	def reboot_bg_color(self, color: list) -> None:
+		''' Обновление цвета заднего фона '''
+
+		self._clear_styles()
+
+		with self.canvas.before:
+			c = Color(*color)
+			self.rect = Rectangle(
+				size=self.size,
+				pos=self.pos,
+				source=self.bg_image
 			)
 
 	def _clear_styles(self) -> None:

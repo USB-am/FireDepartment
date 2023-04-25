@@ -13,9 +13,6 @@ Builder.load_file(COLORS_FIELD)
 class FDColor(MDBoxLayout):
 	''' Поле выбора цвета из палитры '''
 
-	icon = StringProperty()
-	title = StringProperty()
-
 	def __init__(self, icon: str, title: str):
 		self.icon = icon
 		self.title = title
@@ -34,10 +31,15 @@ class FDColor(MDBoxLayout):
 			self._dialog.ok_button.bind(
 				on_release=lambda e: self.update_button_color()
 			)
-			# self.update_button_color()
 
 		self._dialog.open()
 
 	def update_button_color(self) -> None:
 		color = self.color_content.get_value()
 		self.ids.btn.md_bg_color = color
+
+	def get_value(self) -> list:
+		return self.color_content.get_value()
+
+	def set_value(self, color: list) -> None:
+		self.color_content.set_value(color)
