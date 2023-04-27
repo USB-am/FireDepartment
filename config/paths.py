@@ -38,3 +38,4 @@ COLORS_FIELD = os.path.join(__FIELDS_DIR, 'colors.kv')
 __WIDGETS_DIR = os.path.join(__KV_DIR, 'widgets')
 
 BOTTOM_NAVIGATION_WIDGET = os.path.join(__WIDGETS_DIR, 'bottom_navigation.kv')
+NOTEBOOK_WIDGET = os.path.join(__WIDGETS_DIR, 'notebook.kv')
