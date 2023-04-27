@@ -69,7 +69,7 @@ class Application(MDApp):
 			scr = edit_screen(self.path_manager)
 			self.screen_manager.add_widget(scr)
 
-		self.screen_manager.current = 'color_theme_edit'
+		self.screen_manager.current = 'current_calls'
 
 	def build(self) -> ScreenManager:
 		return self.screen_manager

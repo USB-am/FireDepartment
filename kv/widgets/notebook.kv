@@ -1,0 +1,31 @@
+<FDNotebook>:
+	orientation: 'vertical'
+	size_hint: 1, 1
+
+	MDBoxLayout:
+		size_hint: 1, None
+		height: dp(50)
+		md_bg_color: 0, 1, 0, 1
+
+		ScrollView:
+			GridLayout:
+				id: top_bar
+				rows: 1
+				size_hint: None, 1
+				width: self.minimum_width
+				do_scroll_y: False
+				padding: [dp(10), 0]
+
+				MDLabel:
+					text: 'Tab #1'
+					size_hint: None, 1
+					width: dp(100)
+
+				MDLabel:
+					text: 'Tab #2'
+					size_hint: None, 1
+					width: dp(100)
+
+	MDBoxLayout:
+		MDLabel:
+			text: 'All good!'
