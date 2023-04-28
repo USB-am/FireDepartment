@@ -1,3 +1,31 @@
+<FDTopBarTab>:
+	orientation: 'horizontal'
+	size_hint: None, 1
+	width: dp(150)
+
+	MDTextButton:
+		id: open_btn
+		size_hint: 1, 1
+		valign: 'center'
+		text: root.title
+		theme_text_color: 'Custom'
+		text_color: (1, 1, 1, 1)
+		text_size: self.size
+
+		on_release:
+			print('Open tab button is pressed')
+			print(dir(app.theme_cls))
+
+	MDIconButton:
+		id: close_btn
+		icon: 'close'
+		theme_text_color: 'Custom'
+		text_color: (1, 1, 1, 1)
+
+		on_release:
+			print('Close tab button is pressed')
+
+
 <FDNotebook>:
 	orientation: 'vertical'
 	size_hint: 1, 1
@@ -5,7 +33,7 @@
 	MDBoxLayout:
 		size_hint: 1, None
 		height: dp(50)
-		md_bg_color: 0, 1, 0, 1
+		md_bg_color: app.theme_cls.primary_color
 
 		ScrollView:
 			GridLayout:
@@ -15,17 +43,13 @@
 				width: self.minimum_width
 				do_scroll_y: False
 				padding: [dp(10), 0]
+				spacing: [dp(15), 0]
 
-				MDLabel:
-					text: 'Tab #1'
-					size_hint: None, 1
-					width: dp(100)
-
-				MDLabel:
-					text: 'Tab #2'
-					size_hint: None, 1
-					width: dp(100)
-
-	MDBoxLayout:
-		MDLabel:
-			text: 'All good!'
+	ScrollView:
+		GridLayout:
+			id: content
+			cols: 1
+			size_hint: 1, None
+			height: self.minimum_height
+			do_scroll_x: False
+			padding: dp(10)
