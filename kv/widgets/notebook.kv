@@ -47,9 +47,16 @@
 
 	ScrollView:
 		GridLayout:
-			id: content
 			cols: 1
 			size_hint: 1, None
 			height: self.minimum_height
 			do_scroll_x: False
 			padding: dp(10)
+
+			MDBoxLayout:
+				id: contacts_container
+				adaptive_height: True
+
+			MDBoxLayout:
+				id: text_container
+				adaptive_height: True
