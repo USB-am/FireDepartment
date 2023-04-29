@@ -2,6 +2,7 @@
 	orientation: 'horizontal'
 	size_hint: None, 1
 	width: dp(150)
+	# md_bg_color: (0, 0, 0, .2)
 
 	MDTextButton:
 		id: open_btn
@@ -14,7 +15,6 @@
 
 		on_release:
 			print('Open tab button is pressed')
-			print(dir(app.theme_cls))
 
 	MDIconButton:
 		id: close_btn
