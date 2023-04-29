@@ -9,16 +9,6 @@ from data_base import Emergency
 Builder.load_file(NOTEBOOK_WIDGET)
 
 
-class FDTopBarTab(MDBoxLayout):
-	''' Ячейка в верхней прокручиваемой панели '''
-
-	title = StringProperty()
-
-
-class FDTabContent(MDBoxLayout):
-	''' Содержимое ячейки '''
-
-
 class FDNotebook(MDBoxLayout):
 	''' Виджет с вкладками '''
 
@@ -28,11 +18,35 @@ class FDNotebook(MDBoxLayout):
 		self.tabs = []
 
 		# Temp
-		for emergency in Emergency.query.all()[:3]:
+		for emergency in Emergency.query.all():
 			self.add_tab(emergency)
 
 	def add_tab(self, entry: Emergency) -> None:
 		''' Добавляет новую вкладку '''
 
-		top_bar_tab = FDTopBarTab(title=entry.title)
-		self.ids.top_bar.add_widget(top_bar_tab)
+		new_tab = self._create_tab(entry)
+
+	def _create_tab(self, entry: Emergency):
+		''' Создает объект вкладки '''
+
+		return FDTab(self, entry)
+
+
+class FDTab:
+	''' Представление вкладки '''
+
+	def __init__(self, parent: FDNotebook, entry: Emergency):
+		self.parent = parent
+		self.entry = entry
+
+		self.top_bar_tab = FDTopBarTab(title=entry.title)
+
+
+class FDTopBarTab(MDBoxLayout):
+	''' Ячейка в верхней прокручиваемой панели '''
+
+	title = StringProperty()
+
+
+class FDTabContent(MDBoxLayout):
+	''' Содержимое ячейки '''
