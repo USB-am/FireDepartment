@@ -10,9 +10,13 @@ Builder.load_file(NOTEBOOK_WIDGET)
 
 
 class FDTopBarTab(MDBoxLayout):
-	''' Кнопка в верхней прокручиваемой панели '''
+	''' Ячейка в верхней прокручиваемой панели '''
 
 	title = StringProperty()
+
+
+class FDTabContent(MDBoxLayout):
+	''' Содержимое ячейки '''
 
 
 class FDNotebook(MDBoxLayout):
@@ -22,6 +26,10 @@ class FDNotebook(MDBoxLayout):
 		super().__init__()
 
 		self.tabs = []
+
+		# Temp
+		for emergency in Emergency.query.all()[:3]:
+			self.add_tab(emergency)
 
 	def add_tab(self, entry: Emergency) -> None:
 		''' Добавляет новую вкладку '''
