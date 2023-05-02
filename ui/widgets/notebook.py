@@ -4,6 +4,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 
 from config.paths import NOTEBOOK_WIDGET
 from data_base import Emergency
+from ui.fields.switch import FDTripleCheckbox
 
 
 Builder.load_file(NOTEBOOK_WIDGET)
@@ -24,12 +25,13 @@ class FDNotebook(MDBoxLayout):
 	def add_tab(self, entry: Emergency) -> None:
 		''' Добавляет новую вкладку '''
 
-		new_tab = self._create_tab(entry)
+		new_tab = FDTab(self, entry)
+		self.ids.top_bar.add_widget(new_tab.top_bar_tab)
 
-	def _create_tab(self, entry: Emergency):
-		''' Создает объект вкладки '''
+	def clear_content(self) -> None:
+		''' Очищает содержимое вкладки '''
 
-		return FDTab(self, entry)
+		self.ids.description_content.text = ''
 
 
 class FDTab:
@@ -40,6 +42,19 @@ class FDTab:
 		self.entry = entry
 
 		self.top_bar_tab = FDTopBarTab(title=entry.title)
+		self.fill_content()
+
+	def fill_content(self) -> None:
+		''' Заполняет содержимое контентом '''
+
+		self.parent.ids.description_content.text = self.entry.description
+
+		for firefigher in self.entry.humans:
+			triple_checkbox = FDTripleCheckbox(
+				title=firefigher.title,
+				substring=firefigher.phone_1
+			)
+			self.parent.ids.contacts_container.add_widget(triple_checkbox)
 
 
 class FDTopBarTab(MDBoxLayout):
