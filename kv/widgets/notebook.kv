@@ -2,7 +2,7 @@
 	orientation: 'horizontal'
 	size_hint: None, 1
 	width: dp(150)
-	# md_bg_color: (0, 0, 0, .2)
+	# md_bg_color: (0, 0, 0, .05)
 
 	MDTextButton:
 		id: open_btn
@@ -53,9 +53,27 @@
 			do_scroll_x: False
 			padding: dp(10)
 
+			ScrollView:
+				size_hint: 1, None
+				height: dp(100)
+
+				GridLayout:
+					cols: 1
+					size_hint: 1, None
+					height: self.minimum_height
+					do_scroll_x: False
+					padding: dp(10)
+
+					MDLabel:
+						id: description_content
+						size_hint: 1, None
+						height: dp(100)
+
 			MDBoxLayout:
 				id: contacts_container
 				adaptive_height: True
+				orientation: 'vertical'
+				spacing: dp(10)
 
 			MDBoxLayout:
 				id: text_container

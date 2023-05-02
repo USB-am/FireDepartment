@@ -68,10 +68,13 @@ class FDTripleCheckbox(MDBoxLayout):
 
 		if self._state == 0:
 			self.md_bg_color = [0, 0, 0, 0]
+			self.ids.icon_btn = self.normal_icon
 		elif self._state == 1:
 			self.md_bg_color = [0, 1, 0, .3]
+			self.ids.icon_btn = self.active_icon
 		elif self._state == 2:
 			self.md_bg_color = [1, 0, 0, .3]
+			self.ids.icon_btn = self.deactive_icon
 
 	def get_value(self) -> int:
 		return self._state
