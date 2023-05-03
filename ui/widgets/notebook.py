@@ -25,13 +25,22 @@ class FDNotebook(MDBoxLayout):
 	def add_tab(self, entry: Emergency) -> None:
 		''' Добавляет новую вкладку '''
 
+		self.clear_content()
+
 		new_tab = FDTab(self, entry)
 		self.ids.top_bar.add_widget(new_tab.top_bar_tab)
 
 	def clear_content(self) -> None:
 		''' Очищает содержимое вкладки '''
 
+		# Clear description
 		self.ids.description_content.text = ''
+
+		# Clear contact-humans
+		self.ids.contacts_container.clear_widgets()
+
+		# Clear information text
+		self.ids.info_entry.text = ''
 
 
 class FDTab:

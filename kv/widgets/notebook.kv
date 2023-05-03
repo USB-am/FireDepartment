@@ -1,8 +1,9 @@
 <FDTopBarTab>:
 	orientation: 'horizontal'
 	size_hint: None, 1
-	width: dp(150)
-	# md_bg_color: (0, 0, 0, .05)
+	width: dp(175)
+	padding: [dp(10), 0]
+	md_bg_color: (0, 0, 0, .05)
 
 	MDTextButton:
 		id: open_btn
@@ -52,6 +53,7 @@
 			height: self.minimum_height
 			do_scroll_x: False
 			padding: dp(10)
+			spacing: dp(10)
 
 			ScrollView:
 				size_hint: 1, None
@@ -76,5 +78,9 @@
 				spacing: dp(10)
 
 			MDBoxLayout:
-				id: text_container
 				adaptive_height: True
+
+				MDTextField:
+					id: info_entry
+					multiline: True
+					hint_text: 'Дополнительная информация'
