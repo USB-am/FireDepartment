@@ -5,34 +5,6 @@ from ui.fields.switch import FDTripleCheckbox
 from ui.widgets.notebook import FDNotebook
 
 
-# class CurrentCallsScreen(BaseScrolledScreen):
-# 	''' Экран текущих вызовов '''
-
-# 	name = 'current_calls'
-
-# 	def __init__(self, path_manager: PathManager):
-# 		self.path_manager = path_manager
-
-# 		super().__init__()
-
-# 		self.__fill_toolbar()
-
-# 	def __fill_toolbar(self) -> None:
-# 		self.toolbar.add_left_button(
-# 			icon='arrow-left',
-# 			callback=lambda e: self.path_manager.back()
-# 		)
-
-# 	def add_tab(self, entry: Emergency):
-# 		humans = entry.humans
-
-# 		for human in humans:
-# 			self.add_widgets(FDTripleCheckbox(
-# 				title=human.title,
-# 				substring=human.phone_1
-# 			))
-
-
 class CurrentCallsScreen(BaseScreen):
 	''' Экран текущих вызовов '''
 
@@ -52,6 +24,10 @@ class CurrentCallsScreen(BaseScreen):
 		self.toolbar.add_left_button(
 			icon='arrow-left',
 			callback=lambda e: self.path_manager.back()
+		)
+		self.toolbar.add_right_button(
+			icon='content-save',
+			callback=lambda e: print('Save button is pressed!')
 		)
 
 	def add_tab(self, entry: Emergency):
