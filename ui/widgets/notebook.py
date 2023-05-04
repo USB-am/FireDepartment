@@ -10,6 +10,22 @@ from ui.fields.switch import FDTripleCheckbox
 Builder.load_file(NOTEBOOK_WIDGET)
 
 
+def split_into_words(text: str, max_length: int) -> str:
+	split_text = text.split()
+
+	if not len(split_text):
+		return text[:max_length] + '...'
+
+	answer = ''
+	for word in split_text:
+		if len(answer) + len(word) <= max_length:
+			answer += f' {word}'
+		else:
+			break
+
+	return answer[1:] + '...'
+
+
 class FDNotebook(MDBoxLayout):
 	''' Виджет с вкладками '''
 
