@@ -15,7 +15,6 @@
 		text_size: self.size
 
 		on_release:
-			# print('Open tab button is pressed')
 			root._callback()
 
 	MDIconButton:
@@ -25,7 +24,7 @@
 		text_color: (1, 1, 1, 1)
 
 		on_release:
-			print('Close tab button is pressed')
+			root._close()
 
 
 <FDNotebook>:

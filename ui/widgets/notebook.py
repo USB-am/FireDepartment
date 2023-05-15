@@ -46,6 +46,12 @@ class FDNotebook(MDBoxLayout):
 
 		self.move_to_tab(new_tab)
 
+	def close_tab(self, tab) -> None:
+		try:
+			self.tabs.remove(tab)
+		except ValueError as error:
+			print(error)
+
 	def move_to_tab(self, tab) -> None:
 		''' Собитие перехода на вкладку '''
 		self.clear_content()
@@ -83,6 +89,7 @@ class FDTab:
 
 		self.top_bar_tab = FDTopBarTab(title=entry.title)
 		self.top_bar_tab.move_bind(callback=self.fill_content)
+		self.top_bar_tab.close_bind(callback=self.close)
 		# self.fill_content()
 
 	def fill_content(self) -> None:
@@ -106,6 +113,10 @@ class FDTab:
 			)
 			self.parent.ids.contacts_container.add_widget(triple_checkbox)
 
+	def close(self) -> None:
+		print(f'Close {self.entry.title} tab is pressed')
+		self.parent.close_tab(self)
+
 
 class FDTopBarTab(MDBoxLayout):
 	''' Ячейка в верхней прокручиваемой панели '''
@@ -113,7 +124,8 @@ class FDTopBarTab(MDBoxLayout):
 	def __init__(self, title: str):
 		self.title = title
 		self._active = False
-		self._callback = lambda: print('Not callback')
+		self._callback = lambda: print('Not move event')
+		self._close = lambda: print('Not close event')
 
 		super().__init__()
 
@@ -132,6 +144,9 @@ class FDTopBarTab(MDBoxLayout):
 
 	def move_bind(self, callback) -> None:
 		self._callback = callback
+
+	def close_bind(self, callback) -> None:
+		self._close = callback
 
 
 class FDTabContent(MDBoxLayout):
