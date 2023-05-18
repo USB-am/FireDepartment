@@ -64,8 +64,9 @@ class FDNotebook(MDBoxLayout):
 		for tab in self.tabs:
 			if active_tab is tab:
 				active_tab.top_bar_tab.active = True
-				break
-			tab.top_bar_tab.active = False
+			else:
+				tab.top_bar_tab.active = False
+			# tab.top_bar_tab.active = False
 
 	def clear_content(self) -> None:
 		''' Очищает содержимое вкладки '''
@@ -112,6 +113,8 @@ class FDTab:
 				substring=phone_1
 			)
 			self.parent.ids.contacts_container.add_widget(triple_checkbox)
+
+		self.parent.update_tabs_top_bg(self)
 
 	def close(self) -> None:
 		print(f'Close {self.entry.title} tab is pressed')
