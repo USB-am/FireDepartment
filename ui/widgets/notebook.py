@@ -66,7 +66,6 @@ class FDNotebook(MDBoxLayout):
 				active_tab.top_bar_tab.active = True
 			else:
 				tab.top_bar_tab.active = False
-			# tab.top_bar_tab.active = False
 
 	def clear_content(self) -> None:
 		''' Очищает содержимое вкладки '''
