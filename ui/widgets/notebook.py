@@ -45,10 +45,17 @@ class FDNotebook(MDBoxLayout):
 		self.ids.top_bar.add_widget(new_tab.top_bar_tab)
 
 		self.move_to_tab(new_tab)
+		new_tab.fill_content()
 
 	def close_tab(self, tab) -> None:
 		try:
 			self.tabs.remove(tab)
+
+			for active_tab in self.ids.top_bar.children:
+				if active_tab is tab.top_bar_tab:
+					self.ids.top_bar.remove_widget(tab.top_bar_tab)
+					break
+
 		except ValueError as error:
 			print(error)
 
@@ -90,7 +97,6 @@ class FDTab:
 		self.top_bar_tab = FDTopBarTab(title=entry.title)
 		self.top_bar_tab.move_bind(callback=self.fill_content)
 		self.top_bar_tab.close_bind(callback=self.close)
-		# self.fill_content()
 
 	def fill_content(self) -> None:
 		''' Заполняет содержимое контентом '''
