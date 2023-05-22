@@ -1,5 +1,5 @@
 from kivy.lang import Builder
-from kivy.properties import StringProperty
+from kivy.properties import StringProperty, BoundedNumericProperty
 from kivymd.uix.boxlayout import MDBoxLayout
 
 from config import paths
@@ -61,26 +61,24 @@ class FDTripleCheckbox(MDBoxLayout):
 	deactive_icon = StringProperty('phone-cancel')
 	title = StringProperty()
 	substring = StringProperty('')
-	_state = 0
+	state = BoundedNumericProperty(0, min=0, max=2)
 
 	def click(self) -> None:
-		self._state = (self._state + 1) % 3
+		self.state = (self.state + 1) % 3
 
-		if self._state == 0:
+		if self.state == 0:
 			self.md_bg_color = [0, 0, 0, 0]
 			self.ids.icon_btn.icon = self.normal_icon
-		elif self._state == 1:
+		elif self.state == 1:
 			self.md_bg_color = [0, 1, 0, .3]
 			self.ids.icon_btn.icon = self.active_icon
-		elif self._state == 2:
+		elif self.state == 2:
 			self.md_bg_color = [1, 0, 0, .3]
 			self.ids.icon_btn.icon = self.deactive_icon
 
 	def get_value(self) -> int:
-		return self._state
+		return self.state
 
 	def set_value(self, value: int) -> None:
-		if value is None:
-			return
-
-		self._state = value % 3
+		if value is not None:
+			self.state = value % 3
