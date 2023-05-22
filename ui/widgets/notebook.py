@@ -1,3 +1,6 @@
+from dataclasses import dataclass
+from datetime import datetime
+
 from kivy.lang.builder import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
 
@@ -87,6 +90,19 @@ class FDNotebook(MDBoxLayout):
 		self.ids.info_entry.text = ''
 
 
+@dataclass
+class Call:
+	humans: list
+	info: str
+
+
+@dataclass
+class CallHuman:
+	name: str
+	phone: str
+	status: int
+
+
 class FDTab:
 	''' Представление вкладки '''
 
@@ -98,25 +114,49 @@ class FDTab:
 		self.top_bar_tab.move_bind(callback=self.fill_content)
 		self.top_bar_tab.close_bind(callback=self.close)
 
+		self.record = self.init_info()
+
+	def init_info(self) -> Call:
+		humans = []
+
+		for firefigher in self.entry.humans:
+			name = firefigher.title
+			phone = '' if firefigher.phone_1 is None else firefigher.phone_1
+			call_human = CallHuman(name=name, phone=phone, status=0)
+			humans.append(call_human)
+
+		info = 'Начало вызова в {}.\n'.format(
+			datetime.now().strftime('%d.%m.%Y %H:%M:%S')
+		)
+
+		return Call(humans, info)
+
 	def fill_content(self) -> None:
 		''' Заполняет содержимое контентом '''
+
+		def update_firefigher_status(firefigher: CallHuman, status: int) -> None:
+			firefigher.status = status
+
 		self.parent.clear_content()
 
 		description = self.entry.description
 		if description is None:
 			description = ''
-
 		self.parent.ids.description_content.text = description
 
-		for firefigher in self.entry.humans:
-			phone_1 = firefigher.phone_1
-			if phone_1 is None:
-				phone_1 = ''
-
+		for firefigher in self.record.humans:
 			triple_checkbox = FDTripleCheckbox(
-				title=firefigher.title,
-				substring=phone_1
+				title=firefigher.name,
+				substring=firefigher.phone
 			)
+			triple_checkbox.set_value(firefigher.status)
+			triple_checkbox.ids.icon_btn.bind(
+				on_release=lambda e: update_firefigher_status(
+					firefigher=firefigher,
+					status=triple_checkbox.get_value()
+				)
+			)
+			print(firefigher.status)
 			self.parent.ids.contacts_container.add_widget(triple_checkbox)
 
 		self.parent.update_tabs_top_bg(self)
