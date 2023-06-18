@@ -14,3 +14,6 @@ screens.edit_color_theme.EditColorTheme:
 	Обновлять запись в БД
 	Обновлять стили в реальном времени:
 		Исправить отображение
+
+ui/widgets/notebook:
+	Переписать адекватно
