@@ -85,7 +85,7 @@ class FDTab:
 		return {
 			'title': self.entry.title,
 			'description': self.entry.description,
-			'firefighters': 
+			'firefighters': self.firefighter_list,
 		}
 
 	def __str__(self):
