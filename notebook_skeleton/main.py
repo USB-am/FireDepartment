@@ -7,6 +7,7 @@ from dataclasses import dataclass
 
 from kivy.lang import Builder
 from kivymd.app import MDApp
+from kivy.properties import StringProperty
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivymd.uix.boxlayout import MDBoxLayout
 
@@ -14,33 +15,12 @@ from kivymd.uix.boxlayout import MDBoxLayout
 Builder.load_file('tabs.kv')
 
 
+@dataclass
 class FDTripleCheckbox:
 	''' Имитация тройного чекбокса '''
-
-	def __init__(self, title: str, substring: str, state: int):
-		self.title = title
-		self.substring = substring
-		self.state = state
-
-
-class NoteBookTopPanel(MDBoxLayout):
-	''' Верхняя область с вкладками '''
-
-
-class NoteBookContent(MDBoxLayout):
-	''' Содержимое вкладки '''
-
-
-class FDNoteBook(MDBoxLayout):
-	''' Notebook widget '''
-
-	def __init__(self, **options):
-		super().__init__(**options)
-
-		self.tabs = []
-
-	def add_tab(self):
-		pass
+	title: str
+	substring: str
+	state: int
 
 
 @dataclass
@@ -54,50 +34,31 @@ class DBEntry:
 
 class TopPanelTab(MDBoxLayout):
 	''' Вкладка '''
-
-	def __init__(self, title: str):
-		super().__init__()
-
-		self.title = title
+	title = StringProperty()
 
 
-class FDTab:
-	def __init__(self, entry: DBEntry):
-		self.entry = entry
+class TopPanel(MDBoxLayout):
+	''' Поле для отображения  вкладок '''
 
-		self.top_panel_tab = TopPanelTab(entry.title)
-		self.firefighter_list = self._init_firefighter_list()
+	def add_tab(self, tab: TopPanelTab) -> None:
+		container = self.ids.tabs_container
+		container.add_widget(tab)
 
-	def _init_firefighter_list(self) -> list:
-		firefighter_list = []
 
-		for human in self.entry.humans:
-			list_element = FDTripleCheckbox(
-				title=human.title,
-				substring=human.phone_1,
-				state=0
-			)
-			firefighter_list.append(list_element)
-
-	def get_content(self) -> dict:
-		''' Возвращает информацию для заполнения контента '''
-
-		return {
-			'title': self.entry.title,
-			'description': self.entry.description,
-			'firefighters': self.firefighter_list,
-		}
-
-	def __str__(self):
-		return f'<FDTab \'{self.entry.title}\'>'
+class ContentPanel(MDBoxLayout):
+	''' Содержимое ячейки '''
 
 
 class TestScreen(Screen):
 	def __init__(self):
 		super().__init__()
 
-		self.notebook = FDNoteBook()
+		self.notebook = TopPanel()
 		self.add_widget(self.notebook)
+
+		for i in range(10):
+			tab = TopPanelTab(title=f'Tab #{i}')
+			self.notebook.add_tab(tab)
 
 
 class MyApp(MDApp):
