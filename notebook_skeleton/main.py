@@ -37,6 +37,9 @@ class TopPanelTab(MDBoxLayout):
 
 	title = StringProperty()
 
+	def bind_open_event(self, callback) -> None:
+		self.ids.open_btn.bind(on_release=callback)
+
 
 class TopPanel(MDBoxLayout):
 	''' Поле для отображения  вкладок '''
@@ -56,20 +59,39 @@ class TabContent(MDBoxLayout):
 
 
 class Page:
+	last_id = 0
+
+	def __new__(cls, *args, **kwargs):
+		Page.last_id += 1
+
+		return object.__new__(cls)
+
 	def __init__(self, emergency: DBEntry):
+		self.id = self.last_id
 		self.emergency = emergency
 
 		self.top_tab = TopPanelTab(title=emergency.title)
 		self.content = TabContent(db_entry=emergency)
 
+		self.top_tab.bind_open_event(
+			lambda e: print(f'Open "{self.top_tab.title}" tab event')
+		)
+
 
 class FDNotebook(MDBoxLayout):
 	''' Виджет Notebook '''
+
+	def __init__(self):
+		super().__init__()
+
+		self.pages = []
 
 	def add_page(self, entry: DBEntry):
 		new_page = Page(entry)
 		self.ids.top_panel.add_tab(new_page.top_tab)
 		self.ids.text_content.text = entry.title
+
+		self.pages.append(new_page)
 
 
 class TestScreen(Screen):
