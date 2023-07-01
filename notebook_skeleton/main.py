@@ -34,6 +34,7 @@ class DBEntry:
 
 class TopPanelTab(MDBoxLayout):
 	''' Вкладка '''
+
 	title = StringProperty()
 
 
@@ -45,20 +46,48 @@ class TopPanel(MDBoxLayout):
 		container.add_widget(tab)
 
 
-class ContentPanel(MDBoxLayout):
+class TabContent(MDBoxLayout):
 	''' Содержимое ячейки '''
+
+	def __init__(self, db_entry):
+		super().__init__()
+
+		self.db_entry = db_entry
+
+
+class Page:
+	def __init__(self, emergency: DBEntry):
+		self.emergency = emergency
+
+		self.top_tab = TopPanelTab(title=emergency.title)
+		self.content = TabContent(db_entry=emergency)
+
+
+class FDNotebook(MDBoxLayout):
+	''' Виджет Notebook '''
+
+	def add_page(self, entry: DBEntry):
+		new_page = Page(entry)
+		self.ids.top_panel.add_tab(new_page.top_tab)
+		self.ids.text_content.text = entry.title
 
 
 class TestScreen(Screen):
 	def __init__(self):
 		super().__init__()
 
-		self.notebook = TopPanel()
-		self.add_widget(self.notebook)
+		notebook = FDNotebook()
+		self.add_widget(notebook)
 
-		for i in range(10):
-			tab = TopPanelTab(title=f'Tab #{i}')
-			self.notebook.add_tab(tab)
+		for j in range(10):
+			entry = DBEntry(
+				title=f'Title #{j+1}',
+				description='Description',
+				urgent=True,
+				tags=[f'Tag #{i+1}' for i in range(10)],
+				humans=[f'Human #{i+1}' for i in range(10)]
+			)
+			notebook.add_page(entry)
 
 
 class MyApp(MDApp):
