@@ -4,6 +4,7 @@ Config.set('graphics', 'height', '650')
 
 
 from dataclasses import dataclass
+from typing import Union, List
 
 from kivy.lang import Builder
 from kivymd.app import MDApp
@@ -24,12 +25,19 @@ class FDTripleCheckbox:
 
 
 @dataclass
+class Firefigher:
+	title: str
+	phone_1: str
+	phone_2: str
+
+
+@dataclass
 class DBEntry:
 	title: str
 	description: str
 	urgent: bool
 	tags: list
-	humans: list
+	humans: List[Firefigher]
 
 
 class TopPanelTab(MDBoxLayout):
@@ -49,13 +57,24 @@ class TopPanel(MDBoxLayout):
 		container.add_widget(tab)
 
 
-class TabContent(MDBoxLayout):
+class TabContent:
 	''' Содержимое ячейки '''
 
-	def __init__(self, db_entry):
-		super().__init__()
-
+	def __init__(self, db_entry: DBEntry):
 		self.db_entry = db_entry
+
+		self.title = db_entry.title
+		self.description = db_entry.description
+		self.firefighers = db_entry.humans
+		self.tags = db_entry.tags
+
+		self.triple_checkbox = [FDTripleCheckbox(
+		                        title=firefigher.title,
+		                        substring=firefigher.phone_1 if firefigher.phone_1 is not None else '',
+		                        state=0
+			)
+			for firefigher in self.firefighers
+		]
 
 
 class Page:
@@ -107,7 +126,12 @@ class TestScreen(Screen):
 				description='Description',
 				urgent=True,
 				tags=[f'Tag #{i+1}' for i in range(10)],
-				humans=[f'Human #{i+1}' for i in range(10)]
+				humans=[Firefigher(
+						title=f'Human #{i+1}',
+						phone_1=f'8 800 555 35 3{i}',
+						phone_2=''
+					)
+				for i in range(10)]
 			)
 			notebook.add_page(entry)
 
