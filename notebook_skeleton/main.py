@@ -4,11 +4,11 @@ Config.set('graphics', 'height', '650')
 
 
 from dataclasses import dataclass
-from typing import Union, List
+from typing import Union, List, Callable
 
 from kivy.lang import Builder
 from kivymd.app import MDApp
-from kivy.properties import StringProperty
+from kivy.properties import StringProperty, NumericProperty
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivymd.uix.boxlayout import MDBoxLayout
 
@@ -16,12 +16,10 @@ from kivymd.uix.boxlayout import MDBoxLayout
 Builder.load_file('tabs.kv')
 
 
-@dataclass
-class FDTripleCheckbox:
-	''' Имитация тройного чекбокса '''
-	title: str
-	substring: str
-	state: int
+class FDTripleCheckbox(MDBoxLayout):
+	title = StringProperty()
+	substring = StringProperty()
+	state = NumericProperty()
 
 
 @dataclass
@@ -68,13 +66,23 @@ class TabContent:
 		self.firefighers = db_entry.humans
 		self.tags = db_entry.tags
 
-		self.triple_checkbox = [FDTripleCheckbox(
+		self.triple_checkboxes = [FDTripleCheckbox(
 		                        title=firefigher.title,
 		                        substring=firefigher.phone_1 if firefigher.phone_1 is not None else '',
 		                        state=0
 			)
 			for firefigher in self.firefighers
 		]
+
+	def get_data(self) -> dict:
+		data = {
+			'title': self.db_entry.title,
+			'description': self.db_entry.description,
+			'subcontent': self.triple_checkboxes,
+			'tags': self.db_entry.tags,
+		}
+
+		return data
 
 
 class Page:
@@ -85,15 +93,16 @@ class Page:
 
 		return object.__new__(cls)
 
-	def __init__(self, emergency: DBEntry):
+	def __init__(self, emergency: DBEntry, update_content_callable: Callable):
 		self.id = self.last_id
 		self.emergency = emergency
+		self.update_content_callable = update_content_callable
 
 		self.top_tab = TopPanelTab(title=emergency.title)
 		self.content = TabContent(db_entry=emergency)
 
 		self.top_tab.bind_open_event(
-			lambda e: print(f'Open "{self.top_tab.title}" tab event')
+			lambda e: self.update_content_callable(self.content.get_data())
 		)
 
 
@@ -106,11 +115,22 @@ class FDNotebook(MDBoxLayout):
 		self.pages = []
 
 	def add_page(self, entry: DBEntry):
-		new_page = Page(entry)
+		new_page = Page(entry, self.update_content)
 		self.ids.top_panel.add_tab(new_page.top_tab)
-		self.ids.text_content.text = entry.title
 
 		self.pages.append(new_page)
+		self.update_content(new_page.content.get_data())
+
+	def update_content(self, data: dict) -> None:
+		print(f'FDNotebook.update_content is started')
+		self.ids.content_title.text = data['title']
+		self.ids.content_description.text = data['description']
+		self.ids.addition_information.text = data['title']
+
+		self.ids.subcontent.clear_widgets()
+
+		for element in data['subcontent']:
+			self.ids.subcontent.add_widget(element)
 
 
 class TestScreen(Screen):
@@ -120,15 +140,16 @@ class TestScreen(Screen):
 		notebook = FDNotebook()
 		self.add_widget(notebook)
 
+		# Temp fill notebook
 		for j in range(10):
 			entry = DBEntry(
 				title=f'Title #{j+1}',
-				description='Description',
+				description=f'Description for Tab #{j+1}',
 				urgent=True,
 				tags=[f'Tag #{i+1}' for i in range(10)],
 				humans=[Firefigher(
-						title=f'Human #{i+1}',
-						phone_1=f'8 800 555 35 3{i}',
+						title=f'Human #{j+1}.{i+1}',
+						phone_1=f'8 800 555 3{j} 3{i}',
 						phone_2=''
 					)
 				for i in range(10)]
