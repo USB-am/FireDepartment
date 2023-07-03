@@ -31,4 +31,4 @@ class CurrentCallsScreen(BaseScreen):
 		)
 
 	def add_tab(self, entry: Emergency):
-		self.notebook.add_tab(entry)
+		self.notebook.add_page(entry)
