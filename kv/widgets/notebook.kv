@@ -1,86 +1,91 @@
-<FDTopBarTab>:
+<TopPanelTab>:
+	size_hint: None, None
+	size: dp(175), dp(50)
 	orientation: 'horizontal'
-	size_hint: None, 1
-	width: dp(175)
-	padding: [dp(10), 0]
-	md_bg_color: (0, 0, 0, 0)
 
-	MDTextButton:
+	MDFlatButton:
 		id: open_btn
-		size_hint: 1, 1
-		valign: 'center'
 		text: root.title
-		theme_text_color: 'Custom'
-		text_color: (1, 1, 1, 1)
-		text_size: self.size
-
-		on_release:
-			root._callback()
+		text_size: root.size
+		size_hint: 1, 1
 
 	MDIconButton:
 		id: close_btn
 		icon: 'close'
-		theme_text_color: 'Custom'
-		text_color: (1, 1, 1, 1)
-
-		on_release:
-			root._close()
+		size_hint: None, None
+		size: dp(50), dp(50)
 
 
-<FDNotebook>:
-	orientation: 'vertical'
-	size_hint: 1, 1
-
-	MDBoxLayout:
-		size_hint: 1, None
-		height: dp(50)
-		md_bg_color: app.theme_cls.primary_color
-
-		ScrollView:
-			GridLayout:
-				id: top_bar
-				rows: 1
-				size_hint: None, 1
-				width: self.minimum_width
-				do_scroll_y: False
-				padding: [dp(10), 0]
-				spacing: [dp(15), 0]
+<TopPanel>:
+	size_hint: 1, None
+	height: dp(60)
+	padding: [dp(5), dp(5)]
+	md_bg_color: app.theme_cls.primary_color
 
 	ScrollView:
 		GridLayout:
-			cols: 1
-			size_hint: 1, None
-			height: self.minimum_height
-			do_scroll_x: False
-			padding: dp(10)
-			spacing: dp(10)
+			id: tabs_container
+			rows: 1
+			size_hint: None, 1
+			width: self.minimum_width
+			do_scroll_y: False
+			spacing: dp(10), 0
 
-			ScrollView:
+
+<ContentPanel>:
+	size_hint: 1, 1
+	orientation: 'vertical'
+
+	MDLabel:
+		text: 'All good!'
+		valign: 'center'
+		halign: 'center'
+
+
+<FDNotebook>:
+	size_hint: 1, 1
+	orientation: 'vertical'
+
+	TopPanel:
+		id: top_panel
+
+	MDBoxLayout:
+		orientation: 'vertical'
+		padding: dp(10), 0
+
+		ScrollView:
+			GridLayout:
+				id: content
+				cols: 1
 				size_hint: 1, None
-				height: dp(100)
+				height: self.minimum_height
+				do_scroll_x: False
+				# padding: dp(10)
+				spacing: dp(5)
 
-				GridLayout:
-					cols: 1
+				MDLabel:
+					id: content_title
 					size_hint: 1, None
-					height: self.minimum_height
-					do_scroll_x: False
-					padding: dp(10)
+					height: dp(70)
+					font_style: 'H3'
+					halign: 'center'
+					text: 'Title'
 
-					MDLabel:
-						id: description_content
-						size_hint: 1, None
-						height: dp(100)
+				MDLabel:
+					id: content_description
+					size_hint: 1, None
+					height: self.texture_size[1]
+					text_size: self.width, None
+					text: 'Description'
+					font_style: 'H6'
 
-			MDBoxLayout:
-				id: contacts_container
-				adaptive_height: True
-				orientation: 'vertical'
-				spacing: dp(10)
-
-			MDBoxLayout:
-				adaptive_height: True
+				MDBoxLayout:
+					id: subcontent
+					adaptive_height: True
+					orientation: 'vertical'
+					padding: dp(5), 0
 
 				MDTextField:
-					id: info_entry
+					id: addition_information
 					multiline: True
 					hint_text: 'Дополнительная информация'
