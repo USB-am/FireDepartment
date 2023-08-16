@@ -60,23 +60,21 @@
 				size_hint: 1, None
 				height: self.minimum_height
 				do_scroll_x: False
-				# padding: dp(10)
 				spacing: dp(5)
 
 				MDLabel:
 					id: content_title
 					size_hint: 1, None
-					height: dp(70)
-					font_style: 'H3'
-					halign: 'center'
-					text: 'Title'
+					height: self.texture_size[1]
+					font_style: 'H5'
+					text: 'Название выезда'
 
 				MDLabel:
 					id: content_description
 					size_hint: 1, None
 					height: self.texture_size[1]
 					text_size: self.width, None
-					text: 'Description'
+					text: 'Описание'
 					font_style: 'H6'
 
 				MDBoxLayout:
