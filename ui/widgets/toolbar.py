@@ -1,26 +1,11 @@
-from kivymd.uix.toolbar import MDToolbar
+from kivy.lang.builder import Builder
+from kivymd.uix.boxlayout import MDBoxLayout
 
-from config.localizer import LOCALIZE
+from config.paths import __TOOLBAR_DIR
 
 
-class FDToolbar(MDToolbar):
-	''' Верхняя понель на экране '''
+Builder.load_file(__TOOLBAR_DIR)
 
-	def __init__(self, title: str):
-		self.title = LOCALIZE(title).capitalize()
-		super().__init__()
 
-	def add_left_button(self, icon: str, callback) -> None:
-		''' Добавит иконку слева '''
-		self.left_action_items.append([icon, callback])
-
-	def remove_left_button(self) -> None:
-		''' Удаляет иконку слева '''
-		self.left_action_items.pop(-1)
-
-	def add_right_button(self, icon: str, callback) -> None:
-		''' Добавит иконку справа '''
-		self.right_action_items.append([icon, callback])
-
-	def remove_right_button(self) -> None:
-		self.right_action_items.pop(-1)
+class Toolbar(MDBoxLayout):
+	''' Верхняя полоска '''
