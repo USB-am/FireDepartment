@@ -1,11 +1,13 @@
-from kivy.lang.builder import Builder
-from kivymd.uix.boxlayout import MDBoxLayout
+from typing import Callable
 
-from config.paths import __TOOLBAR_DIR
+from kivy.properties import StringProperty
+from kivymd.uix.toolbar import MDToolbar
 
-
-Builder.load_file(__TOOLBAR_DIR)
-
-
-class Toolbar(MDBoxLayout):
+class FDToolbar(MDToolbar):
 	''' Верхняя полоска '''
+
+	def add_left_button(self, icon: str, callback: Callable) -> None:
+		self.left_action_items.append([icon, callback])
+
+	def add_right_button(self, icon: str, callback: Callable) -> None:
+		self.right_action_items.append([icon, callback])
