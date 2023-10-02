@@ -23,6 +23,8 @@ post_humans = db.Table('emergency_humans',
 
 
 class Tag(db.Model):
+	""" Теги """
+
 	icon = 'pound'
 	__tablename__ = 'Tag'
 	id = db.Column(db.Integer, primary_key=True)
@@ -35,6 +37,8 @@ class Tag(db.Model):
 
 
 class Rank(db.Model):
+	""" Звания """
+
 	icon = 'chevron-triple-up'
 	__tablename__ = 'Rank'
 	id = db.Column(db.Integer, primary_key=True)
@@ -47,6 +51,8 @@ class Rank(db.Model):
 
 
 class Position(db.Model):
+	""" Должности """
+
 	icon = 'crosshairs-gps'
 	__tablename__ = 'Position'
 	id = db.Column(db.Integer, primary_key=True)
@@ -58,6 +64,8 @@ class Position(db.Model):
 
 
 class Human(db.Model):
+	""" Люди """
+
 	icon = 'account-group'
 	__tablename__ = 'Human'
 	id = db.Column(db.Integer, primary_key=True)
@@ -75,6 +83,8 @@ class Human(db.Model):
 
 
 class Emergency(db.Model):
+	""" Вызовы """
+
 	icon = 'fire-alert'
 	__tablename__ = 'Emergency'
 	id = db.Column(db.Integer, primary_key=True)
@@ -89,6 +99,8 @@ class Emergency(db.Model):
 
 
 class ColorTheme(db.Model):
+	""" Цветовая схема """
+
 	icon = 'palette'
 	__tablename__ = 'ColorTheme'
 	id = db.Column(db.Integer, primary_key=True)
@@ -101,6 +113,8 @@ class ColorTheme(db.Model):
 
 
 class Worktype(db.Model):
+	""" График работы """
+
 	icon = 'timer-sand'
 	__tablename__ = 'Worktype'
 	id = db.Column(db.Integer, primary_key=True)
@@ -116,6 +130,8 @@ class Worktype(db.Model):
 
 
 class UserSettings(db.Model):
+	""" Пользовательские настройки """
+
 	icon = 'account-wrench'
 	__tablename__ = 'UserSettings'
 	id = db.Column(db.Integer, primary_key=True)
@@ -124,6 +140,8 @@ class UserSettings(db.Model):
 
 
 class Calls(db.Model):
+	""" Информация о вызове """
+
 	icon = 'firebase'
 	__tablename__ = 'Calls'
 	id = db.Column(db.Integer, primary_key=True)
