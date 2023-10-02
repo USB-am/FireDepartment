@@ -7,7 +7,7 @@ __KV_DIR = pjoin(__BASE_DIR, 'kv')
 
 # Screens
 __SCREENS_DIR = pjoin(__KV_DIR, 'screens')
-__BASE_SCREEN_DIR = pjoin(__KV_DIR, 'base_screen.kv')
+# __BASE_SCREEN_DIR = pjoin(__KV_DIR, 'base_screen.kv')
 
 # Widgets
 __WIDGETS_DIR = pjoin(__KV_DIR, 'widgets')

@@ -1,3 +1,20 @@
-<Toolbar>:
+<Toolbar>
+	orientation: 'horizontal'
+	size_hint: 1, None
+	height: dp(50)
+
+	MDIconButton:
+		id: left_button
+		icon: ''
+		size_hint: None, 1
+		width: dp(50)
+
 	MDLabel:
-		text: 'All good!'
+		text: root.title
+		halign: 'center'
+
+	MDIcon:
+		id: right_button
+		icon: ''
+		size_hint: None, 1
+		width: dp(50)

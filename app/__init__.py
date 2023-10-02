@@ -2,7 +2,7 @@ from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager
 
 from .path_manager import PathManager
-from ui.screens import *
+from ui.screens import MainScreen
 
 
 class Application(MDApp):
