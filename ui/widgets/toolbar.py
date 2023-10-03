@@ -1,7 +1,7 @@
 from typing import Callable
 
-from kivy.properties import StringProperty
 from kivymd.uix.toolbar import MDToolbar
+
 
 class FDToolbar(MDToolbar):
 	''' Верхняя полоска '''
