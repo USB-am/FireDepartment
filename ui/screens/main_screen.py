@@ -7,8 +7,8 @@ from kivymd.theming import ThemeManager
 from kivymd.uix.button import MDRectangleFlatIconButton
 
 from app.path_manager import PathManager
-# from ui.widgets.toolbar import Toolbar
 from config.paths import __SCREENS_DIR
+from ui.fields.select import FDSelect
 
 
 Builder.load_file(pjoin(__SCREENS_DIR, 'base_screen.kv'))
@@ -20,7 +20,6 @@ class NavigationButton(MDRectangleFlatIconButton):
 	theme_cls = ThemeManager()
 
 	def __init__(self, *args, **kwargs):
-		print(dir(self.theme_cls))
 		kwargs.update({
 			'theme_text_color': 'Custom',
 			'icon_color': self.theme_cls.accent_dark,
@@ -44,6 +43,17 @@ class BaseScreen(Screen):
 
 		self.__path_manager = path_manager
 
+		self.display()
+
+	def open_menu(self, *events) -> None:
+		self.ids.menu.set_state('open')
+
+	def add_content(self, widget) -> None:
+		self.ids.content.add_widget(widget)
+
+	def display(self) -> None:
+		pass
+
 
 class MainScreen(BaseScreen):
 	""" Главная страница """
@@ -53,3 +63,8 @@ class MainScreen(BaseScreen):
 
 	def __init__(self, path_manager: PathManager):
 		super().__init__(path_manager)
+
+		self.ids.toolbar.add_left_button(icon='menu', callback=self.open_menu)
+
+	def display(self) -> None:
+		self.add_content(FDSelect(icon='bus', title='Hello!'))

@@ -1,0 +1,85 @@
+<FDSelect>:
+	orientation: 'vertical'
+	size_hint_y: None
+	height: dp(400)
+
+	MDBoxLayout:
+		id: top_panel
+		size_hint_y: None
+		height: dp(50)
+
+		MDIcon:
+			size_hint: None, None
+			size: dp(50), dp(50)
+			icon: root.icon
+
+		MDLabel:
+			id: title_text
+			size_hint_y: None
+			height: dp(50)
+			markup: True
+			text: f'[b]{root.title}[/b]'
+
+		MDTextField:
+			id: search_field
+			size_hint: None, None
+			size: 0, 0
+			hint_text: ''
+
+			on_text:
+				root.find_items(self.text)
+
+		MDIconButton:
+			id: search_button
+			icon: 'magnify'
+			size_hint: None, None
+			size: dp(50), dp(50)
+
+			on_release:
+				root.change_search_state()
+
+	ScrollView:
+		size_hint_y: None
+		height: dp(350)
+
+		GridLayout:
+			id: container
+			cols: 1
+			size_hint: 1, None
+			height: self.minimum_height
+			do_scroll_x: False
+
+
+<FDOption>:
+	orientation: 'horizontal'
+	size_hint_y: None
+	height: dp(60)
+
+	MDCheckbox:
+		group: root.group
+		size_hint: None, None
+		size: dp(50), dp(50)
+
+	MDBoxLayout:
+		orientation: 'vertical'
+		size_hint_y: None
+		height: dp(50)
+
+		MDLabel:
+			size_hint_y: None
+			height: dp(25)
+			text: root.title
+
+		MDLabel:
+			size_hint_y: None
+			height: dp(25)
+			theme_text_color: 'Custom'
+			text_color: app.theme_cls.secondary_text_color
+			markup: True
+			text: f'{root.description}'
+			font_style: 'Subtitle2'
+
+	MDIconButton:
+		size_hint: None, None
+		size: dp(50), dp(50)
+		icon: 'information-outline'
