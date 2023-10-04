@@ -2,6 +2,7 @@ from typing import Union
 
 from kivy.lang.builder import Builder
 from kivy.properties import StringProperty
+from kivy.metrics import dp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.label import MDLabel
 
@@ -17,6 +18,14 @@ class FDOption(MDBoxLayout):
 	title = StringProperty()
 	description = StringProperty()
 	group = StringProperty(None, allownone=True)
+
+	def hide(self) -> None:
+		self.height = 0
+		self.opacity = 0
+
+	def display(self) -> None:
+		self.height = dp(60)
+		self.opacity = 1
 
 	def __str__(self):
 		return self.title
@@ -72,6 +81,11 @@ class FDSelect(MDBoxLayout):
 				return True
 			return False
 
-		filtered_elements = list(map(str, filter(find, self.elements)))
+		filtered_elements = filter(find, self.elements)
+		filtered_elements_list = list(filtered_elements)
 
-		print(filtered_elements)
+		for element in self.elements:
+			if element in filtered_elements_list:
+				element.display()
+				continue
+			element.hide()
