@@ -8,7 +8,7 @@ from kivymd.uix.button import MDRectangleFlatIconButton
 
 from app.path_manager import PathManager
 from config.paths import __SCREENS_DIR
-from ui.fields.select import FDSelect
+from ui.fields.switch import FDSwitch
 
 
 Builder.load_file(pjoin(__SCREENS_DIR, 'base_screen.kv'))
@@ -67,4 +67,5 @@ class MainScreen(BaseScreen):
 		self.ids.toolbar.add_left_button(icon='menu', callback=self.open_menu)
 
 	def display(self) -> None:
-		self.add_content(FDSelect(icon='bus', title='Hello!'))
+		widget = FDSwitch(icon='bus', title='Title')
+		self.add_content(widget)
