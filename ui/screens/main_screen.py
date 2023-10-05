@@ -8,7 +8,7 @@ from kivymd.uix.button import MDRectangleFlatIconButton, MDFlatButton
 
 from app.path_manager import PathManager
 from config.paths import __SCREENS_DIR
-from ui.fields.button import FDCenterButton, FDSubmit, FDIconLabelButton
+from ui.fields.date import FDDate, FDDateTime
 
 
 Builder.load_file(pjoin(__SCREENS_DIR, 'base_screen.kv'))
@@ -67,4 +67,16 @@ class MainScreen(BaseScreen):
 		self.ids.toolbar.add_left_button(icon='menu', callback=self.open_menu)
 
 	def display(self) -> None:
-		pass
+		w1 = FDDate(icon='bus', text='Date test 1', button_text='dd.mm.yyyy')
+		self.add_content(w1)
+
+		w2 = FDDateTime(
+			icon='bus',
+			text='Datetime test',
+			button1_text='dd.mm.yyyy',
+			button2_text='HH:MM:SS'
+		)
+		self.add_content(w2)
+
+		b = MDFlatButton(text='Test')
+		self.add_content(b)
