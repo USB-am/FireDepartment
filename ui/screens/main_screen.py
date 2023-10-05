@@ -4,11 +4,11 @@ from kivy.lang.builder import Builder
 from kivy.metrics import dp, sp
 from kivy.uix.screenmanager import Screen
 from kivymd.theming import ThemeManager
-from kivymd.uix.button import MDRectangleFlatIconButton
+from kivymd.uix.button import MDRectangleFlatIconButton, MDFlatButton
 
 from app.path_manager import PathManager
 from config.paths import __SCREENS_DIR
-from ui.fields.switch import FDSwitch
+from ui.fields.switch import FDSwitch, FDStateSwitch
 
 
 Builder.load_file(pjoin(__SCREENS_DIR, 'base_screen.kv'))
@@ -69,3 +69,9 @@ class MainScreen(BaseScreen):
 	def display(self) -> None:
 		widget = FDSwitch(icon='bus', title='Title')
 		self.add_content(widget)
+
+		w2 = FDStateSwitch(active_icon='bus', deactive_icon='information', title='Test')
+		self.add_content(w2)
+
+		b = MDFlatButton(text='Test')
+		self.add_content(b)

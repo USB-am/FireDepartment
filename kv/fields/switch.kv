@@ -14,3 +14,22 @@
 	MDSwitch:
 		id: switch
 		width: dp(35)
+
+
+<FDStateSwitch>:
+	orientation: 'horizontal'
+	size_hint_y: None
+	height: dp(50)
+
+	MDIcon:
+		id: icon
+		size_hint: None, None
+		size: dp(50), dp(50)
+		icon: root.deactive_icon
+
+	MDLabel:
+		text: root.title
+
+	MDSwitch:
+		id: switch
+		width: dp(35)
