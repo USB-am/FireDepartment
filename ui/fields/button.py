@@ -27,3 +27,11 @@ class FDIconLabelButton(MDBoxLayout):
 	icon = StringProperty()
 	text = StringProperty()
 	button_text = StringProperty()
+
+class FDIconLabelDoubleButton(MDBoxLayout):
+	''' Иконка | Текст | Кнопка | Кнопка '''
+
+	icon = StringProperty()
+	text = StringProperty()
+	button1_text = StringProperty()
+	button2_text = StringProperty()

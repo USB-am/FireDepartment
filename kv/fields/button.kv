@@ -47,3 +47,40 @@
 			width: dp(100)
 			height: dp(40)
 			text: root.button_text
+
+
+<FDIconLabelDoubleButton>:
+	orientation: 'horizontal'
+	size_hint_y: None
+	height: dp(50)
+
+	MDIcon:
+		size_hint: None, None
+		size: dp(50), dp(50)
+		icon: root.icon
+
+	MDLabel:
+		size_hint_y: None
+		height: dp(50)
+		text: root.text
+
+	MDBoxLayout:
+		size_hint: None, 1
+		width: dp(195)
+		height: dp(100)
+		padding: [0, 0, 0, dp(10)]
+		spacing: dp(5)
+
+		MDRaisedButton:
+			id: button1
+			size_hint: None, None
+			width: dp(100)
+			height: dp(40)
+			text: root.button1_text
+
+		MDRaisedButton:
+			id: button2
+			size_hint: None, None
+			width: dp(100)
+			height: dp(40)
+			text: root.button2_text
