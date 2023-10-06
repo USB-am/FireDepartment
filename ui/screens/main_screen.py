@@ -77,6 +77,11 @@ class MainScreen(BaseScreen):
 			button2_text='HH:MM:SS'
 		)
 		self.add_content(w2)
+		from datetime import datetime
+		w2.set_value(datetime.now())
 
 		b = MDFlatButton(text='Test')
 		self.add_content(b)
+		b.bind(on_release=lambda *e: print(
+			w2.get_value().strftime('%d.%m.%Y %H:%M:%S')
+		))
