@@ -36,17 +36,13 @@
 		height: dp(50)
 		text: root.text
 
-	MDBoxLayout:
-		size_hint: None, 1
-		height: dp(100)
-		padding: [0, 0, 0, dp(10)]
-
-		MDRaisedButton:
-			id: button
-			size_hint: None, None
-			width: dp(100)
-			height: dp(40)
-			text: root.button_text
+	MDRaisedButton:
+		id: button
+		size_hint: None, None
+		width: dp(100)
+		height: dp(40)
+		pos_hint: {'center_y': .5}
+		text: root.button_text
 
 
 <FDIconLabelDoubleButton>:
