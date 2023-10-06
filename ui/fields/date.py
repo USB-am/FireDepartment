@@ -69,11 +69,13 @@ class FDDateTime(FDIconLabelDoubleButton):
 
 		self.date_dialog.open()
 
-	def _on_save_date(self, *_) -> None:
-		pass
+	def _on_save_date(self, _, value: datetime.date, __) -> None:
+		self.ids.button1.text = value.strftime('%d.%m.%Y')
+		self.date_value = value
 
 	def _on_cancel_date(self, *_) -> None:
-		pass
+		self.ids.button1.text = self.button1_text
+		self.date_value = None
 
 	def open_time_dialog(self, *_) -> None:
 		if self.time_dialog is None:
@@ -83,8 +85,29 @@ class FDDateTime(FDIconLabelDoubleButton):
 				on_cancel=self._on_cancel_time
 			)
 
-	def _on_save_time(self, *_) -> None:
-		pass
+		self.time_dialog.open()
+
+	def _on_save_time(self, _, time: datetime.time) -> None:
+		self.time_value = time
+		self.ids.button2.text = time.strftime('%H:%M:%S')
 
 	def _on_cancel_time(self, *_) -> None:
-		pass
+		self.time_value = None
+		self.ids.button2.text = self.button2_text
+
+	def get_value(self) -> datetime.datetime:
+		if self.date_value is None or self.time_value is None:
+			return None
+
+		return self.date_value + datetime.timedelta(
+			hours=self.time_value.hour,
+			minutes=self.time_value.minute,
+			seconds=self.time_value.second
+		)
+
+	def set_value(self, timestamp: datetime.datetime) -> None:
+		date = timestamp.date()
+		self._on_save_date(None, date, None)
+
+		time = timestamp.time()
+		self._on_save_time(None, time)
