@@ -8,7 +8,7 @@ from kivymd.uix.button import MDRectangleFlatIconButton, MDFlatButton
 
 from app.path_manager import PathManager
 from config.paths import __SCREENS_DIR
-from ui.fields.dropdown import FDDropDown
+from ui.fields.file import FDFileInput
 
 
 Builder.load_file(pjoin(__SCREENS_DIR, 'base_screen.kv'))
@@ -67,14 +67,9 @@ class MainScreen(BaseScreen):
 		self.ids.toolbar.add_left_button(icon='menu', callback=self.open_menu)
 
 	def display(self) -> None:
-		w1 = FDDropDown(
-			icon='bus',
-			text='Test',
-			button_text='123',
-			elements=[f'Element #{i+1}' for i in range(5)]
-		)
+		w1 = FDFileInput(icon='bus', text='File input', button_text='[empty]', preview=True, ext=['png', 'jpg', 'jpeg'])
 		self.add_content(w1)
-		w1.set_value('Element #5')
+		w1.set_value(r'C:\Users\CupkoRI\Documents\Python\MobileApplications\FireDepartment\static\logo.png')
 
 		b = MDFlatButton(text='Test')
 		self.add_content(b)

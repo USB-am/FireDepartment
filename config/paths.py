@@ -3,6 +3,7 @@ from os.path import join as pjoin
 
 
 __BASE_DIR = getcwd()
+__STATIC_DIR = pjoin(__BASE_DIR, 'static')
 __KV_DIR = pjoin(__BASE_DIR, 'kv')
 
 # Screens
