@@ -40,15 +40,17 @@ class FDFileInput(FDIconLabelButton):
 		if self.file_manager is not None:
 			self.file_manager.close()
 
+		self.set_value(None)
+
 	def select_path(self, path) -> None:
 		if os.path.isfile(path):
 			self.set_value(path)
 
-		self.exit_file_manager()
+		self.file_manager.close()
 
 	def get_value(self) -> Union[str, None]:
 		return self.path
 
-	def set_value(self, path) -> None:
-		self.ids.button.text = os.path.basename(path)
+	def set_value(self, path: Union[str, None]) -> None:
+		self.ids.button.text = self.button_text if path is None else os.path.basename(path)
 		self.path = path
