@@ -8,7 +8,7 @@ from kivymd.uix.button import MDRectangleFlatIconButton, MDFlatButton
 
 from app.path_manager import PathManager
 from config.paths import __SCREENS_DIR
-from ui.fields.file import FDFileInput
+from ui.fields.color import FDColor
 
 
 Builder.load_file(pjoin(__SCREENS_DIR, 'base_screen.kv'))
@@ -67,9 +67,21 @@ class MainScreen(BaseScreen):
 		self.ids.toolbar.add_left_button(icon='menu', callback=self.open_menu)
 
 	def display(self) -> None:
-		w1 = FDFileInput(icon='bus', text='File input', button_text='[empty]', preview=True, ext=['png', 'jpg', 'jpeg'])
+		theme_cls = ThemeManager()
+		colors = set()
+		for color in theme_cls.colors.keys():
+			for c in theme_cls.colors[color].values():
+				colors.add(f'#{c}')
+
+		w1 = FDColor(
+			icon='bus',
+			text='FDColor test',
+			button_text='#000000',
+			elements=list(sorted(colors)),
+			callback=lambda e: print(f'Selected elemet {e}')
+		)
 		self.add_content(w1)
-		w1.set_value(r'C:\Users\CupkoRI\Documents\Python\MobileApplications\FireDepartment\static\logo.png')
+		w1.set_value('#000000')
 
 		b = MDFlatButton(text='Test')
 		self.add_content(b)
