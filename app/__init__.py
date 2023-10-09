@@ -2,7 +2,7 @@ from kivymd.app import MDApp
 from kivy.uix.screenmanager import ScreenManager
 
 from .path_manager import PathManager
-from ui.screens import MainScreen
+from ui.screens import MainScreen, OptionsScreen
 
 
 class Application(MDApp):
@@ -18,6 +18,9 @@ class Application(MDApp):
 	def __add_screens(self) -> None:
 		self.main_screen = MainScreen(self.path_manager)
 		self.screen_manager.add_widget(self.main_screen)
+
+		self.options_screen = OptionsScreen(self.path_manager)
+		self.screen_manager.add_widget(self.options_screen)
 
 		self.screen_manager.current = 'main'
 

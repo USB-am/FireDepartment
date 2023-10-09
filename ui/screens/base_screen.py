@@ -40,7 +40,7 @@ class BaseScreen(Screen):
 	def __init__(self, path_manager: PathManager):
 		super().__init__()
 
-		self.__path_manager = path_manager
+		self.path_manager = path_manager
 
 		self.display()
 
