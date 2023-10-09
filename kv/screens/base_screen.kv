@@ -64,6 +64,8 @@
 						size_hint: 1, None
 						icon: 'home'
 						text: 'Главная'
+						on_release:
+							root.path_manager.move_to_screen('main')
 
 					NavigationButton:
 						size_hint: 1, None
@@ -111,3 +113,5 @@
 						size_hint: 1, None
 						icon: 'cog'
 						text: 'Настройки'
+						on_release:
+							root.path_manager.move_to_screen('options')
