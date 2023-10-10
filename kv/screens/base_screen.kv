@@ -66,6 +66,7 @@
 						text: 'Главная'
 						on_release:
 							root.path_manager.move_to_screen('main')
+							menu.set_state('close')
 
 					NavigationButton:
 						size_hint: 1, None
@@ -115,3 +116,4 @@
 						text: 'Настройки'
 						on_release:
 							root.path_manager.move_to_screen('options')
+							menu.set_state('close')
