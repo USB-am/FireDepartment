@@ -35,5 +35,5 @@ class PathManager(metaclass=_Singleton):
 		return self.__screen_manager.current_screen
 
 	def move_to_screen(self, screen_name: str) -> Screen:
-		self._path = ['main',]
+		self._path = []
 		self.forward(screen_name)
