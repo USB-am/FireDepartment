@@ -41,3 +41,29 @@ class FDStateSwitch(MDBoxLayout):
 	def set_value(self, value: bool) -> None:
 		self.ids.switch.active = value
 		self._update_icon()
+
+
+class FDIconSwitch(MDBoxLayout):
+	''' Виджет с переключающимся свитчем '''
+
+	icon = StringProperty()
+	title = StringProperty()
+	active_icon = StringProperty()
+	deactive_icon = StringProperty()
+
+	def __init__(self, **kwargs):
+		super().__init__(**kwargs)
+
+		self.state = False
+		self.ids.switch.bind(on_release=self._update_icon)
+
+	def _update_icon(self, *_) -> None:
+		self.state = not self.state
+		self.ids.switch.icon = self.active_icon if self.state else self.deactive_icon
+
+	def get_value(self) -> bool:
+		return self.state
+
+	def set_value(self, value: bool) -> None:
+		self.state = not value
+		self._update_icon()
