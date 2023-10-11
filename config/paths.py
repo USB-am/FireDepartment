@@ -21,3 +21,4 @@ __FIELD_DROPDOWN = pjoin(__FIELDS_DIR, 'dropdown.kv')
 # Widgets
 __WIDGETS_DIR = pjoin(__KV_DIR, 'widgets')
 __TOOLBAR_DIR = pjoin(__WIDGETS_DIR, 'toolbar.kv')
+__WIDGET_LIST_ELEMENT_MAIN = pjoin(__WIDGETS_DIR, 'list_element.kv')
