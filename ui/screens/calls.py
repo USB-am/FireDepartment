@@ -1,11 +1,8 @@
-from kivy.lang.builder import Builder
+from kivymd.uix.button import MDIconButton
 
 from app.path_manager import PathManager
 from data_base import Emergency
 from ui.screens.base_screen import BaseScreen
-from config.paths import __SCREEN_OPTIONS
-
-Builder.load_file(__SCREEN_OPTIONS)
 
 
 class CallsScreen(BaseScreen):
@@ -20,4 +17,6 @@ class CallsScreen(BaseScreen):
 		self.ids.toolbar.add_left_button(icon='arrow-left', callback=lambda e: path_manager.back())
 
 	def display(self) -> None:
-		print('All good!')
+		self.add_fixed_widget(MDIconButton(
+			icon='phone'
+		))

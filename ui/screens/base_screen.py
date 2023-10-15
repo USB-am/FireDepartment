@@ -50,5 +50,8 @@ class BaseScreen(Screen):
 	def add_content(self, widget) -> None:
 		self.ids.content.add_widget(widget)
 
+	def add_fixed_widget(self, widget) -> None:
+		self.ids.fixed_layout.add_widget(widget)
+
 	def display(self) -> None:
 		pass

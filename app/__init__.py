@@ -25,7 +25,7 @@ class Application(MDApp):
 		self.calls_screen = CallsScreen(self.path_manager)
 		self.screen_manager.add_widget(self.calls_screen)
 
-		self.screen_manager.current = 'main'
+		self.screen_manager.current = 'calls'
 
 	def build(self) -> ScreenManager:
 		return self.screen_manager
