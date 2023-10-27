@@ -1,0 +1,20 @@
+<ListElement>:
+	orientation: 'horizontal'
+	size_hint: 1, None
+	height: dp(50)
+
+	MDIcon:
+		size_hint_x: None
+		width: dp(50)
+		icon: root.entry.icon
+
+	MDLabel:
+		text: root.entry.title
+
+	MDIconButton:
+		size_hint_x: None
+		width: dp(50)
+		icon: 'eye'
+
+		on_release:
+			print('Open button is pressed')

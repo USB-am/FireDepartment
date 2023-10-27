@@ -99,6 +99,9 @@
 						size_hint: 1, None
 						icon: 'fire-alert'
 						text: 'Вызовы'
+						on_release:
+							root.path_manager.move_to_screen('emergency_list')
+							menu.set_state('close')
 
 					NavigationButton:
 						size_hint: 1, None
