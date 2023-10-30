@@ -4,7 +4,8 @@ from kivy.uix.screenmanager import ScreenManager
 from .path_manager import PathManager
 from data_base import Emergency
 from ui.screens import MainScreen, OptionsScreen, CallsScreen, \
-	ModelList
+	EmergencyList, \
+	EmergencyEdit
 
 
 class Application(MDApp):
@@ -27,13 +28,11 @@ class Application(MDApp):
 		self.calls_screen = CallsScreen(self.path_manager)
 		self.screen_manager.add_widget(self.calls_screen)
 
-		self.emergencies_list = ModelList(
-			name='emergency_list',
-			toolbar_title='Список выездов',
-			model=Emergency,
-			path_manager=self.path_manager
-		)
+		self.emergency_edit = EmergencyEdit(self.path_manager)
+		self.screen_manager.add_widget(self.emergency_edit)
+		self.emergencies_list = EmergencyList(self.path_manager)
 		self.screen_manager.add_widget(self.emergencies_list)
+
 
 		self.screen_manager.current = 'emergency_list'
 
