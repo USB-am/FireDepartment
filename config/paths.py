@@ -18,6 +18,8 @@ __FIELD_SELECT = pjoin(__FIELDS_DIR, 'select.kv')
 __FIELD_SWITCH = pjoin(__FIELDS_DIR, 'switch.kv')
 __FIELD_BUTTON = pjoin(__FIELDS_DIR, 'button.kv')
 __FIELD_DROPDOWN = pjoin(__FIELDS_DIR, 'dropdown.kv')
+# Contents
+__CONTENT_DIR = pjoin(__FIELDS_DIR, 'contents')
 
 # Widgets
 __WIDGETS_DIR = pjoin(__KV_DIR, 'widgets')
