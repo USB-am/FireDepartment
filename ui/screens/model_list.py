@@ -26,6 +26,10 @@ class ModelList(BaseScreen):
 		super().__init__(path_manager)
 
 		self.ids.toolbar.add_left_button(icon='menu', callback=self.open_menu)
+		self.ids.toolbar.add_right_button(
+			icon='plus',
+			callback=lambda *_: self.path_manager.forward(f'{self.model.__tablename__.lower()}_create')
+		)
 
 		for entry in self.model.query.all():
 			widget = ListElement(entry=entry)

@@ -5,6 +5,7 @@ from .path_manager import PathManager
 from data_base import Emergency
 from ui.screens import MainScreen, OptionsScreen, CallsScreen, \
 	EmergencyList, \
+	EmergencyCreate, \
 	EmergencyEdit
 
 
@@ -28,6 +29,8 @@ class Application(MDApp):
 		self.calls_screen = CallsScreen(self.path_manager)
 		self.screen_manager.add_widget(self.calls_screen)
 
+		self.emergency_create = EmergencyCreate(self.path_manager)
+		self.screen_manager.add_widget(self.emergency_create)
 		self.emergency_edit = EmergencyEdit(self.path_manager)
 		self.screen_manager.add_widget(self.emergency_edit)
 		self.emergencies_list = EmergencyList(self.path_manager)
