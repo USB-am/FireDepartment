@@ -1,4 +1,6 @@
 #:import FDInput ui.fields.input
+#:import FDSwitch ui.fields.switch
+#:import FDSelect ui.fields.select
 
 
 <EmergencyModelContent>:
@@ -6,4 +8,25 @@
 	size_hint_y: None
 
 	FDInput:
+		id: title
 		hint_text: 'Название'
+
+	MDTextField:
+		id: description
+		hint_text: 'Описание'
+		multiline: True
+
+	FDSwitch:
+		id: urgent
+		icon: ''
+		title: 'Срочный'
+
+	FDSelect:
+		id: tags
+		icon: 'pound'
+		title: 'Теги'
+
+	FDSelect:
+		id: humans
+		icon: 'account-group'
+		title: 'Люди'
