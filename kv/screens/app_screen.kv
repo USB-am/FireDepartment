@@ -1,0 +1,115 @@
+#:import NavigationButton ui.widgets.navigation_button
+
+
+MDNavigationLayout:
+	ScreenManager:
+		id: screen_manager
+
+		Screen:
+			name: 'main'
+
+			MDBoxLayout:
+				orientation: 'vertical'
+				size_hint: (1, 1)
+
+				MDLabel:
+					text: 'Main'
+
+				MDIconButton:
+					text: 'To options'
+					on_release:
+						screen_manager.current = 'options'
+
+		Screen:
+			name: 'options'
+			orientation: 'vertical'
+			size_hint: (1, 1)
+
+			MDLabel:
+				text: 'Options'
+
+	MDNavigationDrawer:
+		id: menu
+
+		MDBoxLayout:
+			orientation: 'vertical'
+			size_hint: (1, 1)
+
+			AnchorLayout:
+				anchor_x: 'left'
+				size_hint_y: None
+				height: logo.height
+
+				Image:
+					id: logo
+					size_hint: (None, None)
+					size: (dp(100), dp(100))
+					source: 'static/logo.png'
+
+			MDLabel:
+				text: 'Пожарка'
+				font_style: 'Button'
+				font_size: sp(30)
+				size_hint_y: None
+				height: self.texture_size[1]
+
+			MDBoxLayout:
+				orientation: 'vertical'
+
+				NavigationButton:
+					size_hint: (1, None)
+					icon: 'home'
+					text: 'Главная'
+
+					on_release:
+						print('Go to home')
+
+				NavigationButton:
+					size_hint: (1, None)
+					icon: 'pound'
+					text: 'Теги'
+
+				NavigationButton:
+					size_hint: (1, None)
+					icon: 'chevron-triple-up'
+					text: 'Звания'
+
+				NavigationButton:
+					size_hint: (1, None)
+					icon: 'crosshairs-gps'
+					text: 'Должности'
+
+				NavigationButton:
+					size_hint: (1, None)
+					icon: 'account-group'
+					text: 'Люди'
+
+				NavigationButton:
+					size_hint: (1, None)
+					icon: 'fire-alert'
+					text: 'Вызовы'
+
+				NavigationButton:
+					size_hint: 1, None
+					icon: 'timer-sand'
+					text: 'Графики работы'
+
+				NavigationButton:
+					size_hint: 1, None
+					icon: 'firebase'
+					text: 'Информация о вызовах'
+
+				MDBoxLayout:	# Separator layout
+
+			MDBoxLayout:
+				orientation: 'horizontal'
+				size_hint_y: None
+				height: dp(60)
+
+				NavigationButton:
+					size_hint: 1, None
+					icon: 'cog'
+					text: 'Настройки'
+
+					on_release:
+						screen_manager.current = 'options'
