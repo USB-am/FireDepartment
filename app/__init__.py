@@ -1,43 +1,17 @@
 from kivymd.app import MDApp
+from kivy.lang.builder import Builder
 from kivy.uix.screenmanager import ScreenManager
 
-from .path_manager import PathManager
-from data_base import Emergency
-from ui.screens import MainScreen, OptionsScreen, CallsScreen, \
-	EmergencyList, \
-	EmergencyCreate, \
-	EmergencyEdit
+from config import APP_SCREEN
 
 
 class Application(MDApp):
-	''' Главный класс приложения '''
+	'''
+	Базовый класс приложения. Инициализирует интерфейс и добавляет страницы.
+	'''
 
-	def __init__(self):
-		super().__init__()
-		self.screen_manager = ScreenManager()
-		self.path_manager = PathManager(self.screen_manager)
+	color = [1, 1, 1, 1]
+	bg_image = None
 
-		self.__add_screens()
-
-	def __add_screens(self) -> None:
-		self.main_screen = MainScreen(self.path_manager)
-		self.screen_manager.add_widget(self.main_screen)
-
-		self.options_screen = OptionsScreen(self.path_manager)
-		self.screen_manager.add_widget(self.options_screen)
-
-		self.calls_screen = CallsScreen(self.path_manager)
-		self.screen_manager.add_widget(self.calls_screen)
-
-		self.emergency_create = EmergencyCreate(self.path_manager)
-		self.screen_manager.add_widget(self.emergency_create)
-		self.emergency_edit = EmergencyEdit(self.path_manager)
-		self.screen_manager.add_widget(self.emergency_edit)
-		self.emergencies_list = EmergencyList(self.path_manager)
-		self.screen_manager.add_widget(self.emergencies_list)
-
-
-		self.screen_manager.current = 'emergency_list'
-
-	def build(self) -> ScreenManager:
-		return self.screen_manager
+	def build(self):
+		return Builder.load_file(APP_SCREEN)
