@@ -1,0 +1,16 @@
+#:import FDToolbar ui.widgets.toolbar
+
+
+<BaseScreen>:
+	MDBoxLayout:
+		orientation: 'vertical'
+		size_hint: (1, 1)
+
+		FDToolbar:
+			id: toolbar
+			title: root.toolbar_title
+
+		MDBoxLayout:
+			id: content
+			orientation: 'vertical'
+			size_hint: (1, 1)
