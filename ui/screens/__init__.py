@@ -27,4 +27,29 @@ class BaseScreen(Screen):
 		self.ids.content.add_widget(widget)
 
 	def open_menu(self, *events) -> None:
+		''' Открывает боковое меню. '''
+
+		self.parent.parent.ids.menu.set_state('open')
+
+
+class BaseScrollScreen(Screen):
+	''' Базовое представление страницы (с прокруткой). '''
+
+	def __init__(self):
+		super().__init__()
+
+	def add_content(self, widget: Widget) -> None:
+		'''
+		Добавляет виджет на страницу.
+
+		~params:
+		widget: Widget - любой элемент, который можно отобразить через
+			метод add_widget.
+		'''
+
+		self.ids.content.add_widget(widget)
+
+	def open_menu(self, *events) -> None:
+		''' Открывает боковое меню. '''
+
 		self.parent.parent.ids.menu.set_state('open')
