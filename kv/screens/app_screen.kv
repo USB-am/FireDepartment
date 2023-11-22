@@ -3,13 +3,9 @@
 #:import OptionsScreen ui.screens.options
 
 
-MDNavigationLayout:
+<FDUIManager>:
 	ScreenManager:
 		id: screen_manager
-
-		MainScreen:
-
-		OptionsScreen:
 
 	MDNavigationDrawer:
 		id: menu
@@ -30,7 +26,7 @@ MDNavigationLayout:
 					source: 'static/logo.png'
 
 			MDLabel:
-				text: 'Пожарка'
+				text: 'FireDepartment'
 				font_style: 'Button'
 				font_size: sp(30)
 				size_hint_y: None
