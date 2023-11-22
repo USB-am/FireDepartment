@@ -1,5 +1,7 @@
 #:import NavigationButton ui.widgets.navigation_button
 #:import MainScreen ui.screens.main
+#:import OptionsScreen ui.screens.options
+
 
 MDNavigationLayout:
 	ScreenManager:
@@ -7,13 +9,7 @@ MDNavigationLayout:
 
 		MainScreen:
 
-		Screen:
-			name: 'options'
-			orientation: 'vertical'
-			size_hint: (1, 1)
-
-			MDLabel:
-				text: 'Options'
+		OptionsScreen:
 
 	MDNavigationDrawer:
 		id: menu
@@ -49,7 +45,8 @@ MDNavigationLayout:
 					text: 'Главная'
 
 					on_release:
-						print('Go to home')
+						screen_manager.current = 'main'
+						menu.set_state('close')
 
 				NavigationButton:
 					size_hint: (1, None)
@@ -100,3 +97,4 @@ MDNavigationLayout:
 
 					on_release:
 						screen_manager.current = 'options'
+						menu.set_state('close')

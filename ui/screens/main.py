@@ -1,7 +1,9 @@
-from . import BaseScreen
+from . import BaseScreen, BaseScrollScreen
+from kivymd.uix.label import MDLabel
+from kivy.metrics import dp
 
 
-class MainScreen(BaseScreen):
+class MainScreen(BaseScrollScreen):
 	''' Стартовая страница '''
 
 	name = 'main'
@@ -14,3 +16,9 @@ class MainScreen(BaseScreen):
 			icon='menu',
 			callback=self.open_menu
 		)
+		for i in range(20):
+			self.add_content(MDLabel(
+				text=f'Row #{i+1}',
+				size_hint=(1, None),
+				height=dp(50)
+			))

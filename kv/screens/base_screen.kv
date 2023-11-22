@@ -14,3 +14,28 @@
 			id: content
 			orientation: 'vertical'
 			size_hint: (1, 1)
+
+
+<BaseScrollScreen>:
+	MDBoxLayout:
+		orientation: 'vertical'
+		size_hint: (1, 1)
+
+		FDToolbar:
+			id: toolbar
+			title: root.toolbar_title
+
+		MDBoxLayout:
+			orientation: 'vertical'
+			size_hint: (1, 1)
+
+			ScrollView:
+				size_hint: (1, 1)
+
+				GridLayout:
+					id: content
+					cols: 1
+					size_hint: 1, None
+					height: self.minimum_height
+					do_scroll_x: False
+					padding: [dp(10), dp(20)]
