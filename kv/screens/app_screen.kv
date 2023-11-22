@@ -1,24 +1,11 @@
 #:import NavigationButton ui.widgets.navigation_button
-
+#:import MainScreen ui.screens.main
 
 MDNavigationLayout:
 	ScreenManager:
 		id: screen_manager
 
-		Screen:
-			name: 'main'
-
-			MDBoxLayout:
-				orientation: 'vertical'
-				size_hint: (1, 1)
-
-				MDLabel:
-					text: 'Main'
-
-				MDIconButton:
-					text: 'To options'
-					on_release:
-						screen_manager.current = 'options'
+		MainScreen:
 
 		Screen:
 			name: 'options'
