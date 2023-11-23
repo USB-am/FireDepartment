@@ -1,6 +1,13 @@
 from typing import Callable
 
+from kivy.lang.builder import Builder
 from kivymd.uix.toolbar import MDToolbar
+
+
+Builder.load_string('''
+<FDToolbar>:
+	md_bg_color: app.theme_cls.accent_color
+''')
 
 
 class FDToolbar(MDToolbar):
