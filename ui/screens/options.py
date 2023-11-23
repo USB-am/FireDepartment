@@ -1,4 +1,5 @@
 from . import BaseScreen
+from app.path_manager import PathManager
 
 
 class OptionsScreen(BaseScreen):
@@ -7,8 +8,8 @@ class OptionsScreen(BaseScreen):
 	name = 'options'
 	toolbar_title = 'Настройки'
 
-	def __init__(self, **options):
-		super().__init__()
+	def __init__(self, path_manager: PathManager, **options):
+		super().__init__(path_manager)
 
 		self.ids.toolbar.add_left_button(
 			icon='menu',
