@@ -36,13 +36,10 @@
 				orientation: 'vertical'
 
 				NavigationButton:
+					id: main_nav_btn
 					size_hint: (1, None)
 					icon: 'home'
 					text: 'Главная'
-
-					on_release:
-						screen_manager.current = 'main'
-						menu.set_state('close')
 
 				NavigationButton:
 					size_hint: (1, None)
@@ -87,10 +84,7 @@
 				height: dp(60)
 
 				NavigationButton:
+					id: options_nav_btn
 					size_hint: 1, None
 					icon: 'cog'
 					text: 'Настройки'
-
-					on_release:
-						screen_manager.current = 'options'
-						menu.set_state('close')
