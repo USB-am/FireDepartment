@@ -17,24 +17,54 @@
 				padding: [dp(5), 0]
 				spacing: dp(10)
 
-	ScrollView:
-		size_hint: (1, 1)
+	MDBottomNavigation:
+		id: bottom_nav
+		panel_color: app.theme_cls.accent_color
 
-		GridLayout:
-			id: content
-			cols: 1
-			size_hint: (1, None)
-			height: self.minimum_height
-			do_scroll_x: False
-			padding: [dp(10), dp(20)]
+		MDBottomNavigationItem:
+			name: 'phones'
+			text: 'Звонки'
+			icon: 'phone'
 
-			MDLabel:
-				text: 'Content #1'
-				size_hint_y: None
-				height: dp(50)
+			ScrollView:
+				size_hint: (1, 1)
+
+				GridLayout:
+					id: phone_content
+					cols: 1
+					size_hint: (1, None)
+					height: self.minimum_height
+					do_scroll_x: False
+					padding: [dp(10), dp(20)]
+
+					MDLabel:
+						text: 'Phones #1'
+						size_hint_y: None
+						height: dp(50)
+
+		MDBottomNavigationItem:
+			name: 'info'
+			text: 'Информация'
+			icon: 'notebook'
+
+			ScrollView:
+				size_hint: (1, 1)
+
+				GridLayout:
+					id: info_content
+					cols: 1
+					size_hint: (1, None)
+					height: self.minimum_height
+					do_scroll_x: False
+					padding: [dp(10), dp(20)]
+
+					MDLabel:
+						text: 'Info #1'
+						size_hint_y: None
+						height: dp(50)
 
 
-<NotebookTab>:
+<NotebookTopPanelElement>:
 	orientation: 'horizontal'
 	size_hint: (None, 1)
 	width: dp(200)
