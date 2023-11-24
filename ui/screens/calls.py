@@ -2,6 +2,8 @@ from . import BaseScreen
 from app.path_manager import PathManager
 from ui.widgets.notebook import FDNotebook
 
+from data_base import Emergency
+
 
 class CallsScreen(BaseScreen):
 	'''
@@ -20,6 +22,7 @@ class CallsScreen(BaseScreen):
 		)
 
 		notebook = FDNotebook()
-		for i in range(10):
-			notebook.add_tab(f'Tab #{i+1}', None)
+		es = Emergency.query.all()
+		for emergency in es:
+			notebook.add_tab(emergency)
 		self.add_content(notebook)
