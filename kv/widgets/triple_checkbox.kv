@@ -1,0 +1,28 @@
+<FDTripleCheckbox>:
+	orientation: 'horizontal'
+	size_hint: (1, None)
+	height: dp(50)
+
+	MDIconButton:
+		id: checkbox
+		size_hint: (None, None)
+		size: (dp(50), dp(50))
+		icon: root.normal_icon
+
+		on_release:
+			root.click()
+
+	MDBoxLayout:
+		orientation: 'vertical'
+		size_hint: (1, None)
+		height: dp(50)
+
+		MDLabel:
+			size_hint: (1, None)
+			height: dp(30)
+			text: root.title
+
+		MDLabel:
+			size_hint: (1, None)
+			height: dp(20)
+			text: root.substring
