@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Callable
+from typing import Callable, List
 
 from kivy.lang.builder import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
@@ -26,7 +26,7 @@ class NotebookPhoneContent(MDBoxLayout):
 	humans: list[Human] - список людей, участвующих в выезде.
 	'''
 
-	def __init__(self, humans: list[Human], **options):
+	def __init__(self, humans: List[Human], **options):
 		self.humans = humans
 
 		super().__init__(**options)
