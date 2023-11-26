@@ -7,6 +7,7 @@ from kivy.properties import StringProperty
 
 from data_base import Emergency, Human
 from config import NOTEBOOK_WIDGET
+from ui.widgets.triple_checkbox import FDTripleCheckbox
 
 
 Builder.load_file(NOTEBOOK_WIDGET)
@@ -28,8 +29,20 @@ class NotebookPhoneContent(MDBoxLayout):
 
 	def __init__(self, humans: List[Human], **options):
 		self.humans = humans
+		self.checkboxes: List[FDTripleCheckbox] = []
 
 		super().__init__(**options)
+
+		for human in self.humans:
+			checkbox = FDTripleCheckbox(
+				normal_icon='phone',
+				active_icon='phone-check',
+				deactive_icon='phone-cancel',
+				title=human.title,
+				substring=human.phone_1
+			)
+			self.checkboxes.append(checkbox)
+			self.add_widget(checkbox)
 
 
 class NotebookInfoContent(MDBoxLayout):
