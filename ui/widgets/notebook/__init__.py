@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List, Callable
+from typing import List, Callable, Optional
 
 from kivy.lang.builder import Builder
 from kivy.properties import StringProperty
@@ -47,7 +47,8 @@ class NotebookPhoneContent(MDBoxLayout):
 	humans: List[Human] - список людей, участвующих в выезде.
 	'''
 
-	def __init__(self, humans: List[Human], **options):
+	def __init__(self, description: str, humans: List[Human], **options):
+		self.description = description
 		self.humans = humans
 		self.checkboxes: List[FDTripleCheckbox] = []
 
@@ -76,6 +77,7 @@ class _NotebookTab:
 	top_panel: NotebookTopPanelElement
 	phone_content: NotebookPhoneContent
 	info_content: NotebookInfoContent
+	state: bool = False
 
 
 class _NotebookManager:
@@ -98,7 +100,10 @@ class _NotebookManager:
 		'''
 
 		top_panel = NotebookTopPanelElement(title=emergency.title)
-		phone_content = NotebookPhoneContent(humans=emergency.humans)
+		phone_content = NotebookPhoneContent(
+			description=emergency.description,
+			humans=emergency.humans
+		)
 		info_content = NotebookInfoContent()
 
 		new_tab = _NotebookTab(
@@ -123,9 +128,11 @@ class _NotebookManager:
 		for tab_ in self.tabs:
 			self.phone_content.remove_widget(tab_.phone_content)
 			self.info_content.remove_widget(tab_.info_content)
+			tab_.state = False
 
 		self.phone_content.add_widget(tab.phone_content)
 		self.info_content.add_widget(tab.info_content)
+		tab.state = True
 
 	def close_tab(self, tab: _NotebookTab) -> None:
 		'''
@@ -166,3 +173,13 @@ class FDNotebook(MDBoxLayout):
 		self.ids.tab_panel.add_widget(new_tab.top_panel)
 
 		self._manager.show_tab(new_tab)
+
+	def get_current_tab(self) -> Optional[_NotebookTab]:
+		''' Возвращает текущую вкладку. '''
+
+		if len(self._manager.tabs) == 0:
+			return
+
+		for tab in self._manager.tabs:
+			if tab.state:
+				return tab

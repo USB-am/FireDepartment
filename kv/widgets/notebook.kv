@@ -53,11 +53,6 @@
 					do_scroll_x: False
 					padding: [dp(10), dp(20)]
 
-					MDLabel:
-						text: 'Info #1'
-						size_hint_y: None
-						height: dp(50)
-
 
 <NotebookTopPanelElement>:
 	orientation: 'horizontal'
@@ -86,3 +81,16 @@
 <NotebookPhoneContent>:
 	orientation: 'vertical'
 	adaptive_height: True
+
+	MDLabel:
+		size_hint: (1, None)
+		height: self.texture_size[1]
+		halign: 'left'
+		valign: 'center'
+		text: root.description
+		padding: [0, dp(10)]
+
+
+<NotebookInfoContent>:
+	MDLabel:
+		text: str(id(root))
