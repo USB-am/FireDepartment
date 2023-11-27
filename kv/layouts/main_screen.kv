@@ -1,0 +1,26 @@
+<_ListElementContent>:
+	orientation: 'vertical'
+	adaptive_height: True
+	padding: [dp(20), 0]
+
+	MDLabel:
+		size_hint: (1, None)
+		height: self.texture_size[1]
+		valign: 'top'
+		halign: 'left'
+		text: root.emergency.description
+
+	MDBoxLayout:
+		orientation: 'horizontal'
+		size_hint: (1, None)
+		height: dp(50)
+
+		MDBoxLayout:
+			id: info_icons
+			size_hint: (1, 1)
+
+		MDIconButton:
+			id: open_button
+			size_hint: (None, None)
+			size: (dp(50), dp(50))
+			icon: 'eye'
