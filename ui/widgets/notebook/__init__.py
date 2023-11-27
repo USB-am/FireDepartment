@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import List
+from typing import List, Callable
 
 from kivy.lang.builder import Builder
 from kivy.properties import StringProperty
@@ -17,6 +17,26 @@ class NotebookTopPanelElement(MDBoxLayout):
 	''' Таб верхней панели FDNotebook'а '''
 
 	title = StringProperty()
+
+	def bind_open(self, callback: Callable) -> None:
+		'''
+		Привязывает событие к нажатию кнопки открытия.
+
+		~params:
+		callback: Callable - событие, которое будет вызываться при нажатии.
+		'''
+
+		self.ids.tab_title.bind(on_release=lambda *_: callback())
+
+	def bind_close(self, callback: Callable) -> None:
+		'''
+		Привязывает событие к нажатию кнопки закрытия.
+
+		~params:
+		callback: Callable - событие, которое будет вызываться при нажатии.
+		'''
+
+		self.ids.close_btn.bind(on_release=lambda *_: callback())
 
 
 class NotebookPhoneContent(MDBoxLayout):
@@ -61,7 +81,8 @@ class _NotebookTab:
 class _NotebookManager:
 	''' Управляет табами '''
 
-	def __init__(self, phone_content: MDBoxLayout, info_content: MDBoxLayout):
+	def __init__(self, tab_panel: MDBoxLayout, phone_content: MDBoxLayout, info_content: MDBoxLayout):
+		self.tab_panel = tab_panel
 		self.phone_content = phone_content
 		self.info_content = info_content
 
@@ -86,6 +107,8 @@ class _NotebookManager:
 			info_content=info_content
 		)
 		self.tabs.append(new_tab)
+		new_tab.top_panel.bind_open(lambda: self.show_tab(new_tab))
+		new_tab.top_panel.bind_close(lambda: self.close_tab(new_tab))
 
 		return new_tab
 
@@ -104,6 +127,26 @@ class _NotebookManager:
 		self.phone_content.add_widget(tab.phone_content)
 		self.info_content.add_widget(tab.info_content)
 
+	def close_tab(self, tab: _NotebookTab) -> None:
+		'''
+		Закрывает переданную вкладку.
+
+		~params:
+		tab: _NotebookTab - вкладка, которая будет закрыта.
+		'''
+
+		for index, tab_ in enumerate(self.tabs):
+			if tab is tab_:
+				self.tab_panel.remove_widget(tab.top_panel)
+				self.phone_content.remove_widget(tab.phone_content)
+				self.info_content.remove_widget(tab.info_content)
+
+				del self.tabs[index]
+				break
+
+		if len(self.tabs) > 0:
+			self.show_tab(self.tabs[index-1])
+
 
 class FDNotebook(MDBoxLayout):
 	''' Виджет с табами '''
@@ -112,6 +155,7 @@ class FDNotebook(MDBoxLayout):
 		super().__init__(**options)
 
 		self._manager = _NotebookManager(
+			tab_panel=self.ids.tab_panel,
 			phone_content=self.ids.phone_content,
 			info_content=self.ids.info_content
 		)
