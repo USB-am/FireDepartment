@@ -1,3 +1,5 @@
+from typing import List, Union
+
 from kivy.lang.builder import Builder
 from kivy.properties import StringProperty, BoundedNumericProperty
 from kivymd.uix.boxlayout import MDBoxLayout
@@ -6,6 +8,7 @@ from config import TRIPLE_CHECKBOX
 
 
 Builder.load_file(TRIPLE_CHECKBOX)
+Digits = Union[float, int]
 
 
 class FDTripleCheckbox(MDBoxLayout):
@@ -23,6 +26,7 @@ class FDTripleCheckbox(MDBoxLayout):
 
 		self.state = (self.state + 1) % 3
 
+		self.md_bg_color: List[Digits]
 		if self.state == 0:
 			self.md_bg_color = [0, 0, 0, 0]
 			self.ids.checkbox.icon = self.normal_icon

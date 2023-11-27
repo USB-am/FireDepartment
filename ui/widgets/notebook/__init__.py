@@ -1,9 +1,9 @@
 from dataclasses import dataclass
-from typing import Callable, List
+from typing import List
 
 from kivy.lang.builder import Builder
-from kivymd.uix.boxlayout import MDBoxLayout
 from kivy.properties import StringProperty
+from kivymd.uix.boxlayout import MDBoxLayout
 
 from data_base import Emergency, Human
 from config import NOTEBOOK_WIDGET
@@ -24,7 +24,7 @@ class NotebookPhoneContent(MDBoxLayout):
 	Содержимое вкладки с контактами.
 
 	~params:
-	humans: list[Human] - список людей, участвующих в выезде.
+	humans: List[Human] - список людей, участвующих в выезде.
 	'''
 
 	def __init__(self, humans: List[Human], **options):
@@ -61,8 +61,12 @@ class _NotebookTab:
 class _NotebookManager:
 	''' Управляет табами '''
 
-	def __init__(self):
-		self.tabs: list[_NotebookTab] = []
+	def __init__(self, phone_content: MDBoxLayout, info_content: MDBoxLayout):
+		self.phone_content = phone_content
+		self.info_content = info_content
+
+		self.tabs: List[_NotebookTab] = []
+		self.current_tab = 0
 
 	def add_tab(self, emergency: Emergency) -> _NotebookTab:
 		'''
@@ -85,6 +89,21 @@ class _NotebookManager:
 
 		return new_tab
 
+	def show_tab(self, tab: _NotebookTab) -> None:
+		'''
+		Отображает переданную вкладку.
+
+		~params:
+		tab: _NotebookTab - вкладка для отображения.
+		'''
+
+		for tab_ in self.tabs:
+			self.phone_content.remove_widget(tab_.phone_content)
+			self.info_content.remove_widget(tab_.info_content)
+
+		self.phone_content.add_widget(tab.phone_content)
+		self.info_content.add_widget(tab.info_content)
+
 
 class FDNotebook(MDBoxLayout):
 	''' Виджет с табами '''
@@ -92,9 +111,14 @@ class FDNotebook(MDBoxLayout):
 	def __init__(self, **options):
 		super().__init__(**options)
 
-		self._manager = _NotebookManager()
+		self._manager = _NotebookManager(
+			phone_content=self.ids.phone_content,
+			info_content=self.ids.info_content
+		)
 
 	def add_tab(self, emergency: Emergency) -> None:
 		new_tab = self._manager.add_tab(emergency)
 
 		self.ids.tab_panel.add_widget(new_tab.top_panel)
+
+		self._manager.show_tab(new_tab)
