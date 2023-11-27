@@ -21,8 +21,6 @@ class CallsScreen(BaseScreen):
 			callback=lambda *_: self._path_manager.back()
 		)
 
-		notebook = FDNotebook()
-		es = Emergency.query.all()
-		for emergency in es:
-			notebook.add_tab(emergency)
-		self.add_content(notebook)
+		self.notebook = FDNotebook()
+		# self.notebook.add_tab(emergency)
+		self.add_content(self.notebook)

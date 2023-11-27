@@ -1,8 +1,8 @@
-from . import BaseScreen, BaseScrollScreen
-from kivymd.uix.label import MDLabel
-from kivy.metrics import dp
+from . import BaseScrollScreen
 
 from app.path_manager import PathManager
+from data_base import Emergency
+from ui.layout.main_screen import MainScreenListElement
 
 
 class MainScreen(BaseScrollScreen):
@@ -23,9 +23,5 @@ class MainScreen(BaseScrollScreen):
 			callback=lambda *_: self._path_manager.forward('calls')
 		)
 
-		for i in range(20):
-			self.add_content(MDLabel(
-				text=f'Row #{i+1}',
-				size_hint=(1, None),
-				height=dp(50)
-			))
+		for emergency in Emergency.query.all():
+			self.add_content(MainScreenListElement(emergency))
