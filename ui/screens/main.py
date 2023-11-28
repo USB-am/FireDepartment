@@ -24,4 +24,17 @@ class MainScreen(BaseScrollScreen):
 		)
 
 		for emergency in Emergency.query.all():
-			self.add_content(MainScreenListElement(emergency))
+			list_elem = MainScreenListElement(emergency)
+			list_elem.bind_open_button(lambda e=emergency: self.open_call(e))
+			self.add_content(list_elem)
+
+	def open_call(self, emergency: Emergency) -> None:
+		'''
+		Переходит на CallsScreen и добавляет вкладку на основании emergency.
+
+		~params:
+		emergency: Emergency - запись из БД о выезде.
+		'''
+
+		calls_screen = self._path_manager.forward('calls')
+		calls_screen.notebook.add_tab(emergency)
