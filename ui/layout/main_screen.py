@@ -1,12 +1,22 @@
+from typing import Callable
+
 from kivy.lang.builder import Builder
+from kivy.properties import StringProperty
 from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelOneLine
 from kivymd.uix.boxlayout import MDBoxLayout
 
 from config import MAIN_SCREEN_LAYOUTS
-from data_base import Emergency
+from data_base import Tag, Human, Emergency
 
 
 Builder.load_file(MAIN_SCREEN_LAYOUTS)
+
+
+class _ListElementIcon(MDBoxLayout):
+	''' Иконка в выпадающей области. '''
+
+	icon = StringProperty()
+	value = StringProperty('')
 
 
 class _ListElementContent(MDBoxLayout):
@@ -22,6 +32,18 @@ class _ListElementContent(MDBoxLayout):
 		self.emergency = emergency
 
 		super().__init__(**options)
+
+		self.ids.info_icons.add_widget(_ListElementIcon(
+			icon=Tag.icon,
+			value=str(len(self.emergency.tags))
+		))
+		self.ids.info_icons.add_widget(_ListElementIcon(
+			icon=Human.icon,
+			value=str(len(self.emergency.humans))
+		))
+
+		if self.emergency.urgent:
+			self.ids.info_icons.add_widget(_ListElementIcon(icon='truck-fast'))
 
 
 class MainScreenListElement(MDExpansionPanel):
@@ -45,3 +67,13 @@ class MainScreenListElement(MDExpansionPanel):
 		})
 
 		super().__init__(**options)
+
+	def bind_open_button(self, callback: Callable) -> None:
+		'''
+		Привязка события к кнопке.
+
+		~params:
+		callback: Callable - событие, которое будет вызываться при нажатии.
+		'''
+
+		self.content.ids.open_button.bind(on_release=lambda *_: callback())

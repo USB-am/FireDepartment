@@ -61,5 +61,7 @@ class Application(MDApp):
 		self.ui.screen_manager.add_widget(MainScreen(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(OptionsScreen(self.ui.path_manager))
 
+		self.ui.path_manager.move_to_screen('main')
+
 	def build(self):
 		return self.ui

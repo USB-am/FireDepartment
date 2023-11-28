@@ -22,5 +22,4 @@ class CallsScreen(BaseScreen):
 		)
 
 		self.notebook = FDNotebook()
-		# self.notebook.add_tab(emergency)
 		self.add_content(self.notebook)
