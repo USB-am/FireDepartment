@@ -8,6 +8,7 @@ from .path_manager import PathManager
 from ui.screens.main import MainScreen
 from ui.screens.options import OptionsScreen
 from ui.screens.calls import CallsScreen
+from ui.screens.model_list import TagsList
 
 
 Builder.load_file(APP_SCREEN)
@@ -26,6 +27,9 @@ class FDUIManager(MDNavigationLayout):
 		)
 		self.ids.options_nav_btn.bind(
 			on_release=lambda *_: self.move_screen_and_close_menu('options')
+		)
+		self.ids.tags_nav_btn.bind(
+			on_release=lambda *_: self.move_screen_and_close_menu('tags_list')
 		)
 
 	def move_screen_and_close_menu(self, screen_name: str) -> None:
@@ -60,6 +64,7 @@ class Application(MDApp):
 		self.ui.screen_manager.add_widget(CallsScreen(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(MainScreen(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(OptionsScreen(self.ui.path_manager))
+		self.ui.screen_manager.add_widget(TagsList(self.ui.path_manager))
 
 		self.ui.path_manager.move_to_screen('main')
 
