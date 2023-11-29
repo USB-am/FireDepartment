@@ -18,3 +18,4 @@ TRIPLE_CHECKBOX = os.path.join(WIDGETS_DIR, 'triple_checkbox.kv')
 # Layouts
 LAYOUTS_DIR = os.path.join(KV_DIR, 'layouts')
 MAIN_SCREEN_LAYOUTS = os.path.join(LAYOUTS_DIR, 'main_screen.kv')
+MODEL_LIST_LAYOUTS = os.path.join(LAYOUTS_DIR, 'model_list.kv')
