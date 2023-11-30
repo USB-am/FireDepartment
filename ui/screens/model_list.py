@@ -38,7 +38,9 @@ class TagsList(_ModelList):
 	toolbar_title = 'Теги'
 
 	def fill_elements(self) -> None:
-		for tag in self.model.query.all():
+		tags = self.model.query.order_by(Tag.title).all()
+
+		for tag in tags:
 			list_elem = ModelListElement(entry=tag, icon=Tag.icon)
 			list_elem.bind_edit_btn(lambda t=tag: print(f'Edit btn {t.title}'))
 			list_elem.bind_info_btn(lambda t=tag: print(f'Info btn {t.title}'))
@@ -53,7 +55,9 @@ class RanksList(_ModelList):
 	toolbar_title = 'Звания'
 
 	def fill_elements(self) -> None:
-		for rank in self.model.query.all():
+		ranks = self.model.query.order_by(Rank.title).all()
+
+		for rank in ranks:
 			list_elem = ModelListElement(entry=rank, icon=Rank.icon)
 			list_elem.bind_edit_btn(lambda r=rank: print(f'Edit btn {r.title}'))
 			list_elem.bind_info_btn(lambda r=rank: print(f'Info btn {r.title}'))
@@ -68,7 +72,9 @@ class PositionsList(_ModelList):
 	toolbar_title = 'Должности'
 
 	def fill_elements(self) -> None:
-		for position in self.model.query.all():
+		positions = self.model.query.order_by(Position.title).all()
+
+		for position in positions:
 			list_elem = ModelListElement(entry=position, icon=Position.icon)
 			list_elem.bind_edit_btn(lambda p=position: print(f'Edit btn {p.title}'))
 			list_elem.bind_info_btn(lambda p=position: print(f'Info btn {p.title}'))
@@ -83,7 +89,9 @@ class HumansList(_ModelList):
 	toolbar_title = 'Сотрудники'
 
 	def fill_elements(self) -> None:
-		for human in self.model.query.all():
+		humans = self.model.query.order_by(Human.title).all()
+
+		for human in humans:
 			i = 'fire-hydrant' if human.is_firefigher else Human.icon
 			list_elem = ModelListElement(
 				entry=human,
@@ -102,7 +110,9 @@ class EmergenciesList(_ModelList):
 	toolbar_title = 'Вызовы'
 
 	def fill_elements(self) -> None:
-		for emergency in self.model.query.all():
+		emergencies = self.model.query.order_by(Emergency.title).all()
+
+		for emergency in emergencies:
 			list_elem = ModelListElement(entry=emergency, icon=Emergency.icon)
 			list_elem.bind_edit_btn(lambda e=emergency: print(f'Edit btn {e.title}'))
 			list_elem.bind_info_btn(lambda e=emergency: print(f'Info btn {e.title}'))
