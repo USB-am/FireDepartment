@@ -178,7 +178,7 @@ class FDNotebook(MDBoxLayout):
 		''' Возвращает текущую вкладку. '''
 
 		if len(self._manager.tabs) == 0:
-			return
+			return None
 
 		for tab in self._manager.tabs:
 			if tab.state:
