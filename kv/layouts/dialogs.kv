@@ -1,6 +1,7 @@
 <_BaseDialogContent>:
 	orientation: 'vertical'
-	adaptive_height: True
+	size_hint_y: None
+	height: dp(250)
 
 	ScrollView:
 		GridLayout:
@@ -9,5 +10,5 @@
 			size_hint_y: None
 			height: self.minimum_height
 			do_scroll_x: False
-			padding: [dp(10), dp(5)]
+			padding: [dp(10), dp(10)]
 			spacing: dp(10)

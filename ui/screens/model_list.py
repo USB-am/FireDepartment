@@ -1,9 +1,14 @@
 from typing import Type
 
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.button import MDRaisedButton
+
 from . import BaseScrollScreen
 from app.path_manager import PathManager
 from data_base import db, Tag, Rank, Position, Human, Emergency
 from ui.layout.model_list_element import ModelListElement
+from ui.layout.dialogs import TagDialogContent
 
 
 __all__ = ('TagsList',)
@@ -14,6 +19,7 @@ class _ModelList(BaseScrollScreen):
 
 	def __init__(self, path_manager: PathManager):
 		super().__init__(path_manager)
+		self.dialog = None
 
 		self.ids.toolbar.add_left_button(
 			icon='menu',
@@ -29,6 +35,29 @@ class _ModelList(BaseScrollScreen):
 	def fill_elements(self) -> None:
 		pass
 
+	def open_info_dialog(self, content: MDBoxLayout) -> None:
+		''' Открыть диалогов окно с информацией '''
+
+		if self.dialog is None:
+			ok_btn = MDRaisedButton(text='Ок')
+			ok_btn.bind(on_release=lambda *_: self.close_info_dialog())
+			self.dialog = MDDialog(
+				title='Информация',
+				type='custom',
+				content_cls=content,
+				buttons=[ok_btn]
+			)
+
+		self.dialog.open()
+
+	def close_info_dialog(self) -> None:
+		''' Закрыть диалоговое окно с информацией '''
+
+		if self.dialog is None:
+			return
+
+		self.dialog.dismiss()
+
 
 class TagsList(_ModelList):
 	''' Класс с элементами из модели Tag '''
@@ -36,6 +65,7 @@ class TagsList(_ModelList):
 	name = 'tags_list'
 	model = Tag
 	toolbar_title = 'Теги'
+	info_dialog_content = TagDialogContent
 
 	def fill_elements(self) -> None:
 		tags = self.model.query.order_by(Tag.title).all()
@@ -43,7 +73,9 @@ class TagsList(_ModelList):
 		for tag in tags:
 			list_elem = ModelListElement(entry=tag, icon=Tag.icon)
 			list_elem.bind_edit_btn(lambda t=tag: print(f'Edit btn {t.title}'))
-			list_elem.bind_info_btn(lambda t=tag: print(f'Info btn {t.title}'))
+			list_elem.bind_info_btn(
+				lambda t=tag: self.open_info_dialog(self.info_dialog_content(t))
+			)
 			self.add_content(list_elem)
 
 
