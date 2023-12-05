@@ -5,6 +5,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 
 from config import DIALOG_LAYOUTS
 from data_base import db, Tag
+from ui.field.label import FDLabel
 
 
 Builder.load_file(DIALOG_LAYOUTS)
@@ -41,3 +42,13 @@ class TagDialogContent(_BaseDialogContent):
 
 	def __init__(self, entry: Tag, **options):
 		super().__init__(entry=entry, **options)
+
+		self.ids.content.add_widget(FDLabel(
+			title='Название',
+			value=entry.title
+		))
+
+		if entry.emergencys:
+			self.ids.content.add_widget(FDLabel(
+				title='Связан с Вызовами:'
+			))
