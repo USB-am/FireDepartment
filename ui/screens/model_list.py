@@ -38,25 +38,16 @@ class _ModelList(BaseScrollScreen):
 	def open_info_dialog(self, content: MDBoxLayout) -> None:
 		''' Открыть диалогов окно с информацией '''
 
-		if self.dialog is None:
-			ok_btn = MDRaisedButton(text='Ок')
-			ok_btn.bind(on_release=lambda *_: self.close_info_dialog())
-			self.dialog = MDDialog(
-				title='Информация',
-				type='custom',
-				content_cls=content,
-				buttons=[ok_btn]
-			)
+		ok_btn = MDRaisedButton(text='Ок')
+		dialog = MDDialog(
+			title='Информация',
+			type='custom',
+			content_cls=content,
+			buttons=[ok_btn]
+		)
+		ok_btn.bind(on_release=lambda *_: dialog.dismiss())
 
-		self.dialog.open()
-
-	def close_info_dialog(self) -> None:
-		''' Закрыть диалоговое окно с информацией '''
-
-		if self.dialog is None:
-			return
-
-		self.dialog.dismiss()
+		dialog.open()
 
 
 class TagsList(_ModelList):
