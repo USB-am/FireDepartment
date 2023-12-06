@@ -24,3 +24,4 @@ DIALOG_LAYOUTS = os.path.join(LAYOUTS_DIR, 'dialogs.kv')
 # Fields
 FIELDS_DIR = os.path.join(KV_DIR, 'fields')
 LABEL_FIELD = os.path.join(FIELDS_DIR, 'label.kv')
+BUTTON_FIELD = os.path.join(FIELDS_DIR, 'button.kv')

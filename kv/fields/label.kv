@@ -1,3 +1,18 @@
+<FDTitle>:
+	orientation: 'horizontal'
+	size_hint_y: None
+	height: dp(50)
+
+	MDLabel:
+		id: title_label
+		halign: 'left'
+		valign: 'bottom'
+		size_hint_y: None
+		height: self.texture_size[1]
+		font_style: 'Subtitle1'
+		text: root.title
+
+
 <FDLabel>:
 	orientation: 'horizontal'
 	size_hint_y: None
@@ -9,4 +24,22 @@
 
 	MDLabel:
 		id: value_label
+		text: root.value
+
+
+<FDVerticalLabel>:
+	orientation: 'vertical'
+	adaptive_height: True
+
+	MDLabel:
+		id: title_label
+		size_hint_y: None
+		height: dp(15)
+		font_style: 'Caption'
+		text: root.title
+
+	MDLabel:
+		id: value_label
+		size_hint_y: None
+		height: dp(15)
 		text: root.value
