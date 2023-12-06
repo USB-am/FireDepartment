@@ -1,0 +1,2 @@
+ui\layout\dialogs.HumanDialogContent:
+	- Добавить информацию о следующем рабочем дне
