@@ -6,7 +6,7 @@ from kivymd.uix.button import MDRaisedButton
 
 from . import BaseScrollScreen
 from app.path_manager import PathManager
-from data_base import db, Tag, Rank, Position, Human, Emergency
+from data_base import Tag, Rank, Position, Human, Emergency
 from ui.layout.model_list_element import ModelListElement
 from ui.layout.dialogs import TagDialogContent, RankDialogContent, \
 	PositionDialogContent, HumanDialogContent, EmergencyDialogContent
@@ -28,7 +28,7 @@ class _ModelList(BaseScrollScreen):
 		)
 		self.ids.toolbar.add_right_button(
 			icon='file-plus',
-			callback=None
+			callback=lambda *_: self._path_manager.forward('create_tag')
 		)
 
 		self.fill_elements()
