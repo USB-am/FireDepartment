@@ -8,7 +8,8 @@ from . import BaseScrollScreen
 from app.path_manager import PathManager
 from data_base import db, Tag, Rank, Position, Human, Emergency
 from ui.layout.model_list_element import ModelListElement
-from ui.layout.dialogs import TagDialogContent
+from ui.layout.dialogs import TagDialogContent, RankDialogContent, \
+	PositionDialogContent, HumanDialogContent, EmergencyDialogContent
 
 
 __all__ = ('TagsList',)
@@ -76,6 +77,7 @@ class RanksList(_ModelList):
 	name = 'ranks_list'
 	model = Rank
 	toolbar_title = 'Звания'
+	info_dialog_content = RankDialogContent
 
 	def fill_elements(self) -> None:
 		ranks = self.model.query.order_by(Rank.title).all()
@@ -83,7 +85,9 @@ class RanksList(_ModelList):
 		for rank in ranks:
 			list_elem = ModelListElement(entry=rank, icon=Rank.icon)
 			list_elem.bind_edit_btn(lambda r=rank: print(f'Edit btn {r.title}'))
-			list_elem.bind_info_btn(lambda r=rank: print(f'Info btn {r.title}'))
+			list_elem.bind_info_btn(
+				lambda r=rank: self.open_info_dialog(self.info_dialog_content(r))
+			)
 			self.add_content(list_elem)
 
 
@@ -93,6 +97,7 @@ class PositionsList(_ModelList):
 	name = 'positions_list'
 	model = Position
 	toolbar_title = 'Должности'
+	info_dialog_content = PositionDialogContent
 
 	def fill_elements(self) -> None:
 		positions = self.model.query.order_by(Position.title).all()
@@ -100,7 +105,9 @@ class PositionsList(_ModelList):
 		for position in positions:
 			list_elem = ModelListElement(entry=position, icon=Position.icon)
 			list_elem.bind_edit_btn(lambda p=position: print(f'Edit btn {p.title}'))
-			list_elem.bind_info_btn(lambda p=position: print(f'Info btn {p.title}'))
+			list_elem.bind_info_btn(
+				lambda p=position: self.open_info_dialog(self.info_dialog_content(p))
+			)
 			self.add_content(list_elem)
 
 
@@ -110,6 +117,7 @@ class HumansList(_ModelList):
 	name = 'humans_list'
 	model = Human
 	toolbar_title = 'Сотрудники'
+	info_dialog_content = HumanDialogContent
 
 	def fill_elements(self) -> None:
 		humans = self.model.query.order_by(Human.title).all()
@@ -121,7 +129,9 @@ class HumansList(_ModelList):
 				icon=i
 			)
 			list_elem.bind_edit_btn(lambda h=human: print(f'Edit btn {h.title}'))
-			list_elem.bind_info_btn(lambda h=human: print(f'Info btn {h.title}'))
+			list_elem.bind_info_btn(
+				lambda h=human: self.open_info_dialog(self.info_dialog_content(h))
+			)
 			self.add_content(list_elem)
 
 
@@ -131,6 +141,7 @@ class EmergenciesList(_ModelList):
 	name = 'emergencies_list'
 	model = Emergency
 	toolbar_title = 'Вызовы'
+	info_dialog_content = EmergencyDialogContent
 
 	def fill_elements(self) -> None:
 		emergencies = self.model.query.order_by(Emergency.title).all()
@@ -138,5 +149,7 @@ class EmergenciesList(_ModelList):
 		for emergency in emergencies:
 			list_elem = ModelListElement(entry=emergency, icon=Emergency.icon)
 			list_elem.bind_edit_btn(lambda e=emergency: print(f'Edit btn {e.title}'))
-			list_elem.bind_info_btn(lambda e=emergency: print(f'Info btn {e.title}'))
+			list_elem.bind_info_btn(
+				lambda e=emergency: self.open_info_dialog(self.info_dialog_content(e))
+			)
 			self.add_content(list_elem)
