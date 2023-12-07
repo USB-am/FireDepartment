@@ -17,3 +17,18 @@
 		size_hint_x: None
 		width: dp(50)
 		icon: root.icon_btn
+
+
+<FDRectangleButton>:
+	# orientation: 'horizontal'
+	anchor_x: 'center'
+	anchor_y: 'center'
+	size_hint_y: None
+	height: dp(70)
+	padding: [0, dp(10)]
+
+	MDRectangleFlatButton:
+		id: btn
+		size_hint_x: None
+		width: int(root.width * .75)
+		text: root.title
