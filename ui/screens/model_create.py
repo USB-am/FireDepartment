@@ -1,7 +1,9 @@
 from . import BaseScrollScreen
 from app.path_manager import PathManager
-from data_base import db, Tag
+from data_base import db, Tag, Emergency
 from ui.field.input import FDInput
+from ui.field.button import FDRectangleButton
+from ui.field.select import FDMultiSelect
 
 
 class _BaseCreateModel(BaseScrollScreen):
@@ -33,5 +35,13 @@ class TagCreateModel(_BaseCreateModel):
 	toolbar_title = 'Создание Тега'
 
 	def fill_elements(self) -> None:
-		self.title_field = FDInput(hint_text='Название')
+		self.title_field = FDInput(
+			hint_text='Название', required=True,
+			helper_text_mode='on_error', max_text_length=25,
+			helper_text='Поле не может быть пустым или неуникальным')
+		self.emergencies_field = FDMultiSelect(title='Вызовы', model=Emergency)
+		self.save_btn = FDRectangleButton(title='Сохранить')
+
 		self.add_content(self.title_field)
+		self.add_content(self.emergencies_field)
+		self.add_content(self.save_btn)

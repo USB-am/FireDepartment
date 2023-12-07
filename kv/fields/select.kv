@@ -1,0 +1,33 @@
+<FDMultiSelect>:
+	orientation: 'vertical'
+	size_hint_y: None
+	height: dp(400)
+
+	MDBoxLayout:
+		orientation: 'horizontal'
+		size_hint_y: None
+		height: dp(50)
+
+		MDIcon:
+			size_hint: (None, None)
+			size: (dp(25), dp(50))
+			icon: root.model.icon
+
+		MDLabel:
+			text: root.title
+
+		MDIconButton:
+			id: add_btn
+			size_hint: (None, None)
+			size: (dp(50), dp(50))
+			icon: 'plus'
+
+	ScrollView:
+		GridLayout:
+			id: content
+			cols: 1
+			size_hint: (1, None)
+			height: self.minimum_height
+			do_scroll_x: False
+			padding: [dp(10), dp(15)]
+			# spacing: dp(10)
