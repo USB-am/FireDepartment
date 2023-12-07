@@ -1,9 +1,11 @@
 from . import BaseScrollScreen
 from app.path_manager import PathManager
-from data_base import db, Tag, Emergency
-from ui.field.input import FDInput
+from data_base import db, Tag, Rank, Position, Human, Emergency
+from ui.field.input import FDInput, FDNumberInput
 from ui.field.button import FDRectangleButton
 from ui.field.select import FDMultiSelect
+from ui.layout.dialogs import HumanDialogContent, EmergencyDialogContent
+
 
 
 class _BaseCreateModel(BaseScrollScreen):
@@ -37,14 +39,51 @@ class TagCreateModel(_BaseCreateModel):
 	def fill_elements(self) -> None:
 		self.title_field = FDInput(
 			hint_text='Название', required=True,
-			helper_text_mode='on_error', max_text_length=25,
+			helper_text_mode='on_error', max_text_length=255,
 			helper_text='Поле не может быть пустым или неуникальным')
-		self.emergencies_field = FDMultiSelect(title='Вызовы', model=Emergency)
+		self.emergencies_field = FDMultiSelect(
+			title='Вызовы',
+			dialog_content=EmergencyDialogContent,
+			model=Emergency)
 		self.emergencies_field.bind_btn(
-			lambda: self._path_manager.forward('create_emergency'
-		))
+			lambda: self._path_manager.forward('create_emergency')
+		)
 		self.save_btn = FDRectangleButton(title='Сохранить')
 
 		self.add_content(self.title_field)
 		self.add_content(self.emergencies_field)
+		self.add_content(self.save_btn)
+
+
+class RankCreateModel(_BaseCreateModel):
+	''' Страница создания модели Rank '''
+
+	name = 'create_rank'
+	model = Rank
+	toolbar_title = 'Создание Звания'
+
+	def fill_elements(self) -> None:
+		self.title_field = FDInput(
+			hint_text='Название',
+			required=True,
+			helper_text_mode='on_error',
+			max_text_length=255,
+			helper_text='Поле не может быть пустым или неуникальным')
+		self.priority_field = FDNumberInput(
+			hint_text='Приоритет',
+			required=True,
+			helper_text_mode='on_error',
+			helper_text='Поле не может быть пустым')
+		self.humans_field = FDMultiSelect(
+			title='Люди',
+			dialog_content=HumanDialogContent,
+			model=Human)
+		self.humans_field.bind_btn(
+			lambda: self._path_manager.forward('create_human')
+		)
+		self.save_btn = FDRectangleButton(title='Сохранить')
+
+		self.add_content(self.title_field)
+		self.add_content(self.priority_field)
+		self.add_content(self.humans_field)
 		self.add_content(self.save_btn)

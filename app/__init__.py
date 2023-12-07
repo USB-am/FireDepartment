@@ -10,7 +10,7 @@ from ui.screens.options import OptionsScreen
 from ui.screens.calls import CallsScreen
 from ui.screens.model_list import TagsList, RanksList, PositionsList, \
 	HumansList, EmergenciesList
-from ui.screens.model_create import TagCreateModel
+from ui.screens.model_create import TagCreateModel, RankCreateModel
 
 
 Builder.load_file(APP_SCREEN)
@@ -77,8 +77,9 @@ class Application(MDApp):
 		self.ui.screen_manager.add_widget(HumansList(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(EmergenciesList(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(TagCreateModel(self.ui.path_manager))
+		self.ui.screen_manager.add_widget(RankCreateModel(self.ui.path_manager))
 
-		self.ui.path_manager.move_to_screen('tags_list')
+		self.ui.path_manager.move_to_screen('ranks_list')
 
 	def build(self):
 		return self.ui
