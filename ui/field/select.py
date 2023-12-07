@@ -1,3 +1,5 @@
+from typing import Callable
+
 from kivy.lang.builder import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
 
@@ -19,9 +21,10 @@ class FDMultiSelect(MDBoxLayout):
 	model: db.Model - модель БД, элементы которой будут отображены.
 	'''
 
-	def __init__(self, title: str, model: db.Model):
+	def __init__(self, title: str, model: db.Model, group: str=None):
 		self.title = title
 		self.model = model
+		self.group = group
 
 		super().__init__()
 
@@ -32,5 +35,13 @@ class FDMultiSelect(MDBoxLayout):
 
 		entries = self.model.query.order_by(self.model.title)
 		for entry in entries:
-			list_elem = FDSelectListElement(entry=entry, info_content=EmergencyDialogContent)
+			list_elem = FDSelectListElement(
+				entry=entry,
+				info_content=EmergencyDialogContent,
+				group=self.group)
 			self.ids.content.add_widget(list_elem)
+
+	def bind_btn(self, callback: Callable) -> None:
+		''' Привязать событие нажатия кнопки на верхней панели '''
+
+		self.ids.add_btn.bind(on_release=lambda *_: callback())
