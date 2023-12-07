@@ -17,3 +17,14 @@ class FDInput(MDTextField):
 	'''
 
 	hint_text = StringProperty()
+
+
+class FDNumberInput(MDTextField):
+	'''
+	Поле ввода целых чисел.
+
+	~params:
+	hint_text: str - placeholder.
+	'''
+
+	hint_text = StringProperty()

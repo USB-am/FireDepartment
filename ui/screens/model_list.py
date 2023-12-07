@@ -28,8 +28,9 @@ class _ModelList(BaseScrollScreen):
 		)
 		self.ids.toolbar.add_right_button(
 			icon='file-plus',
-			callback=lambda *_: self._path_manager.forward('create_tag')
-		)
+			callback=lambda *_: self._path_manager.forward(
+				f'create_{self.model.__tablename__.lower()}'
+		))
 
 		self.fill_elements()
 

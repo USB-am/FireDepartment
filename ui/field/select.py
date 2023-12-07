@@ -6,7 +6,6 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from data_base import db
 from config import SELECT_FIELD
 from ui.layout.select import FDSelectListElement
-from ui.layout.dialogs import EmergencyDialogContent
 
 
 Builder.load_file(SELECT_FIELD)
@@ -21,8 +20,9 @@ class FDMultiSelect(MDBoxLayout):
 	model: db.Model - модель БД, элементы которой будут отображены.
 	'''
 
-	def __init__(self, title: str, model: db.Model, group: str=None):
+	def __init__(self, title: str, dialog_content: MDBoxLayout, model: db.Model, group: str=None):
 		self.title = title
+		self.dialog_content = dialog_content
 		self.model = model
 		self.group = group
 
@@ -37,7 +37,7 @@ class FDMultiSelect(MDBoxLayout):
 		for entry in entries:
 			list_elem = FDSelectListElement(
 				entry=entry,
-				info_content=EmergencyDialogContent,
+				info_content=self.dialog_content,
 				group=self.group)
 			self.ids.content.add_widget(list_elem)
 
