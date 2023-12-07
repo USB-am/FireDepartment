@@ -40,6 +40,9 @@ class TagCreateModel(_BaseCreateModel):
 			helper_text_mode='on_error', max_text_length=25,
 			helper_text='Поле не может быть пустым или неуникальным')
 		self.emergencies_field = FDMultiSelect(title='Вызовы', model=Emergency)
+		self.emergencies_field.bind_btn(
+			lambda: self._path_manager.forward('create_emergency'
+		))
 		self.save_btn = FDRectangleButton(title='Сохранить')
 
 		self.add_content(self.title_field)
