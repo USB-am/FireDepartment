@@ -11,9 +11,24 @@ from config import BUTTON_FIELD
 Builder.load_file(BUTTON_FIELD)
 
 
-class FDIconButton(MDBoxLayout):
+class FDButton(MDBoxLayout):
 	'''
 	Иконка | Заголовок | Кнопка
+
+	~params:
+	icon: str - иконка;
+	title: str - заголовок;
+	btn_text: str - текст на кнопке.
+	'''
+
+	icon = StringProperty()
+	title = StringProperty()
+	btn_text = StringProperty()
+
+
+class FDIconButton(MDBoxLayout):
+	'''
+	Иконка | Заголовок | Кнопка (иконка)
 
 	~params:
 	icon: str - иконка;

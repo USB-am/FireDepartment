@@ -1,3 +1,25 @@
+<FDButton>:
+	orientation: 'horizontal'
+	size_hint_y: None
+	height: dp(40)
+
+	MDIcon:
+		size_hint_x: None
+		width: dp(25)
+		icon: root.icon
+
+	MDLabel:
+		id: title_label
+		text: root.title
+
+	MDRaisedButton:
+		id: btn
+		size_hint_x: None
+		width: dp(75)
+		md_bg_color: app.theme_cls.primary_color
+		text: root.btn_text
+
+
 <FDIconButton>:
 	orientation: 'horizontal'
 	size_hint_y: None
