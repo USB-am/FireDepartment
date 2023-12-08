@@ -10,7 +10,8 @@ from ui.screens.options import OptionsScreen
 from ui.screens.calls import CallsScreen
 from ui.screens.model_list import TagsList, RanksList, PositionsList, \
 	HumansList, EmergenciesList
-from ui.screens.model_create import TagCreateModel, RankCreateModel
+from ui.screens.model_create import TagCreateModel, RankCreateModel, \
+	PositionCreateModel, HumanCreateModel
 
 
 Builder.load_file(APP_SCREEN)
@@ -62,6 +63,7 @@ class Application(MDApp):
 
 	color = [1, 1, 1, 1]
 	bg_image = None
+	title = 'Fire Department'
 
 	def __init__(self, **kwargs):
 		super().__init__(**kwargs)
@@ -78,8 +80,10 @@ class Application(MDApp):
 		self.ui.screen_manager.add_widget(EmergenciesList(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(TagCreateModel(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(RankCreateModel(self.ui.path_manager))
+		self.ui.screen_manager.add_widget(PositionCreateModel(self.ui.path_manager))
+		self.ui.screen_manager.add_widget(HumanCreateModel(self.ui.path_manager))
 
-		self.ui.path_manager.move_to_screen('ranks_list')
+		self.ui.path_manager.move_to_screen('humans_list')
 
 	def build(self):
 		return self.ui
