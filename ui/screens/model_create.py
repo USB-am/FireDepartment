@@ -5,6 +5,7 @@ from ui.field.input import FDInput, FDNumberInput, FDPhoneInput
 from ui.field.button import FDRectangleButton
 from ui.field.select import FDMultiSelect
 from ui.field.switch import FDDoubleSwitch
+from ui.field.date import FDDate
 from ui.layout.dialogs import HumanDialogContent, EmergencyDialogContent
 
 
@@ -142,6 +143,10 @@ class HumanCreateModel(_BaseCreateModel):
 			icon_deactive=Human.icon,
 			title_active='Пожарный',
 			title_deactive='Комнатный')
+		self.work_date_field = FDDate(
+			icon='calendar',
+			title='Рабочий день',
+			btn_text='дд.мм.гггг')
 
 		self.save_btn = FDRectangleButton(title='Сохранить')
 
@@ -149,4 +154,5 @@ class HumanCreateModel(_BaseCreateModel):
 		self.add_content(self.phone_1_field)
 		self.add_content(self.phone_2_field)
 		self.add_content(self.is_firefigher_field)
+		self.add_content(self.work_date_field)
 		self.add_content(self.save_btn)
