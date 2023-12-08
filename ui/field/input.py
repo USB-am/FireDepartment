@@ -8,9 +8,9 @@ from config import INPUT_FIELD
 Builder.load_file(INPUT_FIELD)
 
 
-class FDInput(MDTextField):
+class _BaseInput(MDTextField):
 	'''
-	Поле ввода текста.
+	Родительский класс виджетов ввода.
 
 	~params:
 	hint_text: str - placeholder.
@@ -19,12 +19,13 @@ class FDInput(MDTextField):
 	hint_text = StringProperty()
 
 
-class FDNumberInput(MDTextField):
-	'''
-	Поле ввода целых чисел.
+class FDInput(_BaseInput):
+	''' Поле ввода текста '''
 
-	~params:
-	hint_text: str - placeholder.
-	'''
 
-	hint_text = StringProperty()
+class FDNumberInput(_BaseInput):
+	''' Поле ввода целых чисел '''
+
+
+class FDPhoneInput(_BaseInput):
+	'''  Поле ввода номера телефона '''
