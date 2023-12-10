@@ -6,13 +6,11 @@ from kivymd.uix.button import MDRaisedButton
 
 from . import BaseScrollScreen
 from app.path_manager import PathManager
-from data_base import Tag, Rank, Position, Human, Emergency
+from data_base import Tag, Rank, Position, Human, Emergency, Worktype
 from ui.layout.model_list_element import ModelListElement
 from ui.layout.dialogs import TagDialogContent, RankDialogContent, \
-	PositionDialogContent, HumanDialogContent, EmergencyDialogContent
-
-
-__all__ = ('TagsList',)
+	PositionDialogContent, HumanDialogContent, EmergencyDialogContent,\
+	WorktypeDialogContent
 
 
 class _ModelList(BaseScrollScreen):
@@ -152,5 +150,25 @@ class EmergenciesList(_ModelList):
 			list_elem.bind_edit_btn(lambda e=emergency: print(f'Edit btn {e.title}'))
 			list_elem.bind_info_btn(
 				lambda e=emergency: self.open_info_dialog(self.info_dialog_content(e))
+			)
+			self.add_content(list_elem)
+
+
+class WorktypesList(_ModelList):
+	''' Класс с элементами из модели Worktype '''
+
+	name = 'worktypes_list'
+	model = Worktype
+	toolbar_title = 'Графики работы'
+	info_dialog_content = WorktypeDialogContent
+
+	def fill_elements(self) -> None:
+		worktypes = self.model.query.order_by(Worktype.title).all()
+
+		for worktype in worktypes:
+			list_elem = ModelListElement(entry=worktype, icon=Worktype.icon)
+			list_elem.bind_edit_btn(lambda wt=worktype: print(f'Edit btn {wt.title}'))
+			list_elem.bind_info_btn(
+				lambda wt=worktype: self.open_info_dialog(self.info_dialog_content(wt))
 			)
 			self.add_content(list_elem)

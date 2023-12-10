@@ -1,12 +1,13 @@
 from . import BaseScrollScreen
 from app.path_manager import PathManager
-from data_base import db, Tag, Rank, Position, Human, Emergency
+from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype
 from ui.field.input import FDInput, FDNumberInput, FDPhoneInput
 from ui.field.button import FDRectangleButton
 from ui.field.select import FDMultiSelect
 from ui.field.switch import FDDoubleSwitch
-from ui.field.date import FDDate
-from ui.layout.dialogs import HumanDialogContent, EmergencyDialogContent
+from ui.field.date import FDDate, FDDateTime
+from ui.layout.dialogs import HumanDialogContent, EmergencyDialogContent, \
+	WorktypeDialogContent
 
 
 class _BaseCreateModel(BaseScrollScreen):
@@ -147,6 +148,13 @@ class HumanCreateModel(_BaseCreateModel):
 			icon='calendar',
 			title='Рабочий день',
 			btn_text='дд.мм.гггг')
+		self.worktype_field = FDMultiSelect(
+			title='График работы',
+			dialog_content=WorktypeDialogContent,
+			model=Worktype)
+		self.worktype_field.bind_btn(
+			lambda: self._path_manager.forward('create_worktype')
+		)
 
 		self.save_btn = FDRectangleButton(title='Сохранить')
 
@@ -155,4 +163,47 @@ class HumanCreateModel(_BaseCreateModel):
 		self.add_content(self.phone_2_field)
 		self.add_content(self.is_firefigher_field)
 		self.add_content(self.work_date_field)
+		self.add_content(self.worktype_field)
+		self.add_content(self.save_btn)
+
+
+class WorktypeCreateModel(_BaseCreateModel):
+	''' Страница создания модели Worktype '''
+
+	name = 'create_worktype'
+	model = Worktype
+	toolbar_title = 'Создание Графика работы'
+
+	def fill_elements(self) -> None:
+		self.title_field = FDInput(
+			hint_text='Название',
+			required=True,
+			helper_text_mode='on_error',
+			max_text_length=255,
+			helper_text='Поле не может быть пустым или неуникальным')
+		self.start_work_day_field = FDDateTime(
+			title='Начало рабочего дня',
+			btn1_text='чч:мм:сс',
+			btn2_text='дд.мм.гггг')
+		self.finish_work_day_field = FDDateTime(
+			title='Конец рабочего дня',
+			btn1_text='чч:мм:сс',
+			btn2_text='дд.мм.гггг')
+		self.work_day_range_field = FDNumberInput(
+			hint_text='Рабочие дни подряд',
+			required=True,
+			helper_text_mode='on_error',
+			helper_text='Поле не может быть пустым')
+		self.week_day_range_field = FDNumberInput(
+			hint_text='Выходные дни подряд',
+			required=True,
+			helper_text_mode='on_error',
+			helper_text='Поле не может быть пустым')
+		self.save_btn = FDRectangleButton(title='Сохранить')
+
+		self.add_content(self.title_field)
+		self.add_content(self.start_work_day_field)
+		self.add_content(self.finish_work_day_field)
+		self.add_content(self.work_day_range_field)
+		self.add_content(self.week_day_range_field)
 		self.add_content(self.save_btn)
