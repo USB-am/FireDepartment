@@ -3,7 +3,7 @@ import datetime
 from kivy.properties import StringProperty
 from kivymd.uix.picker import MDDatePicker
 
-from ui.field.button import FDButton
+from ui.field.button import FDButton, FDDoubleButton
 
 
 class FDDate(FDButton):
@@ -11,7 +11,9 @@ class FDDate(FDButton):
 	Поле ввода даты.
 
 	~params:
-	title: str - заголовок.
+	icon: str - иконка;
+	title: str - заголовок;
+	btn_text: str - текст на кнопке.
 	'''
 
 	icon = StringProperty()
@@ -61,6 +63,40 @@ class FDDate(FDButton):
 		self._date = date
 
 		if self._date is None:
-			self.ids.btn.text = 'дд.мм.гггг'
+			self.ids.btn.text = self.btn_text
 		else:
 			self.ids.btn.text = date.strftime('%d.%m.%Y')
+
+
+class FDDateTime(FDDoubleButton):
+	'''
+	Поле ввода даты.
+
+	~params:
+	title: str - заголовок;
+	btn1_text: str - текст на кнопке 1;
+	btn2_text: str - текст на кнопке 2.
+	'''
+
+	title = StringProperty()
+	btn1_text = StringProperty()
+	btn2_text = StringProperty()
+
+	def __init__(self, **options):
+		self._time: datetime.time = None
+		self._date: datetime.date = None
+
+		super().__init__(**options)
+
+		self.ids.btn1.bind(on_release=lambda *_: self.open_time_dialog())
+		self.ids.btn2.bind(on_release=lambda *_: self.open_date_dialog())
+
+	def open_time_dialog(self) -> None:
+		''' Открыть диалоговое окно выбора времени '''
+
+		print('Open time dialog')
+
+	def open_date_dialog(self) -> None:
+		''' Открыть диалоговое окно выбора даты '''
+
+		print('Open date dialog')
