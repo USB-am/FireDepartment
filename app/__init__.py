@@ -9,9 +9,9 @@ from ui.screens.main import MainScreen
 from ui.screens.options import OptionsScreen
 from ui.screens.calls import CallsScreen
 from ui.screens.model_list import TagsList, RanksList, PositionsList, \
-	HumansList, EmergenciesList
+	HumansList, EmergenciesList, WorktypesList
 from ui.screens.model_create import TagCreateModel, RankCreateModel, \
-	PositionCreateModel, HumanCreateModel
+	PositionCreateModel, HumanCreateModel, WorktypeCreateModel
 
 
 Builder.load_file(APP_SCREEN)
@@ -39,6 +39,8 @@ class FDUIManager(MDNavigationLayout):
 			self.move_screen_and_close_menu('humans_list'))
 		self.ids.emergencies_nav_btn.bind(on_release=lambda *_:
 			self.move_screen_and_close_menu('emergencies_list'))
+		self.ids.worktype_nav_btn.bind(on_release=lambda *_:
+			self.move_screen_and_close_menu('worktypes_list'))
 
 	def move_screen_and_close_menu(self, screen_name: str) -> None:
 		'''
@@ -78,12 +80,14 @@ class Application(MDApp):
 		self.ui.screen_manager.add_widget(PositionsList(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(HumansList(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(EmergenciesList(self.ui.path_manager))
+		self.ui.screen_manager.add_widget(WorktypesList(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(TagCreateModel(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(RankCreateModel(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(PositionCreateModel(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(HumanCreateModel(self.ui.path_manager))
+		self.ui.screen_manager.add_widget(WorktypeCreateModel(self.ui.path_manager))
 
-		self.ui.path_manager.move_to_screen('humans_list')
+		self.ui.path_manager.move_to_screen('create_worktype')
 
 	def build(self):
 		return self.ui

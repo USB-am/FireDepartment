@@ -4,7 +4,7 @@ from kivy.uix.widget import Widget
 from kivymd.uix.boxlayout import MDBoxLayout
 
 from config import DIALOG_LAYOUTS
-from data_base import db, Tag, Rank, Position, Human, Emergency
+from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype
 from ui.field.label import FDTitle, FDVerticalLabel
 from ui.field.button import FDIconButton
 
@@ -185,6 +185,49 @@ class EmergencyDialogContent(_BaseDialogContent):
 			self.ids.content.add_widget(FDVerticalLabel(
 				title='',
 				value='Срочный!'))
+
+		if entry.humans:
+			self.ids.content.add_widget(FDTitle(
+				title=f'Задействовано людей: {len(entry.humans)}'))
+
+			sorted_humans = sorted(entry.humans, key=lambda h: h.title)
+			for human in sorted_humans:
+				btn = FDIconButton(
+					icon=human.icon,
+					icon_btn='eye',
+					title=human.title
+				)
+				btn.bind_btn(lambda h=human: print(f'View {h.title} human'))
+
+				self.ids.content.add_widget(btn)
+
+
+class WorktypeDialogContent(_BaseDialogContent):
+	'''
+	Содержимое всплывающего окна с информацией о записи из модели Worktype.
+
+	~params:
+	entry: Worktype - запись из модели Worktype.
+	'''
+
+	def __init__(self, entry: Worktype, **options):
+		super().__init__(entry=entry, **options)
+
+		self.ids.content.add_widget(FDVerticalLabel(
+			title='Название',
+			value=entry.title))
+		self.ids.content.add_widget(FDVerticalLabel(
+			title='Начало рабочего дня',
+			value=entry.start_work_day.time().strftime('%H:%M:%S')))
+		self.ids.content.add_widget(FDVerticalLabel(
+			title='Конец рабочего дня',
+			value=entry.finish_work_day.time().strftime('%H:%M:%S')))
+		self.ids.content.add_widget(FDVerticalLabel(
+			title='Рабочих дней подряд',
+			value=str(entry.work_day_range)))
+		self.ids.content.add_widget(FDVerticalLabel(
+			title='Выходных подряд',
+			value=str(entry.week_day_range)))
 
 		if entry.humans:
 			self.ids.content.add_widget(FDTitle(
