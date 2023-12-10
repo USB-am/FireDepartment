@@ -26,6 +26,21 @@ class FDButton(MDBoxLayout):
 	btn_text = StringProperty()
 
 
+class FDDoubleButton(MDBoxLayout):
+	'''
+	Заголовок | Кнопка | Кнопка
+
+	~params:
+	title: str - заголовок;
+	btn1_text: str - текст на кнопке 1;
+	btn2_text: str - текст на кнопке 2.
+	'''
+
+	title = StringProperty()
+	btn1_text = StringProperty()
+	btn2_text = StringProperty()
+
+
 class FDIconButton(MDBoxLayout):
 	'''
 	Иконка | Заголовок | Кнопка (иконка)
