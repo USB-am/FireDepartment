@@ -30,7 +30,7 @@ class _ModelList(BaseScrollScreen):
 				f'create_{self.model.__tablename__.lower()}'
 		))
 
-		self.fill_elements()
+		self.bind(on_pre_enter=lambda *_: self.fill_elements())
 
 	def fill_elements(self) -> None:
 		pass
