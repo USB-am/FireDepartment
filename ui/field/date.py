@@ -1,7 +1,7 @@
 import datetime
 
 from kivy.properties import StringProperty
-from kivymd.uix.picker import MDDatePicker
+from kivymd.uix.picker import MDDatePicker, MDTimePicker
 
 from ui.field.button import FDButton, FDDoubleButton
 
@@ -88,15 +88,71 @@ class FDDateTime(FDDoubleButton):
 
 		super().__init__(**options)
 
-		self.ids.btn1.bind(on_release=lambda *_: self.open_time_dialog())
-		self.ids.btn2.bind(on_release=lambda *_: self.open_date_dialog())
+		self.time_button = self.ids.btn1
+		self.date_button = self.ids.btn2
+
+		self.time_button.bind(on_release=lambda *_: self.open_time_dialog())
+		self.date_button.bind(on_release=lambda *_: self.open_date_dialog())
 
 	def open_time_dialog(self) -> None:
 		''' Открыть диалоговое окно выбора времени '''
 
-		print('Open time dialog')
+		dialog = MDTimePicker()
+		dialog.bind(
+			on_save=lambda instance, time:
+				self._save_time_and_close_dialog(time, dialog),
+			on_cancel=lambda *_:
+				self._save_time_and_close_dialog(None, dialog)
+		)
+
+		dialog.open()
+
+	def _save_time_and_close_dialog(self, time: datetime.time, dialog: MDTimePicker) -> None:
+		self.set_time(time)
+		dialog.dismiss()
+
+	def set_time(self, time: datetime.time) -> None:
+		self._time = time
+
+		if time is not None:
+			self.time_button.text = time.strftime('%H:%M:%S')
+		else:
+			self.time_button.text = self.btn1_text
 
 	def open_date_dialog(self) -> None:
 		''' Открыть диалоговое окно выбора даты '''
 
-		print('Open date dialog')
+		dialog = MDDatePicker()
+		dialog.bind(
+			on_save=lambda instance, date, range:
+				self._save_date_and_close_dialog(date, dialog),
+			on_cancel=lambda *_:
+				self._save_date_and_close_dialog(None, dialog)
+		)
+
+		dialog.open()
+
+	def _save_date_and_close_dialog(self, date: datetime.date, dialog: MDDatePicker) -> None:
+		self.set_date(date)
+		dialog.dismiss()
+
+	def set_date(self, date: datetime.date) -> None:
+		self._date = date
+
+		if date is not None:
+			self.date_button.text = date.strftime('%d.%m.%Y')
+		else:
+			self.date_button.text = self.btn2_text
+
+	def set_value(self, datetime_: datetime.datetime) -> None:
+		time = datetime_.time()
+		date = datetime_.date()
+
+		self.set_time(time)
+		self.set_date(date)
+
+	def get_value(self) -> datetime.datetime:
+		if None in (self._date, self._time):
+			return None
+
+		return datetime.combine(self._date, self._time)
