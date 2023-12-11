@@ -29,6 +29,11 @@ class _FDScreen(Screen):
 
 		self.ids.content.add_widget(widget)
 
+	def clear_content(self) -> None:
+		''' Очищает содержимое поля с контентом '''
+
+		self.ids.content.clear_widgets()
+
 	def open_menu(self, *events) -> None:
 		''' Открывает боковое меню. '''
 

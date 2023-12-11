@@ -163,6 +163,7 @@ class WorktypesList(_ModelList):
 	info_dialog_content = WorktypeDialogContent
 
 	def fill_elements(self) -> None:
+		self.clear_content()
 		worktypes = self.model.query.order_by(Worktype.title).all()
 
 		for worktype in worktypes:
