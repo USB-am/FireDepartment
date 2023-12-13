@@ -8,6 +8,19 @@ from config import SWITCH_FIELD
 Builder.load_file(SWITCH_FIELD)
 
 
+class FDSwitch(MDBoxLayout):
+	'''
+	Поле с переключателем.
+
+	~params:
+	icon: str - иконка;
+	title: str - заголовок.
+	'''
+
+	icon = StringProperty()
+	title = StringProperty()
+
+
 class FDDoubleSwitch(MDBoxLayout):
 	'''
 	Переключатель с переключаемыми иконками.
