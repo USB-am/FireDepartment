@@ -11,7 +11,8 @@ from ui.screens.calls import CallsScreen
 from ui.screens.model_list import TagsList, RanksList, PositionsList, \
 	HumansList, EmergenciesList, WorktypesList
 from ui.screens.model_create import TagCreateModel, RankCreateModel, \
-	PositionCreateModel, HumanCreateModel, WorktypeCreateModel
+	PositionCreateModel, HumanCreateModel, WorktypeCreateModel, \
+	EmergencyCreateModel
 
 
 Builder.load_file(APP_SCREEN)
@@ -85,6 +86,7 @@ class Application(MDApp):
 		self.ui.screen_manager.add_widget(RankCreateModel(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(PositionCreateModel(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(HumanCreateModel(self.ui.path_manager))
+		self.ui.screen_manager.add_widget(EmergencyCreateModel(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(WorktypeCreateModel(self.ui.path_manager))
 
 		self.ui.path_manager.move_to_screen('create_worktype')
