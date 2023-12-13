@@ -4,10 +4,10 @@ from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype
 from ui.field.input import FDInput, FDNumberInput, FDPhoneInput
 from ui.field.button import FDRectangleButton
 from ui.field.select import FDMultiSelect
-from ui.field.switch import FDDoubleSwitch
+from ui.field.switch import FDSwitch, FDDoubleSwitch
 from ui.field.date import FDDate, FDDateTime
 from ui.layout.dialogs import HumanDialogContent, EmergencyDialogContent, \
-	WorktypeDialogContent
+	WorktypeDialogContent, TagDialogContent
 
 
 class _BaseCreateModel(BaseScrollScreen):
@@ -164,6 +164,49 @@ class HumanCreateModel(_BaseCreateModel):
 		self.add_content(self.is_firefigher_field)
 		self.add_content(self.work_date_field)
 		self.add_content(self.worktype_field)
+		self.add_content(self.save_btn)
+
+
+class EmergencyCreateModel(_BaseCreateModel):
+	''' Страница создания модели Emergency '''
+
+	name = 'create_emergency'
+	model = Emergency
+	toolbar_title = 'Создание Вызова'
+
+	def fill_elements(self) -> None:
+		self.title_field = FDInput(
+			hint_text='Название',
+			required=True,
+			helper_text_mode='on_error',
+			max_text_length=255,
+			helper_text='Поле не может быть пустым или неуникальным')
+		self.description_field = FDInput(
+			hint_text='Описание')
+		self.urgent_field = FDSwitch(
+			icon='truck-fast',
+			title='Срочный?')
+		self.tags_field = FDMultiSelect(
+			title='Теги',
+			dialog_content=TagDialogContent,
+			model=Tag)
+		self.tags_field.bind_btn(
+			lambda: self._path_manager.forward('create_tag')
+		)
+		self.humans_field = FDMultiSelect(
+			title='Люди',
+			dialog_content=HumanDialogContent,
+			model=Human)
+		self.humans_field.bind_btn(
+			lambda: self._path_manager.forward('create_human')
+		)
+		self.save_btn = FDRectangleButton(title='Сохранить')
+
+		self.add_content(self.title_field)
+		self.add_content(self.description_field)
+		self.add_content(self.urgent_field)
+		self.add_content(self.tags_field)
+		self.add_content(self.humans_field)
 		self.add_content(self.save_btn)
 
 
