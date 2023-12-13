@@ -159,4 +159,4 @@ class FDDateTime(FDDoubleButton):
 		if None in (self._date, self._time):
 			return None
 
-		return datetime.combine(self._date, self._time)
+		return datetime.datetime.combine(self._date, self._time)
