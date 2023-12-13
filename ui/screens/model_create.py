@@ -1,7 +1,8 @@
 from . import BaseScrollScreen
 from app.path_manager import PathManager
 from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype
-from ui.field.input import FDInput, FDNumberInput, FDPhoneInput
+from ui.field.input import FDInput, FDMultilineInput, FDNumberInput, \
+	FDPhoneInput
 from ui.field.button import FDRectangleButton
 from ui.field.select import FDMultiSelect
 from ui.field.switch import FDSwitch, FDDoubleSwitch
@@ -181,7 +182,7 @@ class EmergencyCreateModel(_BaseCreateModel):
 			helper_text_mode='on_error',
 			max_text_length=255,
 			helper_text='Поле не может быть пустым или неуникальным')
-		self.description_field = FDInput(
+		self.description_field = FDMultilineInput(
 			hint_text='Описание')
 		self.urgent_field = FDSwitch(
 			icon='truck-fast',
