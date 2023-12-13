@@ -23,6 +23,10 @@ class FDInput(_BaseInput):
 	''' Поле ввода текста '''
 
 
+class FDMultilineInput(_BaseInput):
+	''' Поле ввода многострочного текста '''
+
+
 class FDNumberInput(_BaseInput):
 	''' Поле ввода целых чисел '''
 
