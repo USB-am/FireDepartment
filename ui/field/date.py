@@ -1,4 +1,5 @@
 import datetime
+from typing import Union
 
 from kivy.properties import StringProperty
 from kivymd.uix.picker import MDDatePicker, MDTimePicker
@@ -66,6 +67,9 @@ class FDDate(FDButton):
 			self.ids.btn.text = self.btn_text
 		else:
 			self.ids.btn.text = date.strftime('%d.%m.%Y')
+
+	def get_value(self) -> Union[datetime.date, None]:
+		return self._date
 
 
 class FDDateTime(FDDoubleButton):
@@ -151,7 +155,7 @@ class FDDateTime(FDDoubleButton):
 		self.set_time(time)
 		self.set_date(date)
 
-	def get_value(self) -> datetime.datetime:
+	def get_value(self) -> Union[datetime.datetime, None]:
 		if None in (self._date, self._time):
 			return None
 

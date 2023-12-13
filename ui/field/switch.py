@@ -8,7 +8,17 @@ from config import SWITCH_FIELD
 Builder.load_file(SWITCH_FIELD)
 
 
-class FDSwitch(MDBoxLayout):
+class _BaseSwitch(MDBoxLayout):
+	''' Родительский класс для всех полей Switch '''
+
+	def get_value(self) -> bool:
+		return self.ids.switch.active
+
+	def set_value(self, value: bool) -> None:
+		self.ids.switch.active = value
+
+
+class FDSwitch(_BaseSwitch):
 	'''
 	Поле с переключателем.
 
@@ -21,7 +31,7 @@ class FDSwitch(MDBoxLayout):
 	title = StringProperty()
 
 
-class FDDoubleSwitch(MDBoxLayout):
+class FDDoubleSwitch(_BaseSwitch):
 	'''
 	Переключатель с переключаемыми иконками.
 

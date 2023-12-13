@@ -18,6 +18,12 @@ class _BaseInput(MDTextField):
 
 	hint_text = StringProperty()
 
+	def get_value(self) -> str:
+		return self.text
+
+	def set_value(self, text: str) -> None:
+		self.text = text
+
 
 class FDInput(_BaseInput):
 	''' Поле ввода текста '''

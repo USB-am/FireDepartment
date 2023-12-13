@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, List
 
 from kivy.lang.builder import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
@@ -17,7 +17,9 @@ class FDMultiSelect(MDBoxLayout):
 
 	~params:
 	title: str - текст над списком;
-	model: db.Model - модель БД, элементы которой будут отображены.
+	dialog_content: MDBoxLayout - содержимое окна с информацией;
+	model: db.Model - модель БД, элементы которой будут отображены;
+	group: str=None - группа объектов. Если None, доступен выбор множества элементов.
 	'''
 
 	def __init__(self, title: str, dialog_content: MDBoxLayout, model: db.Model, group: str=None):
@@ -28,6 +30,7 @@ class FDMultiSelect(MDBoxLayout):
 
 		super().__init__()
 
+		self.elements: List[FDSelectListElement] = []
 		self.fill_elements()
 
 	def fill_elements(self) -> None:
@@ -39,9 +42,21 @@ class FDMultiSelect(MDBoxLayout):
 				entry=entry,
 				info_content=self.dialog_content,
 				group=self.group)
+			self.elements.append(list_elem)
 			self.ids.content.add_widget(list_elem)
 
 	def bind_btn(self, callback: Callable) -> None:
 		''' Привязать событие нажатия кнопки на верхней панели '''
 
 		self.ids.add_btn.bind(on_release=lambda *_: callback())
+
+	def get_value(self) -> List[db.Model]:
+		output = [element for element in self.elements \
+			if element.ids.checkbox.active]
+
+		return output
+
+	def set_value(self, entries: List[db.Model]) -> None:
+		for element in self.elements:
+			if element.entry in entries:
+				element.ids.checkbox.active = True
