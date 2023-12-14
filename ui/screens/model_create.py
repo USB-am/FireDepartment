@@ -14,6 +14,7 @@ from ui.field.date import FDDate, FDDateTime
 from ui.layout.dialogs import HumanDialogContent, EmergencyDialogContent, \
 	WorktypeDialogContent, TagDialogContent, RankDialogContent, \
 	PositionDialogContent
+from validators.create_model_validators import UniqueValidator, EmptyValidator
 
 
 class _BaseCreateModel(BaseScrollScreen):
@@ -60,8 +61,8 @@ class TagCreateModel(_BaseCreateModel):
 	def fill_elements(self) -> None:
 		self.title_field = FDInput(
 			hint_text='Название', required=True,
-			helper_text_mode='on_error', max_text_length=255,
-			helper_text='Поле не может быть пустым или неуникальным')
+			helper_text_mode='persistent', max_text_length=255, helper_text='',
+			validators=[UniqueValidator(Tag, 'title'), EmptyValidator(Tag, 'title')])
 		self.emergencies_field = FDMultiSelect(
 			title='Вызовы',
 			dialog_content=EmergencyDialogContent,
@@ -92,16 +93,15 @@ class RankCreateModel(_BaseCreateModel):
 
 	def fill_elements(self) -> None:
 		self.title_field = FDInput(
-			hint_text='Название',
-			required=True,
-			helper_text_mode='on_error',
-			max_text_length=255,
-			helper_text='Поле не может быть пустым или неуникальным')
+			hint_text='Название', required=True, helper_text_mode='persistent',
+			max_text_length=255, helper_text='',
+			validators=[UniqueValidator(Rank, 'title'), EmptyValidator(None, None)])
 		self.priority_field = FDNumberInput(
 			hint_text='Приоритет',
 			required=True,
 			helper_text_mode='on_error',
-			helper_text='Поле не может быть пустым')
+			helper_text='',
+			validators=[EmptyValidator(None, None)])
 		self.humans_field = FDMultiSelect(
 			title='Люди',
 			dialog_content=HumanDialogContent,
@@ -139,7 +139,8 @@ class PositionCreateModel(_BaseCreateModel):
 			required=True,
 			helper_text_mode='on_error',
 			max_text_length=255,
-			helper_text='Поле не может быть пустым или неуникальным')
+			helper_text='',
+			validators=[UniqueValidator(Position, 'title'), EmptyValidator(None, None)])
 		self.humans_field = FDMultiSelect(
 			title='Люди',
 			dialog_content=HumanDialogContent,
@@ -174,7 +175,8 @@ class HumanCreateModel(_BaseCreateModel):
 			required=True,
 			helper_text_mode='on_error',
 			max_text_length=255,
-			helper_text='Поле не может быть пустым')
+			helper_text='',
+			validators=[EmptyValidator(None, None)])
 		self.phone_1_field = FDPhoneInput(
 			hint_text='Телефон',
 			max_text_length=255)
@@ -193,7 +195,8 @@ class HumanCreateModel(_BaseCreateModel):
 		self.worktype_field = FDMultiSelect(
 			title='График работы',
 			dialog_content=WorktypeDialogContent,
-			model=Worktype)
+			model=Worktype,
+			group='human_worktype')
 		self.worktype_field.bind_btn(
 			lambda: self._path_manager.forward('create_worktype')
 		)
@@ -258,7 +261,8 @@ class EmergencyCreateModel(_BaseCreateModel):
 			required=True,
 			helper_text_mode='on_error',
 			max_text_length=255,
-			helper_text='Поле не может быть пустым или неуникальным')
+			helper_text='',
+			validators=[UniqueValidator(Emergency, 'title'), EmptyValidator(None, None)])
 		self.description_field = FDMultilineInput(
 			hint_text='Описание')
 		self.urgent_field = FDSwitch(
@@ -314,7 +318,8 @@ class WorktypeCreateModel(_BaseCreateModel):
 			required=True,
 			helper_text_mode='on_error',
 			max_text_length=255,
-			helper_text='Поле не может быть пустым или неуникальным')
+			helper_text='',
+			validators=[UniqueValidator(Worktype, 'title'), EmptyValidator(None, None)])
 		self.start_work_day_field = FDDateTime(
 			title='Начало рабочего дня',
 			btn1_text='чч:мм:сс',
