@@ -37,12 +37,16 @@ class _BaseCreateModel(BaseScrollScreen):
 	def fill_elements(self) -> None:
 		pass
 
+	def clear_form(self) -> None:
+		pass
+
 	def save_and_back(self) -> None:
 		''' Сделать запись в БД и вернуться на прошлую страницу '''
 
 		print('params:')
 		for param, field in self.params.items():
 			print(param, field.get_value())
+		self.clear_form()
 		self._path_manager.back()
 
 
@@ -73,6 +77,10 @@ class TagCreateModel(_BaseCreateModel):
 			'title': self.title_field,
 			'emergencys': self.emergencies_field
 		})
+
+	def clear_form(self) -> None:
+		self.title_field.set_value('')
+		self.emergencies_field.set_value([])
 
 
 class RankCreateModel(_BaseCreateModel):
@@ -112,6 +120,11 @@ class RankCreateModel(_BaseCreateModel):
 			'humans': self.humans_field
 		})
 
+	def clear_form(self) -> None:
+		self.title_field.set_value('')
+		self.priority_field.set_value('')
+		self.humans_field.set_value([])
+
 
 class PositionCreateModel(_BaseCreateModel):
 	''' Страница создания модели Position '''
@@ -142,6 +155,10 @@ class PositionCreateModel(_BaseCreateModel):
 			'title': self.title_field,
 			'humans': self.humans_field
 		})
+
+	def clear_form(self) -> None:
+		self.title_field.set_value('')
+		self.humans_field.set_value([])
 
 
 class HumanCreateModel(_BaseCreateModel):
@@ -217,6 +234,16 @@ class HumanCreateModel(_BaseCreateModel):
 			'position': self.position_field
 		})
 
+	def clear_form(self) -> None:
+		self.title_field.set_value('')
+		self.phone_1_field.set_value('')
+		self.phone_2_field.set_value('')
+		self.is_firefigher_field.set_value(False)
+		self.work_date_field.set_value(None)
+		self.worktype_field.set_value([])
+		self.rank_field.set_value([])
+		self.position_field.set_value([])
+
 
 class EmergencyCreateModel(_BaseCreateModel):
 	''' Страница создания модели Emergency '''
@@ -265,6 +292,13 @@ class EmergencyCreateModel(_BaseCreateModel):
 			'tags': self.tags_field,
 			'humans': self.humans_field
 		})
+
+	def clear_form(self) -> None:
+		self.title_field.set_value('')
+		self.description_field.set_value('')
+		self.urgent_field.set_value(False)
+		self.tags_field.set_value([])
+		self.humans_field.set_value([])
 
 
 class WorktypeCreateModel(_BaseCreateModel):
@@ -322,3 +356,11 @@ class WorktypeCreateModel(_BaseCreateModel):
 			'week_day_range': self.week_day_range_field,
 			'humans': self.humans_field,
 		})
+
+	def clear_form(self) -> None:
+		self.title_field.set_value('')
+		self.start_work_day_field.set_value(None)
+		self.finish_work_day_field.set_value(None)
+		self.work_day_range_field.set_value('')
+		self.week_day_range_field.set_value('')
+		self.humans_field.set_value([])

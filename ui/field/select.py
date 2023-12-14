@@ -60,3 +60,5 @@ class FDMultiSelect(MDBoxLayout):
 		for element in self.elements:
 			if element.entry in entries:
 				element.ids.checkbox.active = True
+			else:
+				element.ids.checkbox.active = False

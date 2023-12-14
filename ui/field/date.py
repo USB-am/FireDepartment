@@ -148,12 +148,16 @@ class FDDateTime(FDDoubleButton):
 		else:
 			self.date_button.text = self.btn2_text
 
-	def set_value(self, datetime_: datetime.datetime) -> None:
-		time = datetime_.time()
-		date = datetime_.date()
+	def set_value(self, datetime_: Union[datetime.datetime, None]) -> None:
+		if datetime_ is None:
+			self.set_time(None)
+			self.set_date(None)
+		else:
+			time = datetime_.time()
+			date = datetime_.date()
 
-		self.set_time(time)
-		self.set_date(date)
+			self.set_time(time)
+			self.set_date(date)
 
 	def get_value(self) -> Union[datetime.datetime, None]:
 		if None in (self._date, self._time):
