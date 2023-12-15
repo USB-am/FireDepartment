@@ -33,6 +33,7 @@ class _ModelList(BaseScrollScreen):
 		self.bind(on_pre_enter=lambda *_: self.fill_elements())
 
 	def fill_elements(self) -> None:
+		self.clear_content()
 		pass
 
 	def open_info_dialog(self, content: MDBoxLayout) -> None:
@@ -59,6 +60,7 @@ class TagsList(_ModelList):
 	info_dialog_content = TagDialogContent
 
 	def fill_elements(self) -> None:
+		self.clear_content()
 		tags = self.model.query.order_by(Tag.title).all()
 
 		for tag in tags:
@@ -79,6 +81,7 @@ class RanksList(_ModelList):
 	info_dialog_content = RankDialogContent
 
 	def fill_elements(self) -> None:
+		self.clear_content()
 		ranks = self.model.query.order_by(Rank.title).all()
 
 		for rank in ranks:
@@ -99,6 +102,7 @@ class PositionsList(_ModelList):
 	info_dialog_content = PositionDialogContent
 
 	def fill_elements(self) -> None:
+		self.clear_content()
 		positions = self.model.query.order_by(Position.title).all()
 
 		for position in positions:
@@ -119,6 +123,7 @@ class HumansList(_ModelList):
 	info_dialog_content = HumanDialogContent
 
 	def fill_elements(self) -> None:
+		self.clear_content()
 		humans = self.model.query.order_by(Human.title).all()
 
 		for human in humans:
@@ -143,6 +148,7 @@ class EmergenciesList(_ModelList):
 	info_dialog_content = EmergencyDialogContent
 
 	def fill_elements(self) -> None:
+		self.clear_content()
 		emergencies = self.model.query.order_by(Emergency.title).all()
 
 		for emergency in emergencies:

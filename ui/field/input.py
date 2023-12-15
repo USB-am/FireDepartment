@@ -1,3 +1,5 @@
+from typing import Union
+
 from kivy.lang.builder import Builder
 from kivy.properties import StringProperty, ListProperty
 from kivymd.uix.textfield import MDTextField
@@ -20,8 +22,11 @@ class _BaseInput(MDTextField):
 	hint_text = StringProperty()
 	validators = ListProperty([])
 
-	def get_value(self) -> str:
-		return self.text
+	def get_value(self) -> Union[str, None]:
+		if self.text:
+			return self.text
+		else:
+			return None
 
 	def set_value(self, text: str) -> None:
 		self.text = text

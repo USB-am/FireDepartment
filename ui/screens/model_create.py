@@ -5,6 +5,7 @@ from kivy.uix.widget import Widget
 from . import BaseScrollScreen
 from app.path_manager import PathManager
 from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype
+from data_base.manager import write_entry
 from ui.field.input import FDInput, FDMultilineInput, FDNumberInput, \
 	FDPhoneInput
 from ui.field.button import FDRectangleButton
@@ -43,12 +44,17 @@ class _BaseCreateModel(BaseScrollScreen):
 
 	def save_and_back(self) -> None:
 		''' Сделать запись в БД и вернуться на прошлую страницу '''
-
-		print('params:')
-		for param, field in self.params.items():
-			print(param, field.get_value())
+		self.save()
 		self.clear_form()
 		self._path_manager.back()
+
+	def save(self) -> db.Model:
+		''' Сделать запись в БД '''
+		model_params = {key: widget.get_value() \
+			for key, widget in self.params.items()}
+		entry = write_entry(self.model, model_params)
+
+		return entry
 
 
 class TagCreateModel(_BaseCreateModel):
