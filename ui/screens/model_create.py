@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Union
 
 from kivy.uix.widget import Widget
 
@@ -48,13 +48,17 @@ class _BaseCreateModel(BaseScrollScreen):
 		self.clear_form()
 		self._path_manager.back()
 
-	def save(self) -> db.Model:
+	def save(self) -> Union[db.Model, None]:
 		''' Сделать запись в БД '''
-		model_params = {key: widget.get_value() \
-			for key, widget in self.params.items()}
-		entry = write_entry(self.model, model_params)
 
-		return entry
+		try:
+			model_params = {key: widget.get_value() \
+				for key, widget in self.params.items()}
+			entry = write_entry(self.model, model_params)
+
+			return entry
+		except Exception as error:
+			print(error)
 
 
 class TagCreateModel(_BaseCreateModel):
