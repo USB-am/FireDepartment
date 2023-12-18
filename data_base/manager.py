@@ -1,4 +1,6 @@
 from typing import Any, Dict, Type
+from sqlalchemy.orm import sessionmaker, exc
+from sqlalchemy.exc import IntegrityError
 
 from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype
 from exceptions.data_base import DBCommitError, DBAddError
@@ -7,12 +9,12 @@ from exceptions.data_base import DBCommitError, DBAddError
 def add(func):
 	def wrapper(*args, **kwargs):
 		try:
-			output = func(*args, **kwargs)
-			db.session.add(output)
+			entry = func(*args, **kwargs)
+			db.session.add(entry)
 
-			return output
+			return entry
 
-		except Exception as error:
+		except exc.sa_exc.SQLAlchemyError as error:
 			raise DBAddError
 
 	return wrapper
@@ -22,11 +24,11 @@ def commit(func):
 	def wrapper(*args, **kwargs):
 		try:
 			output = func(*args, **kwargs)
-			db.commit()
+			db.session.commit()
 
 			return output
 
-		except Exception as error:
+		except exc.sa_exc.SQLAlchemyError as error:
 			raise DBCommitError
 
 	return wrapper
@@ -44,8 +46,4 @@ def write_entry(model: Type[db.Model], params: Dict[str, Any]) -> db.Model:
 	'''
 
 	entry = model(**params)
-
-	# db.session.add(entry)
-	# db.session.commit()
-
 	return entry
