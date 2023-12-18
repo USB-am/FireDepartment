@@ -1,6 +1,8 @@
 from typing import Dict, Union
 
 from kivy.uix.widget import Widget
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.button import MDRaisedButton
 
 from . import BaseScrollScreen
 from app.path_manager import PathManager
@@ -9,13 +11,14 @@ from data_base.manager import write_entry
 from ui.field.input import FDInput, FDMultilineInput, FDNumberInput, \
 	FDPhoneInput
 from ui.field.button import FDRectangleButton
-from ui.field.select import FDMultiSelect
+from ui.field.select import FDSelect, FDMultiSelect
 from ui.field.switch import FDSwitch, FDDoubleSwitch
 from ui.field.date import FDDate, FDDateTime
 from ui.layout.dialogs import HumanDialogContent, EmergencyDialogContent, \
 	WorktypeDialogContent, TagDialogContent, RankDialogContent, \
 	PositionDialogContent
-from validators.create_model_validators import UniqueValidator, EmptyValidator
+from validators.create_model_validators import UniqueValidator, EmptyValidator, \
+	_check_unique_column
 
 
 class _BaseCreateModel(BaseScrollScreen):
@@ -44,21 +47,34 @@ class _BaseCreateModel(BaseScrollScreen):
 
 	def save_and_back(self) -> None:
 		''' Сделать запись в БД и вернуться на прошлую страницу '''
-		self.save()
-		self.clear_form()
-		self._path_manager.back()
 
-	def save(self) -> Union[db.Model, None]:
+		model_params = {key: widget.get_value() \
+			for key, widget in self.params.items()}
+		confirmed = self.is_valid(model_params)
+
+		if confirmed:
+			self.save(model_params)
+			self.clear_form()
+			self._path_manager.back()
+		else:
+			ok_btn = MDRaisedButton(text='Ок')
+			dialog = MDDialog(
+				title='Ошибка',
+				text='Некоторые поля заполнены неверно.',
+				buttons=[ok_btn,]
+			)
+			ok_btn.bind(on_release=lambda *_: dialog.dismiss())
+
+			dialog.open()
+
+	def save(self, params: Dict[str, Widget]) -> None:
 		''' Сделать запись в БД '''
 
-		try:
-			model_params = {key: widget.get_value() \
-				for key, widget in self.params.items()}
-			entry = write_entry(self.model, model_params)
+		write_entry(self.model, params)
 
-			return entry
-		except Exception as error:
-			print(error)
+	def is_valid(self, params: Dict[str, Widget]) -> bool:
+		''' Валидация всех полей формы '''
+		raise AttributeError('Сhild classes of _BaseCreateModel must have an is_valid method')
 
 
 class TagCreateModel(_BaseCreateModel):
@@ -92,6 +108,14 @@ class TagCreateModel(_BaseCreateModel):
 	def clear_form(self) -> None:
 		self.title_field.set_value('')
 		self.emergencies_field.set_value([])
+
+	def is_valid(self, params: Dict[str, Widget]) -> bool:
+		checks = [
+			params['title'] is not None,
+			_check_unique_column(self.model, 'title', params['title']),
+		]
+
+		return all(checks)
 
 
 class RankCreateModel(_BaseCreateModel):
@@ -135,6 +159,15 @@ class RankCreateModel(_BaseCreateModel):
 		self.priority_field.set_value('')
 		self.humans_field.set_value([])
 
+	def is_valid(self, params: Dict[str, Widget]) -> bool:
+		checks = [
+			params['title'] is not None,
+			_check_unique_column(self.model, 'title', params['title']),
+			params['priority'] is not None
+		]
+
+		return all(checks)
+
 
 class PositionCreateModel(_BaseCreateModel):
 	''' Страница создания модели Position '''
@@ -171,6 +204,14 @@ class PositionCreateModel(_BaseCreateModel):
 		self.title_field.set_value('')
 		self.humans_field.set_value([])
 
+	def is_valid(self, params: Dict[str, Widget]) -> bool:
+		checks = [
+			params['title'] is not None,
+			_check_unique_column(self.model, 'title', params['title']),
+		]
+
+		return all(checks)
+
 
 class HumanCreateModel(_BaseCreateModel):
 	''' Страница создания модели Human '''
@@ -202,7 +243,7 @@ class HumanCreateModel(_BaseCreateModel):
 			icon='calendar',
 			title='Рабочий день',
 			btn_text='дд.мм.гггг')
-		self.worktype_field = FDMultiSelect(
+		self.worktype_field = FDSelect(
 			title='График работы',
 			dialog_content=WorktypeDialogContent,
 			model=Worktype,
@@ -210,7 +251,7 @@ class HumanCreateModel(_BaseCreateModel):
 		self.worktype_field.bind_btn(
 			lambda: self._path_manager.forward('create_worktype')
 		)
-		self.rank_field = FDMultiSelect(
+		self.rank_field = FDSelect(
 			title='Звание',
 			dialog_content=RankDialogContent,
 			model=Rank,
@@ -218,7 +259,7 @@ class HumanCreateModel(_BaseCreateModel):
 		self.rank_field.bind_btn(
 			lambda: self._path_manager.forward('create_rank')
 		)
-		self.position_field = FDMultiSelect(
+		self.position_field = FDSelect(
 			title='Должность',
 			dialog_content=PositionDialogContent,
 			model=Position,
@@ -256,6 +297,14 @@ class HumanCreateModel(_BaseCreateModel):
 		self.worktype_field.set_value([])
 		self.rank_field.set_value([])
 		self.position_field.set_value([])
+
+	def is_valid(self, params: Dict[str, Widget]) -> bool:
+		checks = [
+			params['title'] is not None,
+			_check_unique_column(self.model, 'title', params['title']),
+		]
+
+		return all(checks)
 
 
 class EmergencyCreateModel(_BaseCreateModel):
@@ -313,6 +362,14 @@ class EmergencyCreateModel(_BaseCreateModel):
 		self.urgent_field.set_value(False)
 		self.tags_field.set_value([])
 		self.humans_field.set_value([])
+
+	def is_valid(self, params: Dict[str, Widget]) -> bool:
+		checks = [
+			params['title'] is not None,
+			_check_unique_column(self.model, 'title', params['title']),
+		]
+
+		return all(checks)
 
 
 class WorktypeCreateModel(_BaseCreateModel):
@@ -379,3 +436,15 @@ class WorktypeCreateModel(_BaseCreateModel):
 		self.work_day_range_field.set_value('')
 		self.week_day_range_field.set_value('')
 		self.humans_field.set_value([])
+
+	def is_valid(self, params: Dict[str, Widget]) -> bool:
+		checks = [
+			params['title'] is not None,
+			_check_unique_column(self.model, 'title', params['title']),
+			params['start_work_day'] is not None,
+			params['finish_work_day'] is not None,
+			params['work_day_range'] is not None,
+			params['week_day_range'] is not None
+		]
+
+		return all(checks)
