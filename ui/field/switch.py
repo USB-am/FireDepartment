@@ -57,3 +57,7 @@ class FDDoubleSwitch(_BaseSwitch):
 		else:
 			icon.icon = self.icon_deactive
 			title.text = self.title_deactive
+
+	def set_value(self, value: bool) -> None:
+		super().set_value(value)
+		self._pressed_to_switch()

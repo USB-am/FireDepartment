@@ -70,7 +70,6 @@ class FDSelect(_BaseSelect):
 		return None
 
 	def set_value(self, entry: db.Model) -> None:
-		print(f'FDSelect.set_value(entry={entry})')
 		for element in self.elements:
 			if element.entry.id == entry:
 				element.ids.checkbox.active = True

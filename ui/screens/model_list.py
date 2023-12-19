@@ -6,7 +6,7 @@ from kivymd.uix.button import MDRaisedButton
 
 from . import BaseScrollScreen
 from app.path_manager import PathManager
-from data_base import Tag, Rank, Position, Human, Emergency, Worktype
+from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype
 from ui.layout.model_list_element import ModelListElement
 from ui.layout.dialogs import TagDialogContent, RankDialogContent, \
 	PositionDialogContent, HumanDialogContent, EmergencyDialogContent,\
@@ -34,7 +34,6 @@ class _ModelList(BaseScrollScreen):
 
 	def fill_elements(self) -> None:
 		self.clear_content()
-		pass
 
 	def open_info_dialog(self, content: MDBoxLayout) -> None:
 		''' Открыть диалогов окно с информацией '''
@@ -49,6 +48,18 @@ class _ModelList(BaseScrollScreen):
 		ok_btn.bind(on_release=lambda *_: dialog.dismiss())
 
 		dialog.open()
+
+	def move_to_edit_and_fill_fields(self, entry: db.Model) -> None:
+		'''
+		Перейти на экран редактирования записи.
+
+		~params:
+		entry: db.Model - запись, которая будет редактироваться.
+		'''
+
+		next_screen = self._path_manager.forward(
+			f'edit_{self.model.__tablename__.lower()}')
+		next_screen.fill_fields(entry)
 
 
 class TagsList(_ModelList):
@@ -65,7 +76,8 @@ class TagsList(_ModelList):
 
 		for tag in tags:
 			list_elem = ModelListElement(entry=tag, icon=Tag.icon)
-			list_elem.bind_edit_btn(lambda t=tag: print(f'Edit btn {t.title}'))
+			list_elem.bind_edit_btn(
+				lambda t=tag: self.move_to_edit_and_fill_fields(t))
 			list_elem.bind_info_btn(
 				lambda t=tag: self.open_info_dialog(self.info_dialog_content(t))
 			)
@@ -86,7 +98,8 @@ class RanksList(_ModelList):
 
 		for rank in ranks:
 			list_elem = ModelListElement(entry=rank, icon=Rank.icon)
-			list_elem.bind_edit_btn(lambda r=rank: print(f'Edit btn {r.title}'))
+			list_elem.bind_edit_btn(
+				lambda r=rank: self.move_to_edit_and_fill_fields(r))
 			list_elem.bind_info_btn(
 				lambda r=rank: self.open_info_dialog(self.info_dialog_content(r))
 			)
@@ -107,7 +120,8 @@ class PositionsList(_ModelList):
 
 		for position in positions:
 			list_elem = ModelListElement(entry=position, icon=Position.icon)
-			list_elem.bind_edit_btn(lambda p=position: print(f'Edit btn {p.title}'))
+			list_elem.bind_edit_btn(
+				lambda p=position: self.move_to_edit_and_fill_fields(p))
 			list_elem.bind_info_btn(
 				lambda p=position: self.open_info_dialog(self.info_dialog_content(p))
 			)
@@ -132,7 +146,8 @@ class HumansList(_ModelList):
 				entry=human,
 				icon=i
 			)
-			list_elem.bind_edit_btn(lambda h=human: print(f'Edit btn {h.title}'))
+			list_elem.bind_edit_btn(
+				lambda h=human: self.move_to_edit_and_fill_fields(h))
 			list_elem.bind_info_btn(
 				lambda h=human: self.open_info_dialog(self.info_dialog_content(h))
 			)
@@ -153,7 +168,8 @@ class EmergenciesList(_ModelList):
 
 		for emergency in emergencies:
 			list_elem = ModelListElement(entry=emergency, icon=Emergency.icon)
-			list_elem.bind_edit_btn(lambda e=emergency: print(f'Edit btn {e.title}'))
+			list_elem.bind_edit_btn(
+				lambda e=emergency: self.move_to_edit_and_fill_fields(e))
 			list_elem.bind_info_btn(
 				lambda e=emergency: self.open_info_dialog(self.info_dialog_content(e))
 			)
@@ -174,7 +190,8 @@ class WorktypesList(_ModelList):
 
 		for worktype in worktypes:
 			list_elem = ModelListElement(entry=worktype, icon=Worktype.icon)
-			list_elem.bind_edit_btn(lambda wt=worktype: print(f'Edit btn {wt.title}'))
+			list_elem.bind_edit_btn(
+				lambda wt=worktype: self.move_to_edit_and_fill_fields(wt))
 			list_elem.bind_info_btn(
 				lambda wt=worktype: self.open_info_dialog(self.info_dialog_content(wt))
 			)
