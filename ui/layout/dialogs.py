@@ -161,9 +161,13 @@ class HumanDialogContent(_BaseDialogContent):
 			title='Следующий рабочий день',
 			value=''))
 
+		if entry.worktype is None:
+			worktype_title = 'Неизвестно'
+		else:
+			worktype_title = Worktype.query.get(entry.worktype).title
 		self.ids.content.add_widget(FDVerticalLabel(
 			title='График работы',
-			value=entry.worktype.title if entry.worktype is not None else 'Неизвестно'))
+			value=worktype_title))
 
 
 class EmergencyDialogContent(_BaseDialogContent):
