@@ -1,4 +1,4 @@
-from typing import Any, Dict, Type
+from typing import Any, Dict, Type, Union
 from sqlalchemy.orm import sessionmaker, exc
 from sqlalchemy.exc import IntegrityError
 
@@ -34,7 +34,7 @@ def commit(func):
 	return wrapper
 
 
-# @commit
+@commit
 @add
 def write_entry(model: Type[db.Model], params: Dict[str, Any]) -> db.Model:
 	'''
@@ -47,3 +47,20 @@ def write_entry(model: Type[db.Model], params: Dict[str, Any]) -> db.Model:
 
 	entry = model(**params)
 	return entry
+
+
+@commit
+def update_entry(entry: Union[db.Model, None], params: Dict[str, Any]) -> None:
+	'''
+	Обновить данные записи.
+
+	~params:
+	entry: Union[db.Model, None] - запись для обновления;
+	params: Dict[str, Any] - параметры для обновления.
+	'''
+
+	if entry is None:
+		return
+
+	for column, value in params.items():
+		setattr(entry, column, value)

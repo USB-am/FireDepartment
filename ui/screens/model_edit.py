@@ -1,6 +1,10 @@
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.button import MDRaisedButton
+
 from . import model_create
 from app.path_manager import PathManager
-from data_base import Tag, Rank, Position, Human, Emergency, Worktype
+from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype
+from data_base.manager import update_entry
 
 
 class _BaseEditModel(model_create._BaseCreateModel):
@@ -12,11 +16,30 @@ class _BaseEditModel(model_create._BaseCreateModel):
 		self.ids.toolbar.rem_right_button()
 		self.ids.toolbar.add_right_button(
 			icon='check',
-			callback=lambda *_: print('Update entry button is pressed')
+			callback=lambda *_: self.update_and_back()
 		)
 
-		e = self.model.query.first()
-		self.fill_fields(e)
+	def update_and_back(self) -> None:
+		''' Обновить запись и вернуться на страницу назад '''
+
+		model_params = {key: widget.get_value() \
+			for key, widget in self.params.items()}
+		confirmed = self.is_valid(model_params)
+
+		if confirmed:
+			update_entry(self.entry, model_params)
+			self.clear_form()
+			self._path_manager.back()
+		else:
+			ok_btn = MDRaisedButton(text='Ок')
+			dialog = MDDialog(
+				title='Ошибка',
+				text='Некоторые поля заполнены неверно.',
+				buttons=[ok_btn,]
+			)
+			ok_btn.bind(on_release=lambda *_: dialog.dismiss())
+
+			dialog.open()
 
 
 class TagEditModel(_BaseEditModel, model_create.TagCreateModel):
@@ -25,8 +48,10 @@ class TagEditModel(_BaseEditModel, model_create.TagCreateModel):
 	name = 'edit_tag'
 	model = Tag
 	toolbar_title = 'Редактирование Тега'
+	entry: db.Model = None
 
 	def fill_fields(self, entry: Tag) -> None:
+		self.entry = entry
 		self.params['title'].set_value(entry.title)
 		self.params['emergencys'].set_value(entry.emergencys)
 

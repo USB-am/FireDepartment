@@ -227,7 +227,7 @@ class HumanCreateModel(_BaseCreateModel):
 			helper_text_mode='on_error',
 			max_text_length=255,
 			helper_text='',
-			validators=[EmptyValidator(None, None)])
+			validators=[EmptyValidator(None, None), UniqueValidator(Human, 'title')])
 		self.phone_1_field = FDPhoneInput(
 			hint_text='Телефон',
 			max_text_length=255)
