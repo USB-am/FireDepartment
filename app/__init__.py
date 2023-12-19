@@ -13,6 +13,9 @@ from ui.screens.model_list import TagsList, RanksList, PositionsList, \
 from ui.screens.model_create import TagCreateModel, RankCreateModel, \
 	PositionCreateModel, HumanCreateModel, WorktypeCreateModel, \
 	EmergencyCreateModel
+from ui.screens.model_edit import TagEditModel, RankEditModel, \
+	PositionEditModel, HumanEditModel, EmergencyEditModel, \
+	WorktypeEditModel
 
 
 Builder.load_file(APP_SCREEN)
@@ -76,20 +79,29 @@ class Application(MDApp):
 		self.ui.screen_manager.add_widget(CallsScreen(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(MainScreen(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(OptionsScreen(self.ui.path_manager))
+		# Model list screens
 		self.ui.screen_manager.add_widget(TagsList(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(RanksList(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(PositionsList(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(HumansList(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(EmergenciesList(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(WorktypesList(self.ui.path_manager))
+		# Create model screens
 		self.ui.screen_manager.add_widget(TagCreateModel(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(RankCreateModel(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(PositionCreateModel(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(HumanCreateModel(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(EmergencyCreateModel(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(WorktypeCreateModel(self.ui.path_manager))
+		# Edit model screens
+		self.ui.screen_manager.add_widget(TagEditModel(self.ui.path_manager))
+		self.ui.screen_manager.add_widget(RankEditModel(self.ui.path_manager))
+		self.ui.screen_manager.add_widget(PositionEditModel(self.ui.path_manager))
+		self.ui.screen_manager.add_widget(HumanEditModel(self.ui.path_manager))
+		self.ui.screen_manager.add_widget(EmergencyEditModel(self.ui.path_manager))
+		self.ui.screen_manager.add_widget(WorktypeEditModel(self.ui.path_manager))
 
-		self.ui.path_manager.move_to_screen('humans_list')
+		self.ui.path_manager.move_to_screen('main')
 
 	def build(self):
 		return self.ui

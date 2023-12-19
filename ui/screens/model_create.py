@@ -327,13 +327,6 @@ class EmergencyCreateModel(_BaseCreateModel):
 		self.urgent_field = FDSwitch(
 			icon='truck-fast',
 			title='Срочный?')
-		self.tags_field = FDMultiSelect(
-			title='Теги',
-			dialog_content=TagDialogContent,
-			model=Tag)
-		self.tags_field.bind_btn(
-			lambda: self._path_manager.forward('create_tag')
-		)
 		self.humans_field = FDMultiSelect(
 			title='Люди',
 			dialog_content=HumanDialogContent,
@@ -341,12 +334,19 @@ class EmergencyCreateModel(_BaseCreateModel):
 		self.humans_field.bind_btn(
 			lambda: self._path_manager.forward('create_human')
 		)
+		self.tags_field = FDMultiSelect(
+			title='Теги',
+			dialog_content=TagDialogContent,
+			model=Tag)
+		self.tags_field.bind_btn(
+			lambda: self._path_manager.forward('create_tag')
+		)
 
 		self.add_content(self.title_field)
 		self.add_content(self.description_field)
 		self.add_content(self.urgent_field)
-		self.add_content(self.tags_field)
 		self.add_content(self.humans_field)
+		self.add_content(self.tags_field)
 
 		self.params.update({
 			'title': self.title_field,

@@ -4,7 +4,6 @@ from kivy.uix.widget import Widget
 
 from app.path_manager import PathManager
 from config import BASE_SCREEN
-from ui.widgets.toolbar import FDToolbar
 
 
 Builder.load_file(BASE_SCREEN)
