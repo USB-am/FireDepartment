@@ -28,8 +28,8 @@ class _BaseInput(MDTextField):
 		else:
 			return None
 
-	def set_value(self, text: str) -> None:
-		self.text = text
+	def set_value(self, text: Union[str, None]) -> None:
+		self.text = '' if text is None else str(text)
 
 	def on_text(self, instance, text):
 		for validator in self.validators:
