@@ -51,6 +51,7 @@ class _BaseCreateModel(BaseScrollScreen):
 		model_params = {key: widget.get_value() \
 			for key, widget in self.params.items()}
 		confirmed = self.is_valid(model_params)
+		print(confirmed)
 
 		if not confirmed:
 			self.save(model_params)
@@ -69,10 +70,9 @@ class _BaseCreateModel(BaseScrollScreen):
 
 	def save(self, params: Dict[str, Widget]) -> None:
 		''' Сделать запись в БД '''
-
 		write_entry(self.model, params)
 
-	def is_valid(self, params: Dict[str, Widget]) -> bool:
+	def is_valid(self, params: Dict[str, Widget]) -> tuple:
 		''' Валидация всех полей формы '''
 		raise AttributeError('Сhild classes of _BaseCreateModel must have an is_valid method')
 
@@ -109,7 +109,7 @@ class TagCreateModel(_BaseCreateModel):
 		self.title_field.set_value('')
 		self.emergencies_field.set_value([])
 
-	def is_valid(self, params: Dict[str, Widget]) -> bool:
+	def is_valid(self, params: Dict[str, Widget]) -> tuple:
 		checks = (
 			EmptyValidator(self.model, 'title')(
 				text='Поле "Название" не может быть пустым',
@@ -163,12 +163,7 @@ class RankCreateModel(_BaseCreateModel):
 		self.priority_field.set_value('')
 		self.humans_field.set_value([])
 
-	def is_valid(self, params: Dict[str, Widget]) -> bool:
-		checks = [
-			params['title'] is not None,
-			_check_unique_column(self.model, 'title', params['title']),
-			params['priority'] is not None
-		]
+	def is_valid(self, params: Dict[str, Widget]) -> tuple:
 		checks = (
 			EmptyValidator(self.model, 'title')(
 				text='Поле "Название" не может быть пустым',
@@ -219,11 +214,7 @@ class PositionCreateModel(_BaseCreateModel):
 		self.title_field.set_value('')
 		self.humans_field.set_value([])
 
-	def is_valid(self, params: Dict[str, Widget]) -> bool:
-		checks = [
-			params['title'] is not None,
-			_check_unique_column(self.model, 'title', params['title']),
-		]
+	def is_valid(self, params: Dict[str, Widget]) -> tuple:
 		checks = (
 			EmptyValidator(self.model, 'title')(
 				text='Поле "Название" не может быть пустым',
@@ -321,7 +312,7 @@ class HumanCreateModel(_BaseCreateModel):
 		self.rank_field.set_value([])
 		self.position_field.set_value([])
 
-	def is_valid(self, params: Dict[str, Widget]) -> bool:
+	def is_valid(self, params: Dict[str, Widget]) -> tuple:
 		checks = (
 			EmptyValidator(self.model, 'title')(
 				text='Поле "ФИО" не может быть пустым',
@@ -390,7 +381,7 @@ class EmergencyCreateModel(_BaseCreateModel):
 		self.tags_field.set_value([])
 		self.humans_field.set_value([])
 
-	def is_valid(self, params: Dict[str, Widget]) -> bool:
+	def is_valid(self, params: Dict[str, Widget]) -> tuple:
 		checks = (
 			EmptyValidator(self.model, 'title')(
 				text='Поле "Название" не может быть пустым',
@@ -470,7 +461,7 @@ class WorktypeCreateModel(_BaseCreateModel):
 		self.week_day_range_field.set_value('')
 		self.humans_field.set_value([])
 
-	def is_valid(self, params: Dict[str, Widget]) -> bool:
+	def is_valid(self, params: Dict[str, Widget]) -> tuple:
 		checks = (
 			EmptyValidator(self.model, 'title')(
 				text='Поле "Название" не может быть пустым',
