@@ -52,7 +52,7 @@ class _BaseCreateModel(BaseScrollScreen):
 			for key, widget in self.params.items()}
 		confirmed = self.is_valid(model_params)
 
-		if confirmed:
+		if not confirmed:
 			self.save(model_params)
 			self.clear_form()
 			self._path_manager.back()
@@ -60,7 +60,7 @@ class _BaseCreateModel(BaseScrollScreen):
 			ok_btn = MDRaisedButton(text='Ок')
 			dialog = MDDialog(
 				title='Ошибка',
-				text='Некоторые поля заполнены неверно.',
+				text=confirmed[0].text,
 				buttons=[ok_btn,]
 			)
 			ok_btn.bind(on_release=lambda *_: dialog.dismiss())
@@ -110,12 +110,16 @@ class TagCreateModel(_BaseCreateModel):
 		self.emergencies_field.set_value([])
 
 	def is_valid(self, params: Dict[str, Widget]) -> bool:
-		checks = [
-			params['title'] is not None,
-			_check_unique_column(self.model, 'title', params['title']),
-		]
+		checks = (
+			EmptyValidator(self.model, 'title')(
+				text='Поле "Название" не может быть пустым',
+				value=params['title']),
+			UniqueValidator(self.model, 'title')(
+				text='Поле "Название" должно быть уникальным',
+				value=params['title'])
+		)
 
-		return all(checks)
+		return tuple(filter(lambda check: not check.status, checks))
 
 
 class RankCreateModel(_BaseCreateModel):
@@ -165,8 +169,19 @@ class RankCreateModel(_BaseCreateModel):
 			_check_unique_column(self.model, 'title', params['title']),
 			params['priority'] is not None
 		]
+		checks = (
+			EmptyValidator(self.model, 'title')(
+				text='Поле "Название" не может быть пустым',
+				value=params['title']),
+			UniqueValidator(self.model, 'title')(
+				text='Поле "Название" должно быть уникальным',
+				value=params['title']),
+			EmptyValidator(self.model, 'priority')(
+				text='Поле "Приоритет" не может быть пустым',
+				value=params['priority'])
+		)
 
-		return all(checks)
+		return tuple(filter(lambda check: not check.status, checks))
 
 
 class PositionCreateModel(_BaseCreateModel):
@@ -209,8 +224,16 @@ class PositionCreateModel(_BaseCreateModel):
 			params['title'] is not None,
 			_check_unique_column(self.model, 'title', params['title']),
 		]
+		checks = (
+			EmptyValidator(self.model, 'title')(
+				text='Поле "Название" не может быть пустым',
+				value=params['title']),
+			UniqueValidator(self.model, 'title')(
+				text='Поле "Название" должно быть уникальным',
+				value=params['title']),
+		)
 
-		return all(checks)
+		return tuple(filter(lambda check: not check.status, checks))
 
 
 class HumanCreateModel(_BaseCreateModel):
@@ -299,12 +322,16 @@ class HumanCreateModel(_BaseCreateModel):
 		self.position_field.set_value([])
 
 	def is_valid(self, params: Dict[str, Widget]) -> bool:
-		checks = [
-			params['title'] is not None,
-			_check_unique_column(self.model, 'title', params['title']),
-		]
+		checks = (
+			EmptyValidator(self.model, 'title')(
+				text='Поле "ФИО" не может быть пустым',
+				value=params['title']),
+			UniqueValidator(self.model, 'title')(
+				text='Поле "ФИО" должно быть уникальным',
+				value=params['title']),
+		)
 
-		return all(checks)
+		return tuple(filter(lambda check: not check.status, checks))
 
 
 class EmergencyCreateModel(_BaseCreateModel):
@@ -364,12 +391,18 @@ class EmergencyCreateModel(_BaseCreateModel):
 		self.humans_field.set_value([])
 
 	def is_valid(self, params: Dict[str, Widget]) -> bool:
-		checks = [
-			params['title'] is not None,
-			_check_unique_column(self.model, 'title', params['title']),
-		]
+		checks = (
+			EmptyValidator(self.model, 'title')(
+				text='Поле "Название" не может быть пустым',
+				value=params['title']
+			),
+			UniqueValidator(self.model, 'title')(
+				text='Поле "Название" должно быть уникальным',
+				value=params['title']
+			),
+		)
 
-		return all(checks)
+		return tuple(filter(lambda check: not check.status, checks))
 
 
 class WorktypeCreateModel(_BaseCreateModel):
@@ -438,13 +471,25 @@ class WorktypeCreateModel(_BaseCreateModel):
 		self.humans_field.set_value([])
 
 	def is_valid(self, params: Dict[str, Widget]) -> bool:
-		checks = [
-			params['title'] is not None,
-			_check_unique_column(self.model, 'title', params['title']),
-			params['start_work_day'] is not None,
-			params['finish_work_day'] is not None,
-			params['work_day_range'] is not None,
-			params['week_day_range'] is not None
-		]
+		checks = (
+			EmptyValidator(self.model, 'title')(
+				text='Поле "Название" не может быть пустым',
+				value=params['title']),
+			UniqueValidator(self.model, 'title')(
+				text='Поле "Название" должно быть уникальным',
+				value=params['title']),
+			EmptyValidator(self.model, 'start_work_day')(
+				text='Поле "Начало рабочего дня" не может быть пустым',
+				value=params['start_work_day']),
+			EmptyValidator(self.model, 'finish_work_day')(
+				text='Поле "Конец рабочего дня" не может быть пустым',
+				value=params['finish_work_day']),
+			EmptyValidator(self.model, 'work_day_range')(
+				text='Поле "Рабочие дни подряд" не может быть пустым',
+				value=params['work_day_range']),
+			EmptyValidator(self.model, 'week_day_range')(
+				text='Поле "Выходные дни подряд" не может быть пустым',
+				value=params['week_day_range']),
+		)
 
-		return all(checks)
+		return tuple(filter(lambda check: not check.status, checks))
