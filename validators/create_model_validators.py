@@ -50,14 +50,15 @@ class _BaseValidator:
 class UniqueValidator(_BaseValidator):
 	''' Валидация на уникальность '''
 
-	def __call__(self, value: Any) -> ValidationResult:
+	def __call__(self, value: Any, text: str='Поле должно быть уникальным') -> ValidationResult:
 		check = _check_unique_column(self.model, self.column, value)
-		return ValidationResult('Поле должно быть уникальным', check)
+		return ValidationResult(text, check)
 
 
 class EmptyValidator(_BaseValidator):
 	''' Валидация на пустое значение '''
 
-	def __call__(self, value: Any) -> ValidationResult:
+	def __call__(self, value: Any,
+	             text: str='Поле не может быть пустым') -> ValidationResult:
 		check = _check_not_empty(value)
-		return ValidationResult('Поле не может быть пустым', check)
+		return ValidationResult(text, check)
