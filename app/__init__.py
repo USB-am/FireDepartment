@@ -101,7 +101,7 @@ class Application(MDApp):
 		self.ui.screen_manager.add_widget(EmergencyEditModel(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(WorktypeEditModel(self.ui.path_manager))
 
-		self.ui.path_manager.move_to_screen('main')
+		self.ui.path_manager.move_to_screen('worktypes_list')
 
 	def build(self):
 		return self.ui

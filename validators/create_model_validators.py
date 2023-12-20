@@ -21,6 +21,22 @@ def _check_unique_column(model: db.Model, column: str, value: Any) -> bool:
 	return not bool(entries)
 
 
+def _check_excluding_unique_column(model: db.Model, column: str, value: Any,
+	                                 entry: db.Model) -> bool:
+	'''
+	Проверка уникальности нового значения entry.
+
+	~params:
+	model: db.Model - модель в которой будет идти поиск;
+	column: str - название колонки;
+	value: Any - значение, с которым необходимо сравнить;
+	entry: db.Model - запись, которая будет проигнорированна при поиске.
+	'''
+
+	entries = model.query.filter(getattr(model, column)==value).all()
+	return (entry in entries) or (not entries)
+
+
 def _check_not_empty(value: Any) -> bool:
 	'''
 	Проверка value на не пустое значение.
@@ -52,6 +68,20 @@ class UniqueValidator(_BaseValidator):
 
 	def __call__(self, value: Any, text: str='Поле должно быть уникальным') -> ValidationResult:
 		check = _check_unique_column(self.model, self.column, value)
+		return ValidationResult(text, check)
+
+
+class UniqueExcludingValidator(_BaseValidator):
+	''' Валидация на уникальность, за исключением 1 записи '''
+
+	def __call__(self, value: Any, entry: db.Model,
+	             text: str='Поле должно быть уникальным') -> ValidationResult:
+		check = _check_excluding_unique_column(
+			model=self.model,
+			column=self.column,
+			value=value,
+			entry=entry)
+		print(check)
 		return ValidationResult(text, check)
 
 
