@@ -74,14 +74,16 @@ class UniqueValidator(_BaseValidator):
 class UniqueExcludingValidator(_BaseValidator):
 	''' Валидация на уникальность, за исключением 1 записи '''
 
-	def __call__(self, value: Any, entry: db.Model,
-	             text: str='Поле должно быть уникальным') -> ValidationResult:
+	def __init__(self, model: db.Model, column: str, entry: db.Model):
+		super().__init__(model, column)
+		self.entry = entry
+
+	def __call__(self, value: Any, text: str='Поле должно быть уникальным') -> ValidationResult:
 		check = _check_excluding_unique_column(
 			model=self.model,
 			column=self.column,
 			value=value,
-			entry=entry)
-		print(check)
+			entry=self.entry)
 		return ValidationResult(text, check)
 
 
