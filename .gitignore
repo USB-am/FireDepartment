@@ -3,3 +3,4 @@ venv/
 .venv/
 fire_department.db
 .idea/
+app/application.ini
