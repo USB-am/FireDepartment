@@ -3,7 +3,7 @@ from kivy.lang.builder import Builder
 from kivy.uix.screenmanager import ScreenManager
 from kivymd.uix.navigationdrawer import MDNavigationLayout
 
-from config import APP_SCREEN
+from config import APP_SCREEN, APP_ICON
 from .path_manager import PathManager
 from ui.screens.main import MainScreen
 from ui.screens.options import OptionsScreen
@@ -67,8 +67,7 @@ class Application(MDApp):
 	Базовый класс приложения. Инициализирует интерфейс и добавляет страницы.
 	'''
 
-	color = [1, 1, 1, 1]
-	bg_image = None
+	icon = APP_ICON
 	title = 'Fire Department'
 
 	def __init__(self, **kwargs):
@@ -78,7 +77,8 @@ class Application(MDApp):
 
 		self.ui.screen_manager.add_widget(CallsScreen(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(MainScreen(self.ui.path_manager))
-		self.ui.screen_manager.add_widget(OptionsScreen(self.ui.path_manager))
+		self.options_screen = OptionsScreen(self.ui.path_manager)
+		self.ui.screen_manager.add_widget(self.options_screen)
 		# Model list screens
 		self.ui.screen_manager.add_widget(TagsList(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(RanksList(self.ui.path_manager))
@@ -101,7 +101,22 @@ class Application(MDApp):
 		self.ui.screen_manager.add_widget(EmergencyEditModel(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(WorktypeEditModel(self.ui.path_manager))
 
-		self.ui.path_manager.move_to_screen('worktypes_list')
+		self.ui.path_manager.move_to_screen('options')
+
+	def build_config(self, config):
+		config.setdefaults('options', {
+			'primary_palette': self.theme_cls.primary_palette,
+			'accent_palette': self.theme_cls.accent_palette,
+			'theme_style': self.theme_cls.theme_style,
+			'primary_hue': self.theme_cls.primary_hue,
+		})
+		self.options_screen.config = self.config
 
 	def build(self):
+		config = self.config
+		self.theme_cls.primary_palette = config.get('options', 'primary_palette')
+		self.theme_cls.accent_palette = config.get('options', 'accent_palette')
+		self.theme_cls.theme_style = config.get('options', 'theme_style')
+		self.theme_cls.primary_hue = config.get('options', 'primary_hue')
+
 		return self.ui
