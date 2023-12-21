@@ -6,7 +6,7 @@ from kivymd.uix.toolbar import MDToolbar
 
 Builder.load_string('''
 <FDToolbar>:
-	md_bg_color: app.theme_cls.accent_color
+	# md_bg_color: app.theme_cls.accent_color
 ''')
 
 

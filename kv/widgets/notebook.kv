@@ -5,7 +5,7 @@
 	MDBoxLayout:
 		size_hint: (1, None)
 		height: dp(50)
-		md_bg_color: app.theme_cls.accent_color
+		md_bg_color: app.theme_cls.primary_color
 
 		ScrollView:
 			MDBoxLayout:
@@ -19,9 +19,11 @@
 
 	MDBottomNavigation:
 		id: bottom_nav
-		panel_color: app.theme_cls.accent_color
+		panel_color: app.theme_cls.primary_color
+		# md_bg_color: app.theme_cls.accent_color
 
 		MDBottomNavigationItem:
+			id: phones_nav_item
 			name: 'phones'
 			text: 'Звонки'
 			icon: 'phone'
@@ -38,6 +40,7 @@
 					padding: [dp(10), dp(20)]
 
 		MDBottomNavigationItem:
+			id: info_nav_item
 			name: 'info'
 			text: 'Информация'
 			icon: 'notebook'
