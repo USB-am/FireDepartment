@@ -1,4 +1,5 @@
 #:import NavigationButton ui.widgets.navigation_button
+#:import LOGO_IMG config.LOGO_IMG
 
 
 <FDUIManager>:
@@ -21,7 +22,8 @@
 					id: logo
 					size_hint: (None, None)
 					size: (dp(100), dp(100))
-					source: 'static/logo.png'
+					# source: 'static/logo.png'
+					source: str(LOGO_IMG)
 
 			MDLabel:
 				text: 'FireDepartment'

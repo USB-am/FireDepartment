@@ -5,6 +5,16 @@ BASE_DIR = os.getcwd()
 
 KV_DIR = os.path.join(BASE_DIR, 'kv')
 
+
+# Static
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+APP_ICON = os.path.join(STATIC_DIR, 'icon.jpg')
+LOGO_IMG = os.path.join(STATIC_DIR, 'logo.png')
+
+# Config
+APP_DIR = os.path.join(BASE_DIR, 'app')
+CONF = os.path.join(APP_DIR, 'application.ini')
+
 # Screens
 SCREENS_KV = os.path.join(KV_DIR, 'screens')
 APP_SCREEN = os.path.join(SCREENS_KV, 'app_screen.kv')
