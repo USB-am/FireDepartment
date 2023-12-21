@@ -1,11 +1,2 @@
 ui\layout\dialogs.HumanDialogContent:
 	- Добавить информацию о следующем рабочем дне
-
-ui\screens\model_create._BaseCreateModel.save_and_back:
-	- Добавить обработку исключения метода .save_and_back
-
-ui\screens\model_edit._BaseEditModel.update_and_back:
-	- Добавить обработку исключения метода .update_and_back
-
-validators:
-	- Создать объект хранящий метод для проверки и текст ошибки для вывода пользователю

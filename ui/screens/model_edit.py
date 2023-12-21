@@ -59,8 +59,15 @@ class TagEditModel(_BaseEditModel, model_create.TagCreateModel):
 	toolbar_title = 'Редактирование Тега'
 	entry: db.Model = None
 
+	def update_inputs_validators(self) -> None:
+		self.title_field.validators = [
+			UniqueExcludingValidator(Tag, 'title', self.entry),
+			EmptyValidator(Tag, 'title')
+		]
+
 	def fill_fields(self, entry: Tag) -> None:
 		self.entry = entry
+		self.update_inputs_validators()
 		self.params['title'].set_value(entry.title)
 		self.params['emergencys'].set_value(entry.emergencys)
 
@@ -69,7 +76,7 @@ class TagEditModel(_BaseEditModel, model_create.TagCreateModel):
 			EmptyValidator(self.model, 'title')(
 				text='Поле "Название" не может быть пустым',
 				value=params['title']),
-			UniqueExcludingValidator(self.model, 'title')(
+			UniqueExcludingValidator(self.model, 'title', self.entry)(
 				text='Поле "Название" должно быть уникальным',
 				value=params['title'])
 		)
@@ -85,8 +92,15 @@ class RankEditModel(_BaseEditModel, model_create.RankCreateModel):
 	toolbar_title = 'Редактирование Звания'
 	entry: db.Model = None
 
+	def update_inputs_validators(self) -> None:
+		self.title_field.validators = [
+			UniqueExcludingValidator(Rank, 'title', self.entry),
+			EmptyValidator(None, None)
+		]
+
 	def fill_fields(self, entry: Rank) -> None:
 		self.entry = entry
+		self.update_inputs_validators()
 		self.params['title'].set_value(entry.title)
 		self.params['priority'].set_value(entry.priority)
 		self.params['humans'].set_value(entry.humans)
@@ -96,7 +110,7 @@ class RankEditModel(_BaseEditModel, model_create.RankCreateModel):
 			EmptyValidator(self.model, 'title')(
 				text='Поле "Название" не может быть пустым',
 				value=params['title']),
-			UniqueExcludingValidator(self.model, 'title')(
+			UniqueExcludingValidator(self.model, 'title', self.entry)(
 				text='Поле "Название" должно быть уникальным',
 				value=params['title']),
 			EmptyValidator(self.model, 'priority')(
@@ -115,8 +129,15 @@ class PositionEditModel(_BaseEditModel, model_create.PositionCreateModel):
 	toolbar_title = 'Редактирование Должности'
 	entry: db.Model = None
 
+	def update_inputs_validators(self) -> None:
+		self.title_field.validators = [
+			UniqueExcludingValidator(Position, 'title', self.entry),
+			EmptyValidator(None, None)
+		]
+
 	def fill_fields(self, entry: Position) -> None:
 		self.entry = entry
+		self.update_inputs_validators()
 		self.params['title'].set_value(entry.title)
 		self.params['humans'].set_value(entry.humans)
 
@@ -125,7 +146,7 @@ class PositionEditModel(_BaseEditModel, model_create.PositionCreateModel):
 			EmptyValidator(self.model, 'title')(
 				text='Поле "Название" не может быть пустым',
 				value=params['title']),
-			UniqueExcludingValidator(self.model, 'title')(
+			UniqueExcludingValidator(self.model, 'title', self.entry)(
 				text='Поле "Название" должно быть уникальным',
 				value=params['title']),
 		)
@@ -141,8 +162,15 @@ class HumanEditModel(_BaseEditModel, model_create.HumanCreateModel):
 	toolbar_title = 'Редактирование Человека'
 	entry: db.Model = None
 
+	def update_inputs_validators(self) -> None:
+		self.title_field.validators = [
+			UniqueExcludingValidator(Human, 'title', self.entry),
+			EmptyValidator(None, None),
+		]
+
 	def fill_fields(self, entry: Human) -> None:
 		self.entry = entry
+		self.update_inputs_validators()
 		self.params['title'].set_value(entry.title)
 		self.params['phone_1'].set_value(entry.phone_1)
 		self.params['phone_2'].set_value(entry.phone_2)
@@ -157,7 +185,7 @@ class HumanEditModel(_BaseEditModel, model_create.HumanCreateModel):
 			EmptyValidator(self.model, 'title')(
 				text='Поле "ФИО" не может быть пустым',
 				value=params['title']),
-			UniqueExcludingValidator(self.model, 'title')(
+			UniqueExcludingValidator(self.model, 'title', self.entry)(
 				text='Поле "ФИО" должно быть уникальным',
 				value=params['title']),
 		)
@@ -173,8 +201,15 @@ class EmergencyEditModel(_BaseEditModel, model_create.EmergencyCreateModel):
 	toolbar_title = 'Редактирование Вызова'
 	entry: db.Model = None
 
+	def update_inputs_validators(self) -> None:
+		self.title_field.validators = [
+			UniqueExcludingValidator(Emergency, 'title', self.entry),
+			EmptyValidator(None, None)
+		]
+
 	def fill_fields(self, entry: Emergency) -> None:
 		self.entry = entry
+		self.update_inputs_validators()
 		self.params['title'].set_value(entry.title)
 		self.params['description'].set_value(entry.description)
 		self.params['urgent'].set_value(entry.urgent)
@@ -187,7 +222,7 @@ class EmergencyEditModel(_BaseEditModel, model_create.EmergencyCreateModel):
 				text='Поле "Название" не может быть пустым',
 				value=params['title']
 			),
-			UniqueExcludingValidator(self.model, 'title')(
+			UniqueExcludingValidator(self.model, 'title', self.entry)(
 				text='Поле "Название" должно быть уникальным',
 				value=params['title']
 			),
@@ -204,8 +239,15 @@ class WorktypeEditModel(_BaseEditModel, model_create.WorktypeCreateModel):
 	toolbar_title = 'Редактирование Графика работы'
 	entry: db.Model = None
 
+	def update_inputs_validators(self) -> None:
+		self.title_field.validators = [
+			UniqueExcludingValidator(Worktype, 'title', self.entry),
+			EmptyValidator(None, None)
+		]
+
 	def fill_fields(self, entry: Worktype) -> None:
 		self.entry = entry
+		self.update_inputs_validators()
 		self.params['title'].set_value(entry.title)
 		self.params['start_work_day'].set_value(entry.start_work_day)
 		self.params['finish_work_day'].set_value(entry.finish_work_day)
@@ -218,10 +260,9 @@ class WorktypeEditModel(_BaseEditModel, model_create.WorktypeCreateModel):
 			EmptyValidator(self.model, 'title')(
 				text='Поле "Название" не может быть пустым',
 				value=params['title']),
-			UniqueExcludingValidator(self.model, 'title')(
+			UniqueExcludingValidator(self.model, 'title', self.entry)(
 				text='Поле "Название" должно быть уникальным',
-				value=params['title'],
-				entry=self.entry),
+				value=params['title']),
 			EmptyValidator(self.model, 'start_work_day')(
 				text='Поле "Начало рабочего дня" не может быть пустым',
 				value=params['start_work_day']),
