@@ -67,6 +67,26 @@
 		icon: root.icon_btn
 
 
+<FDButtonDropdown>:
+	orientation: 'horizontal'
+	size_hint_y: None
+	height: dp(40)
+
+	MDIcon:
+		size_hint_x: None
+		width: dp(25)
+		icon: root.icon
+
+	MDLabel:
+		id: title_label
+		text: root.title
+
+	MDRaisedButton:
+		id: btn
+		md_bg_color: app.theme_cls.primary_color
+		text: 'Выбрать'
+
+
 <FDRectangleButton>:
 	# orientation: 'horizontal'
 	anchor_x: 'center'

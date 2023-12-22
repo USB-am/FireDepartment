@@ -1,9 +1,11 @@
-from typing import Callable
+from typing import Callable, List, Dict
 
 from kivy.lang.builder import Builder
-from kivy.properties import StringProperty
+from kivy.properties import StringProperty, ListProperty
 from kivy.uix.anchorlayout import AnchorLayout
 from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.menu import MDDropdownMenu
+from kivymd.uix.list import OneLineListItem
 
 from config import BUTTON_FIELD
 
@@ -64,6 +66,36 @@ class FDIconButton(MDBoxLayout):
 		'''
 
 		self.ids.btn.bind(on_release=lambda *_: callback())
+
+
+class FDButtonDropdown(MDBoxLayout):
+	'''
+	Иконка | Заголовок | Выпадающий список
+
+	~params:
+	icon: str - иконка;
+	title: str - заголовок;
+	elems: List[str] - элементы списка.
+	'''
+
+	icon = StringProperty()
+	title = StringProperty()
+	elems = ListProperty([])
+
+	def __init__(self, **params):
+		super().__init__(**params)
+
+		self.dropdown = MDDropdownMenu(
+			caller=self.ids.btn,
+			items=self.elems,
+			width_mult=5
+		)
+		self.ids.btn.bind(on_release=lambda *_: self.dropdown.open())
+
+	def update_elements(self, elements: List[Dict[str, str]]) -> None:
+		''' Обновить содержимое выпадающего списка '''
+
+		self.dropdown.items = elements
 
 
 class FDRectangleButton(AnchorLayout):
