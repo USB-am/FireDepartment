@@ -8,7 +8,7 @@ KV_DIR = os.path.join(BASE_DIR, 'kv')
 
 # Static
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
-APP_ICON = os.path.join(STATIC_DIR, 'icon.jpg')
+APP_ICON = os.path.join(STATIC_DIR, 'icon.png')
 LOGO_IMG = os.path.join(STATIC_DIR, 'logo.png')
 
 # Config
