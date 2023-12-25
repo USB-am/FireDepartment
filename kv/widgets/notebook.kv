@@ -95,5 +95,18 @@
 
 
 <NotebookInfoContent>:
-	MDLabel:
-		text: str(id(root))
+	orientation: 'vertical'
+	adaptive_height: True
+	padding: [dp(10), 0]
+	spacing: dp(10)
+
+	MDTextField:
+		id: addition_info_field
+		multiline: True
+		mode: 'rectangle'
+		hint_text: 'Дополнительная информация'
+
+	MDBoxLayout:
+		id: logs_layout
+		orientation: 'vertical'
+		adaptive_height: True
