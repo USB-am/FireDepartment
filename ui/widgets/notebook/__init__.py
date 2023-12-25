@@ -69,6 +69,11 @@ class NotebookPhoneContent(MDBoxLayout):
 class NotebookInfoContent(MDBoxLayout):
 	''' Содержимое вкладки с информацией '''
 
+	def __init__(self, **options):
+		super().__init__(**options)
+
+		self.ids.addition_info_field.bind(on_text=lambda *_: print('Pressed key'))
+
 
 @dataclass
 class _NotebookTab:
