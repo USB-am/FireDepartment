@@ -1,5 +1,2 @@
 ui\layout\dialogs.HumanDialogContent:
 	- Добавить информацию о следующем рабочем дне
-
-kv\screens\app_screen.kv:
-	- Добавить прокрутку для меню
