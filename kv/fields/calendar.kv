@@ -1,0 +1,22 @@
+<FDCalendar>:
+	orientation: 'horizontal'
+	adaptive_height: True
+
+	MDBoxLayout:
+		orientation: 'vertical'
+		size_hint_x: None
+		width: dp(25)
+
+		MDIcon:
+			size_hint: None, None
+			size: dp(25), dp(50)
+			icon: root.icon
+
+		MDLabel:
+			id: next_work_day_label
+			size_hint: None, None
+			size: dp(25), dp(50)
+
+	MDBoxLayout:
+		id: calendar
+		orientation: 'vertical'
