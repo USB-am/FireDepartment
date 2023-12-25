@@ -1,13 +1,11 @@
 from typing import List
 
 from kivymd.app import MDApp
-from kivymd.theming import ThemeManager
-from kivymd.uix.picker import MDThemePicker
 
 from . import BaseScrollScreen
 from app.path_manager import PathManager
-from ui.field.button import FDButton, FDButtonDropdown
-from config import CONF
+from ui.field.button import FDButtonDropdown
+from ui.field.switch import FDDoubleSwitch
 
 
 class OptionsScreen(BaseScrollScreen):
@@ -20,7 +18,6 @@ class OptionsScreen(BaseScrollScreen):
 		super().__init__(path_manager)
 
 		self.__app = MDApp.get_running_app()
-		# self.__theme_cls = self.__app.theme_cls
 
 		self.ids.toolbar.add_left_button(
 			icon='menu',
@@ -40,22 +37,69 @@ class OptionsScreen(BaseScrollScreen):
 	def fill_elements(self) -> None:
 		self.clear_content()
 
-		self.color_theme_field = FDButton(
+		self.primary_field = FDButtonDropdown(
 			icon='palette',
-			title='Цветовая схема',
-			btn_text='Выбрать'
+			title='Основной цвет',
 		)
-		self.color_theme_field.ids.btn.bind(on_release=lambda *_: self._open_theme_picker())
+		self.primary_field.update_elements(self._gen_primary_field_elements())
+		self.primary_field.ids.btn.md_bg_color = self.__theme_cls.primary_color
+		self.accent_field = FDButtonDropdown(
+			icon='palette-advanced',
+			title='Акцентирующий цвет'
+		)
+		self.accent_field.update_elements(self._gen_accent_field_elements())
+		self.accent_field.ids.btn.md_bg_color = self.__theme_cls.accent_color
 
 		self.hue_field = FDButtonDropdown(
 			icon='opacity',
 			title='Контрастность',
 		)
 		self.hue_field.update_elements(self._gen_hue_field_elements())
-		self.hue_field.elems.append({'text': 'test', 'viewclass': 'OneLineListItem'})
 
-		self.add_content(self.color_theme_field)
+		self.theme_style_field = FDDoubleSwitch(
+			icon_active='moon-waning-crescent',
+			title_active='Темная тема',
+			icon_deactive='white-balance-sunny',
+			title_deactive='Светлая тема',
+		)
+		self.theme_style_field.ids.switch.bind(on_release=lambda *_: \
+			self._update_style_field(self.theme_style_field.ids.switch.active)
+		)
+
+		self.add_content(self.primary_field)
+		self.add_content(self.accent_field)
 		self.add_content(self.hue_field)
+		self.add_content(self.theme_style_field)
+
+	def _gen_primary_field_elements(self) -> List:
+		''' Возвращает элементы для поля primary '''
+
+		colors = self.__theme_cls.colors.copy()
+		del colors['Light']
+		del colors['Dark']
+
+		return [{
+				'text': elem,
+				'viewclass': 'OneLineListItem',
+				'bg_color': self.__theme_cls.colors[elem][self.__theme_cls.primary_hue],
+				'on_release': lambda elem=elem: self._update_primary_field(elem)
+			} for elem in colors
+		]
+
+	def _gen_accent_field_elements(self) -> List:
+		''' Возвращает элементы для поля accent '''
+
+		colors = self.__theme_cls.colors.copy()
+		del colors['Light']
+		del colors['Dark']
+
+		return [{
+				'text': elem,
+				'viewclass': 'OneLineListItem',
+				'bg_color': self.__theme_cls.colors[elem][self.__theme_cls.primary_hue],
+				'on_release': lambda elem=elem: self._update_accent_field(elem)
+			} for elem in colors
+		]
 
 	def _gen_hue_field_elements(self) -> List:
 		''' Возвращает элементы для поля hue_field '''
@@ -68,12 +112,6 @@ class OptionsScreen(BaseScrollScreen):
 			} for elem in self.__theme_cls.colors[self.__theme_cls.primary_palette].keys()
 		]
 
-	def _open_theme_picker(self) -> None:
-		''' Открыть диалоговое окно выбора темы '''
-
-		dialog = MDThemePicker(on_pre_dismiss=lambda *_: self.__save_colors_to_config())
-		dialog.open()
-
 	def __save_colors_to_config(self) -> None:
 		config = self.__config
 
@@ -85,10 +123,30 @@ class OptionsScreen(BaseScrollScreen):
 		})
 		config.write()
 
-	def _update_hue_field(self, element) -> None:
+	def _update_primary_field(self, element: str) -> None:
+		self.primary_field.ids.btn.text = element
+		self.primary_field.update_elements(self._gen_primary_field_elements())
+		self.primary_field.dropdown.dismiss()
+
+		self.__theme_cls.primary_palette = element
+		self.__save_colors_to_config()
+
+	def _update_accent_field(self, element: str) -> None:
+		self.accent_field.ids.btn.text = element
+		self.accent_field.update_elements(self._gen_accent_field_elements())
+		self.accent_field.dropdown.dismiss()
+
+		self.__theme_cls.accent_palette = element
+		self.__save_colors_to_config()
+
+	def _update_hue_field(self, element: str) -> None:
 		self.hue_field.ids.btn.text = element
 		self.hue_field.update_elements(self._gen_hue_field_elements())
 		self.hue_field.dropdown.dismiss()
 
 		self.__theme_cls.primary_hue = element
+		self.__save_colors_to_config()
+
+	def _update_style_field(self, type_: bool) -> None:
+		self.__theme_cls.theme_style = 'Dark' if type_ else 'Light'
 		self.__save_colors_to_config()
