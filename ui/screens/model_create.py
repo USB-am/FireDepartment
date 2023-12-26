@@ -14,6 +14,7 @@ from ui.field.button import FDRectangleButton
 from ui.field.select import FDSelect, FDMultiSelect
 from ui.field.switch import FDSwitch, FDDoubleSwitch
 from ui.field.date import FDDate, FDDateTime
+from ui.field.calendar import FDCalendar
 from ui.layout.dialogs import HumanDialogContent, EmergencyDialogContent, \
 	WorktypeDialogContent, TagDialogContent, RankDialogContent, \
 	PositionDialogContent
@@ -235,6 +236,7 @@ class HumanCreateModel(_BaseCreateModel):
 	toolbar_title = 'Создание Человека'
 
 	def fill_elements(self) -> None:
+		# title
 		self.title_field = FDInput(
 			hint_text='ФИО',
 			required=True,
@@ -242,21 +244,32 @@ class HumanCreateModel(_BaseCreateModel):
 			max_text_length=255,
 			helper_text='',
 			validators=[EmptyValidator(None, None), UniqueValidator(Human, 'title')])
+		# phone_1
 		self.phone_1_field = FDPhoneInput(
 			hint_text='Телефон',
 			max_text_length=255)
+		# phone_2
 		self.phone_2_field = FDPhoneInput(
 			hint_text='Телефон (доп.)',
 			max_text_length=255)
+		# is_firefigher
 		self.is_firefigher_field = FDDoubleSwitch(
 			icon_active='fire-hydrant',
 			icon_deactive=Human.icon,
 			title_active='Пожарный',
 			title_deactive='Комнатный')
+		# work_date
 		self.work_date_field = FDDate(
 			icon='calendar',
 			title='Рабочий день',
 			btn_text='дд.мм.гггг')
+		# calendar
+		self.calendar_field = FDCalendar(
+			start_work_day=123,
+			worktype=Worktype.query.first()
+		)
+		self.work_date_field.callback = self.calendar_field.update
+		# worktype
 		self.worktype_field = FDSelect(
 			title='График работы',
 			dialog_content=WorktypeDialogContent,
@@ -265,6 +278,7 @@ class HumanCreateModel(_BaseCreateModel):
 		self.worktype_field.bind_btn(
 			lambda: self._path_manager.forward('create_worktype')
 		)
+		# rank
 		self.rank_field = FDSelect(
 			title='Звание',
 			dialog_content=RankDialogContent,
@@ -273,6 +287,7 @@ class HumanCreateModel(_BaseCreateModel):
 		self.rank_field.bind_btn(
 			lambda: self._path_manager.forward('create_rank')
 		)
+		# position
 		self.position_field = FDSelect(
 			title='Должность',
 			dialog_content=PositionDialogContent,
@@ -287,6 +302,7 @@ class HumanCreateModel(_BaseCreateModel):
 		self.add_content(self.phone_2_field)
 		self.add_content(self.is_firefigher_field)
 		self.add_content(self.work_date_field)
+		self.add_content(self.calendar_field)
 		self.add_content(self.worktype_field)
 		self.add_content(self.rank_field)
 		self.add_content(self.position_field)
