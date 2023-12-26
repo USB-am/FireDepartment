@@ -1,5 +1,5 @@
 import datetime
-from typing import Union
+from typing import Union, Callable
 
 from kivy.properties import StringProperty
 from kivymd.uix.picker import MDDatePicker, MDTimePicker
@@ -21,8 +21,13 @@ class FDDate(FDButton):
 	title = StringProperty()
 	btn_text = StringProperty()
 
-	def __init__(self, **options):
+	def __init__(self, callback: Callable=None, **options):
 		self._date: datetime.date = None
+
+		if callback is None:
+			self.callback = lambda: None
+		else:
+			self.callback = callback
 
 		super().__init__(**options)
 
@@ -34,7 +39,10 @@ class FDDate(FDButton):
 		dialog = MDDatePicker()
 		dialog.bind(
 			on_save=lambda instance, date, range:
-				self._save_value_and_close_dialog(date, dialog),
+				(
+					self._save_value_and_close_dialog(date, dialog),
+					self.callback(),
+				),
 			on_cancel=lambda *_:
 				self._save_value_and_close_dialog(None, dialog)
 		)
