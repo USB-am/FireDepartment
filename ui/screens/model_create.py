@@ -52,7 +52,6 @@ class _BaseCreateModel(BaseScrollScreen):
 		model_params = {key: widget.get_value() \
 			for key, widget in self.params.items()}
 		confirmed = self.is_valid(model_params)
-		print(confirmed)
 
 		if not confirmed:
 			self.save(model_params)
@@ -264,9 +263,11 @@ class HumanCreateModel(_BaseCreateModel):
 			title='Рабочий день',
 			btn_text='дд.мм.гггг')
 		# calendar
+		from datetime import datetime, date
 		self.calendar_field = FDCalendar(
-			start_work_day=123,
-			worktype=Worktype.query.first()
+			start_work_day=datetime(2023, 10, 7),
+			worktype=Worktype.query.first(),
+			for_date=datetime.now()
 		)
 		self.work_date_field.callback = self.calendar_field.update
 		# worktype
