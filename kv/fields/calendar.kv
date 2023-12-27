@@ -1,21 +1,27 @@
+<FDCalendarWeekTitle>:
+	size_hint: None, None
+	size: dp(20), dp(20)
+	halign: 'center'
+	valign: 'center'
+	font_style: 'Body2'
+	bold: True
+	text: root.text
+
+
+<FDCalendarDay>:
+	size_hint: None, None
+	size: dp(20), dp(20)
+	radius: dp(10)
+	halign: 'center'
+	valign: 'center'
+	font_style: 'Body2'
+	text: root.date.strftime('%d')
+
+
 <FDCalendar>:
 	orientation: 'horizontal'
-	# adaptive_height: True
 	size_hint_y: None
-	height: dp(145)
-
-	MDBoxLayout:
-		orientation: 'vertical'
-
-		MDIcon:
-			size_hint: None, None
-			size: dp(50), dp(50)
-			icon: root.icon
-
-		MDLabel:
-			id: next_work_day_label
-			size_hint: None, None
-			size: dp(50), dp(50)
+	height: dp(195)
 
 	MDBoxLayout:
 		id: calendar
@@ -40,7 +46,7 @@
 				id: month_title_label
 				halign: 'center'
 				valign: 'center'
-				text: 'Декабрь'
+				text: root.month_title
 
 			MDIconButton:
 				id: next_month_btn
@@ -51,7 +57,29 @@
 				icon: 'menu-right'
 
 		MDGridLayout:
-			id: calendar_layout
-			md_bg_color: (0, 0, 1, .3)
+			id: week_days_layout
+			size_hint_y: None
+			height: dp(20)
+			# md_bg_color: (0, 1, 0, .3)
 			cols: 7
 			spacing: dp(5)
+
+		MDGridLayout:
+			id: calendar_layout
+			# md_bg_color: (0, 0, 1, .3)
+			cols: 7
+			spacing: dp(5)
+
+	MDBoxLayout:
+		orientation: 'vertical'
+		padding: [dp(15), 0, 0, 0]
+
+		MDIcon:
+			size_hint: None, None
+			size: dp(50), dp(50)
+			icon: root.icon
+
+		MDLabel:
+			id: next_work_day_label
+			size_hint: None, None
+			size: dp(50), dp(50)
