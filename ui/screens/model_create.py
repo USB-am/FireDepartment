@@ -265,9 +265,9 @@ class HumanCreateModel(_BaseCreateModel):
 		# calendar
 		from datetime import datetime, date
 		self.calendar_field = FDCalendar(
-			start_work_day=datetime(2023, 10, 7),
-			worktype=Worktype.query.first(),
-			for_date=datetime.now()
+			# start_work_day=datetime(2023, 10, 7),
+			# worktype=Worktype.query.first(),
+			# for_date=datetime.now()
 		)
 		self.work_date_field.callback = self.calendar_field.update
 		# worktype

@@ -40,8 +40,16 @@ def is_work_day(date: date, start_work_day: date, worktype: Worktype) -> bool:
 	worktype: Worktype - запись о графике работы.
 	'''
 
-	date = datetime(date.year, date.month, date.day)
+	current_time = datetime.now().time()
+	date = datetime(
+		date.year,
+		date.month,
+		date.day,
+		current_time.hour,
+		current_time.minute,
+		current_time.second)
 	diff_dates = date - start_work_day
+	work_length = worktype.finish_work_day - worktype.start_work_day
 	work_week_length = worktype.work_day_range + worktype.week_day_range
 
 	start_day = start_work_day + diff_dates
@@ -54,9 +62,9 @@ def is_work_day(date: date, start_work_day: date, worktype: Worktype) -> bool:
 		day=start_date.day,
 		hour=worktype.start_work_day.hour,
 		minute=worktype.start_work_day.minute)
-	print(f'start_week = {start_week.strftime("%d.%m.%Y %H:%M:%S")}')
+	finish_week = start_week + work_length
 
-	return not bool(date.day % 4)
+	return start_week <= date <= finish_week
 
 
 class FDCalendarWeekTitle(MDLabel):
@@ -93,15 +101,15 @@ class FDCalendar(MDBoxLayout):
 	~params:
 	start_work_day: date - день для начала отсчета;
 	worktype: Worktype - запись из БД о графике работы;
-	month: int - месяц, который будет отображен.
+	for_date: datetime - месяц, который будет отображен.
 	'''
 
 	icon = 'calendar-month'
 
 	def __init__(self,
-	             start_work_day: date,
-	             worktype: Worktype,
-	             for_date: date=datetime.now().date(),
+	             start_work_day: date=None,
+	             worktype: Worktype=None,
+	             for_date: datetime=datetime.now(),
 	             **options
 	            ):
 		self.start_work_day = start_work_day
@@ -130,6 +138,8 @@ class FDCalendar(MDBoxLayout):
 		worktype: Worktype=None - запись из БД о графике работы.
 		'''
 
+		print('FDCalendar.update() is started')
+
 		if start_work_day is not None:
 			self.start_work_day = start_work_day
 		if worktype is not None:
@@ -141,7 +151,6 @@ class FDCalendar(MDBoxLayout):
 		layout.clear_widgets()
 
 		month_days = CALENDAR.itermonthdates(self._date.year, self._date.month)
-		# work_days = self.get_work_days(month_days)
 
 		for date in month_days:
 			calendar_day = FDCalendarDay(
@@ -155,9 +164,3 @@ class FDCalendar(MDBoxLayout):
 					calendar_day.md_bg_color = (1, 0, 0, .3)
 
 			layout.add_widget(calendar_day)
-
-	def get_work_days(self, month_days: List) -> List:
-		return list(filter(
-			lambda day: is_work_day(day + timedelta(), self.start_work_day, self.worktype),
-			month_days
-		))
