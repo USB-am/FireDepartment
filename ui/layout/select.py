@@ -31,7 +31,7 @@ class FDSelectListElement(MDBoxLayout):
 
 	def open_info_dialog(self) -> None:
 		''' Открыть диалоговое окно с информацией '''
-		
+
 		ok_btn = MDRaisedButton(text='Ок')
 		dialog = MDDialog(
 			title='Информация',
