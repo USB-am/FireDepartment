@@ -50,6 +50,12 @@ class _BaseSelect(MDBoxLayout):
 
 		self.ids.add_btn.bind(on_release=lambda *_: callback())
 
+	def bind_checkbox(self, callback: Callable) -> None:
+		''' Привязать событие нажатия чекбокса '''
+
+		for element in self.elements:
+			element.ids.checkbox.bind(on_release=lambda e: callback())
+
 
 class FDSelect(_BaseSelect):
 	'''

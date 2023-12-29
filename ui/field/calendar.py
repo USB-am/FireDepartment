@@ -126,7 +126,7 @@ class FDCalendar(MDBoxLayout):
 		self.update()
 
 	def update(self,
-	           start_work_day: date=None,
+	           start_work_day: datetime=None,
 	           worktype: Worktype=None,
 	           for_date: datetime=None
 	          ) -> None:
@@ -137,8 +137,6 @@ class FDCalendar(MDBoxLayout):
 		start_work_day: date=None - день для начала отсчета;
 		worktype: Worktype=None - запись из БД о графике работы.
 		'''
-
-		print('FDCalendar.update() is started')
 
 		if start_work_day is not None:
 			self.start_work_day = start_work_day
