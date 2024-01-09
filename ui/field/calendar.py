@@ -30,17 +30,19 @@ MONTHS = (
 )
 
 
-def is_work_day(date: date, start_work_day: date, worktype: Worktype) -> bool:
+def is_work_day(date: date, start_work_day: date, worktype_id: int) -> bool:
 	'''
 	Проверяет является date рабочим днем по графику worktype, начиная с дня start_work_day.
 
 	~params:
 	date: date - дата, которая будет проверяться;
 	start_work_day: date - дата начала отсчета;
-	worktype: Worktype - запись о графике работы.
+	worktype_id: int - id записи о графике работы.
 	'''
 
+	worktype = Worktype.query.get(worktype_id)
 	current_time = datetime.now().time()
+	diff_dates = date - start_work_day
 	date = datetime(
 		date.year,
 		date.month,
@@ -48,7 +50,6 @@ def is_work_day(date: date, start_work_day: date, worktype: Worktype) -> bool:
 		current_time.hour,
 		current_time.minute,
 		current_time.second)
-	diff_dates = date - start_work_day
 	work_length = worktype.finish_work_day - worktype.start_work_day
 	work_week_length = worktype.work_day_range + worktype.week_day_range
 
