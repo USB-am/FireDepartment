@@ -9,6 +9,8 @@ from kivymd.uix.label import MDLabel
 
 from data_base import Worktype
 from config import CALENDAR_FIELD
+from ui.field.date import FDDate
+from ui.field.select import FDSelect
 
 
 Builder.load_file(CALENDAR_FIELD)
@@ -30,42 +32,19 @@ MONTHS = (
 )
 
 
-def is_work_day(date: date, start_work_day: date, worktype_id: int) -> bool:
+def is_work_day(work_day: date, worktype: Worktype) -> bool:
 	'''
-	Проверяет является date рабочим днем по графику worktype, начиная с дня start_work_day.
+	Возвращает True, если work_day является рабочим днем по графику worktype.
 
 	~params:
-	date: date - дата, которая будет проверяться;
-	start_work_day: date - дата начала отсчета;
-	worktype_id: int - id записи о графике работы.
+	work_day: date - дата проверки;
+	worktype: Worktype - запись из БД о графике работы.
 	'''
 
-	worktype = Worktype.query.get(worktype_id)
-	current_time = datetime.now().time()
-	diff_dates = date - start_work_day
-	date = datetime(
-		date.year,
-		date.month,
-		date.day,
-		current_time.hour,
-		current_time.minute,
-		current_time.second)
-	work_length = worktype.finish_work_day - worktype.start_work_day
 	work_week_length = worktype.work_day_range + worktype.week_day_range
+	work_length = worktype.finish_work_day - worktype.start_work_day
 
-	start_day = start_work_day + diff_dates
-	start_date = start_day - timedelta(
-		days=diff_dates.days % work_week_length
-	)
-	start_week = datetime(
-		year=start_date.year,
-		month=start_date.month,
-		day=start_date.day,
-		hour=worktype.start_work_day.hour,
-		minute=worktype.start_work_day.minute)
-	finish_week = start_week + work_length
-
-	return start_week <= date <= finish_week
+	return not work_day.day % 4
 
 
 class FDCalendarWeekTitle(MDLabel):
@@ -87,7 +66,7 @@ class FDCalendarDay(MDLabel):
 	date: datetime - представляемый день.
 	'''
 
-	def __init__(self, date: datetime, another_month: bool=False):
+	def __init__(self, date: date, another_month: bool=False):
 		self.date = date
 		if not another_month:
 			self.theme_text_color = 'Hint'
@@ -100,66 +79,66 @@ class FDCalendar(MDBoxLayout):
 	Отображение календаря, отображающего график работы.
 
 	~params:
-	start_work_day: date - день для начала отсчета;
-	worktype: Worktype - запись из БД о графике работы;
-	for_date: datetime - месяц, который будет отображен.
+	from_date_field: FDDate - виджет с датой начала работы;
+	worktype_field: FDSelect - виджет с графиками работы.
 	'''
 
 	icon = 'calendar-month'
 
 	def __init__(self,
-	             start_work_day: date=None,
-	             worktype: Worktype=None,
-	             for_date: datetime=datetime.now(),
+	             from_date_field: FDDate,
+	             worktype_field: FDSelect,
 	             **options
 	            ):
-		self.start_work_day = start_work_day
-		self.worktype = worktype
-		self._date = for_date
-		self.month_title = MONTHS[self._date.month]
+		self.from_date_field = from_date_field
+		self.worktype_field = worktype_field
+
+		self.now_date = datetime.now().date()
+		self.month_title = MONTHS[self.now_date.month]
+
+		self.days: List[FDCalendarDay] = []
 
 		super().__init__(**options)
 
-		week_days_layout = self.ids.week_days_layout
-		for day in ('ПН', 'ВТ', 'СР', 'ЧТ', 'ПТ', 'СБ', 'ВС'):
-			week_days_layout.add_widget(FDCalendarWeekTitle(text=day))
+		self._update_days()
+		self._fill_work_days()
 
-		self.update()
-
-	def update(self,
-	           start_work_day: datetime=None,
-	           worktype: Worktype=None,
-	           for_date: datetime=None
-	          ) -> None:
+	def _update_days(self, date: date=None) -> None:
 		'''
-		Производит перерасчет рабочего времени.
+		Обновить страницу календаря на месят, соответствующий date.
 
 		~params:
-		start_work_day: date=None - день для начала отсчета;
-		worktype: Worktype=None - запись из БД о графике работы.
+		date: date - дата, месяц которой будет отображен.
 		'''
 
-		if start_work_day is not None:
-			self.start_work_day = start_work_day
-		if worktype is not None:
-			self.worktype = worktype
-		if for_date is not None:
-			self._date = for_date
+		if date is not None:
+			self.now_date = date
 
+		month_days = CALENDAR.itermonthdates(self.now_date.year, self.now_date.month)
 		layout = self.ids.calendar_layout
 		layout.clear_widgets()
+		self.days = []
 
-		month_days = CALENDAR.itermonthdates(self._date.year, self._date.month)
-
-		for date in month_days:
+		for day in month_days:
 			calendar_day = FDCalendarDay(
-				date=date,
-				another_month=self._date.month == date.month
+				date=day,
+				another_month=(day.month == self.now_date.month)
 			)
-
-			# Rewrite it shit
-			if not (None in (self.start_work_day, self.worktype, self._date)):
-				if is_work_day(date, self.start_work_day, self.worktype):
-					calendar_day.md_bg_color = (1, 0, 0, .3)
-
 			layout.add_widget(calendar_day)
+			self.days.append(calendar_day)
+
+	def _fill_work_days(self) -> None:
+		''' Выделяет рабочие дни '''
+
+		work_day = self.from_date_field.get_value()
+		worktype_id = self.worktype_field.get_value()
+		work_day = datetime.now().date()
+		worktype_id = 1
+
+		if None in (work_day, worktype_id):
+			return
+
+		worktype = Worktype.query.get(worktype_id)
+		for day in self.days:
+			if is_work_day(day.date, worktype):
+				day.md_bg_color = (1, 0, 0, .3)
