@@ -262,25 +262,19 @@ class HumanCreateModel(_BaseCreateModel):
 			icon='calendar',
 			title='Рабочий день',
 			btn_text='дд.мм.гггг')
-		# calendar
-		from datetime import datetime
-		self.calendar_field = FDCalendar(
-			for_date=datetime.now()
-		)
-		self.work_date_field.callback = lambda: self.calendar_field.update(
-			start_work_day=self.work_date_field.get_value()
-		)
 		# worktype
 		self.worktype_field = FDSelect(
 			title='График работы',
 			dialog_content=WorktypeDialogContent,
 			model=Worktype,
 			group='human_worktype')
-		self.worktype_field.bind_checkbox(lambda: self.calendar_field.update(
-			worktype=self.worktype_field.get_value())
-		)
 		self.worktype_field.bind_btn(
 			lambda: self._path_manager.forward('create_worktype')
+		)
+		# calendar
+		self.calendar_field = FDCalendar(
+			from_date_field=self.work_date_field,
+			worktype_field=self.worktype_field
 		)
 		# rank
 		self.rank_field = FDSelect(
