@@ -32,19 +32,28 @@ MONTHS = (
 )
 
 
-def is_work_day(work_day: date, worktype: Worktype) -> bool:
+def is_work_day(day: date, work_day: date, worktype: Worktype) -> bool:
 	'''
 	Возвращает True, если work_day является рабочим днем по графику worktype.
 
 	~params:
-	work_day: date - дата проверки;
+	day: date - дата проверки;
+	work_day: date - дата начала отсчета;
 	worktype: Worktype - запись из БД о графике работы.
 	'''
 
 	work_week_length = worktype.work_day_range + worktype.week_day_range
 	work_length = worktype.finish_work_day - worktype.start_work_day
 
-	return not work_day.day % 4
+	# wt_start = worktype.start_work_day.date()
+	wt_start = work_day
+	start_work_day_bias = (day - wt_start).days
+	start_work_week = wt_start + timedelta(
+		days=start_work_day_bias - (start_work_day_bias % work_week_length)
+	)
+	finish_work_week = start_work_week + timedelta(days=worktype.work_day_range-1)
+
+	return start_work_week <= day <= finish_work_week
 
 
 class FDCalendarWeekTitle(MDLabel):
@@ -94,14 +103,16 @@ class FDCalendar(MDBoxLayout):
 		self.worktype_field = worktype_field
 
 		self.now_date = datetime.now().date()
-		self.month_title = MONTHS[self.now_date.month]
+		self.month_title = '{month}\n{year}'.format(
+			month=MONTHS[self.now_date.month],
+			year=self.now_date.year
+		)
 
 		self.days: List[FDCalendarDay] = []
 
 		super().__init__(**options)
 
-		self._update_days()
-		self._fill_work_days()
+		self.update(self.now_date)
 
 	def _update_days(self, date: date=None) -> None:
 		'''
@@ -132,7 +143,7 @@ class FDCalendar(MDBoxLayout):
 
 		work_day = self.from_date_field.get_value()
 		worktype_id = self.worktype_field.get_value()
-		work_day = datetime.now().date()
+		work_day = datetime.now().date() + timedelta(days=1)
 		worktype_id = 1
 
 		if None in (work_day, worktype_id):
@@ -140,5 +151,21 @@ class FDCalendar(MDBoxLayout):
 
 		worktype = Worktype.query.get(worktype_id)
 		for day in self.days:
-			if is_work_day(day.date, worktype):
+			if is_work_day(day.date, work_day, worktype):
 				day.md_bg_color = (1, 0, 0, .3)
+
+	def _update_month_title(self, date: date) -> None:
+		''' Обновить название месяца '''
+
+		self.month_title = '{month}\n{year}'.format(
+			month=MONTHS[date.month],
+			year=date.year
+		)
+		self.ids.month_title_label.text = self.month_title
+
+	def update(self, date: date) -> None:
+		''' Обновить календарь '''
+
+		self._update_month_title(date)
+		self._update_days(date)
+		self._fill_work_days()
