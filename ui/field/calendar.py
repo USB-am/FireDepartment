@@ -32,6 +32,24 @@ MONTHS = (
 )
 
 
+def add_months(current_date: date, months_to_add: int) -> date:
+	'''
+	Добавить месяц(ы) к current_date.
+
+	~params:
+	current_date: date - дата, которая будет увеличена;
+	months_to_add: int - количество месяцев, на которое будет увеличено.
+	'''
+
+	new_date = date(
+		current_date.year + (current_date.month + months_to_add - 1) // 12,
+		(current_date.month + months_to_add - 1) % 12 + 1,
+		current_date.day
+	)
+
+	return new_date
+
+
 def is_work_day(day: date, work_day: date, worktype: Worktype) -> bool:
 	'''
 	Возвращает True, если work_day является рабочим днем по графику worktype.
@@ -45,10 +63,8 @@ def is_work_day(day: date, work_day: date, worktype: Worktype) -> bool:
 	work_week_length = worktype.work_day_range + worktype.week_day_range
 	work_length = worktype.finish_work_day - worktype.start_work_day
 
-	# wt_start = worktype.start_work_day.date()
-	wt_start = work_day
-	start_work_day_bias = (day - wt_start).days
-	start_work_week = wt_start + timedelta(
+	start_work_day_bias = (day - work_day).days
+	start_work_week = work_day + timedelta(
 		days=start_work_day_bias - (start_work_day_bias % work_week_length)
 	)
 	finish_work_week = start_work_week + timedelta(days=worktype.work_day_range-1)
@@ -143,8 +159,6 @@ class FDCalendar(MDBoxLayout):
 
 		work_day = self.from_date_field.get_value()
 		worktype_id = self.worktype_field.get_value()
-		work_day = datetime.now().date() + timedelta(days=1)
-		worktype_id = 1
 
 		if None in (work_day, worktype_id):
 			return
@@ -163,9 +177,26 @@ class FDCalendar(MDBoxLayout):
 		)
 		self.ids.month_title_label.text = self.month_title
 
-	def update(self, date: date) -> None:
+	def prev_month(self) -> None:
+		''' Переключение календаря на месяц назад '''
+
+		self.now_date = add_months(self.now_date, -1)
+		self.update(self.now_date)
+
+	def next_month(self) -> None:
+		''' Переключение календаря на месяц вперед '''
+
+		self.now_date = add_months(self.now_date, 1)
+		self.update(self.now_date)
+
+	def update(self, date: date=None) -> None:
 		''' Обновить календарь '''
+
+		if date is None:
+			return
 
 		self._update_month_title(date)
 		self._update_days(date)
 		self._fill_work_days()
+
+		self.now_date = date
