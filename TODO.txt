@@ -1,2 +1,5 @@
-ui\layout\dialogs.HumanDialogContent:
+﻿ui\layout\dialogs.HumanDialogContent:
 	- Добавить информацию о следующем рабочем дне
+
+ui\fields\select._BaseSelect:
+	- Обновлять значения FDSelect'ов при переходе на скрин
