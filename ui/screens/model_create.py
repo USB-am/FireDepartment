@@ -276,6 +276,12 @@ class HumanCreateModel(_BaseCreateModel):
 			from_date_field=self.work_date_field,
 			worktype_field=self.worktype_field
 		)
+		self.work_date_field.callback = lambda: self.calendar_field.update(
+			self.work_date_field.get_value()
+		)
+		self.worktype_field.bind_checkbox(lambda: self.calendar_field.update(
+			self.work_date_field.get_value()
+		))
 		# rank
 		self.rank_field = FDSelect(
 			title='Звание',
