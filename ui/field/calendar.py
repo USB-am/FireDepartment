@@ -88,15 +88,33 @@ class FDCalendarDay(MDLabel):
 	Представление дня календаря.
 
 	~params:
-	date: datetime - представляемый день.
+	date: datetime - представляемый день;
+	another_month: bool - указывает, что день относится к другому месяцу.
 	'''
 
 	def __init__(self, date: date, another_month: bool=False):
 		self.date = date
 		if not another_month:
 			self.theme_text_color = 'Hint'
+		self._is_work_day = False
 
 		super().__init__()
+
+	@property
+	def is_work_day(self) -> bool:
+		return self._is_work_day
+
+	@is_work_day.setter
+	def is_work_day(self, value: bool) -> None:
+		'''
+		Перезаписывает значение _is_work_day и обновляет заливку.
+
+		~params:
+		value: bool - статус дня (рабочий/не рабочий).
+		'''
+
+		self._is_work_day = value
+		self.md_bg_color = (1, 0, 0, .3) if value else (0, 0, 0, 0)
 
 
 class FDCalendar(MDBoxLayout):
@@ -165,8 +183,7 @@ class FDCalendar(MDBoxLayout):
 
 		worktype = Worktype.query.get(worktype_id)
 		for day in self.days:
-			if is_work_day(day.date, work_day, worktype):
-				day.md_bg_color = (1, 0, 0, .3)
+			day.is_work_day = is_work_day(day.date, work_day, worktype)
 
 	def _update_month_title(self, date: date) -> None:
 		''' Обновить название месяца '''
@@ -176,6 +193,24 @@ class FDCalendar(MDBoxLayout):
 			year=date.year
 		)
 		self.ids.month_title_label.text = self.month_title
+
+	def _update_information(self) -> None:
+		''' Обновляет область с информацией справа '''
+
+		# for day in self.days:
+		# 	if day.is_work_day and day.date >= datetime.now().date():
+		# 		print(day.date)
+		work_days = list(filter(lambda day: day.is_work_day, self.days))
+		now_date = datetime.now().date()
+		next_work_days = list(filter(lambda day: day.date >= now_date, work_days))[:2]
+		try:
+			self.ids.next_work_day_label.text = str(next_work_days[0].date)
+		except IndexError:
+			pass
+		try:
+			self.ids.next_next_work_day_label.text = str(next_work_days[1].date)
+		except IndexError:
+			pass
 
 	def prev_month(self) -> None:
 		''' Переключение календаря на месяц назад '''
@@ -198,5 +233,6 @@ class FDCalendar(MDBoxLayout):
 		self._update_month_title(date)
 		self._update_days(date)
 		self._fill_work_days()
+		self._update_information()
 
 		self.now_date = date
