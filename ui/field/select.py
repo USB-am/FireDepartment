@@ -36,6 +36,7 @@ class _BaseSelect(MDBoxLayout):
 	def fill_elements(self) -> None:
 		''' Заполняет список элементами из модели '''
 
+		self.ids.content.clear_widgets()
 		entries = self.model.query.order_by(self.model.title)
 		for entry in entries:
 			list_elem = FDSelectListElement(

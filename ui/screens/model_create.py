@@ -40,6 +40,8 @@ class _BaseCreateModel(BaseScrollScreen):
 		self.params: Dict[str, Widget] = {}
 		self.fill_elements()
 
+		self.bind(on_pre_enter=lambda e: self._pre_open_update())
+
 	def fill_elements(self) -> None:
 		pass
 
@@ -76,6 +78,10 @@ class _BaseCreateModel(BaseScrollScreen):
 		''' Валидация всех полей формы '''
 		raise AttributeError('Сhild classes of _BaseCreateModel must have an is_valid method')
 
+	def _pre_open_update(self) -> None:
+		''' Обновление полей перед загрузкой окна '''
+		pass
+
 
 class TagCreateModel(_BaseCreateModel):
 	''' Страница создания модели Tag '''
@@ -104,6 +110,9 @@ class TagCreateModel(_BaseCreateModel):
 			'title': self.title_field,
 			'emergencys': self.emergencies_field
 		})
+
+	def _pre_open_update(self) -> None:
+		self.emergencies_field.fill_elements()
 
 	def clear_form(self) -> None:
 		self.title_field.set_value('')
@@ -158,6 +167,9 @@ class RankCreateModel(_BaseCreateModel):
 			'humans': self.humans_field
 		})
 
+	def _pre_open_update(self) -> None:
+		self.humans_field.fill_elements()
+
 	def clear_form(self) -> None:
 		self.title_field.set_value('')
 		self.priority_field.set_value('')
@@ -209,6 +221,9 @@ class PositionCreateModel(_BaseCreateModel):
 			'title': self.title_field,
 			'humans': self.humans_field
 		})
+
+	def _pre_open_update(self) -> None:
+		self.humans_field.fill_elements()
 
 	def clear_form(self) -> None:
 		self.title_field.set_value('')
@@ -322,6 +337,11 @@ class HumanCreateModel(_BaseCreateModel):
 			'position': self.position_field
 		})
 
+	def _pre_open_update(self) -> None:
+		self.worktype_field.fill_elements()
+		self.rank_field.fill_elements()
+		self.position_field.fill_elements()
+
 	def clear_form(self) -> None:
 		self.title_field.set_value('')
 		self.phone_1_field.set_value('')
@@ -393,6 +413,10 @@ class EmergencyCreateModel(_BaseCreateModel):
 			'tags': self.tags_field,
 			'humans': self.humans_field
 		})
+
+	def _pre_open_update(self) -> None:
+		self.humans_field.fill_elements()
+		self.tags_field.fill_elements()
 
 	def clear_form(self) -> None:
 		self.title_field.set_value('')
@@ -472,6 +496,9 @@ class WorktypeCreateModel(_BaseCreateModel):
 			'week_day_range': self.week_day_range_field,
 			'humans': self.humans_field,
 		})
+
+	def _pre_open_update(self) -> None:
+		self.humans_field.fill_elements()
 
 	def clear_form(self) -> None:
 		self.title_field.set_value('')
