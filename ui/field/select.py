@@ -37,6 +37,8 @@ class _BaseSelect(MDBoxLayout):
 		''' Заполняет список элементами из модели '''
 
 		self.ids.content.clear_widgets()
+		self.elements.clear()
+
 		entries = self.model.query.order_by(self.model.title)
 		for entry in entries:
 			list_elem = FDSelectListElement(
@@ -55,7 +57,7 @@ class _BaseSelect(MDBoxLayout):
 		''' Привязать событие нажатия чекбокса '''
 
 		for element in self.elements:
-			element.ids.checkbox.bind(on_release=lambda e: callback())
+			element.ids.checkbox.bind(on_release=lambda *_: callback())
 
 
 class FDSelect(_BaseSelect):
