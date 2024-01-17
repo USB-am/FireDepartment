@@ -37,9 +37,10 @@ class _BaseCreateModel(BaseScrollScreen):
 			callback=lambda *_: self.save_and_back()
 		)
 
+		# Если значение == False, в методе _pre_open_update инициализирует
+		# необходимые виджеты и переводит значение в True.
+		self.was_opened = False
 		self.params: Dict[str, Widget] = {}
-		self.fill_elements()
-
 		self.bind(on_pre_enter=lambda e: self._pre_open_update())
 
 	def fill_elements(self) -> None:
@@ -112,6 +113,10 @@ class TagCreateModel(_BaseCreateModel):
 		})
 
 	def _pre_open_update(self) -> None:
+		if not self.was_opened:
+			self.fill_elements()
+			self.was_opened = True
+
 		self.emergencies_field.fill_elements()
 
 	def clear_form(self) -> None:
@@ -168,6 +173,10 @@ class RankCreateModel(_BaseCreateModel):
 		})
 
 	def _pre_open_update(self) -> None:
+		if not self.was_opened:
+			self.fill_elements()
+			self.was_opened = True
+
 		self.humans_field.fill_elements()
 
 	def clear_form(self) -> None:
@@ -223,6 +232,10 @@ class PositionCreateModel(_BaseCreateModel):
 		})
 
 	def _pre_open_update(self) -> None:
+		if not self.was_opened:
+			self.fill_elements()
+			self.was_opened = True
+
 		self.humans_field.fill_elements()
 
 	def clear_form(self) -> None:
@@ -338,6 +351,10 @@ class HumanCreateModel(_BaseCreateModel):
 		})
 
 	def _pre_open_update(self) -> None:
+		if not self.was_opened:
+			self.fill_elements()
+			self.was_opened = True
+
 		self.worktype_field.fill_elements()
 		self.rank_field.fill_elements()
 		self.position_field.fill_elements()
@@ -415,6 +432,10 @@ class EmergencyCreateModel(_BaseCreateModel):
 		})
 
 	def _pre_open_update(self) -> None:
+		if not self.was_opened:
+			self.fill_elements()
+			self.was_opened = True
+
 		self.humans_field.fill_elements()
 		self.tags_field.fill_elements()
 
@@ -498,6 +519,10 @@ class WorktypeCreateModel(_BaseCreateModel):
 		})
 
 	def _pre_open_update(self) -> None:
+		if not self.was_opened:
+			self.fill_elements()
+			self.was_opened = True
+
 		self.humans_field.fill_elements()
 
 	def clear_form(self) -> None:
