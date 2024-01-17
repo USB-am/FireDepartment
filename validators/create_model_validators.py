@@ -1,9 +1,7 @@
-from typing import Any, Dict, Union
+from typing import Any
 from dataclasses import dataclass
 
-from kivy.uix.widget import Widget
-
-from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype
+from data_base import db
 
 
 def _check_unique_column(model: db.Model, column: str, value: Any) -> bool:

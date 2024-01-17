@@ -5,7 +5,6 @@ from kivy.properties import StringProperty, ListProperty
 from kivy.uix.anchorlayout import AnchorLayout
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.menu import MDDropdownMenu
-from kivymd.uix.list import OneLineListItem
 
 from config import BUTTON_FIELD
 

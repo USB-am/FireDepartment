@@ -2,8 +2,6 @@ from . import BaseScreen
 from app.path_manager import PathManager
 from ui.widgets.notebook import FDNotebook
 
-from data_base import Emergency
-
 
 class CallsScreen(BaseScreen):
 	'''

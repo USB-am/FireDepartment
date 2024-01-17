@@ -197,9 +197,6 @@ class FDCalendar(MDBoxLayout):
 	def _update_information(self) -> None:
 		''' Обновляет область с информацией справа '''
 
-		# for day in self.days:
-		# 	if day.is_work_day and day.date >= datetime.now().date():
-		# 		print(day.date)
 		work_days = list(filter(lambda day: day.is_work_day, self.days))
 		now_date = datetime.now().date()
 		next_work_days = list(filter(lambda day: day.date >= now_date, work_days))[:2]

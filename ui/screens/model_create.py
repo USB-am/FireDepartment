@@ -1,4 +1,4 @@
-from typing import Dict, Union
+from typing import Dict
 
 from kivy.uix.widget import Widget
 from kivymd.uix.dialog import MDDialog
@@ -10,7 +10,6 @@ from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype
 from data_base.manager import write_entry
 from ui.field.input import FDInput, FDMultilineInput, FDNumberInput, \
 	FDPhoneInput
-from ui.field.button import FDRectangleButton
 from ui.field.select import FDSelect, FDMultiSelect
 from ui.field.switch import FDSwitch, FDDoubleSwitch
 from ui.field.date import FDDate, FDDateTime
@@ -18,8 +17,7 @@ from ui.field.calendar import FDCalendar
 from ui.layout.dialogs import HumanDialogContent, EmergencyDialogContent, \
 	WorktypeDialogContent, TagDialogContent, RankDialogContent, \
 	PositionDialogContent
-from validators.create_model_validators import UniqueValidator, EmptyValidator, \
-	_check_unique_column
+from validators.create_model_validators import UniqueValidator, EmptyValidator
 
 
 class _BaseCreateModel(BaseScrollScreen):
