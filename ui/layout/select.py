@@ -34,7 +34,7 @@ class FDSelectListElement(MDBoxLayout):
 
 		ok_btn = MDRaisedButton(text='Ок')
 		dialog = MDDialog(
-			title='Информация',
+			title=f'Информация',
 			type='custom',
 			content_cls=self.info_content(self.entry),
 			buttons=[ok_btn]
