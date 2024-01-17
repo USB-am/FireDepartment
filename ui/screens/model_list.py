@@ -1,5 +1,3 @@
-from typing import Type
-
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDRaisedButton

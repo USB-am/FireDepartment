@@ -1,8 +1,7 @@
 from typing import Any, Dict, Type, Union
-from sqlalchemy.orm import sessionmaker, exc
-from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import exc
 
-from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype
+from data_base import db
 from exceptions.data_base import DBCommitError, DBAddError
 
 
