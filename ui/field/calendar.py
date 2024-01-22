@@ -224,7 +224,6 @@ class FDCalendar(MDBoxLayout):
 	def update(self, date: date=None) -> None:
 		''' Обновить календарь '''
 
-		print(date)
 		if date is None:
 			return
 
