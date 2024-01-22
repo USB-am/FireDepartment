@@ -5,9 +5,10 @@ from kivy.lang.builder import Builder
 from kivy.properties import StringProperty
 from kivymd.uix.boxlayout import MDBoxLayout
 
-from data_base import Emergency, Human
+from data_base import Emergency, Human, Short, Rank
 from config import NOTEBOOK_WIDGET
 from ui.widgets.triple_checkbox import FDTripleCheckbox
+from ui.field.short import FDShortField
 
 
 Builder.load_file(NOTEBOOK_WIDGET)
@@ -54,13 +55,21 @@ class NotebookPhoneContent(MDBoxLayout):
 
 		super().__init__(**options)
 
-		for human in self.humans:
+		humans_with_rank = filter(
+			lambda h: bool(h.rank),
+			self.humans)
+		sorted_by_rank = sorted(
+			humans_with_rank,
+			key=lambda h: Rank.query.get(h.rank).priority,
+			reverse=True)
+
+		for human in sorted_by_rank:
 			checkbox = FDTripleCheckbox(
 				normal_icon='phone',
 				active_icon='phone-check',
 				deactive_icon='phone-cancel',
 				title=human.title,
-				substring=human.phone_1
+				substring=human.phone_1 if human.phone_1 is not None else ''
 			)
 			self.checkboxes.append(checkbox)
 			self.add_widget(checkbox)
@@ -69,10 +78,11 @@ class NotebookPhoneContent(MDBoxLayout):
 class NotebookInfoContent(MDBoxLayout):
 	''' Содержимое вкладки с информацией '''
 
-	def __init__(self, **options):
-		super().__init__(**options)
+	def fill_shorts(self, shorts: List[Short]) -> None:
+		layout = self.ids.shorts_layout
 
-		self.ids.addition_info_field.bind(on_text=lambda *_: print('Pressed key'))
+		for short in shorts:
+			layout.add_widget(FDShortField(short))
 
 
 @dataclass
@@ -110,6 +120,7 @@ class _NotebookManager:
 			humans=emergency.humans
 		)
 		info_content = NotebookInfoContent()
+		info_content.fill_shorts(emergency.shorts[::2])
 
 		new_tab = _NotebookTab(
 			top_panel=top_panel,
