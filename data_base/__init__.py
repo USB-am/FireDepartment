@@ -20,10 +20,14 @@ post_humans = db.Table('emergency_humans',
 	db.Column('human_id', db.Integer, db.ForeignKey('Human.id')),
 	db.Column('emergency_id', db.Integer, db.ForeignKey('Emergency.id')),
 )
+post_shorts = db.Table('emergency_shorts',
+	db.Column('short_id', db.Integer, db.ForeignKey('Short.id')),
+	db.Column('emergency_id', db.Integer, db.ForeignKey('Emergency.id')),
+)
 
 
 class Tag(db.Model):
-	""" Теги """
+	''' Теги '''
 
 	icon = 'pound'
 	__tablename__ = 'Tag'
@@ -36,8 +40,21 @@ class Tag(db.Model):
 		return self.title
 
 
+class Short(db.Model):
+	''' Хоткей для ввода информации о вызове '''
+
+	icon = 'text-short'
+	__tablename__ = 'Short'
+	id = db.Column(db.Integer, primary_key=True)
+	title = db.Column(db.String(255), nullable=False)
+	explanation = db.Column(db.Text(), nullable=True)
+
+	def __str__(self):
+		return self.title
+
+
 class Rank(db.Model):
-	""" Звания """
+	''' Звания '''
 
 	icon = 'chevron-triple-up'
 	__tablename__ = 'Rank'
@@ -51,7 +68,7 @@ class Rank(db.Model):
 
 
 class Position(db.Model):
-	""" Должности """
+	''' Должности '''
 
 	icon = 'crosshairs-gps'
 	__tablename__ = 'Position'
@@ -64,7 +81,7 @@ class Position(db.Model):
 
 
 class Human(db.Model):
-	""" Люди """
+	''' Люди '''
 
 	icon = 'account-group'
 	__tablename__ = 'Human'
@@ -83,7 +100,7 @@ class Human(db.Model):
 
 
 class Emergency(db.Model):
-	""" Вызовы """
+	''' Вызовы '''
 
 	icon = 'fire-alert'
 	__tablename__ = 'Emergency'
@@ -93,13 +110,14 @@ class Emergency(db.Model):
 	urgent = db.Column(db.Boolean(), nullable=True)
 	tags = db.relationship('Tag', secondary=post_tags, back_populates='emergencys')
 	humans = db.relationship('Human', secondary=post_humans, backref='emergencys')
+	shorts = db.relationship('Short', secondary=post_shorts, backref='emergencys')
 
 	def __str__(self):
 		return self.title
 
 
 class ColorTheme(db.Model):
-	""" Цветовая схема """
+	''' Цветовая схема '''
 
 	icon = 'palette'
 	__tablename__ = 'ColorTheme'
@@ -113,7 +131,7 @@ class ColorTheme(db.Model):
 
 
 class Worktype(db.Model):
-	""" График работы """
+	''' График работы '''
 
 	icon = 'timer-sand'
 	__tablename__ = 'Worktype'
@@ -130,7 +148,7 @@ class Worktype(db.Model):
 
 
 class UserSettings(db.Model):
-	""" Пользовательские настройки """
+	''' Пользовательские настройки '''
 
 	icon = 'account-wrench'
 	__tablename__ = 'UserSettings'
@@ -140,7 +158,7 @@ class UserSettings(db.Model):
 
 
 class Calls(db.Model):
-	""" Информация о вызове """
+	''' Информация о вызове '''
 
 	icon = 'firebase'
 	__tablename__ = 'Calls'
