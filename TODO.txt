@@ -5,4 +5,7 @@ ui\fields\calendar.FDCalendar:
 	- Сделать более привлекательный UI
 
 ui\fields\select.FDSelect:
-	 - Пофиксить .bind_checkbox метод для обновления FDCalendar на HumanCreateModel экране
+	- Пофиксить .bind_checkbox метод для обновления FDCalendar на HumanCreateModel экране
+
+ui\screens\model_create.ShortCreate(Edit)Model:
+	- Создать экран создания/редактирования шорта
