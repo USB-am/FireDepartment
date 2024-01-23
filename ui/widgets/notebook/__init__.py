@@ -120,7 +120,7 @@ class _NotebookManager:
 			humans=emergency.humans
 		)
 		info_content = NotebookInfoContent()
-		info_content.fill_shorts(emergency.shorts[::2])
+		info_content.fill_shorts(emergency.shorts)
 
 		new_tab = _NotebookTab(
 			top_panel=top_panel,

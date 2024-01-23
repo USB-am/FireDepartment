@@ -2,7 +2,6 @@ from kivy.lang.builder import Builder
 from kivymd.uix.button import MDRectangleFlatButton
 
 from data_base import Short
-from config import SHORT_FIELD
 
 
 Builder.load_string('''
