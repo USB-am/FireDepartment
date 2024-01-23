@@ -6,7 +6,7 @@ from kivymd.uix.button import MDRaisedButton
 
 from . import BaseScrollScreen
 from app.path_manager import PathManager
-from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype
+from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype, Short
 from data_base.manager import write_entry
 from ui.field.input import FDInput, FDMultilineInput, FDNumberInput, \
 	FDPhoneInput
@@ -16,7 +16,7 @@ from ui.field.date import FDDate, FDDateTime
 from ui.field.calendar import FDCalendar
 from ui.layout.dialogs import HumanDialogContent, EmergencyDialogContent, \
 	WorktypeDialogContent, TagDialogContent, RankDialogContent, \
-	PositionDialogContent
+	PositionDialogContent, ShortDialogContent
 from validators.create_model_validators import UniqueValidator, EmptyValidator
 
 
@@ -388,6 +388,7 @@ class EmergencyCreateModel(_BaseCreateModel):
 	toolbar_title = 'Создание Вызова'
 
 	def fill_elements(self) -> None:
+		# title
 		self.title_field = FDInput(
 			hint_text='Название',
 			required=True,
@@ -395,11 +396,14 @@ class EmergencyCreateModel(_BaseCreateModel):
 			max_text_length=255,
 			helper_text='',
 			validators=[UniqueValidator(Emergency, 'title'), EmptyValidator(None, None)])
+		# description
 		self.description_field = FDMultilineInput(
 			hint_text='Описание')
+		# urgent
 		self.urgent_field = FDSwitch(
 			icon='truck-fast',
 			title='Срочный?')
+		# humans
 		self.humans_field = FDMultiSelect(
 			title='Люди',
 			dialog_content=HumanDialogContent,
@@ -407,6 +411,15 @@ class EmergencyCreateModel(_BaseCreateModel):
 		self.humans_field.bind_btn(
 			lambda: self._path_manager.forward('create_human')
 		)
+		# shorts
+		self.shorts_field = FDMultiSelect(
+			title='Сокращения',
+			dialog_content=ShortDialogContent,
+			model=Short)
+		self.shorts_field.bind_btn(
+			lambda: self._path_manager.forward('create_short')
+		)
+		# tags
 		self.tags_field = FDMultiSelect(
 			title='Теги',
 			dialog_content=TagDialogContent,
@@ -419,6 +432,7 @@ class EmergencyCreateModel(_BaseCreateModel):
 		self.add_content(self.description_field)
 		self.add_content(self.urgent_field)
 		self.add_content(self.humans_field)
+		self.add_content(self.shorts_field)
 		self.add_content(self.tags_field)
 
 		self.params.update({
@@ -426,7 +440,8 @@ class EmergencyCreateModel(_BaseCreateModel):
 			'description': self.description_field,
 			'urgent': self.urgent_field,
 			'tags': self.tags_field,
-			'humans': self.humans_field
+			'shorts': self.shorts_field,
+			'humans': self.humans_field,
 		})
 
 	def _pre_open_update(self) -> None:
@@ -435,6 +450,7 @@ class EmergencyCreateModel(_BaseCreateModel):
 			self.was_opened = True
 
 		self.humans_field.fill_elements()
+		self.shorts_field.fill_elements()
 		self.tags_field.fill_elements()
 
 	def clear_form(self) -> None:
@@ -442,6 +458,7 @@ class EmergencyCreateModel(_BaseCreateModel):
 		self.description_field.set_value('')
 		self.urgent_field.set_value(False)
 		self.tags_field.set_value([])
+		self.shorts_field.set_value([])
 		self.humans_field.set_value([])
 
 	def is_valid(self, params: Dict[str, Widget]) -> tuple:

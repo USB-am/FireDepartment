@@ -4,7 +4,7 @@ from kivy.uix.widget import Widget
 from kivymd.uix.boxlayout import MDBoxLayout
 
 from config import DIALOG_LAYOUTS
-from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype
+from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype, Short
 from ui.field.label import FDTitle, FDVerticalLabel
 from ui.field.button import FDIconButton
 
@@ -48,6 +48,39 @@ class TagDialogContent(_BaseDialogContent):
 			title='Название',
 			value=entry.title))
 
+		if entry.emergencys:
+			self.ids.content.add_widget(FDTitle(
+				title='Связан с Вызовами:'))
+
+			sorted_emergencies = sorted(entry.emergencys, key=lambda e: e.title)
+			for emergency in sorted_emergencies:
+				btn = FDIconButton(
+					icon=emergency.icon,
+					icon_btn='eye',
+					title=emergency.title
+				)
+				btn.bind_btn(lambda e=emergency: print(f'View {e.title} emergency'))
+
+				self.ids.content.add_widget(btn)
+
+
+class ShortDialogContent(_BaseDialogContent):
+	'''
+	Содержимое всплывающего окна с информацией о записи из модели Short.
+
+	~params:
+	entry: Short - запись из модели Short.
+	'''
+
+	def __init__(self, entry: Short, **options):
+		super().__init__(entry=entry, **options)
+
+		self.ids.content.add_widget(FDVerticalLabel(
+			title='Название',
+			value=entry.title))
+		self.ids.content.add_widget(FDVerticalLabel(
+			title='Полный текст',
+			value=entry.explanation))
 		if entry.emergencys:
 			self.ids.content.add_widget(FDTitle(
 				title='Связан с Вызовами:'))
