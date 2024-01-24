@@ -9,6 +9,7 @@ Builder.load_string('''
 	text: root.short.title
 	theme_text_color: 'Custom'
 	line_color: app.theme_cls.text_color[:-1] + [.1]
+	font_size: dp(10)
 ''')
 
 
