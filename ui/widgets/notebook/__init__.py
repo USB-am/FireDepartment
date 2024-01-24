@@ -1,3 +1,4 @@
+import datetime
 from dataclasses import dataclass
 from typing import List, Callable, Optional
 
@@ -12,6 +13,33 @@ from ui.field.short import FDShortField
 
 
 Builder.load_file(NOTEBOOK_WIDGET)
+
+
+def get_explanation_text(short: Short) -> str:
+	'''
+	Возвращает форматированный текст из short'a.
+	[explanation text format's]:
+	- daytime
+	- timeday
+	- time
+	- day
+
+	~params:
+	short: Short - запись модели Short.
+	'''
+
+	if short.explanation is None:
+		return short.title
+
+	now_datetime = datetime.datetime.now()
+	returnable_explanation = short.explanation.format(
+		daytime=now_datetime.strftime('%d.%m.%Y %H:%M'),
+		timeday=now_datetime.strftime('%H:%M %d.%m.%Y'),
+		time=now_datetime.strftime('%H:%M'),
+		day=now_datetime.strftime('%d.%m.%Y'),
+	)
+
+	return f'{returnable_explanation}\n'
 
 
 class NotebookTopPanelElement(MDBoxLayout):
@@ -79,10 +107,22 @@ class NotebookInfoContent(MDBoxLayout):
 	''' Содержимое вкладки с информацией '''
 
 	def fill_shorts(self, shorts: List[Short]) -> None:
+		''' Отобразить хоткеи '''
+
 		layout = self.ids.shorts_layout
 
 		for short in shorts:
-			layout.add_widget(FDShortField(short))
+			short_btn = FDShortField(short)
+			short_btn.bind(on_release=lambda *_, s=short: self.insert_info_text(s))
+			layout.add_widget(short_btn)
+
+	def insert_info_text(self, short: Short) -> None:
+		''' Вставить текст в поле информации '''
+
+		text_area = self.ids.addition_info_field
+		inserted_text = get_explanation_text(short)
+
+		text_area.insert_text(inserted_text, from_undo=False)
 
 
 @dataclass
