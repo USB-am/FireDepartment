@@ -12,7 +12,7 @@ from ui.screens.model_list import TagsList, RanksList, PositionsList, \
 	HumansList, EmergenciesList, WorktypesList
 from ui.screens.model_create import TagCreateModel, RankCreateModel, \
 	PositionCreateModel, HumanCreateModel, WorktypeCreateModel, \
-	EmergencyCreateModel
+	EmergencyCreateModel, ShortCreateModel
 from ui.screens.model_edit import TagEditModel, RankEditModel, \
 	PositionEditModel, HumanEditModel, EmergencyEditModel, \
 	WorktypeEditModel
@@ -92,6 +92,7 @@ class Application(MDApp):
 		self.ui.screen_manager.add_widget(HumanCreateModel(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(EmergencyCreateModel(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(WorktypeCreateModel(self.ui.path_manager))
+		self.ui.screen_manager.add_widget(ShortCreateModel(self.ui.path_manager))
 		# Edit model screens
 		self.ui.screen_manager.add_widget(TagEditModel(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(RankEditModel(self.ui.path_manager))
