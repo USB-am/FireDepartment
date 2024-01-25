@@ -4,11 +4,11 @@ from kivymd.uix.button import MDRaisedButton
 
 from . import BaseScrollScreen
 from app.path_manager import PathManager
-from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype
+from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype, Short
 from ui.layout.model_list_element import ModelListElement
 from ui.layout.dialogs import TagDialogContent, RankDialogContent, \
 	PositionDialogContent, HumanDialogContent, EmergencyDialogContent,\
-	WorktypeDialogContent
+	WorktypeDialogContent, ShortDialogContent
 
 
 class _ModelList(BaseScrollScreen):
@@ -79,6 +79,27 @@ class TagsList(_ModelList):
 			list_elem.bind_info_btn(
 				lambda t=tag: self.open_info_dialog(self.info_dialog_content(t))
 			)
+			self.add_content(list_elem)
+
+
+class ShortsList(_ModelList):
+	''' Класс с элементами из модели Short '''
+
+	name = 'shorts_list'
+	model = Short
+	toolbar_title = 'Сокращения'
+	info_dialog_content = ShortDialogContent
+
+	def fill_elements(self) -> None:
+		self.clear_content()
+		shorts = self.model.query.order_by(Short.title).all()
+
+		for short in shorts:
+			list_elem = ModelListElement(entry=short, icon=Short.icon)
+			list_elem.bind_edit_btn(
+				lambda s=short: self.move_to_edit_and_fill_fields(s))
+			list_elem.bind_info_btn(
+				lambda s=short: self.open_info_dialog(self.info_dialog_content(s)))
 			self.add_content(list_elem)
 
 
