@@ -35,6 +35,8 @@ class FDUIManager(MDNavigationLayout):
 			self.move_screen_and_close_menu('options'))
 		self.ids.tags_nav_btn.bind(on_release=lambda *_:
 			self.move_screen_and_close_menu('tags_list'))
+		self.ids.shorts_nav_btn.bind(on_release=lambda *_:
+			self.move_screen_and_close_menu('shorts_list'))
 		self.ids.ranks_nav_btn.bind(on_release=lambda *_:
 			self.move_screen_and_close_menu('ranks_list'))
 		self.ids.positions_nav_btn.bind(on_release=lambda *_:
