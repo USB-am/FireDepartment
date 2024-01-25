@@ -6,7 +6,7 @@ from kivymd.uix.button import MDRaisedButton
 
 from . import model_create
 from app.path_manager import PathManager
-from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype
+from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype, Short
 from data_base.manager import update_entry
 from validators.create_model_validators import EmptyValidator, UniqueExcludingValidator
 
@@ -70,6 +70,39 @@ class TagEditModel(_BaseEditModel, model_create.TagCreateModel):
 		self.update_inputs_validators()
 		self.params['title'].set_value(entry.title)
 		self.params['emergencys'].set_value(entry.emergencys)
+
+	def is_valid(self, params: Dict[str, Any]) -> tuple:
+		checks = (
+			EmptyValidator(self.model, 'title')(
+				text='Поле "Название" не может быть пустым',
+				value=params['title']),
+			UniqueExcludingValidator(self.model, 'title', self.entry)(
+				text='Поле "Название" должно быть уникальным',
+				value=params['title'])
+		)
+
+		return tuple(filter(lambda check: not check.status, checks))
+
+
+class ShortEditModel(_BaseEditModel, model_create.ShortCreateModel):
+	''' Страница редактирования записи из модели Short '''
+
+	name = 'edit_short'
+	model = Short
+	toolbar_title = 'Редактирование Сокращения'
+	entry: db.Model = None
+
+	def update_inputs_validators(self) -> None:
+		self.title_field.validators = [
+			UniqueExcludingValidator(Short, 'title', self.entry),
+			EmptyValidator(None, None)
+		]
+
+	def fill_fields(self, entry: Short) -> None:
+		self.entry = entry
+		self.update_inputs_validators()
+		self.params['title'].set_value(entry.title)
+		self.params['explanation'].set_value(entry.explanation)
 
 	def is_valid(self, params: Dict[str, Any]) -> tuple:
 		checks = (

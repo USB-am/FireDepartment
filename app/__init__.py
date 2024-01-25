@@ -15,7 +15,7 @@ from ui.screens.model_create import TagCreateModel, RankCreateModel, \
 	EmergencyCreateModel, ShortCreateModel
 from ui.screens.model_edit import TagEditModel, RankEditModel, \
 	PositionEditModel, HumanEditModel, EmergencyEditModel, \
-	WorktypeEditModel
+	WorktypeEditModel, ShortEditModel
 
 
 Builder.load_file(APP_SCREEN)
@@ -100,6 +100,7 @@ class Application(MDApp):
 		self.ui.screen_manager.add_widget(HumanEditModel(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(EmergencyEditModel(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(WorktypeEditModel(self.ui.path_manager))
+		self.ui.screen_manager.add_widget(ShortEditModel(self.ui.path_manager))
 
 		self.ui.path_manager.move_to_screen('main')
 
