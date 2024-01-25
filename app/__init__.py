@@ -9,7 +9,7 @@ from ui.screens.main import MainScreen
 from ui.screens.options import OptionsScreen
 from ui.screens.calls import CallsScreen
 from ui.screens.model_list import TagsList, RanksList, PositionsList, \
-	HumansList, EmergenciesList, WorktypesList
+	HumansList, EmergenciesList, WorktypesList, ShortsList
 from ui.screens.model_create import TagCreateModel, RankCreateModel, \
 	PositionCreateModel, HumanCreateModel, WorktypeCreateModel, \
 	EmergencyCreateModel, ShortCreateModel
@@ -85,6 +85,7 @@ class Application(MDApp):
 		self.ui.screen_manager.add_widget(HumansList(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(EmergenciesList(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(WorktypesList(self.ui.path_manager))
+		self.ui.screen_manager.add_widget(ShortsList(self.ui.path_manager))
 		# Create model screens
 		self.ui.screen_manager.add_widget(TagCreateModel(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(RankCreateModel(self.ui.path_manager))
@@ -102,7 +103,7 @@ class Application(MDApp):
 		self.ui.screen_manager.add_widget(WorktypeEditModel(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(ShortEditModel(self.ui.path_manager))
 
-		self.ui.path_manager.move_to_screen('main')
+		self.ui.path_manager.move_to_screen('shorts_list')
 
 	def build_config(self, config):
 		config.setdefaults('options', {
