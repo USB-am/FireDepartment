@@ -134,6 +134,52 @@ class TagCreateModel(_BaseCreateModel):
 		return tuple(filter(lambda check: not check.status, checks))
 
 
+class ShortCreateModel(_BaseCreateModel):
+	''' Страница создания модели Short '''
+
+	name = 'create_short'
+	model = Short
+	toolbar_title = 'Создание Сокращения'
+
+	def fill_elements(self) -> None:
+		self.title_field = FDInput(
+			hint_text='Название', required=True, helper_text_mode='persistent',
+			max_text_length=255, helper_text='',
+			validators=[UniqueValidator(Short, 'title'), EmptyValidator(None, None)])
+		self.explanation_field = FDMultilineInput(
+			hint_text='Полный текст',
+			helper_text='Этот текст будет вставлен при нажатии в экране Вызова')
+
+		self.add_content(self.title_field)
+		self.add_content(self.explanation_field)
+
+		self.params.update({
+			'title': self.title_field,
+			'explanation': self.explanation_field,
+		})
+
+	def _pre_open_update(self) -> None:
+		if not self.was_opened:
+			self.fill_elements()
+			self.was_opened = True
+
+	def clear_form(self) -> None:
+		self.title_field.set_value('')
+		self.explanation_field.set_value('')
+
+	def is_valid(self, params: Dict[str, Widget]) -> tuple:
+		checks = (
+			EmptyValidator(self.model, 'title')(
+				text='Поле "Название" не может быть пустым',
+				value=params['title']),
+			UniqueValidator(self.model, 'title')(
+				text='Поле "Название" должно быть уникальным',
+				value=params['title'])
+		)
+
+		return tuple(filter(lambda check: not check.status, checks))
+
+
 class RankCreateModel(_BaseCreateModel):
 	''' Страница создания модели Rank '''
 
