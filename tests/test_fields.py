@@ -1,4 +1,6 @@
 import unittest
+
+from tests import AppTest
 from ui.field.switch import FDSwitch, FDDoubleSwitch
 
 
@@ -6,7 +8,9 @@ class TestFDSwitch(unittest.TestCase):
 	''' Тесты FDSwitch '''
 
 	def setUp(self):
+		app = AppTest()
 		self.switch = FDSwitch()
+		app.screen.add_widget(self.switch)
 
 	def test_set_value_false(self):
 		self.switch.set_value(False)
