@@ -18,6 +18,4 @@ class FDShortField(MDRectangleFlatButton):
 
 	def __init__(self, short: Short):
 		self.short = short
-
 		super().__init__()
-		self.bind(on_release=lambda *_: print(self.short.explanation))
