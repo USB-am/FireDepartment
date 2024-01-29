@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Optional
 from dataclasses import dataclass
 
 from data_base import db
@@ -76,7 +76,10 @@ class UniqueExcludingValidator(_BaseValidator):
 		super().__init__(model, column)
 		self.entry = entry
 
-	def __call__(self, value: Any, text: str='Поле должно быть уникальным') -> ValidationResult:
+	def __call__(self,
+		         value: Any,
+		         text: Optional[str]='Поле должно быть уникальным'
+		         ) -> ValidationResult:
 		check = _check_excluding_unique_column(
 			model=self.model,
 			column=self.column,
@@ -89,6 +92,6 @@ class EmptyValidator(_BaseValidator):
 	''' Валидация на пустое значение '''
 
 	def __call__(self, value: Any,
-	             text: str='Поле не может быть пустым') -> ValidationResult:
+	             text: Optional[str]='Поле не может быть пустым') -> ValidationResult:
 		check = _check_not_empty(value)
 		return ValidationResult(text, check)
