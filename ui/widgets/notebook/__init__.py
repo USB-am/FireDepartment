@@ -5,6 +5,7 @@ from typing import List, Callable, Optional
 from kivy.lang.builder import Builder
 from kivy.properties import StringProperty
 from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.label import MDLabel
 
 from data_base import Emergency, Human, Short, Rank
 from config import NOTEBOOK_WIDGET
@@ -40,6 +41,27 @@ def get_explanation_text(short: Short) -> str:
 	)
 
 	return f'{returnable_explanation}\n'
+
+
+class NotebookInformationText(MDLabel):
+	''' Область для отображения логов вызова '''
+
+	def __init__(self, **options):
+		super().__init__(**options)
+
+		self.story: List[str] = []
+
+	def add_logs(self, *logs: str) -> None:
+		'''
+		Добавляет переданные логи.
+
+		~params:
+		*logs: str - логи.
+		'''
+
+		for log in logs:
+			self.text += f'{log}\n'
+			self.story.append(log)
 
 
 class NotebookTopPanelElement(MDBoxLayout):
