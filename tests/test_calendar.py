@@ -65,6 +65,22 @@ class TestFDCalendar(unittest.TestCase):
 			day=self.NOW_DATE.day)
 		self.assertEqual(func_result, expected)
 
+	def test_is_work_day(self):
+		start_date = datetime(year=2024, month=12, day=1, hour=9)
+		finish_date = datetime(year=2024, month=12, day=2, hour=9)
+		wt = Worktype(
+			title='1/1',
+			start_work_day=start_date,
+			finish_work_day=finish_date,
+			work_day_range=1,
+			week_day_range=1
+		)
+
+		for day in range(1, 10):
+			test_date = date(year=2024, month=12, day=day)
+			result = Calendar.is_work_day(test_date, start_date.date(), wt)
+			self.assertEqual(result, bool(day%2))
+
 
 if __name__ == '__main__':
 	unittest.main()
