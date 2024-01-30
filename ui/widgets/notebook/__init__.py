@@ -7,7 +7,7 @@ from kivy.properties import StringProperty
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.label import MDLabel
 
-from data_base import Emergency, Human, Short, Rank
+from data_base import db, Emergency, Human, Short, Rank
 from config import NOTEBOOK_WIDGET
 from ui.widgets.triple_checkbox import FDTripleCheckbox
 from ui.field.short import FDShortField
@@ -43,25 +43,41 @@ def get_explanation_text(short: Short) -> str:
 	return f'{returnable_explanation}\n'
 
 
+class NotebookLog:
+	''' Представление лога '''
+
+	def __init__(self, text: str):
+		self.text = text
+		self.create_time = datetime.datetime.now()
+
+	def __str__(self):
+		str_datetime = self.create_time.strftime('%H:%S %d.%m.%Y')
+		return f'[{str_datetime}] {self.text}'
+
+
 class NotebookInformationText(MDLabel):
 	''' Область для отображения логов вызова '''
 
 	def __init__(self, **options):
+		self.logs: List[NotebookLog] = [NotebookLog('Начало выезда'),]
 		super().__init__(**options)
 
-		self.story: List[str] = []
-
-	def add_logs(self, *logs: str) -> None:
+	def add_phone_log(self, entry: Human, status: int) -> None:
 		'''
-		Добавляет переданные логи.
+		Добавить в историю событие звонка/попытки связи с сотрудником.
 
 		~params:
-		*logs: str - логи.
+		entry: Human - запись о сотруднике;
+		status: int - статус события:
+			0 - не было звонка;
+			1 - успешный звонок;
+			2 - неуспешный звонок.
 		'''
 
-		for log in logs:
-			self.text += f'{log}\n'
-			self.story.append(log)
+		pass
+
+	def __str__(self):
+		return ''.join(map(str, self.logs))
 
 
 class NotebookTopPanelElement(MDBoxLayout):
@@ -128,6 +144,12 @@ class NotebookPhoneContent(MDBoxLayout):
 class NotebookInfoContent(MDBoxLayout):
 	''' Содержимое вкладки с информацией '''
 
+	def __init__(self, **options):
+		super().__init__(**options)
+
+		self.manager = NotebookInformationText()
+		self.add_widget(self.manager)
+
 	def fill_shorts(self, shorts: List[Short]) -> None:
 		''' Отобразить хоткеи '''
 
@@ -176,6 +198,7 @@ class _NotebookManager:
 		emergency: Emergency - запись из БД о выезде.
 		'''
 
+		# Init Notebook tab layouts
 		top_panel = NotebookTopPanelElement(title=emergency.title)
 		phone_content = NotebookPhoneContent(
 			description=emergency.description,
@@ -190,8 +213,14 @@ class _NotebookManager:
 			info_content=info_content
 		)
 		self.tabs.append(new_tab)
+
+		# Bind Notebook tag components
 		new_tab.top_panel.bind_open(lambda: self.show_tab(new_tab))
 		new_tab.top_panel.bind_close(lambda: self.close_tab(new_tab))
+
+		for checkbox in new_tab.phone_content.checkboxes:
+			# checkbox.ids.checkbox.bind(on_release=lambda )
+			pass
 
 		return new_tab
 
