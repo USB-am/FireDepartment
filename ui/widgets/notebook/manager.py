@@ -58,6 +58,15 @@ class NotebookManager:
 		new_tab.top_panel.bind_open(lambda: self.show_tab(new_tab))
 		new_tab.top_panel.bind_close(lambda: self.close_tab(new_tab))
 
+		info_manager = info_content.manager
+		for checkbox in new_tab.phone_content.checkboxes:
+			checkbox.ids.checkbox.bind(on_release=lambda *_:
+				info_manager.add_phone_log(
+					human_name=checkbox.title,
+					phone=checkbox.substring,
+					status=checkbox.get_value()
+			))
+
 		return new_tab
 
 	def show_tab(self, tab: NotebookTab) -> None:
