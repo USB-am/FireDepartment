@@ -51,22 +51,40 @@ class NotebookInformationText(MDLabel):
 	''' Область для отображения логов вызова '''
 
 	def __init__(self, **options):
-		self.logs: List[NotebookLog] = [NotebookLog('Начало выезда'),]
+		self.logs: List[NotebookLog] = [NotebookLog('Начало выезда.'),]
 		super().__init__(**options)
 
-	def add_phone_log(self, entry: Human, status: int) -> None:
+	def add_phone_log(self, human_name: str, phone: str, status: int) -> None:
 		'''
 		Добавить в историю событие звонка/попытки связи с сотрудником.
 
 		~params:
-		entry: Human - запись о сотруднике;
+		haman_name: str - ФИО сотрудника;
+		phone: str - номер телефона;
 		status: int - статус события:
 			0 - не было звонка;
 			1 - успешный звонок;
 			2 - неуспешный звонок.
 		'''
 
-		pass
+		if not status:
+			return
+
+		if status == 1:
+			log_text = f'Звонок {human_name} на номер {phone}.'
+		elif status == 2:
+			log_text = f'Звонок {human_name} не прошел.'
+		self.logs.append(NotebookLog(log_text))
+
+	def add_short_log(self, entry: Short) -> None:
+		'''
+		Добавить в историю событие из Short.
+
+		~params:
+		entry: Short - добавляемые данные.
+		'''
+
+		self.logs.append(get_explanation_text(entry))
 
 	def __str__(self):
 		return ''.join(map(str, self.logs))
