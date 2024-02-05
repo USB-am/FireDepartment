@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Callable
 from datetime import datetime
 
 from kivymd.uix.label import MDLabel
@@ -6,6 +6,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 
 from data_base import Short, Human
 from ui.field.short import FDShortField
+from ui.widgets.triple_checkbox import FDTripleCheckbox
 
 
 def get_explanation_text(short: Short) -> str:
@@ -54,27 +55,38 @@ class NotebookInformationText(MDLabel):
 		self.logs: List[NotebookLog] = [NotebookLog('Начало выезда.'),]
 		super().__init__(**options)
 
-	def add_phone_log(self, human_name: str, phone: str, status: int) -> None:
+	def add_phone_log(self, checkbox: FDTripleCheckbox) -> None:
 		'''
 		Добавить в историю событие звонка/попытки связи с сотрудником.
 
 		~params:
 		haman_name: str - ФИО сотрудника;
 		phone: str - номер телефона;
-		status: int - статус события:
+		status: Callable - метод получения статуса:
 			0 - не было звонка;
 			1 - успешный звонок;
 			2 - неуспешный звонок.
 		'''
 
-		if not status:
-			return
+		# status = status()
+		# print(f'{status=}')
+		# if not status:
+		# 	return
+		human_name = checkbox.title
+		phone = checkbox.substring
+		status = checkbox.state
+		print(status)
 
 		if status == 1:
 			log_text = f'Звонок {human_name} на номер {phone}.'
 		elif status == 2:
 			log_text = f'Звонок {human_name} не прошел.'
+		else:
+			return
+		print(f'{log_text=}')
+
 		self.logs.append(NotebookLog(log_text))
+		self.update_logs()
 
 	def add_short_log(self, entry: Short) -> None:
 		'''
@@ -85,6 +97,11 @@ class NotebookInformationText(MDLabel):
 		'''
 
 		self.logs.append(get_explanation_text(entry))
+		self.update_logs()
+
+	def update_logs(self) -> None:
+		print(str(self))
+		self.text = str(self)
 
 	def __str__(self):
 		return ''.join(map(str, self.logs))
