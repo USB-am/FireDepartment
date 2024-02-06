@@ -1,6 +1,7 @@
 from typing import List, Callable
 from datetime import datetime
 
+from kivy.metrics import dp
 from kivymd.uix.label import MDLabel
 from kivymd.uix.boxlayout import MDBoxLayout
 
@@ -44,7 +45,7 @@ class NotebookLog:
 		self.create_time = datetime.now()
 
 	def __str__(self):
-		str_datetime = self.create_time.strftime('%H:%S %d.%m.%Y')
+		str_datetime = self.create_time.strftime('%d.%m.%Y %H:%M')
 		return f'[{str_datetime}] {self.text}'
 
 
@@ -60,8 +61,7 @@ class NotebookInformationText(MDLabel):
 		Добавить в историю событие звонка/попытки связи с сотрудником.
 
 		~params:
-		checkbox: FDTripleCheckbox - тройной checkbox с информацией
-			о вызове сотруднику.
+		checkbox: FDTripleCheckbox - тройной checkbox с информацией о вызове сотруднику.
 		'''
 
 		human_name = checkbox.title
@@ -94,7 +94,7 @@ class NotebookInformationText(MDLabel):
 		self.text = str(self)
 
 	def __str__(self):
-		return '\n'.join(map(str, self.logs))
+		return '\n'.join(map(str, self.logs[::-1]))
 
 
 class NotebookInfoContent(MDBoxLayout):
@@ -103,7 +103,8 @@ class NotebookInfoContent(MDBoxLayout):
 	def __init__(self, **options):
 		super().__init__(**options)
 
-		self.manager = NotebookInformationText(adaptive_height=True)
+		self.manager = NotebookInformationText()
+		self.manager.texture_update()
 		self.add_widget(self.manager)
 
 	def fill_shorts(self, shorts: List[Short]) -> None:
