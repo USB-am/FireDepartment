@@ -60,8 +60,8 @@ class NotebookManager:
 
 		info_manager = info_content.manager
 		for checkbox in new_tab.phone_content.checkboxes:
-			checkbox.ids.checkbox.bind(on_release=lambda *_:
-				info_manager.add_phone_log(checkbox)
+			checkbox.ids.checkbox.bind(on_release=lambda *_, c=checkbox:
+				info_manager.add_phone_log(c)
 			)
 
 		return new_tab
