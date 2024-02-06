@@ -60,22 +60,13 @@ class NotebookInformationText(MDLabel):
 		Добавить в историю событие звонка/попытки связи с сотрудником.
 
 		~params:
-		haman_name: str - ФИО сотрудника;
-		phone: str - номер телефона;
-		status: Callable - метод получения статуса:
-			0 - не было звонка;
-			1 - успешный звонок;
-			2 - неуспешный звонок.
+		checkbox: FDTripleCheckbox - тройной checkbox с информацией
+			о вызове сотруднику.
 		'''
 
-		# status = status()
-		# print(f'{status=}')
-		# if not status:
-		# 	return
 		human_name = checkbox.title
 		phone = checkbox.substring
-		status = checkbox.state
-		print(status)
+		status = (checkbox.state + 1) % 3
 
 		if status == 1:
 			log_text = f'Звонок {human_name} на номер {phone}.'
@@ -83,7 +74,6 @@ class NotebookInformationText(MDLabel):
 			log_text = f'Звонок {human_name} не прошел.'
 		else:
 			return
-		print(f'{log_text=}')
 
 		self.logs.append(NotebookLog(log_text))
 		self.update_logs()
@@ -96,15 +86,15 @@ class NotebookInformationText(MDLabel):
 		entry: Short - добавляемые данные.
 		'''
 
-		self.logs.append(get_explanation_text(entry))
+		short_without_text_transfer = get_explanation_text(entry)[:-1]
+		self.logs.append(short_without_text_transfer)
 		self.update_logs()
 
 	def update_logs(self) -> None:
-		print(str(self))
 		self.text = str(self)
 
 	def __str__(self):
-		return ''.join(map(str, self.logs))
+		return '\n'.join(map(str, self.logs))
 
 
 class NotebookInfoContent(MDBoxLayout):
@@ -113,7 +103,7 @@ class NotebookInfoContent(MDBoxLayout):
 	def __init__(self, **options):
 		super().__init__(**options)
 
-		self.manager = NotebookInformationText()
+		self.manager = NotebookInformationText(adaptive_height=True)
 		self.add_widget(self.manager)
 
 	def fill_shorts(self, shorts: List[Short]) -> None:
@@ -124,6 +114,7 @@ class NotebookInfoContent(MDBoxLayout):
 		for short in shorts:
 			short_btn = FDShortField(short)
 			short_btn.bind(on_release=lambda *_, s=short: self.insert_info_text(s))
+			short_btn.bind(on_release=lambda *_, s=short: self.manager.add_short_log(s))
 			layout.add_widget(short_btn)
 
 	def insert_info_text(self, short: Short) -> None:
