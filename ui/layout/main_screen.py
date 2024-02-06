@@ -6,7 +6,7 @@ from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelOneLine
 from kivymd.uix.boxlayout import MDBoxLayout
 
 from config import MAIN_SCREEN_LAYOUTS
-from data_base import Tag, Human, Emergency
+from data_base import Tag, Short, Human, Emergency
 
 
 Builder.load_file(MAIN_SCREEN_LAYOUTS)
@@ -40,6 +40,10 @@ class _ListElementContent(MDBoxLayout):
 		self.ids.info_icons.add_widget(_ListElementIcon(
 			icon=Human.icon,
 			value=str(len(self.emergency.humans))
+		))
+		self.ids.info_icons.add_widget(_ListElementIcon(
+			icon=Short.icon,
+			value=str(len(self.emergency.shorts))
 		))
 
 		if self.emergency.urgent:
