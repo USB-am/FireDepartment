@@ -61,10 +61,11 @@ class MainScreenListElement(MDExpansionPanel):
 
 	def __init__(self, emergency: Emergency, **options):
 		self.emergency = emergency
+		content = _ListElementContent(emergency)
 
 		options.update({
 			'icon': Emergency.icon,
-			'content': _ListElementContent(emergency),
+			'content': content,
 			'panel_cls': MDExpansionPanelOneLine(
 				text=emergency.title
 			)
@@ -81,3 +82,7 @@ class MainScreenListElement(MDExpansionPanel):
 		'''
 
 		self.content.ids.open_button.bind(on_release=lambda *_: callback())
+
+	def on_open(self, *a, **kw):
+		super().on_open(*a, **kw)
+		print(self.content.height)

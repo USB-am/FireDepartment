@@ -1,14 +1,25 @@
 <_ListElementContent>:
 	orientation: 'vertical'
 	adaptive_height: True
-	padding: [dp(20), dp(10)]
+	padding: [dp(10), dp(20)]
 
-	MDLabel:
+	ScrollView:
 		size_hint: (1, None)
-		height: self.texture_size[1]
-		valign: 'top'
-		halign: 'left'
-		text: root.emergency.description
+		height: dp(100)
+
+		GridLayout:
+			cols: 1
+			size_hint: (1, None)
+			height: self.minimum_height
+			do_scroll_x: False
+
+			MDLabel:
+				size_hint_y: None
+				height: self.texture_size[1]
+				# text_size: self.width, None
+				valign: 'top'
+				halign: 'left'
+				text: (root.emergency.description + '\n')*1
 
 	MDBoxLayout:
 		orientation: 'horizontal'
