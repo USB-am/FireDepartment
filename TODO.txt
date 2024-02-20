@@ -4,8 +4,3 @@
 ui\fields\calendar.FDCalendar:
 	- Сделать более привлекательный UI
 	- Исправить ужас в методе FDCalendar._update_information
-
-ui\fields\select.FDSelect:
-	- Пофиксить .bind_checkbox метод для обновления FDCalendar на HumanCreateModel экране
-	* Ошибка в классе _BaseSelect. При вызове метода fill_elements создаются новые экземпляры checkbox'ов,
-	из-за чего не работает метод привязки событий.
