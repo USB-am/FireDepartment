@@ -1,4 +1,4 @@
-from typing import Callable, List, Union, Type
+from typing import Callable, List, Union, Type, Set
 
 from kivy.lang.builder import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
@@ -9,6 +9,22 @@ from ui.layout.select import FDSelectListElement
 
 
 Builder.load_file(SELECT_FIELD)
+
+
+def filter_created_widgets(displayed_items: List[FDSelectListElement],
+                           entries: Set[db.Model]) -> Set[db.Model]:
+	'''
+	Получить не отображенные элементы FDSelectListElement.
+
+	~params:
+	displayed_items: List[FDSelectListElement] - список созданных элементов;
+	entries: Set - фильтруемые записи.
+	'''
+
+	# get entries from all items
+	displayed_items_entries = {item.entry for item in displayed_items}
+
+	return entries - displayed_items_entries
 
 
 class _BaseSelect(MDBoxLayout):
@@ -34,13 +50,13 @@ class _BaseSelect(MDBoxLayout):
 		self.fill_elements()
 
 	def fill_elements(self) -> None:
-		''' Заполняет список элементами из модели '''
+		''' Заполняет список недостающими элементами из модели '''
 
-		self.ids.content.clear_widgets()
-		self.elements.clear()
+		all_entries = self.model.query.order_by(self.model.title)
+		entries = filter_created_widgets(self.elements, set(all_entries))
+		sorted_entries = sorted(entries, key=lambda e: e.title)
 
-		entries = self.model.query.order_by(self.model.title)
-		for entry in entries:
+		for entry in sorted_entries:
 			list_elem = FDSelectListElement(
 				entry=entry,
 				info_content=self.dialog_content,
