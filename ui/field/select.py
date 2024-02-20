@@ -1,4 +1,4 @@
-from typing import Callable, List, Union
+from typing import Callable, List, Union, Type
 
 from kivy.lang.builder import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
@@ -22,7 +22,7 @@ class _BaseSelect(MDBoxLayout):
 	group: str=None - группа объектов. Если None, доступен выбор множества элементов.
 	'''
 
-	def __init__(self, title: str, dialog_content: MDBoxLayout, model: db.Model, group: str):
+	def __init__(self, title: str, dialog_content: MDBoxLayout, model: Type[db.Model], group: str):
 		self.title = title
 		self.dialog_content = dialog_content
 		self.model = model
