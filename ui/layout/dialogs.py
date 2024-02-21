@@ -10,7 +10,7 @@ from config import DIALOG_LAYOUTS
 from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype, Short
 from ui.field.label import FDTitle, FDVerticalLabel
 from ui.field.button import FDIconButton
-from ui.field.calendar import is_work_day
+from ui.field.calendar import is_work_day, add_months
 
 
 Builder.load_file(DIALOG_LAYOUTS)
@@ -197,6 +197,7 @@ class HumanDialogContent(_BaseDialogContent):
 		self.ids.content.add_widget(FDVerticalLabel(
 			title='Следующий рабочий день',
 			value=''))
+		print(self.next_work_day())
 
 		if entry.worktype is None:
 			worktype_title = 'Неизвестно'
@@ -206,16 +207,24 @@ class HumanDialogContent(_BaseDialogContent):
 			title='График работы',
 			value=worktype_title))
 
-	@property
 	def next_work_day(self) -> date:
 		''' Возвращает следующий рабочий день '''
 
 		current_date = datetime.now().date()
+		next_month_date = add_months(current_date=current_date, months_to_add=1)
 		# is_work_day
-		month_days = Calendar().itermonthdates(current_date.year,
-		                                       current_date.month)
+		now_month_days = Calendar().itermonthdates(current_date.year,
+		                                           current_date.month)
+		next_month_days = Calendar().itermonthdates(next_month_date.year,
+		                                            next_month_date.month)
+		month_days = sorted(set(list(now_month_days) + list(next_month_days)))
+
 		for day in month_days:
-			print(type(day), day)
+			if day <= current_date:
+				continue
+
+			if is_work_day(day, , Worktype.query.get(self.entry.worktype)):
+				return day
 
 
 class EmergencyDialogContent(_BaseDialogContent):
