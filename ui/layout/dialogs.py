@@ -1,3 +1,6 @@
+from datetime import date, datetime
+from calendar import Calendar
+
 from kivy.lang.builder import Builder
 from kivy.properties import ObjectProperty
 from kivy.uix.widget import Widget
@@ -7,6 +10,7 @@ from config import DIALOG_LAYOUTS
 from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype, Short
 from ui.field.label import FDTitle, FDVerticalLabel
 from ui.field.button import FDIconButton
+from ui.field.calendar import is_work_day
 
 
 Builder.load_file(DIALOG_LAYOUTS)
@@ -201,6 +205,17 @@ class HumanDialogContent(_BaseDialogContent):
 		self.ids.content.add_widget(FDVerticalLabel(
 			title='График работы',
 			value=worktype_title))
+
+	@property
+	def next_work_day(self) -> date:
+		''' Возвращает следующий рабочий день '''
+
+		current_date = datetime.now().date()
+		# is_work_day
+		month_days = Calendar().itermonthdates(current_date.year,
+		                                       current_date.month)
+		for day in month_days:
+			print(type(day), day)
 
 
 class EmergencyDialogContent(_BaseDialogContent):
