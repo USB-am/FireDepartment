@@ -196,8 +196,7 @@ class HumanDialogContent(_BaseDialogContent):
 		# TODO: set value
 		self.ids.content.add_widget(FDVerticalLabel(
 			title='Следующий рабочий день',
-			value=''))
-		print(self.next_work_day())
+			value=self.next_work_day))
 
 		if entry.worktype is None:
 			worktype_title = 'Неизвестно'
@@ -207,12 +206,15 @@ class HumanDialogContent(_BaseDialogContent):
 			title='График работы',
 			value=worktype_title))
 
-	def next_work_day(self) -> date:
+	@property
+	def next_work_day(self) -> str:
 		''' Возвращает следующий рабочий день '''
+
+		if self.entry.worktype is None:
+			return 'Неизвестно'
 
 		current_date = datetime.now().date()
 		next_month_date = add_months(current_date=current_date, months_to_add=1)
-		# is_work_day
 		now_month_days = Calendar().itermonthdates(current_date.year,
 		                                           current_date.month)
 		next_month_days = Calendar().itermonthdates(next_month_date.year,
@@ -223,8 +225,8 @@ class HumanDialogContent(_BaseDialogContent):
 			if day <= current_date:
 				continue
 
-			if is_work_day(day, , Worktype.query.get(self.entry.worktype)):
-				return day
+			if is_work_day(day, self.entry.work_day, Worktype.query.get(self.entry.worktype)):
+				return day.strftime('%d.%m.%Y')
 
 
 class EmergencyDialogContent(_BaseDialogContent):

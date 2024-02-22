@@ -1,6 +1,3 @@
-﻿ui\layout\dialogs.HumanDialogContent:
-	- Добавить информацию о следующем рабочем дне
-
-ui\fields\calendar.FDCalendar:
+﻿ui\fields\calendar.FDCalendar:
 	- Сделать более привлекательный UI
 	- Исправить ужас в методе FDCalendar._update_information
