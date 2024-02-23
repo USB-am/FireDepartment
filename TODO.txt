@@ -1,3 +1,9 @@
 ﻿ui\fields\calendar.FDCalendar:
 	- Сделать более привлекательный UI
 	- Исправить ужас в методе FDCalendar._update_information
+
+ui\screens\main:
+	- Добавить виджет поиска
+
+ui\fields\select:
+	- Добавить виджет поиска
