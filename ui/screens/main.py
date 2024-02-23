@@ -23,10 +23,16 @@ class MainScreen(BaseScrollScreen):
 			callback=lambda *_: self._path_manager.forward('calls')
 		)
 
+		self.bind(on_pre_enter=lambda *_: self.fill_elements())
+
+	def fill_elements(self) -> None:
+		''' Заполнить контент Вызовами '''
+
 		for emergency in Emergency.query.all():
 			list_elem = MainScreenListElement(emergency)
 			list_elem.bind_open_button(lambda e=emergency: self.open_call(e))
 			self.add_content(list_elem)
+		# self.ids.content.children = self.ids.content.children[::-1]
 
 	def open_call(self, emergency: Emergency) -> None:
 		'''
