@@ -1,8 +1,13 @@
-from . import BaseScrollScreen
+from kivymd.uix.textfield import MDTextField
 
+from . import BaseScrollScreen
 from app.path_manager import PathManager
 from data_base import Emergency
 from ui.layout.main_screen import MainScreenListElement
+
+
+class FDSearch(MDTextField):
+	''' Поле поискового ввода '''
 
 
 class MainScreen(BaseScrollScreen):
@@ -22,6 +27,8 @@ class MainScreen(BaseScrollScreen):
 			icon='fire-truck',
 			callback=lambda *_: self._path_manager.forward('calls')
 		)
+		self.ids.content_container.add_widget(FDSearch(hint_text='Поиск...'))
+		self.ids.content_container.children = self.ids.content_container.children[::-1]
 
 		self.bind(on_pre_enter=lambda *_: self.fill_elements())
 
