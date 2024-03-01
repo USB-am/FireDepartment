@@ -24,6 +24,7 @@ BASE_SCREEN = os.path.join(SCREENS_KV, 'base_screen.kv')
 WIDGETS_DIR = os.path.join(KV_DIR, 'widgets')
 NOTEBOOK_WIDGET = os.path.join(WIDGETS_DIR, 'notebook.kv')
 TRIPLE_CHECKBOX = os.path.join(WIDGETS_DIR, 'triple_checkbox.kv')
+SEARCH_WIDGET = os.path.join(WIDGETS_DIR, 'search.kv')
 
 # Layouts
 LAYOUTS_DIR = os.path.join(KV_DIR, 'layouts')
