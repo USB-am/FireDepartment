@@ -2,7 +2,7 @@ from typing import List
 
 from . import BaseScrollScreen
 from app.path_manager import PathManager
-from data_base import Emergency
+from data_base import db, Emergency
 from ui.layout.main_screen import MainScreenListElement
 from ui.widgets.search import FDSearch
 
@@ -50,10 +50,14 @@ class MainScreen(BaseScrollScreen):
 		self.ids.content_container.children = self.ids.content_container.children[::-1]
 
 		self.elements: List[MainScreenListElement] = []
-		self.bind(on_pre_enter=lambda *_: self.fill_elements())
+		self.fill_elements()
+		# self.bind(on_pre_enter=lambda *_: self.fill_elements())
+		self.bind(on_pre_enter=lambda *_: self.__check_new_elements())
 
 	def fill_elements(self) -> None:
 		''' Заполнить контент Вызовами '''
+		# self.elements.clear()
+		# self.clear_content()
 
 		for emergency in Emergency.query.order_by(Emergency.title).all():
 			list_elem = MainScreenListElement(emergency)
@@ -75,6 +79,53 @@ class MainScreen(BaseScrollScreen):
 		for element in self.elements:
 			if element.emergency in filtered_elements:
 				self.add_content(element)
+
+	def __check_new_elements(self) -> None:
+		''' Проверка на новые элементы '''
+
+		all_ids = set(entry[0] for entry in \
+			Emergency.query.with_entities(Emergency.id).all())
+		old_ids = set(e.emergency.id for e in self.elements)
+
+		emergencies_for_insert = all_ids - old_ids
+		emergencies_for_delete = old_ids - all_ids
+		self.__delete_elements(emergencies_for_delete)
+		self.__insert_elements(emergencies_for_insert)
+
+	def __delete_elements(self, emergencies_for_delete: set) -> None:
+		'''
+		Удалить элементы списка.
+
+		~params:
+		emergencies_for_insert: set - множество элементов для удаления.
+		'''
+
+		for element in self.elements:
+			if element.emergency.id in emergencies_for_delete:
+				self.ids.content.remove_widget(element)
+				del element
+
+	def __insert_elements(self, emergencies_for_insert: set) -> None:
+		'''
+		Вставить элементы списка.
+
+		~params:
+		emergencies_for_insert: set - множество элементов для вставки.
+		'''
+
+		for emergency_id in emergencies_for_insert:
+			emergency = Emergency.query.get(emergency_id)
+			list_elem = MainScreenListElement(emergency)
+			list_elem.bind_open_button(lambda e=emergency: self.open_call(e))
+			self.elements.append(list_elem)
+			self.add_content(list_elem)
+
+		childs = self.ids.content.children
+		self.ids.content.children = sorted(
+			self.ids.content.children,
+			key=lambda child: child.emergency.title,
+			reverse=True
+		)
 
 	def open_call(self, emergency: Emergency) -> None:
 		'''
