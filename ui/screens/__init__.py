@@ -45,3 +45,8 @@ class BaseScreen(_FDScreen):
 
 class BaseScrollScreen(_FDScreen):
 	''' Базовое представление страницы (с прокруткой). '''
+
+	def end_list_event(self) -> None:
+		''' Событие прокрутки до конца страницы '''
+
+		pass

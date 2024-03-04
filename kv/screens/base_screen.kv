@@ -31,7 +31,11 @@
 			size_hint: (1, 1)
 
 			ScrollView:
+				id: scroll_content
 				size_hint: (1, 1)
+
+				on_scroll_y:
+					if args[1] <= 0: root.end_list_event()
 
 				GridLayout:
 					id: content
