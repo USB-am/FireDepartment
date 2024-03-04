@@ -51,13 +51,10 @@ class MainScreen(BaseScrollScreen):
 
 		self.elements: List[MainScreenListElement] = []
 		self.fill_elements()
-		# self.bind(on_pre_enter=lambda *_: self.fill_elements())
 		self.bind(on_pre_enter=lambda *_: self.__check_new_elements())
 
 	def fill_elements(self) -> None:
 		''' Заполнить контент Вызовами '''
-		# self.elements.clear()
-		# self.clear_content()
 
 		for emergency in Emergency.query.order_by(Emergency.title).all():
 			list_elem = MainScreenListElement(emergency)

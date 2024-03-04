@@ -1,3 +1,5 @@
+from typing import List
+
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDRaisedButton
@@ -28,10 +30,64 @@ class _ModelList(BaseScrollScreen):
 				f'create_{self.model.__tablename__.lower()}'
 		))
 
-		self.bind(on_pre_enter=lambda *_: self.fill_elements())
+		self.bind(on_pre_enter=lambda *_: self.__check_new_elements())
 
-	def fill_elements(self) -> None:
-		self.clear_content()
+	def end_list_event(self) -> None:
+		''' Подгрузка элементов при прокрутке в конец страницы '''
+
+		print('_ModelList.end_list_event')
+
+	def __check_new_elements(self) -> None:
+		''' Проверка на новые элементы '''
+
+		all_ids = set(entry[0] for entry in \
+			self.model.query.with_entities(self.model.id).all())
+		old_ids = set(e.entry.id for e in self.ids.content.children)
+
+		entries_for_insert = all_ids - old_ids
+		entries_for_delete = old_ids - all_ids
+		self.__delete_elements(entries_for_delete)
+		self.__insert_elements(entries_for_insert)
+
+	def __delete_elements(self, entries_for_delete: set) -> None:
+		'''
+		Удалить элементы списка.
+
+		~params:
+		entries_for_delete: set - множество элементов для удаления.
+		'''
+
+		for element in self.ids.content.children:
+			if element.entry.id in entries_for_delete:
+				self.ids.content.remove_widget(element)
+				del element
+
+	def __insert_elements(self, entries_for_insert: set) -> None:
+		'''
+		Вставить элементы списка.
+
+		~params:
+		entries_for_insert: set - множество элементов для вставки.
+		'''
+
+		for entry_id in entries_for_insert:
+			entry = self.model.query.get(entry_id)
+			# list_elem = MainScreenListElement(entry)
+			# list_elem.bind_open_button(lambda e=entry: self.open_call(e))
+			list_elem = ModelListElement(entry=entry, icon=self.model.icon)
+			list_elem.bind_edit_btn(
+				lambda e=entry: self.move_to_edit_and_fill_fields(e))
+			list_elem.bind_info_btn(
+				lambda e=entry: self.open_info_dialog(self.info_dialog_content(e))
+			)
+			self.add_content(list_elem)
+
+		childs = self.ids.content.children
+		self.ids.content.children = sorted(
+			self.ids.content.children,
+			key=lambda child: child.entry.title,
+			reverse=True
+		)
 
 	def open_info_dialog(self, content: MDBoxLayout) -> None:
 		''' Открыть диалогов окно с информацией '''
@@ -68,19 +124,6 @@ class TagsList(_ModelList):
 	toolbar_title = 'Теги'
 	info_dialog_content = TagDialogContent
 
-	def fill_elements(self) -> None:
-		self.clear_content()
-		tags = self.model.query.order_by(Tag.title).all()
-
-		for tag in tags:
-			list_elem = ModelListElement(entry=tag, icon=Tag.icon)
-			list_elem.bind_edit_btn(
-				lambda t=tag: self.move_to_edit_and_fill_fields(t))
-			list_elem.bind_info_btn(
-				lambda t=tag: self.open_info_dialog(self.info_dialog_content(t))
-			)
-			self.add_content(list_elem)
-
 
 class ShortsList(_ModelList):
 	''' Класс с элементами из модели Short '''
@@ -89,18 +132,6 @@ class ShortsList(_ModelList):
 	model = Short
 	toolbar_title = 'Сокращения'
 	info_dialog_content = ShortDialogContent
-
-	def fill_elements(self) -> None:
-		self.clear_content()
-		shorts = self.model.query.order_by(Short.title).all()
-
-		for short in shorts:
-			list_elem = ModelListElement(entry=short, icon=Short.icon)
-			list_elem.bind_edit_btn(
-				lambda s=short: self.move_to_edit_and_fill_fields(s))
-			list_elem.bind_info_btn(
-				lambda s=short: self.open_info_dialog(self.info_dialog_content(s)))
-			self.add_content(list_elem)
 
 
 class RanksList(_ModelList):
@@ -111,19 +142,6 @@ class RanksList(_ModelList):
 	toolbar_title = 'Звания'
 	info_dialog_content = RankDialogContent
 
-	def fill_elements(self) -> None:
-		self.clear_content()
-		ranks = self.model.query.order_by(Rank.title).all()
-
-		for rank in ranks:
-			list_elem = ModelListElement(entry=rank, icon=Rank.icon)
-			list_elem.bind_edit_btn(
-				lambda r=rank: self.move_to_edit_and_fill_fields(r))
-			list_elem.bind_info_btn(
-				lambda r=rank: self.open_info_dialog(self.info_dialog_content(r))
-			)
-			self.add_content(list_elem)
-
 
 class PositionsList(_ModelList):
 	''' Класс с элементами из модели Position '''
@@ -132,19 +150,6 @@ class PositionsList(_ModelList):
 	model = Position
 	toolbar_title = 'Должности'
 	info_dialog_content = PositionDialogContent
-
-	def fill_elements(self) -> None:
-		self.clear_content()
-		positions = self.model.query.order_by(Position.title).all()
-
-		for position in positions:
-			list_elem = ModelListElement(entry=position, icon=Position.icon)
-			list_elem.bind_edit_btn(
-				lambda p=position: self.move_to_edit_and_fill_fields(p))
-			list_elem.bind_info_btn(
-				lambda p=position: self.open_info_dialog(self.info_dialog_content(p))
-			)
-			self.add_content(list_elem)
 
 
 class HumansList(_ModelList):
@@ -155,23 +160,6 @@ class HumansList(_ModelList):
 	toolbar_title = 'Сотрудники'
 	info_dialog_content = HumanDialogContent
 
-	def fill_elements(self) -> None:
-		self.clear_content()
-		humans = self.model.query.order_by(Human.title).all()
-
-		for human in humans:
-			i = 'fire-hydrant' if human.is_firefigher else Human.icon
-			list_elem = ModelListElement(
-				entry=human,
-				icon=i
-			)
-			list_elem.bind_edit_btn(
-				lambda h=human: self.move_to_edit_and_fill_fields(h))
-			list_elem.bind_info_btn(
-				lambda h=human: self.open_info_dialog(self.info_dialog_content(h))
-			)
-			self.add_content(list_elem)
-
 
 class EmergenciesList(_ModelList):
 	''' Класс с элементами из модели Emergency '''
@@ -181,19 +169,6 @@ class EmergenciesList(_ModelList):
 	toolbar_title = 'Вызовы'
 	info_dialog_content = EmergencyDialogContent
 
-	def fill_elements(self) -> None:
-		self.clear_content()
-		emergencies = self.model.query.order_by(Emergency.title).all()
-
-		for emergency in emergencies:
-			list_elem = ModelListElement(entry=emergency, icon=Emergency.icon)
-			list_elem.bind_edit_btn(
-				lambda e=emergency: self.move_to_edit_and_fill_fields(e))
-			list_elem.bind_info_btn(
-				lambda e=emergency: self.open_info_dialog(self.info_dialog_content(e))
-			)
-			self.add_content(list_elem)
-
 
 class WorktypesList(_ModelList):
 	''' Класс с элементами из модели Worktype '''
@@ -202,16 +177,3 @@ class WorktypesList(_ModelList):
 	model = Worktype
 	toolbar_title = 'Графики работы'
 	info_dialog_content = WorktypeDialogContent
-
-	def fill_elements(self) -> None:
-		self.clear_content()
-		worktypes = self.model.query.order_by(Worktype.title).all()
-
-		for worktype in worktypes:
-			list_elem = ModelListElement(entry=worktype, icon=Worktype.icon)
-			list_elem.bind_edit_btn(
-				lambda wt=worktype: self.move_to_edit_and_fill_fields(wt))
-			list_elem.bind_info_btn(
-				lambda wt=worktype: self.open_info_dialog(self.info_dialog_content(wt))
-			)
-			self.add_content(list_elem)
