@@ -1,11 +1,11 @@
 <_ListElementContent>:
 	orientation: 'vertical'
 	adaptive_height: True
-	padding: [dp(10), dp(20)]
+	padding: [dp(10), dp(25)]
 
 	ScrollView:
 		size_hint: (1, None)
-		height: dp(100)
+		height: dp(50)
 
 		GridLayout:
 			cols: 1
@@ -16,10 +16,9 @@
 			MDLabel:
 				size_hint_y: None
 				height: self.texture_size[1]
-				# text_size: self.width, None
 				valign: 'top'
 				halign: 'left'
-				text: (root.emergency.description + '\n')*1
+				text: root.emergency.description
 
 	MDBoxLayout:
 		orientation: 'horizontal'
