@@ -82,7 +82,3 @@ class MainScreenListElement(MDExpansionPanel):
 		'''
 
 		self.content.ids.open_button.bind(on_release=lambda *_: callback())
-
-	def on_open(self, *a, **kw):
-		super().on_open(*a, **kw)
-		print(self.content.height)
