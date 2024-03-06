@@ -120,6 +120,7 @@ class MainScreen(Screen):
 		self.ids.content.clear_widgets()
 		gen = self.element_controller.find_elements(text)
 		[self.content.add_widget(el) for el in next(gen)]
+		self.ids.scrollbar.scroll_y = 1
 
 	def end_list_event(self):
 		if self.last_call > time() - 1:
@@ -128,7 +129,6 @@ class MainScreen(Screen):
 		try:
 			elements = self.element_controller.current_paginator
 			[self.content.add_widget(el) for el in next(elements)]
-			# self.ids.scrollbar.scroll_to(self.content.children[10])
 		except StopIteration:
 			pass
 
