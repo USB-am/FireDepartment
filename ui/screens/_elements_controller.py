@@ -1,24 +1,41 @@
-from time import time
-from typing import Type, Generator, Callable
+from typing import Any, Iterable, Generator
+
+from sqlalchemy import or_
 
 from data_base import db
-from ui.widgets.search import FDSearch
 
 
 class Paginator(list):
 	''' Пагинатор '''
 
-	def __init__(self, *args):
-		self._elements = args
+	def __init__(self, *elements: db.Model):
+		super().__init__(*elements)
+		self.__all_elements = elements
 
-		super().__init__(*args)
+	def paginate_by(self, elements: Iterable[Any]=None, count: int=10) -> Generator:
+		''' Получить генератор, возвращающий по count ВСЕХ элементов '''
 
-	def paginate_by(self, count: int) -> Generator:
-		''' Получить функцию-генератор, возвращающий count элементов '''
+		if elements is None:
+			elements = self.copy()
 
-		while self._elements:
-			yield self._elements[:count]
-			self._elements = self._elements[count:]
+		while elements:
+			yield elements.pop(0)
+
+	def filter_by(self, *fields: str, value: str, count: int=10) -> Generator:
+		''' Получить генератор, возвращающий по count сортированных элементов '''
+
+		if len(self):
+			return iter(())
+
+		model = self[0].__class__
+		filtered_entries = model.query.filter(
+			or_(
+				*[getattr(model, field).like(f'%{value}%') \
+				for field in fields]
+			)
+		)
+
+		return self.paginate_by(filtered_entries)
 
 
 class ElementController:
@@ -26,17 +43,14 @@ class ElementController:
 	Контроллер для управления пагинацией.
 
 	~params:
-	model: Type[db.Model] - таблица БД из которой будут браться данные для элеметов;
-	paginator: Paginator - экземпляр Пагинатора.
+	*elements: db.Model - записи БД.
 	'''
 
-	def __init__(self, model: Type[db.Model], paginator: Paginator):
-		self.model = model
-		self.paginator = paginator
+	def __init__(self, *elements: db.Model):
+		self.elements = elements
+		self.paginator = Paginator(*elements)
 
-		self.current_paginator = iter(())
-
-	def get_paginator(self, count: int=10) -> Generator:
+	def paginate(self, count: int=10) -> Generator:
 		'''
 		Получить генератор элементов для пагинации.
 
@@ -44,10 +58,9 @@ class ElementController:
 		count: int=10 - количество элементов, возвращенные одной итерацией.
 		'''
 
-		self.current_paginator = self.paginator.paginate_by(count)
-		return self.current_paginator
+		return self.paginator.paginate_by(count)
 
-	def find_elements(self, text: str, count: int=10) -> Generator:
+	def find_elements(self, *fields: str, text: str, count: int=10) -> Generator:
 		'''
 		Получить генератор элементов для пагинации после поиска.
 
@@ -60,7 +73,6 @@ class ElementController:
 			.filter(self.model.title.like(f'%{text}%'))\
 			.order_by(self.model.title)\
 			.all()
-		filtered_entries = [i for i in range(100)]
 		self.paginator = Paginator(*self.paginator)
 
-		return self.get_paginator()
+		return self.paginate(count)
