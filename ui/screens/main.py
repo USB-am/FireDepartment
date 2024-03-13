@@ -1,8 +1,10 @@
 from typing import List
 
+from sqlalchemy import or_
+
 from . import BaseScrollScreen
 from app.path_manager import PathManager
-from data_base import db, Emergency
+from data_base import db, Tag, Emergency
 from ui.layout.main_screen import MainScreenListElement
 from ui.widgets.search import FDSearch
 
@@ -15,8 +17,14 @@ def filter_list_elements(text: str) -> List[Emergency]:
 	text: str - текст поиска.
 	'''
 
+	# https://stackoverflow.com/questions/36916072/flask-sqlalchemy-filter-on-many-to-many-relationship-with-parent-model
+	like_text = f'%{text}%'
 	filtered_emergencies = Emergency.query.filter(
-		Emergency.title.like(f'%{text}%')
+		or_(
+			Emergency.title.like(like_text),
+			Emergency.description.like(like_text),
+			# Emergency.tags.in_(Tag.title.like(like_text))
+		)
 	).order_by(Emergency.title).all()
 
 	return filtered_emergencies
