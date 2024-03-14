@@ -1,4 +1,5 @@
 from typing import Any, Generator, List, Tuple
+import time
 
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.dialog import MDDialog
@@ -41,7 +42,8 @@ class Paginator:
 
 		elements = self.__current_elements.copy()
 		while elements:
-			yield elements.pop(0)
+			yield elements[:count]
+			elements = elements[count:]
 
 	def paginate_by_filter(self, elements: List[Any], count: int=10) -> Generator:
 		'''
@@ -79,6 +81,7 @@ class _ModelList(BaseScrollScreen):
 		self.dialog = None
 		self.paginator = Paginator()
 		self.current_paginate = self.paginator.paginate_by(ITERABLE_COUNT)
+		self.last_paginate_update = 0
 
 		search = FDSearch(hint_text='Поиск...')
 		search.on_press_enter(
@@ -110,7 +113,10 @@ class _ModelList(BaseScrollScreen):
 	def end_list_event(self) -> None:
 		''' Подгрузка элементов при прокрутке в конец страницы '''
 
-		pass
+		cur_time = time.time()
+		if self.last_paginate_update <= cur_time - 1:
+			self.last_paginate_update = cur_time
+			self.__show_elements()
 
 	def __check_new_elements(self) -> Tuple[set, set]:
 		'''
@@ -136,10 +142,12 @@ class _ModelList(BaseScrollScreen):
 		entries_for_delete: set - множество элементов для удаления.
 		'''
 
-		for element in self.ids.content.children:
-			if element.entry.id in entries_for_delete:
-				self.ids.content.remove_widget(element)
-				del element
+		layout = self.ids.content
+		layout.clear_widgets()
+
+		for element in self.paginator.all_elements:
+			if element.entry.id not in entries_for_delete:
+				layout.add_widget(element)
 
 	def __insert_elements(self, entries_id_for_insert: set) -> None:
 		'''
@@ -166,26 +174,40 @@ class _ModelList(BaseScrollScreen):
 	def __show_elements(self) -> None:
 		''' Отобразить элементы '''
 
-		[self.add_content(element) for element in self.current_paginate]
+		for elem in next(self.current_paginate):
+			try:
+				self.ids.content.add_widget(elem)
+			except AttributeError:
+				pass
 
 	def filter_by(self, title: str) -> None:
 		'''
-		Отфильтровать элементы по полю title
+		Отфильтровать элементы по полю title.
 
 		~params:
 		title: str - часть текста поля title для поиска.
 		'''
 
+		all_ids = set(entry[0] for entry in \
+			self.model.query.with_entities(self.model.id).all())
+
 		elements = self.model.query\
 			.filter(self.model.title.like(f'%{title}%'))\
 			.order_by(self.model.title)
-		all_ids = set(entry[0] for entry in \
-			self.model.query.with_entities(self.model.id).all())
 		new_ids = set(entry[0] for entry in \
 			elements.with_entities(self.model.id).all())
+
 		self.__delete_elements(all_ids - new_ids)
 
-		self.paginator.paginate_by_filter(elements.all(), count=ITERABLE_COUNT)
+		all_elements = elements.all()
+		filtered_elements = list(filter(
+			lambda el: el.entry in all_elements,
+			self.paginator.all_elements
+		))
+		self.current_paginate = self.paginator.paginate_by_filter(
+			filtered_elements,
+			count=ITERABLE_COUNT
+		)
 		self.__show_elements()
 
 	def open_info_dialog(self, content: MDBoxLayout) -> None:
