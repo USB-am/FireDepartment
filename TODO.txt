@@ -9,3 +9,6 @@ ui\screens\calls:
 
 ui\screen\_elements_controller.find_elements:
 	- Возвращать отфильтрованные элементы
+
+ui\screen\screens\model_list:
+	- Перенести ITERABLE_COUNT в настройки
