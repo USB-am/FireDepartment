@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, Generator, List, Tuple
 
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.dialog import MDDialog
@@ -7,10 +7,68 @@ from kivymd.uix.button import MDRaisedButton
 from . import BaseScrollScreen
 from app.path_manager import PathManager
 from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype, Short
+from ui.widgets.search import FDSearch
 from ui.layout.model_list_element import ModelListElement
 from ui.layout.dialogs import TagDialogContent, RankDialogContent, \
 	PositionDialogContent, HumanDialogContent, EmergencyDialogContent,\
 	WorktypeDialogContent, ShortDialogContent
+
+
+ITERABLE_COUNT = 10
+
+
+class Paginator:
+	''' Пагинатор записей БД '''
+
+	def __init__(self, *elements: Any):
+		self.__all_elements = sorted(elements, key=lambda e: e.title)
+		self.__current_elements = self.__all_elements.copy()
+
+	def __str__(self):
+		return self.__current_elements
+
+	@property
+	def all_elements(self) -> List[Any]:
+		return self.__all_elements
+
+	def paginate_by(self, count: int=10) -> Generator:
+		'''
+		Генератор элементов.
+
+		~params:
+		count: int=10 - количество элементов за одну итерацию.
+		'''
+
+		elements = self.__current_elements.copy()
+		while elements:
+			yield elements.pop(0)
+
+	def paginate_by_filter(self, elements: List[Any], count: int=10) -> Generator:
+		'''
+		Генератор отфильтрованных элементов.
+
+		~params:
+		elements: List[Any] - элементы для вывода пагинатора;
+		count: int=10 - количество элементов на одну итерацию.
+		'''
+
+		self.__current_elements = elements
+		return self.paginate_by(count)
+
+	def append(self, element: Any) -> None:
+		''' Добавить элемент в конец списка '''
+
+		self.__all_elements = sorted(
+			self.__all_elements + [element,],
+			key=lambda e: e.entry.title
+		)
+		self.__current_elements = sorted(
+			self.__current_elements + [element,],
+			key=lambda e: e.entry.title
+		)
+
+	def reset_elements(self) -> None:
+		self.__current_elements = self.__all_elements.copy()
 
 
 class _ModelList(BaseScrollScreen):
@@ -19,6 +77,15 @@ class _ModelList(BaseScrollScreen):
 	def __init__(self, path_manager: PathManager):
 		super().__init__(path_manager)
 		self.dialog = None
+		self.paginator = Paginator()
+		self.current_paginate = self.paginator.paginate_by(ITERABLE_COUNT)
+
+		search = FDSearch(hint_text='Поиск...')
+		search.on_press_enter(
+			callback=lambda text: self.filter_by(text)
+		)
+		self.ids.content_container.add_widget(search)
+		self.ids.content_container.children = self.ids.content_container.children[::-1]
 
 		self.ids.toolbar.add_left_button(
 			icon='menu',
@@ -30,15 +97,27 @@ class _ModelList(BaseScrollScreen):
 				f'create_{self.model.__tablename__.lower()}'
 		))
 
-		self.bind(on_pre_enter=lambda *_: self.__check_new_elements())
+		self.bind(on_pre_enter=lambda *_: self.update_elements())
+
+	def update_elements(self) -> None:
+		''' Обновить элементы списка '''
+
+		ids_for_delete, ids_for_insert = self.__check_new_elements()
+		self.__delete_elements(ids_for_delete)
+		self.__insert_elements(ids_for_insert)
+		self.__show_elements()
 
 	def end_list_event(self) -> None:
 		''' Подгрузка элементов при прокрутке в конец страницы '''
 
-		print('_ModelList.end_list_event')
+		pass
 
-	def __check_new_elements(self) -> None:
-		''' Проверка на новые элементы '''
+	def __check_new_elements(self) -> Tuple[set, set]:
+		'''
+		Проверка на новые элементы. Возвращает кортеж, где:
+		Tuple[0] - список id записей для удаления;
+		Tuple[1] - список id записей для добавления.
+		'''
 
 		all_ids = set(entry[0] for entry in \
 			self.model.query.with_entities(self.model.id).all())
@@ -46,8 +125,8 @@ class _ModelList(BaseScrollScreen):
 
 		entries_for_insert = all_ids - old_ids
 		entries_for_delete = old_ids - all_ids
-		self.__delete_elements(entries_for_delete)
-		self.__insert_elements(entries_for_insert)
+
+		return entries_for_delete, entries_for_insert
 
 	def __delete_elements(self, entries_for_delete: set) -> None:
 		'''
@@ -62,32 +141,52 @@ class _ModelList(BaseScrollScreen):
 				self.ids.content.remove_widget(element)
 				del element
 
-	def __insert_elements(self, entries_for_insert: set) -> None:
+	def __insert_elements(self, entries_id_for_insert: set) -> None:
 		'''
-		Вставить элементы списка.
+		Добавляет элементы в Paginator.
 
 		~params:
-		entries_for_insert: set - множество элементов для вставки.
+		entries_id_for_insert: set - множество id записей для вставки.
 		'''
 
-		for entry_id in entries_for_insert:
+		entries_for_insert = self.model.query.filter(self.model.id.in_(entries_id_for_insert))
+
+		for entry_id in entries_id_for_insert:
 			entry = self.model.query.get(entry_id)
-			# list_elem = MainScreenListElement(entry)
-			# list_elem.bind_open_button(lambda e=entry: self.open_call(e))
+
 			list_elem = ModelListElement(entry=entry, icon=self.model.icon)
 			list_elem.bind_edit_btn(
 				lambda e=entry: self.move_to_edit_and_fill_fields(e))
 			list_elem.bind_info_btn(
 				lambda e=entry: self.open_info_dialog(self.info_dialog_content(e))
 			)
-			self.add_content(list_elem)
 
-		childs = self.ids.content.children
-		self.ids.content.children = sorted(
-			self.ids.content.children,
-			key=lambda child: child.entry.title,
-			reverse=True
-		)
+			self.paginator.append(list_elem)
+
+	def __show_elements(self) -> None:
+		''' Отобразить элементы '''
+
+		[self.add_content(element) for element in self.current_paginate]
+
+	def filter_by(self, title: str) -> None:
+		'''
+		Отфильтровать элементы по полю title
+
+		~params:
+		title: str - часть текста поля title для поиска.
+		'''
+
+		elements = self.model.query\
+			.filter(self.model.title.like(f'%{title}%'))\
+			.order_by(self.model.title)
+		all_ids = set(entry[0] for entry in \
+			self.model.query.with_entities(self.model.id).all())
+		new_ids = set(entry[0] for entry in \
+			elements.with_entities(self.model.id).all())
+		self.__delete_elements(all_ids - new_ids)
+
+		self.paginator.paginate_by_filter(elements.all(), count=ITERABLE_COUNT)
+		self.__show_elements()
 
 	def open_info_dialog(self, content: MDBoxLayout) -> None:
 		''' Открыть диалогов окно с информацией '''

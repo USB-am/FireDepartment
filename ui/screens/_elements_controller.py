@@ -16,7 +16,7 @@ class Paginator(list):
 		''' Получить генератор, возвращающий по count ВСЕХ элементов '''
 
 		if elements is None:
-			elements = self.copy()
+			elements = self.__all_elements.copy()
 
 		while elements:
 			yield elements.pop(0)
