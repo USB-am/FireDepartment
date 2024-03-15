@@ -174,11 +174,14 @@ class _ModelList(BaseScrollScreen):
 	def __show_elements(self) -> None:
 		''' Отобразить элементы '''
 
-		for elem in next(self.current_paginate):
-			try:
-				self.ids.content.add_widget(elem)
-			except AttributeError:
-				pass
+		try:
+			for elem in next(self.current_paginate):
+				try:
+					self.ids.content.add_widget(elem)
+				except AttributeError:
+					pass
+		except StopIteration:
+			pass
 
 	def filter_by(self, title: str) -> None:
 		'''
