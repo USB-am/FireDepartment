@@ -1,14 +1,8 @@
 ﻿ui\fields\calendar.FDCalendar:
 	- Сделать более привлекательный UI
 
-ui\fields\select:
-	- Добавить виджет поиска
-
 ui\screens\calls:
-	- Сделать тесты на отображение выезжающих сотрудников
-
-ui\screen\_elements_controller.find_elements:
-	- Возвращать отфильтрованные элементы
+	- Пофиксить отображение выезжающих сотрудников
 
 ui\screen\screens\model_list:
 	- Перенести ITERABLE_COUNT в настройки
