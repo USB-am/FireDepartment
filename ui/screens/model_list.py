@@ -1,6 +1,7 @@
 from typing import Any, Generator, List, Tuple
 import time
 
+from kivy.uix.widget import WidgetException
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDRaisedButton
@@ -13,9 +14,7 @@ from ui.layout.model_list_element import ModelListElement
 from ui.layout.dialogs import TagDialogContent, RankDialogContent, \
 	PositionDialogContent, HumanDialogContent, EmergencyDialogContent,\
 	WorktypeDialogContent, ShortDialogContent
-
-
-ITERABLE_COUNT = 10
+from config import ITERABLE_COUNT
 
 
 class Paginator:
@@ -180,7 +179,7 @@ class _ModelList(BaseScrollScreen):
 					self.ids.content.add_widget(elem)
 				except AttributeError:
 					pass
-		except StopIteration:
+		except (StopIteration, WidgetException):
 			pass
 
 	def filter_by(self, title: str) -> None:
