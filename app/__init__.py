@@ -47,6 +47,8 @@ class FDUIManager(MDNavigationLayout):
 			self.move_screen_and_close_menu('emergencies_list'))
 		self.ids.worktype_nav_btn.bind(on_release=lambda *_:
 			self.move_screen_and_close_menu('worktypes_list'))
+		self.ids.history_nav_btn.bind(on_release=lambda *_:
+			self.move_screen_and_close_menu('history'))
 
 	def move_screen_and_close_menu(self, screen_name: str) -> None:
 		'''
