@@ -3,6 +3,3 @@
 
 ui\screens\calls:
 	- Пофиксить отображение выезжающих сотрудников
-
-ui\screens\model_list:
-	- Перенести ITERABLE_COUNT в настройки
