@@ -1,8 +1,19 @@
 import os
+import configparser
 
 
 BASE_DIR = os.getcwd()
 
+
+settings = configparser.ConfigParser()
+settings.read(os.path.join(BASE_DIR, 'app', 'application.ini'))
+try:
+	ITERABLE_COUNT = int(settings.get('global', 'iterable_count'))
+except (configparser.NoSectionError, ValueError):
+	ITERABLE_COUNT = 10
+
+
+# Paths to .kv files
 KV_DIR = os.path.join(BASE_DIR, 'kv')
 
 
