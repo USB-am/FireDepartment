@@ -1,0 +1,17 @@
+<FDHistoryElement>:
+	size_hint_y: None
+	height: self.ids.label.height
+	orientation: 'horizontal'
+
+	MDLabel:
+		id: label
+		text: root.title
+
+	MDIconButton:
+		size_hint_x: None
+		width: dp(50)
+		valign: 'center'
+		icon: 'information'
+
+		on_release:
+			print('All good!')
