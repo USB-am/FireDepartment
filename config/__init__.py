@@ -43,6 +43,8 @@ MAIN_SCREEN_LAYOUTS = os.path.join(LAYOUTS_DIR, 'main_screen.kv')
 MODEL_LIST_LAYOUTS = os.path.join(LAYOUTS_DIR, 'model_list.kv')
 DIALOG_LAYOUTS = os.path.join(LAYOUTS_DIR, 'dialogs.kv')
 SELECT_LAYOUTS = os.path.join(LAYOUTS_DIR, 'select.kv')
+LABEL_LAYOUT = os.path.join(LAYOUTS_DIR, 'label_layout.kv')
+HISTORY_LAYOUT = os.path.join(LAYOUTS_DIR, 'history_layout.kv')
 
 # Fields
 FIELDS_DIR = os.path.join(KV_DIR, 'fields')
