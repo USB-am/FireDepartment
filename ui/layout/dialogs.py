@@ -4,11 +4,13 @@ from calendar import Calendar
 from kivy.lang.builder import Builder
 from kivy.properties import ObjectProperty
 from kivy.uix.widget import Widget
+from kivymd.uix.label import MDLabel
 from kivymd.uix.boxlayout import MDBoxLayout
 
 from config import DIALOG_LAYOUTS
-from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype, Short
-from ui.field.label import FDTitle, FDVerticalLabel
+from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype, \
+	Short, Calls
+from ui.field.label import FDTitle, FDVerticalLabel, FDDoubleVerticalLabel
 from ui.field.button import FDIconButton
 from ui.field.calendar import is_work_day, add_months
 
@@ -306,3 +308,33 @@ class WorktypeDialogContent(_BaseDialogContent):
 				btn.bind_btn(lambda h=human: print(f'View {h.title} human'))
 
 				self.ids.content.add_widget(btn)
+
+
+class CallsDialogContent(_BaseDialogContent):
+	'''
+	Содержимое всплывающего окна с информацией о записи из модели Calls.
+
+	~params:
+	entry: Calls - запись из модели Calls.
+	'''
+
+	def __init__(self, entry: Calls, **options):
+		super().__init__(entry=entry, **options)
+
+		self.add_content(FDVerticalLabel(
+			title='Название Выезда',
+			value=Emergency.query.get(entry.emergency).title
+		))
+		self.add_content(FDDoubleVerticalLabel(
+			title_1='Начало',
+			value_1=entry.start.strftime('%H:%M %d.%m.%Y'),
+			title_2='Конец',
+			value_2=entry.finish.strftime('%H:%M %d.%m.%Y')
+		))
+		self.add_content(FDTitle(
+			title='Информация:'
+		))
+		self.add_content(MDLabel(
+			text=entry.info + ' ',
+			adaptive_height=True
+		))
