@@ -1,5 +1,9 @@
 from typing import Generator
 
+from kivy.metrics import dp
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.button import MDRaisedButton
+
 from . import BaseScrollScreen
 from data_base import Calls, Emergency
 from app.path_manager import PathManager
@@ -29,6 +33,7 @@ class History(BaseScrollScreen):
 
 	name = 'history'
 	toolbar_title = 'История Вызовов'
+	dialog = None
 
 	def __init__(self, path_manager: PathManager):
 		super().__init__(path_manager)
@@ -38,6 +43,7 @@ class History(BaseScrollScreen):
 			callback=self.open_menu
 		)
 
+		self.ids.content.spacing = dp(30)
 		self.fill_content()
 
 	def fill_content(self) -> None:
@@ -49,13 +55,39 @@ class History(BaseScrollScreen):
 			label = calls[0].start.strftime('%d %B %Y')
 			label_layout = FDLabelLayout(label=label)
 
-			for call in calls:
+			for ind, call in enumerate(calls):
 				emergency = cache.get(call.emergency)
 				if not emergency:
 					emergency = Emergency.query.get(call.emergency)
 					cache[call.emergency] = emergency
 
 				start = call.start.strftime('%H:%M:%S')
-				label_layout.add_content(FDHistoryElement(title=f'{start} {emergency.title}'*5))
+				history_element = FDHistoryElement(
+					title=f'{ind+1}) {start} {emergency.title}'
+				)
+				history_element.bind_btn(lambda c=call: self.__open_dialog(c))
+				label_layout.add_content(history_element)
 
 			self.add_content(label_layout)
+
+	def __open_dialog(self, call: Calls) -> None:
+		'''
+		Открыть диалоговое окно с информацией о Вызове.
+
+		~params:
+		call: Calls - запись из таблицы Calls.
+		'''
+
+		from kivymd.uix.boxlayout import MDBoxLayout
+
+		if self.dialog is None:
+			ok_btn = MDRaisedButton(text='Ок')
+			self.dialog = MDDialog(
+				title='Информация',
+				type='custom',
+				content_cls=MDBoxLayout(),
+				buttons=[ok_btn]
+			)
+			ok_btn.bind(on_release=lambda *_: self.dialog.dismiss())
+
+		self.dialog.open()
