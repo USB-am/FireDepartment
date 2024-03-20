@@ -44,3 +44,46 @@
 		size_hint_y: None
 		height: dp(15)
 		text: root.value
+
+
+<FDDoubleVerticalLabel>:
+	orientation: 'horizontal'
+	adaptive_height: True
+
+	MDBoxLayout:
+		orientation: 'vertical'
+		adaptive_height: True
+
+		MDLabel:
+			id: title_label_1
+			size_hint_y: None
+			height: dp(15)
+			font_style: 'Caption'
+			theme_text_color: 'Hint'
+			text: root.title_1
+
+		MDLabel:
+			id: value_label_1
+			size_hint_y: None
+			height: dp(35)
+			text: root.value_1
+
+	MDBoxLayout:
+		orientation: 'vertical'
+		adaptive_height: True
+
+		MDLabel:
+			id: title_label_2
+			size_hint_y: None
+			height: dp(15)
+			halign: 'right'
+			font_style: 'Caption'
+			theme_text_color: 'Hint'
+			text: root.title_2
+
+		MDLabel:
+			id: value_label_2
+			size_hint_y: None
+			height: dp(35)
+			halign: 'right'
+			text: root.value_2
