@@ -43,3 +43,20 @@ class FDVerticalLabel(MDBoxLayout):
 
 	title = StringProperty()
 	value = StringProperty()
+
+
+class FDDoubleVerticalLabel(MDBoxLayout):
+	'''
+	Сдвоенное текстовое поле.
+
+	+---------+--+---------+
+	| title_1 |  | title_2 |
+	+---------+--+---------+
+	| value_1 |  | value_2 |
+	+---------+--+---------+
+	'''
+
+	title_1 = StringProperty()
+	title_2 = StringProperty()
+	value_1 = StringProperty()
+	value_2 = StringProperty()
