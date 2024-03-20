@@ -9,6 +9,7 @@ from data_base import Calls, Emergency
 from app.path_manager import PathManager
 from ui.layout.label_layout import FDLabelLayout
 from ui.layout.history import FDHistoryElement
+from ui.layout.dialogs import CallsDialogContent
 
 
 def get_calls_by_dates() -> Generator:
@@ -85,7 +86,7 @@ class History(BaseScrollScreen):
 			self.dialog = MDDialog(
 				title='Информация',
 				type='custom',
-				content_cls=MDBoxLayout(),
+				content_cls=CallsDialogContent(call),
 				buttons=[ok_btn]
 			)
 			ok_btn.bind(on_release=lambda *_: self.dialog.dismiss())
