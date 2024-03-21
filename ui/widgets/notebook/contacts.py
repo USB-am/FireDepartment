@@ -17,7 +17,6 @@ class NotebookPhoneContent(MDBoxLayout):
 	def __init__(self, description: str, humans: List[Human], **options):
 		self.description = description
 		self.humans = humans
-		self.checkboxes: List[FDTripleCheckbox] = []
 
 		super().__init__(**options)
 
@@ -37,5 +36,4 @@ class NotebookPhoneContent(MDBoxLayout):
 				title=human.title,
 				substring=human.phone_1 if human.phone_1 is not None else ''
 			)
-			self.checkboxes.append(checkbox)
 			self.add_widget(checkbox)
