@@ -26,7 +26,9 @@ def get_calls_by_dates() -> Generator:
 
 		yield output
 		output = []
-	yield output + [calls[-1],]
+
+	if calls:
+		yield output + [calls[-1],]
 
 
 class History(BaseScrollScreen):
