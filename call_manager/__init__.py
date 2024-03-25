@@ -1,102 +1,56 @@
-from typing import Callable, List
+from typing import Type, List
 
-from kivy.widgets import Widget
-from kivymd.uix.boxlayout import MDBoxLayout
-
-from data_base import Human, Emergency, Calls
-from ui.widgets.notebook import NotebookPhoneContent, NotebookInfoContent
 from ui.widgets.triple_checkbox import FDTripleCheckbox
 
 
-class _PhoneManager:
-	'''
-	Менеджер экрана с номерами телефонов.
+class PhoneProperty:
+	def __init__(self, objtype: Type):
+		self.objtype = objtype
 
-	~params:
-	phone_content: NotebookPhoneContent - объект экрана с номерами телефонов.
-	'''
+	def __set_name__(self, owner, name):
+		self.public_name = name
+		self.private_name = '_' + name
 
-	def __init__(self, phone_content: NotebookPhoneContent):
-		self._phone_content = phone_content
+	def __get__(self, instance, name):
+		return instance.__dict__.get(self.private_name, name)
 
-	def add_phone(self, human: Human) -> None:
-		'''
-		Добавить номер телефона.
+	def __set__(self, instance, value):
+		if not isinstance(value, self.objtype):
+			raise TypeError(f'{self.public_name} can only be of type {self.objtype.__class__.__name__}')
 
-		~params:
-		human: Human - человек, телефон которого будет добавлен.
-		'''
-
-		self._phone_content.add_widget(
-			FDTripleCheckbox(normal_icon='phone',
-			                 active_icon='phone-check',
-			                 deactive_icon='phone-cancel',
-			                 title=human.title,
-			                 substring=human.phone_1 if human.phone_1 is not None else ''
-			)
-		)
-
-	def bind_all(self, callback: Callable) -> None:
-		''' Добавить события каждому элементу '''
-
-		map(
-			lambda c: c.ids.checkbox.bind(on_release=lambda *_: callback()),
-			self._phone_content.children
-		)
+		instance.__dict__[self.private_name] = value
 
 
-class _ShortsManager:
-	''' Менеджер Сокращений '''
+class Phone:
+	''' Представление виджета с номером телефона '''
 
-	def __init__(self, shorts_layout: MDBoxLayout):
-		self._shorts_layout = shorts_layout
+	phone_widget = PhoneProperty(FDTripleCheckbox)
 
+	def __init__(self, phone_checkbox: FDTripleCheckbox):
+		self.phone_widget = phone_checkbox
 
-class _AdditionInfoManager:
-	''' Менеджер дополнительной текстовой информации '''
-
-	def __init__(self, info_field: Widget):
-		self._info_field = info_field
+	def __str__(self):
+		return self.phone_widget.title
 
 
-class _CallLogManager:
-	''' Менеджер логов Вызова '''
+class Phonebook:
+	def __init__(self, phones: List[Phone]):
+		self.phones = phones
 
-	def __init__(self, logs_layout: MDBoxLayout):
-		self._logs_layout = logs_layout
-
-
-class _InfoManager:
-	'''
-	Менеджер экрана с информацией.
-
-	~params:
-	info_content: NotebookInfoContent - объект экрана с информацией.
-	'''
-
-	def __init__(self, info_content: NotebookInfoContent):
-		self._info_content = info_content
-
-		self._shorts_layout = _ShortsManager(info_content.ids.shorts_layout)
-		self._addition_info = _AdditionInfoManager(info_content.ids.addition_info_field)
-		self._logs = _CallLogManager(info_content.ids.logs_layout)
+	def __str__(self):
+		return 'Phones:\n' + '\n'.join([f'- {str(phone)}' for phone in self.phones])
 
 
-class CallManager:
-	'''
-	Менеджер, отвечающий за хранение и обработку состояния вызова.
+def test():
+	ps = []
+	for i in range(5):
+		p = Phone(FDTripleCheckbox(
+			normal_icon='bus',
+			active_icon='eye',
+			deactive_icon='bus',
+			title=f'8800555353{i}'
+		))
+		ps.append(p)
 
-	~params:
-	call: Emergency - вызов;
-	phone_content: NotebookPhoneContent - объект вкладки с номерами телефонов;
-	info_content: NotebookInfoContent - объект вкладски с дополнительной информацией.
-	'''
-
-	def __init__(self,
-	             emergency: Emergency,
-	             phone_content: NotebookPhoneContent,
-	             info_content: NotebookInfoContent):
-
-		self.emergency = emergency
-		self.phones_manager = phone_content
-		self.info_manager = info_content
+	pb = Phonebook(ps)
+	print(pb)
