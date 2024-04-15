@@ -10,12 +10,26 @@ class FDTripleCheckbox:
 		return f'[{self.state}] {self.title}'
 
 
-class PhoneManager:
-	def __init__(self, *phones):
-		self.phones = list(phones)
+class PhoneList(list):
+	def __init__(self, *args, callback=lambda e: None):
+		super().__init__(*args)
+		self.callback = callback
 
-	def add_phone(self, phone):
-		self.phones.appned(phone)
+	def append(self, elem) -> None:
+		super().appned(elem)
+		self.callback(elem)
+
+	def extend(self, *elems) -> None:
+		super().extend(elems)
+		self.callback(*elems)
+
+
+class PhoneManager(PhoneList):
+	def __init__(self, *phones):
+		super().__init__(*phones)
+
+	def add_phones(self, *phones):
+		self.phones.extend(*phones)
 
 
 class CallManager:
