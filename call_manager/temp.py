@@ -1,4 +1,5 @@
 from typing import Any
+from datetime import datetime
 
 
 class FDTripleCheckbox:
@@ -16,7 +17,7 @@ class FDTripleCheckbox:
 		if not isinstance(value, int):
 			raise AttributeError
 
-		if value % 3 > 3:
+		if value >= 3:
 			value = value % 3
 
 		self._state = value
@@ -30,19 +31,33 @@ class FDTripleCheckbox:
 			return f'Unselected {self.title}'
 
 
-class PhoneLogger(dict):
-	def add_log(self, obj: Any, status: str) -> None:
-		if obj in self:
-			self[id(obj)].append(status)
-		else:
-			self[id(obj)] = [status,]
+class LogElement:
+	def __init__(self, msg: str):
+		self.msg = msg
+		self.timestamp = datetime.now().strftime('[%H:%M:%S %d.%m.%Y]')
 
 	def __str__(self):
+		return f'{self.timestamp} {self.msg}'
+
+
+class PhoneLogger(dict):
+	def add_log(self, obj: Any, msg: str) -> None:
+		log = LogElement(msg=msg)
+
+		if id(obj) in self:
+			self[id(obj)].append(log)
+		else:
+			self[id(obj)] = [log,]
+
+	def _all_logs(self) -> str:
 		output = ''
 		for key, logs in self.items():
-			output += str(key) + ', '.join(logs) + '\n'
+			output += str(key) + ' '  + ', '.join(map(str, logs)) + '\n'
 
 		return output
+
+	def __str__(self):
+		return '\n'.join([f'{key} {logs[-1]}' for key, logs in self.items()])
 
 
 class PhoneList(list):
@@ -82,27 +97,36 @@ class CallManager:
 	def add_phone(self, phone):
 		self.phone_manager.add_phone(phone)
 
+	def __str__(self):
+		return str(self.phone_manager.logger)
+
 
 class CallController:
 	def __init__(self, boxlayout):
 		self.boxlayout = boxlayout
 		self.call_manager = CallManager(boxlayout.phones)
 
+	def select_phone(self, phone: FDTripleCheckbox) -> None:
+		self.call_manager.phone_manager.select_phone(phone)
+
 
 def get_all_checkboxes():
-	return [FDTripleCheckbox(
-		title=f'Phone #{i+1}',
-		substring=f'Substring #{i+1}',
-		state=i%3) for i in range(50)
+	return [FDTripleCheckbox(title=f'Phone #{i+1}',
+	                         substring=f'Substring #{i+1}',
+	                         state=0)
+		for i in range(50)
 	]
 
 class BoxLayout_:
-	def __init__(self):
-		self.phones = get_all_checkboxes()
+	phones = get_all_checkboxes()
 
 
 if __name__ == '__main__':
 	boxlayout = BoxLayout_()
 	cc = CallController(boxlayout)
-	pm = cc.call_manager.phone_manager
-	print(*pm, sep='\n')
+	cc.select_phone(BoxLayout_.phones[0])
+	cc.select_phone(BoxLayout_.phones[0])
+	cc.select_phone(BoxLayout_.phones[0])
+	cc.select_phone(BoxLayout_.phones[1])
+	cc.select_phone(BoxLayout_.phones[2])
+	print(cc.call_manager)
