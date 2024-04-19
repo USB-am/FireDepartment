@@ -130,14 +130,29 @@ class ShortsManager(ShortsList):
 			self.add_shorts(short)
 
 		self.logger.add_log(short, str(short))
-
 # === SHORTS MANAGER === #
+
+# === TEXT MANAGER === #
+class TextList(list):
+	pass
+
+
+class TextManager(TextList):
+	def __init__(self, textfield):
+		self.textfield = textfield
+		self.logger = Logger()
+
+	def __add__(self, msg: str):
+		self.textfield.text += msg
+		self.logger.add_log(self, msg)
+# === TEXT MANAGER === #
 
 
 class CallManager:
 	def __init__(self, phones):
 		self.phone_manager = PhoneManager(*phones)
 		self.shorts_manager = ShortsManager(emergency.shorts)
+		self.text_manager = TextManager()
 
 	def add_phone(self, phone):
 		self.phone_manager.add_phone(phone)
