@@ -40,6 +40,11 @@ class Short:
 		return self.title
 
 
+class TextField:
+	def __init__(self, text: str):
+		self.text = text
+
+
 class LogElement:
 	def __init__(self, msg: str):
 		self.msg = msg
@@ -152,7 +157,7 @@ class CallManager:
 	def __init__(self, phones):
 		self.phone_manager = PhoneManager(*phones)
 		self.shorts_manager = ShortsManager(emergency.shorts)
-		self.text_manager = TextManager()
+		self.text_manager = TextManager(TextField('text'))
 
 	def add_phone(self, phone):
 		self.phone_manager.add_phone(phone)
