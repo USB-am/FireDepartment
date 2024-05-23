@@ -40,7 +40,7 @@ class PhoneManager:
 	def call(self, human: Human) -> None:
 		''' Сделать вызов сотруднику '''
 		if human.id in self._control:
-			self._control[human.id] += 1
+			self._control[human.id] = (self._control[human.id] + 1) % 3
 
 
 class ShortManager:
@@ -68,10 +68,12 @@ class Call:
 
 
 if __name__ == '__main__':
+	hs = [Human(title=f'Human #{i+1}', phone=f'8 800 555 35 3{i}') for i in range(10)]
+	ss = [Short(title=f'Short #{i+1}', text=f'Short text for Short #{i+1}') for i in range(10)]
 	call_entry = DBCall(
 		title='Call #1',
-		humans=[Human(title=f'Human #{i+1}', phone=f'8 800 555 35 3{i}') for i in range(10)],
-		shorts=[Short(title=f'Short #{i+1}', text=f'Short text for Short #{i+1}') for i in range(10)]
+		humans=hs,
+		shorts=ss
 	)
 	print(*[human.id for human in call_entry.humans])
 
