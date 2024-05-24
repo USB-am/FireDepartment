@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from typing import List, Dict
+from typing import List, Dict, Any
+import time
 
 
 # === TEMP === #
@@ -31,11 +32,26 @@ class DBCall:
 # === TEMP === #
 
 
+class _Logger(list):
+	''' Логгер информации '''
+
+	class __SubLog:
+		def __init__(self, key: Any, value: Any):
+			self.key = key
+			self.value = value
+
+	def append(self, value: str) -> None:
+		''' Записать лог '''
+
+		pass
+
+
 class PhoneManager:
 	''' Менеджер звонков '''
 	def __init__(self, humans: List[Human]):
 		self._humans = humans
 		self._control: Dict[Human, int] = {human.id: 0 for human in humans}
+		self.logger = _Logger()
 
 	def call(self, human: Human) -> None:
 		''' Сделать вызов сотруднику '''
@@ -75,6 +91,5 @@ if __name__ == '__main__':
 		humans=hs,
 		shorts=ss
 	)
-	print(*[human.id for human in call_entry.humans])
 
 	call = Call(call_entry)
