@@ -16,6 +16,9 @@ class Human:
 		instance.id = cls.id
 		return instance
 
+	def __str__(self):
+		return self.title
+
 @dataclass
 class Short:
 	title: str
@@ -40,14 +43,21 @@ class _Logger(list):
 			self.key = key
 			self.value = value
 
+		def __str__(self):
+			return self.value
+
 	def append(self, value: str) -> None:
 		''' Записать лог '''
 
-		pass
+		log = self.__SubLog(key=time.time(), value=value)
+		super().append(log)
 
 
 class PhoneManager:
 	''' Менеджер звонков '''
+
+	__MESSAGES = ['', 'Вызов {human}', 'Неудачный вызов {human}']
+
 	def __init__(self, humans: List[Human]):
 		self._humans = humans
 		self._control: Dict[Human, int] = {human.id: 0 for human in humans}
@@ -56,7 +66,9 @@ class PhoneManager:
 	def call(self, human: Human) -> None:
 		''' Сделать вызов сотруднику '''
 		if human.id in self._control:
-			self._control[human.id] = (self._control[human.id] + 1) % 3
+			value = (self._control[human.id] + 1) % 3
+			self._control[human.id] = value
+			self.logger.append(PhoneManager.__MESSAGES[value].format(human=human))
 
 
 class ShortManager:
@@ -82,6 +94,12 @@ class Call:
 		''' Вызов сотрудника '''
 		self.phone_manager.call(human)
 
+	def __str__(self):
+		output = ''
+		output += '\n'.join(map(str, self.phone_manager.logger))
+
+		return output
+
 
 if __name__ == '__main__':
 	hs = [Human(title=f'Human #{i+1}', phone=f'8 800 555 35 3{i}') for i in range(10)]
@@ -93,3 +111,7 @@ if __name__ == '__main__':
 	)
 
 	call = Call(call_entry)
+	call.call_human(hs[0])
+	call.call_human(hs[0])
+	call.call_human(hs[2])
+	print(call)
