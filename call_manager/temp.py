@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import List, Dict, Any
 import time
+from collections import defaultdict
 
 
 # === TEMP === #
@@ -60,21 +61,26 @@ class PhoneManager:
 
 	def __init__(self, humans: List[Human]):
 		self._humans = humans
-		self._control: Dict[Human, int] = {human.id: 0 for human in humans}
+		self._control: defaultdict[Human.id, int] = defaultdict(lambda: 0)
 		self.logger = _Logger()
 
 	def call(self, human: Human) -> None:
 		''' Сделать вызов сотруднику '''
-		if human.id in self._control:
-			value = (self._control[human.id] + 1) % 3
-			self._control[human.id] = value
-			self.logger.append(PhoneManager.__MESSAGES[value].format(human=human))
+		value = (self._control[human.id] + 1) % 3
+		self._control[human.id] = value
+		self.logger.append(PhoneManager.__MESSAGES[value].format(human=human))
 
 
-class ShortManager:
+class ShortManager(list):
 	''' Менеджер сокращений '''
 	def __init__(self, shorts: List[Short]):
 		self._shorts = shorts
+		self.logger = _Logger()
+
+	def add(self, short: Short) -> None:
+		''' Добавить сокращение '''
+		self.append(short)
+		self.logger.append(short.text)
 
 
 class InformationManager:
@@ -94,9 +100,14 @@ class Call:
 		''' Вызов сотрудника '''
 		self.phone_manager.call(human)
 
+	def add_short(self, short: Short) -> None:
+		''' Добавить сокращение '''
+		self.short_manager.add(short)
+
 	def __str__(self):
 		output = ''
 		output += '\n'.join(map(str, self.phone_manager.logger))
+		output += '\n'.join(map(str, self.short_manager.logger))
 
 		return output
 
@@ -113,5 +124,8 @@ if __name__ == '__main__':
 	call = Call(call_entry)
 	call.call_human(hs[0])
 	call.call_human(hs[0])
-	call.call_human(hs[2])
+	call.add_short(ss[0])
+	call.add_short(ss[3])
+	call.add_short(ss[4])
+	call.add_short(ss[1])
 	print(call)
