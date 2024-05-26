@@ -50,8 +50,10 @@ class _Logger(list):
 	def append(self, value: str) -> None:
 		''' Записать лог '''
 
-		log = self.__SubLog(key=time.time(), value=value)
-		super().append(log)
+		super().append(self.__SubLog(
+			key=time.time(),
+			value=value
+		))
 
 
 class PhoneManager:
@@ -85,6 +87,9 @@ class ShortManager(list):
 
 class InformationManager:
 	''' Менеджер дополнительной информации '''
+
+	def __init__(self):
+		self.logger = _Logger()
 
 
 class Call:
