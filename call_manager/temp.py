@@ -110,11 +110,11 @@ class Call:
 		self.short_manager.add(short)
 
 	def __str__(self):
-		output = ''
-		output += '\n'.join(map(str, self.phone_manager.logger))
-		output += '\n'.join(map(str, self.short_manager.logger))
+		global_logs = _Logger()
+		global_logs.extend(self.phone_manager.logger)
+		global_logs.extend(self.short_manager.logger)
 
-		return output
+		return '\n'.join(map(str, sorted(global_logs, key=lambda log: log.key)))
 
 
 if __name__ == '__main__':
@@ -128,9 +128,9 @@ if __name__ == '__main__':
 
 	call = Call(call_entry)
 	call.call_human(hs[0])
-	call.call_human(hs[0])
 	call.add_short(ss[0])
 	call.add_short(ss[3])
 	call.add_short(ss[4])
+	call.call_human(hs[0])
 	call.add_short(ss[1])
 	print(call)
