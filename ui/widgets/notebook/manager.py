@@ -3,10 +3,12 @@ from dataclasses import dataclass
 
 from kivymd.uix.boxlayout import MDBoxLayout
 
-from data_base import Emergency
+from data_base import Emergency, Human
 from .top_panel import NotebookTopPanelElement
 from .contacts import NotebookPhoneContent
 from .information import NotebookInfoContent
+from .controller import CallController
+from ui.widgets.triple_checkbox import FDTripleCheckbox
 
 
 @dataclass
@@ -16,7 +18,20 @@ class NotebookTab:
 	top_panel: NotebookTopPanelElement
 	phone_content: NotebookPhoneContent
 	info_content: NotebookInfoContent
+	emergency: Emergency
 	state: bool = False
+
+	def __post_init__(self):
+		self._controller = CallController(self.emergency)
+
+		# Add callback for TripleCheckbox
+		for triple_checkbox in self.phone_content.children:
+			if isinstance(triple_checkbox, FDTripleCheckbox):
+				human = Human.query.filter_by(title=triple_checkbox.title).first()
+				triple_checkbox.ids.checkbox.bind(on_release=lambda *_, h=human: self._controller.call_human(h))
+
+	def __str__(self):
+		return str(self._controller)
 
 
 class NotebookManager:
@@ -50,7 +65,8 @@ class NotebookManager:
 		new_tab = NotebookTab(
 			top_panel=top_panel,
 			phone_content=phone_content,
-			info_content=info_content
+			info_content=info_content,
+			emergency=emergency
 		)
 		self.tabs.append(new_tab)
 
