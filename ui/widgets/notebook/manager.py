@@ -30,6 +30,10 @@ class NotebookTab:
 				human = Human.query.filter_by(title=triple_checkbox.title).first()
 				triple_checkbox.ids.checkbox.bind(on_release=lambda *_, h=human: self._controller.call_human(h))
 
+		# Adding short text by clicked to ShortButton
+
+		# Adding text from information text
+
 	def __str__(self):
 		return str(self._controller)
 
