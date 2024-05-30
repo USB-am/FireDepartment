@@ -51,7 +51,7 @@ class ShortManager(list):
 	def add(self, short: Short) -> None:
 		''' Добавить сокращение '''
 		self.append(short)
-		self.logger.append(short.text)
+		self.logger.append(short.explanation)
 
 
 class InformationManager:
