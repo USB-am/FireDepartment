@@ -2,6 +2,8 @@ from typing import List, Any
 import time
 from collections import defaultdict
 
+from kivymd.uix.textfield import MDTextField
+
 from data_base import Human, Short
 
 
@@ -60,6 +62,10 @@ class InformationManager:
 	def __init__(self):
 		self.logger = _Logger()
 
+	def update(self, text: str) -> None:
+		''' Обновить текст с дополнительной информацией '''
+		self.logger.append(text)
+
 
 class CallController:
 	''' Контроллер Вызова '''
@@ -78,9 +84,14 @@ class CallController:
 		''' Добавить сокращение '''
 		self.short_manager.add(short)
 
+	def update_info_text(self, textfield: MDTextField) -> None:
+		''' Обновить текст с дополнительной информацией '''
+		self.info_manager.update(textfield.text)
+
 	def __str__(self):
 		global_logs = _Logger()
 		global_logs.extend(self.phone_manager.logger)
 		global_logs.extend(self.short_manager.logger)
+		global_logs.extend(self.info_manager.logger)
 
 		return '\n'.join(map(str, sorted(global_logs, key=lambda log: log.key)))
