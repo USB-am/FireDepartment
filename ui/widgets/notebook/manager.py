@@ -36,6 +36,8 @@ class NotebookTab:
 			short_btn.bind(on_release=lambda *_, s=short: self._controller.add_short(s))
 
 		# Adding text from information text
+		text_field = self.info_content.ids.addition_info_field
+		text_field.bind(text=lambda *_: self._controller.update_info_text(text_field))
 
 	def __str__(self):
 		return str(self._controller)
