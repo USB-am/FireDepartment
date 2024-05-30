@@ -31,6 +31,9 @@ class NotebookTab:
 				triple_checkbox.ids.checkbox.bind(on_release=lambda *_, h=human: self._controller.call_human(h))
 
 		# Adding short text by clicked to ShortButton
+		for short_btn in self.info_content.ids.shorts_layout.children:
+			short = short_btn.short
+			short_btn.bind(on_release=lambda *_, s=short: self._controller.add_short(s))
 
 		# Adding text from information text
 
