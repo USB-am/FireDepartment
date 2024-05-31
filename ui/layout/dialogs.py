@@ -6,7 +6,9 @@ from kivy.properties import ObjectProperty
 from kivy.uix.widget import Widget
 from kivymd.uix.label import MDLabel
 from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.dialog import MDDialog
 
+from app.path_manager import PathManager
 from config import DIALOG_LAYOUTS
 from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype, \
 	Short, Calls
@@ -38,6 +40,20 @@ class _BaseDialogContent(MDBoxLayout):
 
 		self.ids.content.add_widget(widget)
 
+	def _move_to_screen(self, page_ref: str, entry: 'DataBase.Entry') -> None:
+		'''
+		Переход на экран.
+
+		~params:
+		page_ref: str - name экрана перехода;
+		pk: DataBase.Entry - запись из БД.
+		'''
+
+		screen = PathManager().forward(page_ref)
+		screen.fill_fields(entry)
+		parent_dialog: MDDialog = self.parent.parent.parent
+		parent_dialog.dismiss()
+
 
 class TagDialogContent(_BaseDialogContent):
 	'''
@@ -65,7 +81,7 @@ class TagDialogContent(_BaseDialogContent):
 					icon_btn='eye',
 					title=emergency.title
 				)
-				btn.bind_btn(lambda e=emergency: print(f'View {e.title} emergency'))
+				btn.bind_btn(lambda e=emergency: self._move_to_screen('edit_emergency', e))
 
 				self.ids.content.add_widget(btn)
 
@@ -98,7 +114,7 @@ class ShortDialogContent(_BaseDialogContent):
 					icon_btn='eye',
 					title=emergency.title
 				)
-				btn.bind_btn(lambda e=emergency: print(f'View {e.title} emergency'))
+				btn.bind_btn(lambda e=emergency: self._move_to_screen('edit_emergency', e))
 
 				self.ids.content.add_widget(btn)
 
@@ -148,7 +164,7 @@ class PositionDialogContent(_BaseDialogContent):
 					icon_btn='eye',
 					title=human.title
 				)
-				btn.bind_btn(lambda h=human: print(f'View {h.title} human'))
+				btn.bind_btn(lambda h=human: self._move_to_screen('edit_human', h))
 				self.ids.content.add_widget(btn)
 
 
@@ -195,7 +211,6 @@ class HumanDialogContent(_BaseDialogContent):
 			title='Пожарный',
 			value='Да' if entry.is_firefigher else 'Нет'))
 
-		# TODO: set value
 		self.ids.content.add_widget(FDVerticalLabel(
 			title='Следующий рабочий день',
 			value=self.next_work_day))
@@ -262,7 +277,7 @@ class EmergencyDialogContent(_BaseDialogContent):
 					icon_btn='eye',
 					title=human.title
 				)
-				btn.bind_btn(lambda h=human: print(f'View {h.title} human'))
+				btn.bind_btn(lambda h=human: self._move_to_screen('edit_human', h))
 
 				self.ids.content.add_widget(btn)
 
@@ -305,7 +320,7 @@ class WorktypeDialogContent(_BaseDialogContent):
 					icon_btn='eye',
 					title=human.title
 				)
-				btn.bind_btn(lambda h=human: print(f'View {h.title} human'))
+				btn.bind_btn(lambda h=human: self._move_to_screen('edit_human', h))
 
 				self.ids.content.add_widget(btn)
 
