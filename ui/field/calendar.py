@@ -6,6 +6,7 @@ from kivy.lang.builder import Builder
 from kivy.properties import StringProperty
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.label import MDLabel
+from dateutil.relativedelta import relativedelta
 
 from data_base import Worktype
 from config import CALENDAR_FIELD
@@ -41,12 +42,7 @@ def add_months(current_date: date, months_to_add: int) -> date:
 	months_to_add: int - количество месяцев, на которое будет увеличено.
 	'''
 
-	new_date = date(
-		current_date.year + (current_date.month + months_to_add - 1) // 12,
-		(current_date.month + months_to_add - 1) % 12 + 1,
-		current_date.day
-	)
-
+	new_date = current_date + relativedelta(months=months_to_add)
 	return new_date
 
 
