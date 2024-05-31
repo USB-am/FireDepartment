@@ -109,8 +109,7 @@ class Application(MDApp):
 		self.ui.screen_manager.add_widget(WorktypeEditModel(self.ui.path_manager))
 		self.ui.screen_manager.add_widget(ShortEditModel(self.ui.path_manager))
 
-		# self.ui.path_manager.move_to_screen('history')
-		self.ui.path_manager.move_to_screen('main')
+		self.ui.path_manager.move_to_screen('options')
 
 	def build_config(self, config):
 		config.setdefaults('options', {
