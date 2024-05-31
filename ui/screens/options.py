@@ -7,7 +7,7 @@ from app.path_manager import PathManager
 from ui.field.button import FDButtonDropdown
 from ui.field.switch import FDDoubleSwitch
 from ui.field.input import FDNumberInput
-from config import ITERABLE_COUNT
+# from config import ITERABLE_COUNT
 
 
 class OptionsScreen(BaseScrollScreen):
@@ -44,10 +44,10 @@ class OptionsScreen(BaseScrollScreen):
 		''' Сохранить настройки в application.ini '''
 
 		self.__save_colors_to_config()
-		try:
-			ITERABLE_COUNT = int(self.iterable_count_field.text)
-		except ValueError:
-			pass
+		# try:
+		# 	ITERABLE_COUNT = int(self.iterable_count_field.text)
+		# except ValueError:
+		# 	pass
 
 		self._path_manager.back()
 
@@ -59,7 +59,12 @@ class OptionsScreen(BaseScrollScreen):
 			icon='palette',
 			title='Основной цвет',
 		)
-		self.primary_field.update_elements(self._gen_primary_field_elements())
+		primary_field_elements = self._gen_primary_field_elements()
+		self.primary_field.update_elements(primary_field_elements)
+
+		# clr = self.__theme_cls.primary_color
+		# clr = list(map(lambda c: hex(int(c*255)), clr[:-1]))
+		# print(clr)
 		self.primary_field.ids.btn.md_bg_color = self.__theme_cls.primary_color
 
 		# Акцентирующий цвет
@@ -89,18 +94,18 @@ class OptionsScreen(BaseScrollScreen):
 		)
 
 		# Количество подгружаемых элементов в пагинаторе
-		self.iterable_count_field = FDNumberInput(
-			hint_text='Элементы на странице',
-			helper_text='Увеличение значения может замедлить работу приложения!'
-		)
-		self.iterable_count_field.set_value(ITERABLE_COUNT)
-		self.iterable_count_field.bind(on_text_validate=lambda *_: print(_))
+		# self.iterable_count_field = FDNumberInput(
+		# 	hint_text='Элементы на странице',
+		# 	helper_text='Увеличение значения может замедлить работу приложения!'
+		# )
+		# self.iterable_count_field.set_value(ITERABLE_COUNT)
+		# self.iterable_count_field.bind(on_text_validate=lambda *_: print(_))
 
 		self.add_content(self.primary_field)
 		self.add_content(self.accent_field)
 		self.add_content(self.hue_field)
 		self.add_content(self.theme_style_field)
-		self.add_content(self.iterable_count_field)
+		# self.add_content(self.iterable_count_field)
 
 	def _gen_primary_field_elements(self) -> List:
 		''' Возвращает элементы для поля primary '''
@@ -152,9 +157,9 @@ class OptionsScreen(BaseScrollScreen):
 			'theme_style': self.__theme_cls.theme_style,
 			'primary_hue': self.__theme_cls.primary_hue,
 		})
-		config.setall('global', {
-				'iterable_count': self.iterable_count_field.text,
-			})
+		# config.setall('global', {
+		# 	'iterable_count': self.iterable_count_field.text,
+		# })
 		config.write()
 
 	def _update_primary_field(self, element: str) -> None:
