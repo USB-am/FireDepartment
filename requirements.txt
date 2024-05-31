@@ -17,12 +17,17 @@ kivy-deps.sdl2==0.4.5
 Kivy-Garden==0.1.4
 kivymd==0.104.2
 MarkupSafe==2.1.0
+mypy==1.7.1
+mypy-extensions==1.0.0
 Pillow==9.1.0
 Pygments==2.11.2
 pypiwin32==223
+python-dateutil==2.9.0.post0
 pywin32==303
 requests==2.27.1
+six==1.16.0
 SQLAlchemy==1.4.32
+tomli==2.0.1
 typing_extensions==4.1.1
 urllib3==1.26.8
 Werkzeug==2.0.3
