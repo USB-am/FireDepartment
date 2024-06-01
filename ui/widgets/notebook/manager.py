@@ -83,7 +83,7 @@ class NotebookManager:
 		new_tab.top_panel.bind_open(lambda: self.show_tab(new_tab))
 		new_tab.top_panel.bind_close(lambda: self.close_tab(new_tab))
 
-		info_manager = info_content.manager
+		# info_manager = info_content.manager
 		# for checkbox in new_tab.phone_content.checkboxes:
 		# for checkbox in new_tab.phone_content.children:
 		# 	checkbox.ids.checkbox.bind(on_release=lambda *_, c=checkbox:
