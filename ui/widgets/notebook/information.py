@@ -49,56 +49,13 @@ class NotebookLog:
 		return f'[{str_datetime}] {self.text}'
 
 
-class NotebookInformationText(MDLabel):
-	''' Область для отображения логов вызова '''
-
-	def __init__(self, **options):
-		self.logs: List[NotebookLog] = [NotebookLog('Начало выезда.'),]
-		super().__init__(**options)
-
-	def add_phone_log(self, checkbox: FDTripleCheckbox) -> None:
-		'''
-		Добавить в историю событие звонка/попытки связи с сотрудником.
-
-		~params:
-		checkbox: FDTripleCheckbox - тройной checkbox с информацией о вызове сотруднику.
-		'''
-
-		human_name = checkbox.title
-		phone = checkbox.substring
-		status = (checkbox.state + 1) % 3
-
-		if status == 1:
-			log_text = f'Звонок {human_name} на номер {phone}.'
-		elif status == 2:
-			log_text = f'Звонок {human_name} не прошел.'
-		else:
-			return
-
-		self.logs.append(NotebookLog(log_text))
-		self.update_logs()
-
-	def add_short_log(self, entry: Short) -> None:
-		'''
-		Добавить в историю событие из Short.
-
-		~params:
-		entry: Short - добавляемые данные.
-		'''
-
-		short_without_text_transfer = get_explanation_text(entry)[:-1]
-		self.logs.append(short_without_text_transfer)
-		self.update_logs()
-
-	def update_logs(self) -> None:
-		self.text = str(self)
-
-	def __str__(self):
-		return '\n'.join(map(str, self.logs[::-1]))
-
-
 class NotebookInfoContent(MDBoxLayout):
 	''' Содержимое вкладки с информацией '''
+
+	def __init__(self, **options):
+		super().__init__(**options)
+		self.logs_label = MDLabel(text=':D\n\n:D:D:D')
+		self.add_widget(self.logs_label)
 
 	def fill_shorts(self, shorts: List[Short]) -> None:
 		''' Отобразить хоткеи '''
