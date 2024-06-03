@@ -100,13 +100,6 @@ class NotebookInformationText(MDLabel):
 class NotebookInfoContent(MDBoxLayout):
 	''' Содержимое вкладки с информацией '''
 
-	def __init__(self, **options):
-		super().__init__(**options)
-
-		# self.manager = NotebookInformationText()
-		# self.manager.texture_update()
-		# self.add_widget(self.manager)
-
 	def fill_shorts(self, shorts: List[Short]) -> None:
 		''' Отобразить хоткеи '''
 
@@ -115,7 +108,6 @@ class NotebookInfoContent(MDBoxLayout):
 		for short in shorts:
 			short_btn = FDShortField(short)
 			short_btn.bind(on_release=lambda *_, s=short: self.insert_info_text(s))
-			# short_btn.bind(on_release=lambda *_, s=short: self.manager.add_short_log(s))
 			layout.add_widget(short_btn)
 
 	def insert_info_text(self, short: Short) -> None:
