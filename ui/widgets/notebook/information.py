@@ -54,7 +54,7 @@ class NotebookInfoContent(MDBoxLayout):
 
 	def __init__(self, **options):
 		super().__init__(**options)
-		self.logs_label = MDLabel(text=':D\n\n:D:D:D')
+		self.logs_label = MDLabel(adaptive_height=True)
 		self.add_widget(self.logs_label)
 
 	def fill_shorts(self, shorts: List[Short]) -> None:
