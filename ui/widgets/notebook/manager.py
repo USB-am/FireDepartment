@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from kivymd.uix.boxlayout import MDBoxLayout
 
-from data_base import Emergency, Human
+from data_base import Emergency, Human, Short
 from .top_panel import NotebookTopPanelElement
 from .contacts import NotebookPhoneContent
 from .information import NotebookInfoContent
@@ -28,7 +28,7 @@ class NotebookTab:
 		for triple_checkbox in self.phone_content.children:
 			if isinstance(triple_checkbox, FDTripleCheckbox):
 				human = Human.query.filter_by(title=triple_checkbox.title).first()
-				triple_checkbox.ids.checkbox.bind(on_release=lambda *_, h=human: self._controller.call_human(h))
+				triple_checkbox.ids.checkbox.bind(on_release=lambda *_, h=human: self._call_human_and_update_logs(h))
 
 		# Adding short text by clicked to ShortButton
 		for short_btn in self.info_content.ids.shorts_layout.children:
@@ -38,6 +38,33 @@ class NotebookTab:
 		# Adding text from information text
 		text_field = self.info_content.ids.addition_info_field
 		text_field.bind(text=lambda *_: self._controller.update_info_text(text_field))
+
+	def _call_human_and_update_logs(self, human: Human) -> None:
+		'''
+		Вызвать метод контроллера вызова Человека и обновить логи.
+
+		~params:
+		human: Human - запись из БД с информацией о Человеке.
+		'''
+
+		self._controller.call_human(human)
+		self._update_logs()
+
+	def _add_short_and_update_logs(self, short: Short) -> None:
+		'''
+		Вызвать метод контроллера добавления Сокращения и обновить логи.
+
+		~params:
+		short: Short - запись из БД с информацией о Сокращении.
+		'''
+
+		self._controller.add_short(short)
+		self._update_logs()
+
+	def _update_logs(self) -> None:
+		''' Обновить текстовое поле с логами выезда '''
+
+		self.info_content.logs_label.text = str(self)
 
 	def __str__(self):
 		return str(self._controller)
@@ -82,13 +109,6 @@ class NotebookManager:
 		# Bind Notebook tag components
 		new_tab.top_panel.bind_open(lambda: self.show_tab(new_tab))
 		new_tab.top_panel.bind_close(lambda: self.close_tab(new_tab))
-
-		# info_manager = info_content.manager
-		# for checkbox in new_tab.phone_content.checkboxes:
-		# for checkbox in new_tab.phone_content.children:
-		# 	checkbox.ids.checkbox.bind(on_release=lambda *_, c=checkbox:
-		# 		info_manager.add_phone_log(c)
-		# 	)
 
 		return new_tab
 
