@@ -34,7 +34,7 @@ def get_explanation_text(short: Short) -> str:
 		day=now_datetime.strftime('%d.%m.%Y'),
 	)
 
-	return f'{returnable_explanation}\n'
+	return f'{returnable_explanation}'
 
 
 class NotebookLog:
@@ -71,6 +71,6 @@ class NotebookInfoContent(MDBoxLayout):
 		''' Вставить текст в поле информации '''
 
 		text_area = self.ids.addition_info_field
-		inserted_text = get_explanation_text(short)
+		inserted_text = get_explanation_text(short) + '\n'
 
 		text_area.insert_text(inserted_text, from_undo=False)
