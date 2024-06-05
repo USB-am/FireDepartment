@@ -3,6 +3,7 @@ from typing import Dict
 from kivy.uix.widget import Widget
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDRaisedButton
+from kivymd.uix.label import MDLabel
 
 from . import BaseScrollScreen
 from app.path_manager import PathManager
@@ -152,6 +153,16 @@ class ShortCreateModel(_BaseCreateModel):
 
 		self.add_content(self.title_field)
 		self.add_content(self.explanation_field)
+		self.add_content(MDLabel(
+			text='[b]Дополнительные элементы:[/b]\n' + \
+			     '{daytime} - [i]заполнится текущей датой и временем (dd.mm.yyyy HH:MM);[/i]\n' + \
+			     '{timeday} - [i]заполнится текущим временем и датой (HH:MM dd.mm.yyyy);[/i]\n' + \
+			     '{time} - [i]заполнится текущим временем (HH:MM);[/i]\n' + \
+			     '{day} - [i]заполнится текущей датой (dd.mm.yyyy).[/i]',
+			adaptive_height=True,
+			markup=True,
+			theme_text_color='Hint'
+		))
 
 		self.params.update({
 			'title': self.title_field,
