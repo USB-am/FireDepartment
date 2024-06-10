@@ -65,6 +65,9 @@ class InformationManager:
 
 	def update(self, text: str) -> None:
 		''' Обновить текст с дополнительной информацией '''
+		if self.logger:
+			self.logger[0] = text
+			return
 		self.logger.append(text)
 
 
