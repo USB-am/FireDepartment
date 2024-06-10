@@ -2,6 +2,7 @@ from typing import List
 from dataclasses import dataclass
 
 from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.label import MDLabel
 
 from data_base import Emergency, Human, Short
 from .top_panel import NotebookTopPanelElement
@@ -33,11 +34,13 @@ class NotebookTab:
 		# Adding short text by clicked to ShortButton
 		for short_btn in self.info_content.ids.shorts_layout.children:
 			short = short_btn.short
-			short_btn.bind(on_release=lambda *_, s=short: self._controller.add_short(s))
+			short_btn.bind(on_release=lambda *_, s=short: self._add_short_and_update_logs(s))
 
 		# Adding text from information text
 		text_field = self.info_content.ids.addition_info_field
-		text_field.bind(text=lambda *_: self._controller.update_info_text(text_field))
+		text_field.bind(text=lambda *_: self._update_info_text_and_logs(text_field))
+
+		self._update_logs()
 
 	def _call_human_and_update_logs(self, human: Human) -> None:
 		'''
@@ -59,6 +62,17 @@ class NotebookTab:
 		'''
 
 		self._controller.add_short(short)
+		self._update_logs()
+
+	def _update_info_text_and_logs(self, text_field: MDLabel) -> None:
+		'''
+		Обновить текст логов из "Дополнительная информация" и обновить логи.
+
+		~params:
+		text_field: MDLabel - текстовое поле с "Дополнительной информацией".
+		'''
+
+		# self._controller.update_info_text(text_field)
 		self._update_logs()
 
 	def _update_logs(self) -> None:
