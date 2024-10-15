@@ -18,7 +18,7 @@
 				height: self.texture_size[1]
 				valign: 'top'
 				halign: 'left'
-				text: root.emergency.description
+				text: root.emergency.description if root.emergency.description else ''
 
 	MDBoxLayout:
 		orientation: 'horizontal'
