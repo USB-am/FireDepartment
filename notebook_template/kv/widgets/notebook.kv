@@ -1,0 +1,40 @@
+<FDNotebook>:
+	orientation: 'vertical'
+	size_hint: (1, 1)
+
+	MDBoxLayout:
+		size_hint: 1, None
+		height: dp(50)
+		md_bg_color: app.theme_cls.primary_color
+
+		ScrollView:
+			MDBoxLayout:
+				id: tab_list
+				orientation: 'horizontal'
+				size_hint: (None, 1)
+				width: self.minimum_width
+				do_scroll_y: False
+				padding: [dp(5), 0]
+				spacing: dp(10)
+
+	MDBoxLayout:
+		id: content
+
+
+<_NotebookMark>:
+	orientation: 'horizontal'
+	size_hint: (None, 1)
+	width: dp(200)
+	padding: [dp(10), dp(3), 0, 0]
+
+	MDTextButton:
+		id: tab_btn
+		size_hint: (None, 1)
+		width: dp(150)
+		halign: 'left'
+		valign: 'center'
+		text: root.title
+
+	MDIconButton:
+		id: close_btn
+		icon: 'close'
