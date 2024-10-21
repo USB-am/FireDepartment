@@ -5,6 +5,7 @@ from collections import defaultdict
 from kivymd.uix.textfield import MDTextField
 
 from data_base import Human, Short
+from .information import get_explanation_text
 
 
 class _Logger(list):
@@ -53,7 +54,7 @@ class ShortManager(list):
 	def add(self, short: Short) -> None:
 		''' Добавить сокращение '''
 		self.append(short)
-		self.logger.append(short.explanation)
+		self.logger.append(get_explanation_text(short))
 
 
 class InformationManager:
@@ -64,6 +65,9 @@ class InformationManager:
 
 	def update(self, text: str) -> None:
 		''' Обновить текст с дополнительной информацией '''
+		if self.logger:
+			self.logger[0] = text
+			return
 		self.logger.append(text)
 
 
