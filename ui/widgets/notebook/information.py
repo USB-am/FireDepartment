@@ -34,7 +34,7 @@ def get_explanation_text(short: Short) -> str:
 		day=now_datetime.strftime('%d.%m.%Y'),
 	)
 
-	return f'{returnable_explanation}\n'
+	return f'{returnable_explanation}'
 
 
 class NotebookLog:
@@ -54,7 +54,11 @@ class NotebookInfoContent(MDBoxLayout):
 
 	def __init__(self, **options):
 		super().__init__(**options)
+<<<<<<< HEAD
 		self.logs_label = MDLabel()
+=======
+		self.logs_label = MDLabel(adaptive_height=True)
+>>>>>>> 9e947e33fa019cb65ba62a2b7c728547d5ca9eea
 		self.add_widget(self.logs_label)
 
 	def fill_shorts(self, shorts: List[Short]) -> None:
@@ -71,6 +75,6 @@ class NotebookInfoContent(MDBoxLayout):
 		''' Вставить текст в поле информации '''
 
 		text_area = self.ids.addition_info_field
-		inserted_text = get_explanation_text(short)
+		inserted_text = get_explanation_text(short) + '\n'
 
 		text_area.insert_text(inserted_text, from_undo=False)
