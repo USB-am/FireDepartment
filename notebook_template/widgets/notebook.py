@@ -16,8 +16,22 @@ class _NotebookMark(MDBoxLayout):
 
 	def __init__(self, title: str, **options):
 		self.title = title
+		self._active = False
 
 		super().__init__(**options)
+
+	@property
+	def active(self) -> bool:
+		return self._active
+
+	@active.setter
+	def active(self, state: bool) -> None:
+		self._active = state
+
+		if state:
+			self.md_bg_color[-1] = .15
+		else:
+			self.md_bg_color[-1] = 0
 
 
 class FDTab:
@@ -45,6 +59,14 @@ class FDTab:
 	def title(self, text: str) -> None:
 		self._marker.title = text
 		self._marker.ids.tab_btn.text = text
+
+	@property
+	def active(self) -> bool:
+		return self._marker.active
+
+	@active.setter
+	def active(self, state: bool) -> None:
+		self._marker.active = state
 
 
 class FDNotebook(MDBoxLayout):
@@ -82,6 +104,10 @@ class FDNotebook(MDBoxLayout):
 
 		content_layout.add_widget(tab.content)
 		self.current_tab = tab
+
+		for tab in self.__tabs:
+			tab.active = False
+		self.current_tab.active = True
 
 	def close_tab(self, tab: FDTab) -> None:
 		''' Закрыть вкладку '''
