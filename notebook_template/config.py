@@ -13,3 +13,4 @@ HOME_KV = os.path.join(SCREENS_KV, 'home.kv')
 
 # Widgets
 NOTEBOOK_WIDGET_KV = os.path.join(KV_WIDGETS_DIR, 'notebook.kv')
+NAVIGATION_WIDGET_KV = os.path.join(KV_WIDGETS_DIR, 'navigation.kv')
