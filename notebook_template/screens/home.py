@@ -4,11 +4,12 @@ from kivy.uix.screenmanager import Screen # type: ignore
 from kivy.lang.builder import Builder # type: ignore
 from kivymd.uix.boxlayout import MDBoxLayout # type: ignore
 
-from config import HOME_KV
+from config import HOME_KV, NAVIGATION_WIDGET_KV
 from widgets.notebook import FDNotebook, FDTab
 
 
 Builder.load_file(HOME_KV)
+Builder.load_file(NAVIGATION_WIDGET_KV)
 
 
 @dataclass
@@ -50,3 +51,6 @@ class HomeScreen(Screen):
 
 		self.notebook = FDNotebook()
 		self.ids.content.add_widget(self.notebook)
+
+		tab = FDTab('My super Emergency', CallTabContent(TEST_EMERGENCIES[0]))
+		self.notebook.add_tab(tab)
