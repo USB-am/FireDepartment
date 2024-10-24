@@ -29,24 +29,26 @@
 <PhoneTabContent>:
 	orientation: 'vertical'
 
-	MDLabel:
-		size_hint: (1, None)
-		height: dp(50)
-		text: root.title
-
-	MDLabel:
-		size_hint: (1, None)
-		height: dp(250)
-		text: root.description
-		valign: 'top'
-		halign: 'left'
-
 	ScrollView:
 		MDBoxLayout:
 			id: content
-			orientation: 'horizontal'
-			size_hint: (None, 1)
-			width: self.minimum_width
-			do_scroll_y: False
+			orientation: 'vertical'
+			size_hint: (1, None)
+			height: self.minimum_height
+			do_scroll_x: False
 			padding: [dp(5), 0]
 			spacing: dp(10)
+
+			MDLabel:
+				size_hint: (1, None)
+				height: dp(50)
+				text: root.title
+				font_style: 'H5'
+
+			MDLabel:
+				size_hint: (1, None)
+				height: dp(75)
+				text: f'{root.description} '*5
+				valign: 'top'
+				halign: 'left'
+				theme_text_color: 'Secondary'
