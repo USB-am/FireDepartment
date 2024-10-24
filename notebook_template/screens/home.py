@@ -28,12 +28,49 @@ class Emergency:
 		return self.title
 
 
+@dataclass
+class Human:
+	''' Люди '''
+
+	icon = 'account-group'
+	__tablename__ = 'Human'
+	id: int				# = db.Column(db.Integer, primary_key=True)
+	title: str			# = db.Column(db.String(255), nullable=False)
+	phone_1: str		# = db.Column(db.String(255), nullable=True)
+	phone_2: str		# = db.Column(db.String(255), nullable=True)
+	is_firefigher: bool	# = db.Column(db.Boolean(), nullable=False)
+
+	def __str__(self):
+		return self.title
+
+
+class PhoneTabContent(MDBoxLayout):
+	''' Контент вкладки о звонках '''
+
+	def __init__(self, title: str, description: str, humans: list):
+		self.title = title
+		self.description = description
+		self.humans = humans
+
+		super().__init__()
+
+		for human in humans:
+			self.ids.content.add_widget(MDLabel(text=human))
+
+
 class CallTabContent(MDBoxLayout):
 	''' Контент вкладки '''
 
 	def __init__(self, emergency: Emergency):
 		self._emergency = emergency
 		super().__init__()
+
+		self.calls_tab = PhoneTabContent(
+			title=emergency.title,
+			description=emergency.description,
+			humans=emergency.humans)
+
+		self.ids.calls.add_widget(self.calls_tab)
 
 
 TEST_EMERGENCIES = [

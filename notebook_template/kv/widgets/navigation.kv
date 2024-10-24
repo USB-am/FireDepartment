@@ -2,7 +2,8 @@
 	orientation: 'vertical'
 
 	MDBottomNavigation:
-		# panel_color: app.theme_cls.primary_color
+		panel_color: app.theme_cls.primary_color
+		text_color_active: app.theme_cls.opposite_text_color
 
 		MDBottomNavigationItem:
 			name: 'calls'
@@ -23,3 +24,29 @@
 				id: info
 				orientation: 'vertical'
 				size_hint: (1, 1)
+
+
+<PhoneTabContent>:
+	orientation: 'vertical'
+
+	MDLabel:
+		size_hint: (1, None)
+		height: dp(50)
+		text: root.title
+
+	MDLabel:
+		size_hint: (1, None)
+		height: dp(250)
+		text: root.description
+		valign: 'top'
+		halign: 'left'
+
+	ScrollView:
+		MDBoxLayout:
+			id: content
+			orientation: 'horizontal'
+			size_hint: (None, 1)
+			width: self.minimum_width
+			do_scroll_y: False
+			padding: [dp(5), 0]
+			spacing: dp(10)
