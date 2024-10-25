@@ -1,9 +1,9 @@
 <CallTabContent>:
 	orientation: 'vertical'
+	padding: [dp(10), 0]
 
 	MDBottomNavigation:
-		panel_color: app.theme_cls.primary_color
-		text_color_active: app.theme_cls.opposite_text_color
+		id: nav_bot
 
 		MDBottomNavigationItem:
 			name: 'calls'
@@ -46,9 +46,14 @@
 				font_style: 'H5'
 
 			MDLabel:
-				size_hint: (1, None)
-				height: dp(75)
-				text: f'{root.description} '*5
-				valign: 'top'
-				halign: 'left'
+				pos_hint: {'x': 0, 'top': 1}
+				adaptive_height: True
 				theme_text_color: 'Secondary'
+				text: root.description
+
+
+<InfoTabContent>:
+	MDLabel:
+		text: 'Info tab'
+		halign: 'center'
+		valign: 'center'

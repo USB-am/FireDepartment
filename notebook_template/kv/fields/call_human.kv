@@ -10,7 +10,8 @@
 	MDLabel:
 		halign: 'left'
 		valign: 'center'
-		text: root.human.title
+		markup: True
+		text: f'{root.human.title}\n[color=#717171]{root.human.phone_1}[/color]'
 
 	MDIconButton:
 		id: info_btn

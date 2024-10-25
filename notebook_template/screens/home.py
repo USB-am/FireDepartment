@@ -60,6 +60,15 @@ class PhoneTabContent(MDBoxLayout):
 			self.ids.content.add_widget(h)
 
 
+class InfoTabContent(MDBoxLayout):
+	''' Контент вкладки с информацией '''
+
+	def __init__(self, shorts: list):
+		self.shorts = shorts
+
+		super().__init__()
+
+
 class CallTabContent(MDBoxLayout):
 	''' Контент вкладки '''
 
@@ -71,8 +80,11 @@ class CallTabContent(MDBoxLayout):
 			title=emergency.title,
 			description=emergency.description,
 			humans=emergency.humans)
+		self.info_tab = InfoTabContent(
+			shorts=emergency.shorts)
 
 		self.ids.calls.add_widget(self.calls_tab)
+		self.ids.info.add_widget(self.info_tab)
 
 
 TEST_EMERGENCIES = [

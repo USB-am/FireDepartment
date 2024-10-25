@@ -77,13 +77,6 @@ class FDNotebook(MDBoxLayout):
 		self.current_tab = None
 		self.__tabs: List[FDTab] = []
 
-		for i in range(5):
-			txt = f'Tab #{i+1}'
-			content = MDBoxLayout()
-			content.add_widget(MDLabel(text=txt))
-			tab = FDTab(title=txt, content=content)
-			self.add_tab(tab)
-
 	def add_tab(self, tab: FDTab) -> None:
 		''' Добавить вкладку '''
 
