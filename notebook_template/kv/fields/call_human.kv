@@ -1,0 +1,17 @@
+
+<FDCallHumanField>:
+	orientation: 'horizontal'
+	size_hint: (1, None)
+	height: dp(50)
+
+	FDTripleCheckbox:
+		id: triple_checkbox
+
+	MDLabel:
+		halign: 'left'
+		valign: 'center'
+		text: root.human.title
+
+	MDIconButton:
+		id: info_btn
+		icon: 'information'

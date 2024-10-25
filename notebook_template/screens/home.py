@@ -1,13 +1,12 @@
 from dataclasses import dataclass
 
-from kivy.uix.screenmanager import Screen # type: ignore
-from kivy.lang.builder import Builder # type: ignore
-from kivymd.uix.boxlayout import MDBoxLayout # type: ignore
-from kivymd.uix.label import MDLabel # type: ignore
-from kivymd.uix.button import MDIconButton # type: ignore
+from kivy.uix.screenmanager import Screen
+from kivy.lang.builder import Builder
+from kivymd.uix.boxlayout import MDBoxLayout
 
 from config import HOME_KV, NAVIGATION_WIDGET_KV
 from widgets.notebook import FDNotebook, FDTab
+from fields.call_human import FDCallHumanField
 
 
 Builder.load_file(HOME_KV)
@@ -46,35 +45,6 @@ class Human:
 		return self.title
 
 
-class FDTripleCheckbox(MDIconButton):
-	''' Чекбокс с 3 состояниями нажатия '''
-
-	def __init__(self, normal: str, active: str, deactive: str, **options):
-		self.normal = normal
-		self.active = active
-		self.deactive = deactive
-		self.__icons = [self.normal, self.active, self.deactive]
-		self.state = 0
-
-		super().__init__(**options)
-
-		self.bind(on_release=lambda _: self.click())
-
-	def click(self) -> None:
-		self.state = (self.state + 1) % 3
-		self.icon = self.__icons[self.state]
-
-
-class FDCallHumanField(MDBoxLayout):
-	''' Поле с вызываемым человеком '''
-
-	def __init__(self, human: Human):
-		self.human = human
-		self.triple_checkbox = FDTripleCheckbox(normal='phone', active='phone-check', deactive='phone-remove')
-
-		super().__init__()
-
-
 class PhoneTabContent(MDBoxLayout):
 	''' Контент вкладки о звонках '''
 
@@ -86,7 +56,8 @@ class PhoneTabContent(MDBoxLayout):
 		super().__init__()
 
 		for human in humans:
-			self.ids.content.add_widget(MDLabel(text=str(human), size_hint=(1, None), height=50))
+			h = FDCallHumanField(human=human)
+			self.ids.content.add_widget(h)
 
 
 class CallTabContent(MDBoxLayout):
