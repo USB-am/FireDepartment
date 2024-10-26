@@ -53,7 +53,23 @@
 
 
 <InfoTabContent>:
-	MDLabel:
-		text: 'Info tab'
-		halign: 'center'
-		valign: 'center'
+	orientation: 'vertical'
+	size_hint: (1, 1)
+
+	ScrollView:
+		MDBoxLayout:
+			orientation: 'vertical'
+			size_hint: (1, None)
+			height: self.minimum_height
+			do_scroll_x: False
+			padding: [dp(5), 0]
+			spacing: dp(10)
+
+			MDStackLayout:
+				id: shorts_layout
+				adaptive_height: True
+
+			MDTextField:
+				id: addition_info
+				multiline: True
+				hint_text: 'Дополнительная информация'
