@@ -45,6 +45,20 @@ class Human:
 		return self.title
 
 
+@dataclass
+class Short:
+	''' Сокращение '''
+
+	icon = 'text-short'
+	__tablename__ = 'Short'
+	id: int				# = db.Column(db.Integer, primary_key=True)
+	title: str			# db.Column(db.String(255), nullable=False)
+	explanation: str	# = db.Column(db.Text(), nullable=True)
+
+	def __str__(self):
+		return self.title
+
+
 class PhoneTabContent(MDBoxLayout):
 	''' Контент вкладки о звонках '''
 
@@ -67,6 +81,9 @@ class InfoTabContent(MDBoxLayout):
 		self.shorts = shorts
 
 		super().__init__()
+
+		if not self.shorts:
+			self.ids.content.remove_widget(self.ids.shorts_layout)
 
 
 class CallTabContent(MDBoxLayout):
@@ -96,7 +113,8 @@ TEST_EMERGENCIES = [
 		tags=[],
 		humans=[Human(id=h, title=f'Human #{h+1}', phone_1=f'8 (800) 555-35-3{h}', is_firefigher=bool(h%2))
 			for h in range(10)],
-		shorts=[])
+		shorts=[Short(id=s, title=f'Short #{s+1}', explanation=f'Short #{s+1} for Emergency #{i+1}.')
+			for s in range(10)])
 	for i in range(10)
 ]
 
