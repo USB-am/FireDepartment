@@ -1,8 +1,11 @@
+import time
+from typing import List
 from dataclasses import dataclass
 
 from kivy.uix.screenmanager import Screen
 from kivy.lang.builder import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.button import MDFlatButton
 
 from config import HOME_KV, NAVIGATION_WIDGET_KV
 from widgets.notebook import FDNotebook, FDTab
@@ -74,15 +77,60 @@ class PhoneTabContent(MDBoxLayout):
 			self.ids.content.add_widget(h)
 
 
+@dataclass
+class Log:
+	timestamp: float
+	title: str
+	description: str
+
+
+class InformationLogger(list):
+	''' Логгер информации '''
+
+	def on_click_short_btn(self, title: str, description: str) -> None:
+		new_log = Log(timestamp=time.time(), title=title, description=description)
+		self.append(new_log)
+
+	#TODO: Change this shit
+	def __str__(self):
+		sorted_logs = sorted(self, key=lambda log: -log.timestamp)
+		output = ''
+		for log in sorted_logs:
+			output += log.title + '\n'
+
+		return output
+
+
+class _FDShortButton(MDFlatButton):
+	''' Кнопка сокращения '''
+
+	def __init__(self, short: Short):
+		self.short = short
+
+		super().__init__(text=short.title)
+
+
 class InfoTabContent(MDBoxLayout):
 	''' Контент вкладки с информацией '''
 
-	def __init__(self, shorts: list):
+	def __init__(self, shorts: List[_FDShortButton]):
 		self.shorts = shorts
+		self._shorts_btn: List[_FDShortButton] = []
+		self.__logger = InformationLogger()
 
 		super().__init__()
 
-		if not self.shorts:
+		if self.shorts:
+			for short in self.shorts:
+				new_short = _FDShortButton(short)
+				new_short.bind(on_release=lambda *_: print(self.__logger))
+				new_short.bind(on_release=lambda *_, s=short: self.__logger.on_click_short_btn(
+					title=s.title, description=s.explanation
+				))
+
+				self.ids.shorts_layout.add_widget(new_short)
+				self._shorts_btn.append(new_short)
+		else:
 			self.ids.content.remove_widget(self.ids.shorts_layout)
 
 
