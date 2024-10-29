@@ -1,5 +1,6 @@
 import time
 from typing import List
+from datetime import datetime
 from dataclasses import dataclass
 
 from kivy.uix.screenmanager import Screen
@@ -57,6 +58,7 @@ class Short:
 	id: int				# = db.Column(db.Integer, primary_key=True)
 	title: str			# db.Column(db.String(255), nullable=False)
 	explanation: str	# = db.Column(db.Text(), nullable=True)
+	into_new_line: bool	# = db.Column(db.Boolean(), nullable=False)
 
 	def __str__(self):
 		return self.title
@@ -133,12 +135,26 @@ class InfoTabContent(MDBoxLayout):
 		else:
 			self.ids.content.remove_widget(self.ids.shorts_layout)
 
-		self.ids.addition_info.bind(on_touch_up=lambda inst, _: print(inst.cursor))
-		# self.ids.addition_info.bind(text=lambda inst, value: print(inst.cursor))
+		# self.ids.addition_info.bind(on_touch_up=lambda inst, _: print(inst.cursor))
 
 	def _insert_short(self, short: Short) -> None:
+		''' Вставить текст сокращения в текстовое поле "Дополнительная информация" '''
 		text_field = self.ids.addition_info
-		text_field.text += f'\n{short.explanation}'
+		now_datetime = datetime.now()
+
+		#TODO: change this shit
+		explanation = short.explanation. \
+			replace('yyyy', str(now_datetime.year)). \
+			replace('mm', str(now_datetime.month)). \
+			replace('dd', str(now_datetime.day)). \
+			replace('HH', str(now_datetime.hour)). \
+			replace('MM', str(now_datetime.minute)). \
+			replace('SS', str(now_datetime.second))
+
+		if short.into_new_line:
+			text_field.text += f'\n{explanation}'
+		else:
+			text_field.insert_text(f' {explanation} ')
 
 
 class CallTabContent(MDBoxLayout):
@@ -168,7 +184,11 @@ TEST_EMERGENCIES = [
 		tags=[],
 		humans=[Human(id=h, title=f'Human #{h+1}', phone_1=f'8 (800) 555-35-3{h}', is_firefigher=bool(h%2))
 			for h in range(10)],
-		shorts=[Short(id=s, title=f'Short #{s+1}', explanation=f'Short #{s+1} for Emergency #{i+1}.')
+		shorts=[Short(
+				id=s,
+				title=f'Short #{s+1}',
+				explanation=f'Short #{s+1} for Emergency #{i+1} (HH:MM:SS)' if bool(s%2) else f'[dd.mm.yyyy HH:MM] Short #{s+1} for Emergency #{i+1}.',
+				into_new_line=bool(s%2))
 			for s in range(10)])
 	for i in range(10)
 ]
