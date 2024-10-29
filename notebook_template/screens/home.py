@@ -123,7 +123,7 @@ class InfoTabContent(MDBoxLayout):
 		if self.shorts:
 			for short in self.shorts:
 				new_short = _FDShortButton(short)
-				new_short.bind(on_release=lambda *_: print(self.__logger))
+				new_short.bind(on_release=lambda *_, s=short: self._insert_short(s))
 				new_short.bind(on_release=lambda *_, s=short: self.__logger.on_click_short_btn(
 					title=s.title, description=s.explanation
 				))
@@ -132,6 +132,13 @@ class InfoTabContent(MDBoxLayout):
 				self._shorts_btn.append(new_short)
 		else:
 			self.ids.content.remove_widget(self.ids.shorts_layout)
+
+		self.ids.addition_info.bind(on_touch_up=lambda inst, _: print(inst.cursor))
+		# self.ids.addition_info.bind(text=lambda inst, value: print(inst.cursor))
+
+	def _insert_short(self, short: Short) -> None:
+		text_field = self.ids.addition_info
+		text_field.text += f'\n{short.explanation}'
 
 
 class CallTabContent(MDBoxLayout):
