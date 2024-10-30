@@ -89,18 +89,13 @@ class Log:
 class InformationLogger(list):
 	''' Логгер информации '''
 
-	def on_click_short_btn(self, title: str, description: str) -> None:
+	def add_log(self, title: str, description: str) -> None:
 		new_log = Log(timestamp=time.time(), title=title, description=description)
 		self.append(new_log)
 
-	#TODO: Change this shit
 	def __str__(self):
 		sorted_logs = sorted(self, key=lambda log: -log.timestamp)
-		output = ''
-		for log in sorted_logs:
-			output += log.title + '\n'
-
-		return output
+		return '\n'.join(map(lambda log: log.title, sorted_logs))
 
 
 class _FDShortButton(MDFlatButton):
@@ -117,7 +112,6 @@ class InfoTabContent(MDBoxLayout):
 
 	def __init__(self, shorts: List[_FDShortButton]):
 		self.shorts = shorts
-		self._shorts_btn: List[_FDShortButton] = []
 		self.__logger = InformationLogger()
 
 		super().__init__()
@@ -126,16 +120,13 @@ class InfoTabContent(MDBoxLayout):
 			for short in self.shorts:
 				new_short = _FDShortButton(short)
 				new_short.bind(on_release=lambda *_, s=short: self._insert_short(s))
-				new_short.bind(on_release=lambda *_, s=short: self.__logger.on_click_short_btn(
+				new_short.bind(on_release=lambda *_, s=short: self.__logger.add_log(
 					title=s.title, description=s.explanation
 				))
 
 				self.ids.shorts_layout.add_widget(new_short)
-				self._shorts_btn.append(new_short)
 		else:
 			self.ids.content.remove_widget(self.ids.shorts_layout)
-
-		# self.ids.addition_info.bind(on_touch_up=lambda inst, _: print(inst.cursor))
 
 	def _insert_short(self, short: Short) -> None:
 		''' Вставить текст сокращения в текстовое поле "Дополнительная информация" '''
@@ -160,6 +151,8 @@ class InfoTabContent(MDBoxLayout):
 			text_field.text += f'\n{text}\n'
 		else:
 			text_field.insert_text(' ' + text + ' ')
+
+		print(self.__logger)
 
 
 class CallTabContent(MDBoxLayout):
