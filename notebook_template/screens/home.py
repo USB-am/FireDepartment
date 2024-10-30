@@ -67,16 +67,18 @@ class Short:
 class PhoneTabContent(MDBoxLayout):
 	''' Контент вкладки о звонках '''
 
-	def __init__(self, title: str, description: str, humans: list):
+	def __init__(self, title: str, description: str, humans: List[Human]):
 		self.title = title
 		self.description = description
 		self.humans = humans
+		self.human_fields: List[FDCallHumanField] = []
 
 		super().__init__()
 
 		for human in humans:
-			h = FDCallHumanField(human=human)
-			self.ids.content.add_widget(h)
+			human_field = FDCallHumanField(human=human)
+			self.ids.content.add_widget(human_field)
+			self.human_fields.append(human_field)
 
 
 @dataclass
@@ -112,7 +114,7 @@ class InfoTabContent(MDBoxLayout):
 
 	def __init__(self, shorts: List[_FDShortButton]):
 		self.shorts = shorts
-		self.__logger = InformationLogger()
+		self._logger = InformationLogger()
 
 		super().__init__()
 
@@ -120,7 +122,7 @@ class InfoTabContent(MDBoxLayout):
 			for short in self.shorts:
 				new_short = _FDShortButton(short)
 				new_short.bind(on_release=lambda *_, s=short: self._insert_short(s))
-				new_short.bind(on_release=lambda *_, s=short: self.__logger.add_log(
+				new_short.bind(on_release=lambda *_, s=short: self._logger.add_log(
 					title=s.title, description=s.explanation
 				))
 
@@ -152,8 +154,6 @@ class InfoTabContent(MDBoxLayout):
 		else:
 			text_field.insert_text(' ' + text + ' ')
 
-		print(self.__logger)
-
 
 class CallTabContent(MDBoxLayout):
 	''' Контент вкладки '''
@@ -169,8 +169,17 @@ class CallTabContent(MDBoxLayout):
 		self.info_tab = InfoTabContent(
 			shorts=emergency.shorts)
 
+		for human_field in self.calls_tab.human_fields:
+			human_field.checkbox.bind(on_release=lambda *_, hf=human_field: self._add_human_call_log(hf))
+
 		self.ids.calls.add_widget(self.calls_tab)
 		self.ids.info.add_widget(self.info_tab)
+
+	def _add_human_call_log(self, human_field: FDCallHumanField) -> None:
+		''' Добавиьт лог о нажатии чекбокса на поле звонка человеку '''
+		cbox = human_field.checkbox
+		state = (cbox.state_ + 1) % 3
+		print(f'{state=}')
 
 
 TEST_EMERGENCIES = [
@@ -180,13 +189,17 @@ TEST_EMERGENCIES = [
 		description=f'Description for Emergency #{i+1}',
 		urgent=bool(i%2),
 		tags=[],
-		humans=[Human(id=h, title=f'Human #{h+1}', phone_1=f'8 (800) 555-35-3{h}', is_firefigher=bool(h%2))
+		humans=[Human(
+				id=h,
+				title=f'Human #{h+1}',
+				phone_1=f'8 (800) 555-35-3{h}',
+				is_firefigher=bool(h%2))
 			for h in range(10)],
 		shorts=[Short(
 				id=s,
 				title=f'Short #{s+1}',
 				explanation=f'Short #{s+1} for Emergency #{i+1} (HH:MM:SS)' if bool(s%2) else f'[dd.mm.yyyy HH:MM] Short #{s+1} for Emergency #{i+1}.',
-				into_new_line=bool(s%2))
+				into_new_line=bool(s%2))	# TODO: Add to production version
 			for s in range(10)])
 	for i in range(10)
 ]
