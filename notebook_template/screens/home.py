@@ -139,11 +139,16 @@ class InfoTabContent(MDBoxLayout):
 
 	def _insert_short(self, short: Short) -> None:
 		''' Вставить текст сокращения в текстовое поле "Дополнительная информация" '''
+		self.insert_text(text=short.explanation, new_line=short.into_new_line)
+
+	def insert_text(self, text: str, new_line: bool=True) -> None:
+		''' Вставить текст в поле "Дополнительная информация" '''
+
 		text_field = self.ids.addition_info
 		now_datetime = datetime.now()
 
 		#TODO: change this shit
-		explanation = short.explanation. \
+		text = text. \
 			replace('yyyy', str(now_datetime.year)). \
 			replace('mm', str(now_datetime.month)). \
 			replace('dd', str(now_datetime.day)). \
@@ -151,10 +156,10 @@ class InfoTabContent(MDBoxLayout):
 			replace('MM', str(now_datetime.minute)). \
 			replace('SS', str(now_datetime.second))
 
-		if short.into_new_line:
-			text_field.text += f'\n{explanation}'
+		if new_line:
+			text_field.text += f'\n{text}\n'
 		else:
-			text_field.insert_text(f' {explanation} ')
+			text_field.insert_text(' ' + text + ' ')
 
 
 class CallTabContent(MDBoxLayout):
