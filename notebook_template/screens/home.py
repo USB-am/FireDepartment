@@ -1,5 +1,5 @@
 import time
-from typing import List
+from typing import List, Dict
 from datetime import datetime
 from dataclasses import dataclass
 
@@ -95,6 +95,9 @@ class InformationLogger(list):
 		new_log = Log(timestamp=time.time(), title=title, description=description)
 		self.append(new_log)
 
+	def get_last_log(self) -> Log:
+		return self[-1]
+
 	def __str__(self):
 		sorted_logs = sorted(self, key=lambda log: -log.timestamp)
 		return '\n'.join(map(lambda log: log.title, sorted_logs))
@@ -152,7 +155,7 @@ class InfoTabContent(MDBoxLayout):
 		if new_line:
 			text_field.text += f'\n{text}\n'
 		else:
-			text_field.insert_text(' ' + text + ' ')
+			text_field.insert_text(text)
 
 
 class CallTabContent(MDBoxLayout):
@@ -160,6 +163,7 @@ class CallTabContent(MDBoxLayout):
 
 	def __init__(self, emergency: Emergency):
 		self._emergency = emergency
+		self._human_call_logs: Dict[Log] = {}
 		super().__init__()
 
 		self.calls_tab = PhoneTabContent(
@@ -170,16 +174,42 @@ class CallTabContent(MDBoxLayout):
 			shorts=emergency.shorts)
 
 		for human_field in self.calls_tab.human_fields:
-			human_field.checkbox.bind(on_release=lambda *_, hf=human_field: self._add_human_call_log(hf))
+			human_field.checkbox.bind(
+				on_release=lambda *_, hf=human_field: self.update_info_textfield(hf)
+			)
 
 		self.ids.calls.add_widget(self.calls_tab)
 		self.ids.info.add_widget(self.info_tab)
 
-	def _add_human_call_log(self, human_field: FDCallHumanField) -> None:
-		''' Добавиьт лог о нажатии чекбокса на поле звонка человеку '''
+	def update_info_textfield(self, human_field: FDCallHumanField) -> None:
+		''' Обновить текстовое поле с дополнительной информацией '''
+		log = self._add_human_call_log(human_field)
+		self.info_tab.insert_text(f'{log.description}\n', new_line=False)
+
+	def _add_human_call_log(self, human_field: FDCallHumanField) -> Log:
+		''' Добавить лог при нажатии чекбокса на поле звонка человеку '''
+
 		cbox = human_field.checkbox
+		human = human_field.human
+		logger = self.info_tab._logger
 		state = (cbox.state_ + 1) % 3
-		print(f'{state=}')
+
+		if state == 0:
+			logger.add_log(title='', description='')
+		elif state == 1:
+			logger.add_log(
+				title=f'Вызов {human.title}',
+				description=f'Вызов {human.title}.')
+		elif state == 2:
+			logger.add_log(
+				title=f'Не получен ответ от {human.title}',
+				description=f'Не получен ответ от {human.title}')
+
+		new_log = logger.get_last_log()
+		key = f'{human.title}-{human.id}'
+		self._human_call_logs[key] = new_log
+
+		return new_log
 
 
 TEST_EMERGENCIES = [
