@@ -1,5 +1,5 @@
 import time
-from typing import List, Dict
+from typing import List, Dict, Union
 from datetime import datetime
 from dataclasses import dataclass
 
@@ -184,9 +184,10 @@ class CallTabContent(MDBoxLayout):
 	def update_info_textfield(self, human_field: FDCallHumanField) -> None:
 		''' Обновить текстовое поле с дополнительной информацией '''
 		log = self._add_human_call_log(human_field)
-		self.info_tab.insert_text(f'{log.description}\n', new_line=False)
+		if log:
+			self.info_tab.insert_text(f'{log.description}', new_line=True)
 
-	def _add_human_call_log(self, human_field: FDCallHumanField) -> Log:
+	def _add_human_call_log(self, human_field: FDCallHumanField) -> Union[Log, None]:
 		''' Добавить лог при нажатии чекбокса на поле звонка человеку '''
 
 		cbox = human_field.checkbox
@@ -195,15 +196,15 @@ class CallTabContent(MDBoxLayout):
 		state = (cbox.state_ + 1) % 3
 
 		if state == 0:
-			logger.add_log(title='', description='')
+			return
 		elif state == 1:
 			logger.add_log(
 				title=f'Вызов {human.title}',
-				description=f'Вызов {human.title}.')
+				description=f'[dd.mm.yyyy HH:MM] Вызов {human.title}.')
 		elif state == 2:
 			logger.add_log(
 				title=f'Не получен ответ от {human.title}',
-				description=f'Не получен ответ от {human.title}')
+				description=f'[dd.mm.yyyy HH:MM] Не получен ответ от {human.title}')
 
 		new_log = logger.get_last_log()
 		key = f'{human.title}-{human.id}'
@@ -228,7 +229,7 @@ TEST_EMERGENCIES = [
 		shorts=[Short(
 				id=s,
 				title=f'Short #{s+1}',
-				explanation=f'Short #{s+1} for Emergency #{i+1} (HH:MM:SS)' if bool(s%2) else f'[dd.mm.yyyy HH:MM] Short #{s+1} for Emergency #{i+1}.',
+				explanation=f'Short #{s+1} for Emergency #{i+1} (HH:MM)' if bool(s%2) else f'[dd.mm.yyyy HH:MM] Short #{s+1} for Emergency #{i+1}.',
 				into_new_line=bool(s%2))	# TODO: Add to production version
 			for s in range(10)])
 	for i in range(10)
