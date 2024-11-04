@@ -141,4 +141,5 @@ class MainScreen(BaseScrollScreen):
 		'''
 
 		calls_screen = self._path_manager.forward('calls')
-		calls_screen.notebook.add_tab(emergency)
+		# calls_screen.notebook.add_tab(emergency)
+		calls_screen.add_notebook_tab(emergency)

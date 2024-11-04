@@ -1,48 +1,17 @@
-from typing import List, Union
-
-from kivy.lang.builder import Builder
-from kivy.properties import StringProperty, BoundedNumericProperty
-from kivymd.uix.boxlayout import MDBoxLayout
-
-from config import TRIPLE_CHECKBOX
+from kivymd.uix.button import MDIconButton
 
 
-Builder.load_file(TRIPLE_CHECKBOX)
-Digits = Union[float, int]
+class FDTripleCheckbox(MDIconButton):
+	''' Чекбокс с 3 состояниями нажатия '''
 
+	def __init__(self, normal: str='', active: str='', deactive: str='', **options):
+		self.icons = [normal, active, deactive]
+		self.state_ = 0
 
-class FDTripleCheckbox(MDBoxLayout):
-	''' Область с тройным чекбоксом. '''
+		super().__init__(icon=normal, **options)
 
-	normal_icon = StringProperty()
-	active_icon = StringProperty()
-	deactive_icon = StringProperty()
-	title = StringProperty()
-	substring = StringProperty('')
-	state = BoundedNumericProperty(0, min=0, max=2)
+		self.bind(on_release=lambda _: self.click())
 
 	def click(self) -> None:
-		''' Обработка изменения состояния при клике '''
-
-		self.state = (self.state + 1) % 3
-
-		self.md_bg_color: List[Digits]
-		if self.state == 0:
-			self.md_bg_color = [0, 0, 0, 0]
-			self.ids.checkbox.icon = self.normal_icon
-		elif self.state == 1:
-			self.md_bg_color = [0, 1, 0, .3]
-			self.ids.checkbox.icon = self.active_icon
-		elif self.state == 2:
-			self.md_bg_color = [1, 0, 0, .3]
-			self.ids.checkbox.icon = self.deactive_icon
-
-	def get_value(self) -> int:
-		''' Возвращает текущее состояние виджета '''
-
-		return self.state
-
-	def set_value(self, state: int) -> None:
-		''' Устанавливает состояние виджету '''
-		if state is not None:
-			self.state = state % 3
+		self.state_ = (self.state_ + 1) % 3
+		self.icon = self.icons[self.state_]

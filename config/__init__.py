@@ -33,9 +33,11 @@ BASE_SCREEN = os.path.join(SCREENS_KV, 'base_screen.kv')
 
 # Widgets
 WIDGETS_DIR = os.path.join(KV_DIR, 'widgets')
-NOTEBOOK_WIDGET = os.path.join(WIDGETS_DIR, 'notebook.kv')
-TRIPLE_CHECKBOX = os.path.join(WIDGETS_DIR, 'triple_checkbox.kv')
+# NOTEBOOK_WIDGET = os.path.join(WIDGETS_DIR, 'notebook.kv')
+# TRIPLE_CHECKBOX = os.path.join(WIDGETS_DIR, 'triple_checkbox.kv')
 SEARCH_WIDGET = os.path.join(WIDGETS_DIR, 'search.kv')
+NOTEBOOK_WIDGET = os.path.join(WIDGETS_DIR, 'notebook.kv')
+NAVIGATION_WIDGET = os.path.join(WIDGETS_DIR, 'navigation.kv')
 
 # Layouts
 LAYOUTS_DIR = os.path.join(KV_DIR, 'layouts')
@@ -54,3 +56,4 @@ INPUT_FIELD = os.path.join(FIELDS_DIR, 'input.kv')
 SELECT_FIELD = os.path.join(FIELDS_DIR, 'select.kv')
 SWITCH_FIELD = os.path.join(FIELDS_DIR, 'switch.kv')
 CALENDAR_FIELD = os.path.join(FIELDS_DIR, 'calendar.kv')
+CALL_HUMAN_FIELD_KV = os.path.join(FIELDS_DIR, 'call_human.kv')
