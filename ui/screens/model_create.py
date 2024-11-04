@@ -150,23 +150,32 @@ class ShortCreateModel(_BaseCreateModel):
 		self.explanation_field = FDMultilineInput(
 			hint_text='Полный текст',
 			helper_text='Этот текст будет вставлен при нажатии в экране Вызова')
+		self.into_new_line_field = FDDoubleSwitch(
+			icon_active='text',
+			icon_deactive='cursor-text',
+			title_active='На новой строке',
+			title_deactive='Продолжить строку')
 
 		self.add_content(self.title_field)
 		self.add_content(self.explanation_field)
 		self.add_content(MDLabel(
 			text='[b]Дополнительные элементы:[/b]\n' + \
-			     '{daytime} - [i]заполнится текущей датой и временем (dd.mm.yyyy HH:MM);[/i]\n' + \
-			     '{timeday} - [i]заполнится текущим временем и датой (HH:MM dd.mm.yyyy);[/i]\n' + \
-			     '{time} - [i]заполнится текущим временем (HH:MM);[/i]\n' + \
-			     '{day} - [i]заполнится текущей датой (dd.mm.yyyy).[/i]',
+			     'HH - [i]заполнится текущим часом;[/i]\n' + \
+			     'MM - [i]заполнится текущей минутой;[/i]\n' + \
+			     'SS - [i]заполнится текущей секундой;[/i]\n' + \
+			     'yyyy - [i]заполнится текущим годом;[/i]\n' + \
+			     'mm - [i]заполнится текущим месяцем;[/i]\n' + \
+			     'dd - [i]заполнится текущим днем.[/i]',
 			adaptive_height=True,
 			markup=True,
 			theme_text_color='Hint'
 		))
+		self.add_content(self.into_new_line_field)
 
 		self.params.update({
 			'title': self.title_field,
 			'explanation': self.explanation_field,
+			'into_new_line': self.into_new_line_field,
 		})
 
 	def _pre_open_update(self) -> None:

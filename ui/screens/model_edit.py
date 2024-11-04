@@ -103,6 +103,7 @@ class ShortEditModel(_BaseEditModel, model_create.ShortCreateModel):
 		self.update_inputs_validators()
 		self.params['title'].set_value(entry.title)
 		self.params['explanation'].set_value(entry.explanation)
+		self.params['into_new_line'].set_value(entry.into_new_line)
 
 	def is_valid(self, params: Dict[str, Any]) -> tuple:
 		checks = (
