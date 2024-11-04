@@ -3,13 +3,14 @@
 	size_hint: (1, 1)
 
 	MDBoxLayout:
-		size_hint: (1, None)
-		height: dp(50)
+		size_hint: 1, None
+		height: dp(60)
+		padding: [dp(5), dp(5)]
 		md_bg_color: app.theme_cls.primary_color
 
 		ScrollView:
 			MDBoxLayout:
-				id: tab_panel
+				id: tab_list
 				orientation: 'horizontal'
 				size_hint: (None, 1)
 				width: self.minimum_width
@@ -17,107 +18,36 @@
 				padding: [dp(5), 0]
 				spacing: dp(10)
 
-	MDBottomNavigation:
-		id: bottom_nav
-		panel_color: app.theme_cls.primary_color
-		# md_bg_color: app.theme_cls.accent_color
+	MDBoxLayout:
+		id: content
+		orientation: 'vertical'
+		size_hint: (1, 1)
 
-		MDBottomNavigationItem:
-			id: phones_nav_item
-			name: 'phones'
-			text: 'Звонки'
-			icon: 'phone'
-
-			ScrollView:
-				size_hint: (1, 1)
-
-				GridLayout:
-					id: phone_content
-					cols: 1
-					size_hint: (1, None)
-					height: self.minimum_height
-					do_scroll_x: False
-					padding: [dp(10), dp(20)]
-
-		MDBottomNavigationItem:
-			id: info_nav_item
-			name: 'info'
-			text: 'Информация'
-			icon: 'notebook'
-
-			ScrollView:
-				size_hint: (1, 1)
-
-				GridLayout:
-					id: info_content
-					cols: 1
-					size_hint: (1, None)
-					height: self.minimum_height
-					do_scroll_x: False
-					padding: [dp(10), dp(20)]
+		MDLabel:
+			size_hint: (1, 1)
+			text: 'Ничего не выбрано'
+			halign: 'center'
+			valign: 'center'
 
 
-<NotebookTopPanelElement>:
+<_NotebookMark>:
 	orientation: 'horizontal'
 	size_hint: (None, 1)
 	width: dp(200)
 	padding: [dp(10), dp(3), 0, 0]
 
 	MDTextButton:
-		id: tab_title
-		size_hint: (1, 1)
-		theme_text_color: 'Custom'
-		text_color: app.theme_cls.opposite_text_color
+		id: tab_btn
+		size_hint: (None, 1)
+		width: dp(150)
 		halign: 'left'
 		valign: 'center'
 		text: root.title
+		theme_text_color: 'Custom'
+		text_color: app.theme_cls.opposite_text_color
 
 	MDIconButton:
 		id: close_btn
-		size_hint: (None, None)
-		size: (dp(50), dp(50))
+		icon: 'close'
 		theme_text_color: 'Custom'
 		text_color: app.theme_cls.opposite_text_color
-		icon: 'close'
-
-
-<NotebookPhoneContent>:
-	orientation: 'vertical'
-	adaptive_height: True
-
-	MDLabel:
-		size_hint: (1, None)
-		height: self.texture_size[1]
-		halign: 'left'
-		valign: 'center'
-		text: root.description if root.description else ''
-		padding: [0, dp(10)]
-
-
-<NotebookInfoContent>:
-	orientation: 'vertical'
-	adaptive_height: True
-	padding: [dp(10), 0]
-	spacing: dp(10)
-
-	MDStackLayout:
-		id: shorts_layout
-		adaptive_height: True
-		minimum_height: dp(1)
-		spacing: dp(10)
-
-	MDTextField:
-		id: addition_info_field
-		multiline: True
-		mode: 'rectangle'
-		hint_text: 'Дополнительная информация'
-
-	MDBoxLayout:
-		id: logs_layout
-		orientation: 'vertical'
-		adaptive_height: True
-
-
-<NotebookInformationText>:
-	adaptive_height: True
-	markup: True

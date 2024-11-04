@@ -5,10 +5,10 @@ from kivy.lang.builder import Builder # type: ignore
 from kivymd.uix.boxlayout import MDBoxLayout # type: ignore
 from kivymd.uix.label import MDLabel # type: ignore
 
-from config import NOTEBOOK_WIDGET_KV
+from config import NOTEBOOK_WIDGET
 
 
-Builder.load_file(NOTEBOOK_WIDGET_KV)
+Builder.load_file(NOTEBOOK_WIDGET)
 
 
 class _NotebookMark(MDBoxLayout):

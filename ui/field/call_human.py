@@ -1,7 +1,7 @@
 from kivy.lang import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
 
-from widgets.triple_checkbox import FDTripleCheckbox	# used in the .kv file
+from ui.widgets.triple_checkbox import FDTripleCheckbox	# used in the .kv file
 from config import CALL_HUMAN_FIELD_KV
 
 
