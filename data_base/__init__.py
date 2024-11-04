@@ -48,6 +48,7 @@ class Short(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	title = db.Column(db.String(255), nullable=False)
 	explanation = db.Column(db.Text(), nullable=True)
+	into_new_line = db.Column(db.Boolean(), nullable=False)
 
 	def __str__(self):
 		return self.title
