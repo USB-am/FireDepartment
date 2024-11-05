@@ -92,6 +92,7 @@ class OptionsScreen(BaseScrollScreen):
 		self.theme_style_field.ids.switch.bind(on_release=lambda *_: \
 			self._update_style_field(self.theme_style_field.ids.switch.active)
 		)
+		self.theme_style_field.set_value(self.__theme_cls.theme_style=='Dark')
 
 		# Количество подгружаемых элементов в пагинаторе
 		# self.iterable_count_field = FDNumberInput(
