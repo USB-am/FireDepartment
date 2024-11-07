@@ -26,7 +26,7 @@
 
 			MDLabel:
 				id: month_title
-				text: 'Ноябрь'
+				text: '???'
 				halign: 'center'
 
 			MDIconButton:
@@ -105,6 +105,6 @@
 
 
 <_CalendarGridDay>:
-	text: str(root.day) if root.day >= 10 else '0' + str(root.day)
+	text: str(root.date.day) if root.date.day >= 10 else '0' + str(root.date.day)
 	halign: 'center'
 	theme_text_color: 'Primary' if root.this_month else 'Hint'
