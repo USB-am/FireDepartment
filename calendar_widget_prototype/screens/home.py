@@ -17,6 +17,7 @@ class HomeScreen(Screen):
 		super().__init__(**kw)
 		self.ids.content.orientation = 'vertical'
 
+		self.ids.content.add_widget(MDBoxLayout(size_hint=(1, 1), md_bg_color=(1, 1, 1, 1)))
 		calendar_ = FDCalendar()
 		self.ids.content.add_widget(calendar_)
 		self.ids.content.add_widget(MDBoxLayout(size_hint=(1, 1), md_bg_color=(1, 1, 1, 1)))
