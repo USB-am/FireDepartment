@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Union
 from calendar import Calendar
 from datetime import datetime, date, timedelta
 from dataclasses import dataclass	# temp
@@ -120,6 +120,8 @@ class FDCalendar(MDBoxLayout):
 		super().__init__()
 
 		self._grid_elements: List[_CalendarGridDay] = []
+		self._is_select_work_days = False
+		self._work_days_params = {}
 		self.update()
 		self.select_work_days(work_day=date(2024, 10, 29), worktype=WORK_TYPES[1])
 
@@ -128,8 +130,8 @@ class FDCalendar(MDBoxLayout):
 		return self._now_date
 
 	@now_date.setter
-	def now_date(self, new_date: date) -> None:
-		if not isinstance(new_date, date):
+	def now_date(self, new_date: Union[date, datetime]) -> None:
+		if not isinstance(new_date, (date, datetime)):
 			raise ValueError('param \'new_date\' is not date type.')
 		self._now_date = new_date
 
@@ -145,15 +147,29 @@ class FDCalendar(MDBoxLayout):
 			grid.add_widget(d)
 			self._grid_elements.append(d)
 
+		if self._is_select_work_days:
+			self.select_work_days(**self._work_days_params)
+
 	def _change_month_title(self) -> None:
 		''' Изменить название месяца '''
 		self.ids.month_title.text = MONTHS[self._now_date.month]
 
 	def select_work_days(self, work_day: date, worktype: Worktype) -> None:
 		''' Выделить рабочие дни '''
+		self._is_select_work_days = True
+		self._work_days_params = {
+			'work_day': work_day,
+			'worktype': worktype}
+
 		for calendar_day in self._grid_elements:
 			is_work = is_work_day(calendar_day.date, work_day, worktype)
 			calendar_day.select() if is_work else calendar_day.unselect()
+
+	def unselect_work_days(self) -> None:
+		''' Снять выделения рабочих дней '''
+		self._is_select_work_days = False
+		for calendar_day in self._grid_elements:
+			calendar_day.unselect()
 
 	def update(self) -> None:
 		''' Обновить календарь '''
