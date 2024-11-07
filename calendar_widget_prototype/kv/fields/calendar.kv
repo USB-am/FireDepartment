@@ -1,6 +1,5 @@
 <FDCalendar>:
 	orientation: 'horizontal'
-	# adaptive_height: True
 	size_hint: (1, None)
 	height: dp(250)
 	padding: [dp(5), dp(10)]
@@ -12,6 +11,7 @@
 		size: (root.height, root.height)
 
 		MDBoxLayout:
+			# Navigation panel
 			orientation: 'horizontal'
 			size_hint: (1, None)
 			height: dp(50)
@@ -21,7 +21,11 @@
 				size_hint: (None, None)
 				size: (dp(50), dp(50))
 
+				on_release:
+					root.move_to_prev_month()
+
 			MDLabel:
+				id: month_title
 				text: 'Ноябрь'
 				halign: 'center'
 
@@ -29,6 +33,9 @@
 				icon: 'menu-right'
 				size_hint: (None, None)
 				size: (dp(50), dp(50))
+
+				on_release:
+					root.move_to_next_month()
 
 		MDGridLayout:
 			# Week day titles
