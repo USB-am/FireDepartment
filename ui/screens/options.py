@@ -1,4 +1,4 @@
-from typing import List
+from typing import Any, List
 
 from kivymd.app import MDApp
 
@@ -40,6 +40,17 @@ class OptionsScreen(BaseScrollScreen):
 	@property
 	def __config(self):
 		return self.__app.config
+
+	def __get_config_value(self, section: str, option: str, fallback: Any='') -> Any:
+		'''
+		Получить значение из конфига.
+
+		~params:
+		section: str - секция конфига в которой будет идти поиск значения;
+		option: str - ключ по которому будет возвращено значение;
+		fallback: Any - значение при ненахождении (не может быть None).
+		'''
+		return self.__config.get(section, option, fallback=fallback)
 
 	def save_changes(self) -> None:
 		''' Сохранить настройки в application.ini '''
@@ -112,22 +123,26 @@ class OptionsScreen(BaseScrollScreen):
 		# Текст начала выезда
 		self.start_call_text_field = FDMultilineInput(hint_text='Начало выезда')
 		self.start_call_text_field.helper_text = 'Будет вставлен при каждом начале выезда'
-		self.start_call_text_field.helper_text_mode = 'on_focus'
+		self.start_call_text_field.helper_text_mode = 'persistent'
+		self.start_call_text_field.set_value(self.__get_config_value('call', 'start_text', '[HH:MM dd.mm.yyyy] Начало выезда.'))
 
 		# Текст окончания выезда
 		self.finish_call_text_field = FDMultilineInput(hint_text='Окончание выезда')
 		self.finish_call_text_field.helper_text = 'Будет вставлен при окончании выезда'
-		self.finish_call_text_field.helper_text_mode = 'on_focus'
+		self.finish_call_text_field.helper_text_mode = 'persistent'
+		self.finish_call_text_field.set_value(self.__get_config_value('call', 'finish_text', '[HH:MM dd.mm.yyyy] Конец выезда.'))
 
 		# Текст при удачном вызове человека
 		self.human_call_success_field = FDMultilineInput(hint_text='Успешный вызов')
 		self.human_call_success_field.helper_text = 'Будет вставлен при успешном вызове человека'
-		self.human_call_success_field.helper_text_mode = 'on_focus'
+		self.human_call_success_field.helper_text_mode = 'persistent'
+		self.human_call_success_field.set_value(self.__get_config_value('call', 'human_success', '[HH:MM dd.mm.yyyy] Вызов {human.title}.'))
 
 		# Текст при неудачном вызове человека
 		self.human_call_unsuccess_field = FDMultilineInput(hint_text='Безуспешный вызов')
 		self.human_call_unsuccess_field.helper_text = 'Будет вставлен при безуспешном вызове человека'
-		self.human_call_unsuccess_field.helper_text_mode = 'on_focus'
+		self.human_call_unsuccess_field.helper_text_mode = 'persistent'
+		self.human_call_unsuccess_field.set_value(self.__get_config_value('call', 'human_unsuccess', '[HH:MM dd.mm.yyyy] Вызов {human.title} не прошел.'))
 
 		# Количество подгружаемых элементов в пагинаторе
 		# self.iterable_count_field = FDNumberInput(
