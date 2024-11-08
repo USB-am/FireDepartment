@@ -6,7 +6,8 @@ from . import BaseScrollScreen
 from app.path_manager import PathManager
 from ui.field.button import FDButtonDropdown
 from ui.field.switch import FDDoubleSwitch
-from ui.field.input import FDNumberInput
+from ui.field.input import FDNumberInput, FDMultilineInput
+from ui.field.label import FDTitle
 # from config import ITERABLE_COUNT
 
 
@@ -54,6 +55,9 @@ class OptionsScreen(BaseScrollScreen):
 	def fill_elements(self) -> None:
 		self.clear_content()
 
+		# Название раздела
+		theme_lbl = FDTitle(title='Тема')
+
 		# Основной цвет
 		self.primary_field = FDButtonDropdown(
 			icon='palette',
@@ -94,6 +98,37 @@ class OptionsScreen(BaseScrollScreen):
 		)
 		self.theme_style_field.set_value(self.__theme_cls.theme_style=='Dark')
 
+
+		# Название раздела
+		calls_lbl = FDTitle(title='Вызовы')
+
+		# Игнорировать показатель "Рабочий день"
+		self.work_day_ignore_field = FDDoubleSwitch(
+			icon_active='cancel',
+			title_active='Игнорировать рабочие дни',
+			icon_deactive='check',
+			title_deactive='В соответствии с графиком')
+
+		# Текст начала выезда
+		self.start_call_text_field = FDMultilineInput(hint_text='Начало выезда')
+		self.start_call_text_field.helper_text = 'Будет вставлен при каждом начале выезда'
+		self.start_call_text_field.helper_text_mode = 'on_focus'
+
+		# Текст окончания выезда
+		self.finish_call_text_field = FDMultilineInput(hint_text='Окончание выезда')
+		self.finish_call_text_field.helper_text = 'Будет вставлен при окончании выезда'
+		self.finish_call_text_field.helper_text_mode = 'on_focus'
+
+		# Текст при удачном вызове человека
+		self.human_call_success_field = FDMultilineInput(hint_text='Успешный вызов')
+		self.human_call_success_field.helper_text = 'Будет вставлен при успешном вызове человека'
+		self.human_call_success_field.helper_text_mode = 'on_focus'
+
+		# Текст при неудачном вызове человека
+		self.human_call_unsuccess_field = FDMultilineInput(hint_text='Безуспешный вызов')
+		self.human_call_unsuccess_field.helper_text = 'Будет вставлен при безуспешном вызове человека'
+		self.human_call_unsuccess_field.helper_text_mode = 'on_focus'
+
 		# Количество подгружаемых элементов в пагинаторе
 		# self.iterable_count_field = FDNumberInput(
 		# 	hint_text='Элементы на странице',
@@ -102,11 +137,19 @@ class OptionsScreen(BaseScrollScreen):
 		# self.iterable_count_field.set_value(ITERABLE_COUNT)
 		# self.iterable_count_field.bind(on_text_validate=lambda *_: print(_))
 
+		self.add_content(theme_lbl)
 		self.add_content(self.primary_field)
 		self.add_content(self.accent_field)
 		self.add_content(self.hue_field)
 		self.add_content(self.theme_style_field)
 		# self.add_content(self.iterable_count_field)
+
+		self.add_content(calls_lbl)
+		self.add_content(self.work_day_ignore_field)
+		self.add_content(self.start_call_text_field)
+		self.add_content(self.finish_call_text_field)
+		self.add_content(self.human_call_success_field)
+		self.add_content(self.human_call_unsuccess_field)
 
 	def _gen_primary_field_elements(self) -> List:
 		''' Возвращает элементы для поля primary '''
