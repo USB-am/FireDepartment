@@ -121,9 +121,14 @@ class FDCalendar(MDBoxLayout):
 
 		self._grid_elements: List[_CalendarGridDay] = []
 		self._is_select_work_days = False
-		self._work_days_params = {}
+		self._work_days_params = {
+			'work_day': None,
+			'worktype': None}
 		self.update()
-		self.select_work_days(work_day=date(2024, 10, 29), worktype=WORK_TYPES[1])
+
+		self.select_work_days(
+			work_day=date(2024, 10, 29),
+			worktype=WORK_TYPES[1])
 
 	@property
 	def now_date(self) -> date:
@@ -156,6 +161,10 @@ class FDCalendar(MDBoxLayout):
 
 	def select_work_days(self, work_day: date, worktype: Worktype) -> None:
 		''' Выделить рабочие дни '''
+		if work_day is None or worktype is None:
+			self.unselect_work_days()
+			return
+
 		self._is_select_work_days = True
 		self._work_days_params = {
 			'work_day': work_day,
