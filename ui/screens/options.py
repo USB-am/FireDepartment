@@ -55,12 +55,7 @@ class OptionsScreen(BaseScrollScreen):
 	def save_changes(self) -> None:
 		''' Сохранить настройки в application.ini '''
 
-		self.__save_colors_to_config()
-		# try:
-		# 	ITERABLE_COUNT = int(self.iterable_count_field.text)
-		# except ValueError:
-		# 	pass
-
+		self.__save_to_config()
 		self._path_manager.back()
 
 	def fill_elements(self) -> None:
@@ -76,10 +71,6 @@ class OptionsScreen(BaseScrollScreen):
 		)
 		primary_field_elements = self._gen_primary_field_elements()
 		self.primary_field.update_elements(primary_field_elements)
-
-		# clr = self.__theme_cls.primary_color
-		# clr = list(map(lambda c: hex(int(c*255)), clr[:-1]))
-		# print(clr)
 		self.primary_field.ids.btn.md_bg_color = self.__theme_cls.primary_color
 
 		# Акцентирующий цвет
@@ -119,46 +110,65 @@ class OptionsScreen(BaseScrollScreen):
 			title_active='Игнорировать рабочие дни',
 			icon_deactive='check',
 			title_deactive='В соответствии с графиком')
+		self.work_day_ignore_field.set_value(bool(
+			self.__get_config_value(
+				section='call',
+				option='work_day_ignore',
+				fallback='1'
+			)))
 
 		# Текст начала выезда
 		self.start_call_text_field = FDMultilineInput(hint_text='Начало выезда')
 		self.start_call_text_field.helper_text = 'Будет вставлен при каждом начале выезда'
 		self.start_call_text_field.helper_text_mode = 'persistent'
-		self.start_call_text_field.set_value(self.__get_config_value('call', 'start_text', '[HH:MM dd.mm.yyyy] Начало выезда.'))
+		self.start_call_text_field.set_value(
+			self.__get_config_value(
+				section='call',
+				option='start_text',
+				fallback='[HH:MM dd.mm.yyyy] Начало выезда.'
+			))
 
 		# Текст окончания выезда
 		self.finish_call_text_field = FDMultilineInput(hint_text='Окончание выезда')
 		self.finish_call_text_field.helper_text = 'Будет вставлен при окончании выезда'
 		self.finish_call_text_field.helper_text_mode = 'persistent'
-		self.finish_call_text_field.set_value(self.__get_config_value('call', 'finish_text', '[HH:MM dd.mm.yyyy] Конец выезда.'))
+		self.finish_call_text_field.set_value(
+			self.__get_config_value(
+				section='call',
+				option='finish_text',
+				fallback='[HH:MM dd.mm.yyyy] Конец выезда.'
+			))
 
 		# Текст при удачном вызове человека
 		self.human_call_success_field = FDMultilineInput(hint_text='Успешный вызов')
 		self.human_call_success_field.helper_text = 'Будет вставлен при успешном вызове человека'
 		self.human_call_success_field.helper_text_mode = 'persistent'
-		self.human_call_success_field.set_value(self.__get_config_value('call', 'human_success', '[HH:MM dd.mm.yyyy] Вызов {human.title}.'))
+		self.human_call_success_field.set_value(
+			self.__get_config_value(
+				section='call',
+				option='human_success',
+				fallback='[HH:MM dd.mm.yyyy] Вызов {human.title}.'
+			))
 
 		# Текст при неудачном вызове человека
 		self.human_call_unsuccess_field = FDMultilineInput(hint_text='Безуспешный вызов')
 		self.human_call_unsuccess_field.helper_text = 'Будет вставлен при безуспешном вызове человека'
 		self.human_call_unsuccess_field.helper_text_mode = 'persistent'
-		self.human_call_unsuccess_field.set_value(self.__get_config_value('call', 'human_unsuccess', '[HH:MM dd.mm.yyyy] Вызов {human.title} не прошел.'))
+		self.human_call_unsuccess_field.set_value(
+			self.__get_config_value(
+				section='call',
+				option='human_unsuccess',
+				fallback='[HH:MM dd.mm.yyyy] Вызов {human.title} не прошел.'
+			))
 
-		# Количество подгружаемых элементов в пагинаторе
-		# self.iterable_count_field = FDNumberInput(
-		# 	hint_text='Элементы на странице',
-		# 	helper_text='Увеличение значения может замедлить работу приложения!'
-		# )
-		# self.iterable_count_field.set_value(ITERABLE_COUNT)
-		# self.iterable_count_field.bind(on_text_validate=lambda *_: print(_))
-
+		# Добавление настроек темы
 		self.add_content(theme_lbl)
 		self.add_content(self.primary_field)
 		self.add_content(self.accent_field)
 		self.add_content(self.hue_field)
 		self.add_content(self.theme_style_field)
-		# self.add_content(self.iterable_count_field)
 
+		# Добавление настроек вызовов
 		self.add_content(calls_lbl)
 		self.add_content(self.work_day_ignore_field)
 		self.add_content(self.start_call_text_field)
@@ -207,18 +217,26 @@ class OptionsScreen(BaseScrollScreen):
 			} for elem in self.__theme_cls.colors[self.__theme_cls.primary_palette].keys()
 		]
 
-	def __save_colors_to_config(self) -> None:
+	def __save_to_config(self) -> None:
 		config = self.__config
 
-		config.setall('options', {
-			'primary_palette': self.__theme_cls.primary_palette,
-			'accent_palette': self.__theme_cls.accent_palette,
-			'theme_style': self.__theme_cls.theme_style,
-			'primary_hue': self.__theme_cls.primary_hue,
-		})
-		# config.setall('global', {
-		# 	'iterable_count': self.iterable_count_field.text,
-		# })
+		config.setall(
+			'options', {
+				'primary_palette': self.__theme_cls.primary_palette,
+				'accent_palette': self.__theme_cls.accent_palette,
+				'theme_style': self.__theme_cls.theme_style,
+				'primary_hue': self.__theme_cls.primary_hue,
+			}
+		)
+		config.setall(
+			'call', {
+				'work_day_ignore': '1' if self.work_day_ignore_field.get_value() else '',
+				'start_text': self.start_call_text_field.get_value(),
+				'finish_text': self.finish_call_text_field.get_value(),
+				'human_success': self.human_call_success_field.get_value(),
+				'human_unsuccess': self.human_call_unsuccess_field.get_value(),
+			}
+		)
 		config.write()
 
 	def _update_primary_field(self, element: str) -> None:
@@ -227,7 +245,7 @@ class OptionsScreen(BaseScrollScreen):
 		self.primary_field.dropdown.dismiss()
 
 		self.__theme_cls.primary_palette = element
-		self.__save_colors_to_config()
+		self.__save_to_config()
 
 	def _update_accent_field(self, element: str) -> None:
 		self.accent_field.ids.btn.text = element
@@ -235,7 +253,7 @@ class OptionsScreen(BaseScrollScreen):
 		self.accent_field.dropdown.dismiss()
 
 		self.__theme_cls.accent_palette = element
-		self.__save_colors_to_config()
+		self.__save_to_config()
 
 	def _update_hue_field(self, element: str) -> None:
 		self.hue_field.ids.btn.text = element
@@ -243,8 +261,8 @@ class OptionsScreen(BaseScrollScreen):
 		self.hue_field.dropdown.dismiss()
 
 		self.__theme_cls.primary_hue = element
-		self.__save_colors_to_config()
+		self.__save_to_config()
 
 	def _update_style_field(self, type_: bool) -> None:
 		self.__theme_cls.theme_style = 'Dark' if type_ else 'Light'
-		self.__save_colors_to_config()
+		self.__save_to_config()
