@@ -1,9 +1,10 @@
 import time
-from typing import List, Dict, Union
+from typing import Any, List, Dict, Union
 from datetime import datetime
 from dataclasses import dataclass
 
 from kivy.lang.builder import Builder
+from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDFlatButton
 
@@ -16,6 +17,20 @@ from config import NAVIGATION_WIDGET
 
 
 Builder.load_file(NAVIGATION_WIDGET)
+
+
+def _get_config_value(section: str, option: str, fallback: Any='') -> Any:
+	'''
+	Получить значение из конфига.
+
+	~params:
+	section: str - секция конфига в которой будет идти поиск значения;
+	option: str - ключ по которому будет возвращено значение;
+	fallback: Any - значение при ненахождении (не может быть None).
+	'''
+
+	app = MDApp.get_running_app()
+	return app.config.get(section, option, fallback=fallback)
 
 
 class PhoneTabContent(MDBoxLayout):
@@ -135,6 +150,9 @@ class CallTabContent(MDBoxLayout):
 		self.ids.calls.add_widget(self.calls_tab)
 		self.ids.info.add_widget(self.info_tab)
 
+		start_text = _get_config_value(section='call', option='start_text')
+		self.info_tab.insert_text(f'{start_text}\n', new_line=False)
+
 	def update_info_textfield(self, human_field: FDCallHumanField) -> None:
 		''' Обновить текстовое поле с дополнительной информацией '''
 		log = self._add_human_call_log(human_field)
@@ -154,11 +172,11 @@ class CallTabContent(MDBoxLayout):
 		elif state == 1:
 			logger.add_log(
 				title=f'Вызов {human.title}',
-				description=f'[dd.mm.yyyy HH:MM] Вызов {human.title}.')
+				description=_get_config_value('call', 'human_success'))
 		elif state == 2:
 			logger.add_log(
 				title=f'Не получен ответ от {human.title}',
-				description=f'[dd.mm.yyyy HH:MM] Не получен ответ от {human.title}')
+				description=_get_config_value('call', 'human_unsuccess'))
 
 		new_log = logger.get_last_log()
 		key = f'{human.title}-{human.id}'
@@ -182,15 +200,13 @@ class CallsScreen(BaseScreen):
 			icon='arrow-left',
 			callback=lambda *_: self._path_manager.back()
 		)
+		self.ids.toolbar.add_right_button(
+			icon='notebook',
+			callback=lambda *_: self._path_manager.forward('history')
+		)
 
 		self.notebook = FDNotebook()
 		self.add_content(self.notebook)
-
-		first_emergency = Emergency.query.first()
-		tab = FDTab(
-			'My super Emergency',
-			CallTabContent(first_emergency))
-		self.notebook.add_tab(tab)
 
 	def add_notebook_tab(self, emergency: Emergency) -> None:
 		''' Добавить вкладку '''
