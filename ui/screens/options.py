@@ -1,6 +1,7 @@
 from typing import Any, List
 
 from kivymd.app import MDApp
+from kivymd.uix.label import MDLabel
 
 from . import BaseScrollScreen
 from app.path_manager import PathManager
@@ -8,7 +9,6 @@ from ui.field.button import FDButtonDropdown
 from ui.field.switch import FDDoubleSwitch
 from ui.field.input import FDNumberInput, FDMultilineInput
 from ui.field.label import FDTitle
-# from config import ITERABLE_COUNT
 
 
 class OptionsScreen(BaseScrollScreen):
@@ -116,6 +116,14 @@ class OptionsScreen(BaseScrollScreen):
 				option='work_day_ignore',
 				fallback='1'
 			)))
+		work_day_ignore_info = MDLabel(
+			text='[b]Примечание[/b]:\n' + \
+				'[i]Если [b]включено[/b], при начале выезда будут добавлены все сотрудники связанные с этим выездом.[/i]\n' + \
+				'[i]Если [b]выключено[/b], выбраны будут только сотрудники работающие в настоящее время (в соответствии с рабочим графиком).[/i]\n',
+			adaptive_height=True,
+			markup=True,
+			theme_text_color='Hint'
+		)
 
 		# Текст начала выезда
 		self.start_call_text_field = FDMultilineInput(hint_text='Начало выезда')
@@ -147,7 +155,7 @@ class OptionsScreen(BaseScrollScreen):
 			self.__get_config_value(
 				section='call',
 				option='human_success',
-				fallback='[HH:MM dd.mm.yyyy] Вызов {human.title}.'
+				fallback='[HH:MM dd.mm.yyyy] Вызов {human_name}.'
 			))
 
 		# Текст при неудачном вызове человека
@@ -158,8 +166,19 @@ class OptionsScreen(BaseScrollScreen):
 			self.__get_config_value(
 				section='call',
 				option='human_unsuccess',
-				fallback='[HH:MM dd.mm.yyyy] Вызов {human.title} не прошел.'
+				fallback='[HH:MM dd.mm.yyyy] Вызов {human_name} не прошел.'
 			))
+
+		call_text_info = MDLabel(
+			text='[b]Примечание:[/b]\n' + \
+				'[i]В поля "Успешный вызов" и "Безуспешный вызов" можно добавить:\n' + \
+				'- {human_name} для вставки ФИО сотрудника;\n' + \
+				'- {human_phone_1} для вставки основного номера телефона;\n' + \
+				'- {human_phone_2} для вставки дополнительного номера телефона.\n',
+			adaptive_height=True,
+			markup=True,
+			theme_text_color='Hint'
+		)
 
 		# Добавление настроек темы
 		self.add_content(theme_lbl)
@@ -171,10 +190,12 @@ class OptionsScreen(BaseScrollScreen):
 		# Добавление настроек вызовов
 		self.add_content(calls_lbl)
 		self.add_content(self.work_day_ignore_field)
+		self.add_content(work_day_ignore_info)
 		self.add_content(self.start_call_text_field)
 		self.add_content(self.finish_call_text_field)
 		self.add_content(self.human_call_success_field)
 		self.add_content(self.human_call_unsuccess_field)
+		self.add_content(call_text_info)
 
 	def _gen_primary_field_elements(self) -> List:
 		''' Возвращает элементы для поля primary '''
