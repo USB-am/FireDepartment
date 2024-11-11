@@ -166,17 +166,22 @@ class CallTabContent(MDBoxLayout):
 		human = human_field.human
 		logger = self.info_tab._logger
 		state = (cbox.state_ + 1) % 3
+		human_fields = {
+			'human_name': human.title,
+			'human_phone_1': human.phone_1,
+			'human_phone_2': human.phone_2
+		}
 
 		if state == 0:
 			return
 		elif state == 1:
 			logger.add_log(
 				title=f'Вызов {human.title}',
-				description=_get_config_value('call', 'human_success'))
+				description=_get_config_value('call', 'human_success').format(**human_fields))
 		elif state == 2:
 			logger.add_log(
 				title=f'Не получен ответ от {human.title}',
-				description=_get_config_value('call', 'human_unsuccess'))
+				description=_get_config_value('call', 'human_unsuccess').format(**human_fields))
 
 		new_log = logger.get_last_log()
 		key = f'{human.title}-{human.id}'
