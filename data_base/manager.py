@@ -63,3 +63,14 @@ def update_entry(entry: Union[db.Model, None], params: Dict[str, Any]) -> None:
 
 	for column, value in params.items():
 		setattr(entry, column, value)
+
+
+def get_by_id(model: Union[db.Model], id: int) -> db.Model:
+	'''
+	Получить значение по id.
+
+	model: Union[db.Model] - модель из которой будет браться значение;
+	id: int - id элемента, который будет возвращен.
+	'''
+
+	return model.query.get(id)
