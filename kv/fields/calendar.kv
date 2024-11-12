@@ -1,7 +1,8 @@
 <FDCalendar>:
 	orientation: 'horizontal'
 	size_hint: (1, None)
-	height: dp(250)
+	height: dp(270)
+	# padding: [0, dp(10)]
 
 	MDBoxLayout:
 		# Left padding layout
@@ -10,15 +11,15 @@
 		# Calendar layout
 		orientation: 'vertical'
 		size_hint: (None, None)
-		size: (root.height + dp(4), root.height + dp(4))
+		size: (root.height - dp(6), root.height - dp(6))
 		padding: (dp(2), dp(2))
-		md_bg_color: app.theme_cls.primary_color[:-1] + [.5]
+		md_bg_color: app.theme_cls.primary_color[:-1] + [.1]
 
 		MDBoxLayout:
 			orientation: 'vertical'
 			size_hint: (None, None)
-			size: (root.height, root.height)
-			md_bg_color: (1, 1, 1, 1)
+			size: (root.height - dp(10), root.height - dp(10))
+			md_bg_color: app.theme_cls.opposite_text_color
 
 			MDBoxLayout:
 				# Navigation panel
