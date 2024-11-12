@@ -102,6 +102,11 @@ class InfoTabContent(MDBoxLayout):
 		else:
 			self.ids.content.remove_widget(self.ids.shorts_layout)
 
+		self.ids.content.add_widget(MDBoxLayout(size_hint=(1, None), height=10))
+
+		start_text = _get_config_value(section='call', option='start_text')
+		self.insert_text(f'{start_text}\n', new_line=False)
+
 	def _insert_short(self, short: Short) -> None:
 		''' Вставить текст сокращения в текстовое поле "Дополнительная информация" '''
 		self.insert_text(text=short.explanation, new_line=short.into_new_line)
@@ -112,7 +117,6 @@ class InfoTabContent(MDBoxLayout):
 		text_field = self.ids.addition_info
 		now_datetime = datetime.now()
 
-		#TODO: change this shit
 		text = text. \
 			replace('yyyy', str(now_datetime.year)). \
 			replace('mm', str(now_datetime.month)). \
@@ -124,7 +128,7 @@ class InfoTabContent(MDBoxLayout):
 		if new_line:
 			text_field.text += f'\n{text}\n'
 		else:
-			text_field.insert_text(text)
+			text_field.text += text
 
 
 class CallTabContent(MDBoxLayout):
@@ -149,9 +153,6 @@ class CallTabContent(MDBoxLayout):
 
 		self.ids.calls.add_widget(self.calls_tab)
 		self.ids.info.add_widget(self.info_tab)
-
-		start_text = _get_config_value(section='call', option='start_text')
-		self.info_tab.insert_text(f'{start_text}\n', new_line=False)
 
 	def update_info_textfield(self, human_field: FDCallHumanField) -> None:
 		''' Обновить текстовое поле с дополнительной информацией '''
@@ -205,10 +206,10 @@ class CallsScreen(BaseScreen):
 			icon='arrow-left',
 			callback=lambda *_: self._path_manager.back()
 		)
-		self.ids.toolbar.add_right_button(
-			icon='notebook',
-			callback=lambda *_: self._path_manager.forward('history')
-		)
+		# self.ids.toolbar.add_right_button(
+		# 	icon='content-save',
+		# 	callback=lambda *_: self._path_manager.forward('history')
+		# )
 
 		self.notebook = FDNotebook()
 		self.add_content(self.notebook)
@@ -218,4 +219,21 @@ class CallsScreen(BaseScreen):
 
 		content = CallTabContent(emergency)
 		new_tab = FDTab(emergency.title, content)
+		new_tab.bind_close(lambda *_: self._rem_toolbar_button())
 		self.notebook.add_tab(new_tab)
+
+		toolbar = self.ids.toolbar
+		if not toolbar.right_action_items:
+			toolbar.add_right_button(
+				icon='content-save',
+				callback=lambda *_: print(f'{self.notebook.tabs_count} tabs')
+			)
+
+	def _rem_toolbar_button(self) -> None:
+		''' Удалить кнопку на тулбаре, если не осталось вкладок '''
+
+		toolbar = self.ids.toolbar
+		if self.notebook.tabs_count > 0:
+			return
+
+		toolbar.rem_right_button()
