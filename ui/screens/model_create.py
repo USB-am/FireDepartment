@@ -8,7 +8,7 @@ from kivymd.uix.label import MDLabel
 from . import BaseScrollScreen
 from app.path_manager import PathManager
 from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype, Short
-from data_base.manager import write_entry
+from data_base.manager import write_entry, get_by_id
 from ui.field.input import FDInput, FDMultilineInput, FDNumberInput, \
 	FDPhoneInput
 from ui.field.select import FDSelect, FDMultiSelect
@@ -364,16 +364,13 @@ class HumanCreateModel(_BaseCreateModel):
 			lambda: self._path_manager.forward('create_worktype')
 		)
 		# calendar
-		self.calendar_field = FDCalendar(
-			from_date_field=self.work_date_field,
-			worktype_field=self.worktype_field
-		)
-		self.work_date_field.callback = lambda: self.calendar_field.update(
-			self.work_date_field.get_value()
-		)
-		self.worktype_field.bind_checkbox(lambda: self.calendar_field.update(
-			self.work_date_field.get_value()
-		))
+		self.calendar_field = FDCalendar()
+		self.work_date_field.callback = lambda: self.calendar_field.select_work_days(
+			work_day=self.work_date_field.get_value(),
+			worktype=get_by_id(Worktype, self.worktype_field.get_value()))
+		self.worktype_field.bind_checkbox(lambda: self.calendar_field.select_work_days(
+			work_day=self.work_date_field.get_value(),
+			worktype=get_by_id(Worktype, self.worktype_field.get_value())))
 		# rank
 		self.rank_field = FDSelect(
 			title='Звание',

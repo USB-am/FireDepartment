@@ -1,21 +1,19 @@
-from typing import List
-from datetime import datetime, date, timedelta
+from typing import List, Union
 from calendar import Calendar
+from datetime import datetime, date, timedelta
 
 from kivy.lang.builder import Builder
-from kivy.properties import StringProperty
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.label import MDLabel
 from dateutil.relativedelta import relativedelta
 
-from data_base import Worktype
 from config import CALENDAR_FIELD
-from ui.field.date import FDDate
-from ui.field.select import FDSelect
+from data_base import Worktype
 
 
 Builder.load_file(CALENDAR_FIELD)
-CALENDAR = Calendar()
+
+
 MONTHS = (
 	'',
 	'Январь',
@@ -41,21 +39,19 @@ def add_months(current_date: date, months_to_add: int) -> date:
 	current_date: date - дата, которая будет увеличена;
 	months_to_add: int - количество месяцев, на которое будет увеличено.
 	'''
-
 	new_date = current_date + relativedelta(months=months_to_add)
 	return new_date
 
 
 def is_work_day(day: date, work_day: date, worktype: Worktype) -> bool:
 	'''
-	Возвращает True, если work_day является рабочим днем по графику worktype.
+	Возвращает True, если day является рабочим днем по графику worktype.
 
 	~params:
 	day: date - дата проверки;
-	work_day: date - дата начала отсчета;
+	work_day: date - дата начала отсчета рабочих дней;
 	worktype: Worktype - запись из БД о графике работы.
 	'''
-
 	work_week_length = worktype.work_day_range + worktype.week_day_range
 	work_length = worktype.finish_work_day - worktype.start_work_day
 
@@ -68,164 +64,108 @@ def is_work_day(day: date, work_day: date, worktype: Worktype) -> bool:
 	return start_work_week <= day <= finish_work_week
 
 
-class FDCalendarWeekTitle(MDLabel):
-	'''
-	Представление дня недели календаря.
+class _CalendarGridDay(MDLabel):
+	''' Представление дня на сетке календаря '''
 
-	~params:
-	text: str - название дня недели.
-	'''
-
-	text = StringProperty()
-
-
-class FDCalendarDay(MDLabel):
-	'''
-	Представление дня календаря.
-
-	~params:
-	date: datetime - представляемый день;
-	another_month: bool - указывает, что день относится к другому месяцу.
-	'''
-
-	def __init__(self, date: date, another_month: bool=False):
+	def __init__(self, date: date, this_month: bool=True):
 		self.date = date
-		if not another_month:
-			self.theme_text_color = 'Hint'
-		self._is_work_day = False
+		self.this_month = this_month
+		self.is_select = False
 
 		super().__init__()
 
-	@property
-	def is_work_day(self) -> bool:
-		return self._is_work_day
+	def select(self) -> None:
+		''' Выделить '''
+		self.is_select = True
+		self.md_bg_color = (1, 0, 0, .2)
 
-	@is_work_day.setter
-	def is_work_day(self, value: bool) -> None:
-		'''
-		Перезаписывает значение _is_work_day и обновляет заливку.
-
-		~params:
-		value: bool - статус дня (рабочий/не рабочий).
-		'''
-
-		self._is_work_day = value
-		self.md_bg_color = (1, 0, 0, .3) if value else (0, 0, 0, 0)
+	def unselect(self) -> None:
+		''' Снять выделение '''
+		self.is_select = False
+		self.md_bg_color = (0, 0, 0, 0)
 
 
 class FDCalendar(MDBoxLayout):
-	'''
-	Отображение календаря, отображающего график работы.
+	''' Поле отображения календаря с рабочими днями '''
 
-	~params:
-	from_date_field: FDDate - виджет с датой начала работы;
-	worktype_field: FDSelect - виджет с графиками работы.
-	'''
+	def __init__(self):
+		self._calendar = Calendar()
+		self._now_date = datetime.now().date()
 
-	icon = 'calendar-month'
+		super().__init__()
 
-	def __init__(self,
-	             from_date_field: FDDate,
-	             worktype_field: FDSelect,
-	             **options
-	            ):
-		self.from_date_field = from_date_field
-		self.worktype_field = worktype_field
+		self._grid_elements: List[_CalendarGridDay] = []
+		self._is_select_work_days = False
+		self._work_days_params = {
+			'work_day': None,
+			'worktype': None}
+		self.update()
 
-		self.now_date = datetime.now().date()
-		self.month_title = '{month}\n{year}'.format(
-			month=MONTHS[self.now_date.month],
-			year=self.now_date.year
-		)
+	@property
+	def now_date(self) -> date:
+		return self._now_date
 
-		self.days: List[FDCalendarDay] = []
+	@now_date.setter
+	def now_date(self, new_date: Union[date, datetime]) -> None:
+		if not isinstance(new_date, (date, datetime)):
+			raise ValueError('param \'new_date\' is not date type.')
+		self._now_date = new_date
 
-		super().__init__(**options)
+	def _fill_grid(self) -> None:
+		''' Заполнить сетку календаря '''
+		grid = self.ids.calendar_grid
+		grid.clear_widgets()
+		self._grid_elements.clear()
 
-		self.update(self.now_date)
+		for date in self._calendar.itermonthdates(self._now_date.year, self._now_date.month):
+			this_month = date.month == self._now_date.month
+			d = _CalendarGridDay(date=date, this_month=this_month)
+			grid.add_widget(d)
+			self._grid_elements.append(d)
 
-	def _update_days(self, date: date=None) -> None:
-		'''
-		Обновить страницу календаря на месят, соответствующий date.
+		if self._is_select_work_days:
+			self.select_work_days(**self._work_days_params)
 
-		~params:
-		date: date - дата, месяц которой будет отображен.
-		'''
+	def _change_month_title(self) -> None:
+		''' Изменить название месяца '''
+		self.ids.month_title.text = MONTHS[self._now_date.month]
 
-		if date is not None:
-			self.now_date = date
-
-		month_days = CALENDAR.itermonthdates(self.now_date.year, self.now_date.month)
-		layout = self.ids.calendar_layout
-		layout.clear_widgets()
-		self.days = []
-
-		for day in month_days:
-			calendar_day = FDCalendarDay(
-				date=day,
-				another_month=(day.month == self.now_date.month)
-			)
-			layout.add_widget(calendar_day)
-			self.days.append(calendar_day)
-
-	def _fill_work_days(self) -> None:
-		''' Выделяет рабочие дни '''
-
-		work_day = self.from_date_field.get_value()
-		worktype_id = self.worktype_field.get_value()
-
-		if None in (work_day, worktype_id):
+	def select_work_days(self, work_day: date, worktype: Worktype) -> None:
+		''' Выделить рабочие дни '''
+		if work_day is None or worktype is None:
+			self.unselect_work_days()
 			return
 
-		worktype = Worktype.query.get(worktype_id)
-		for day in self.days:
-			day.is_work_day = is_work_day(day.date, work_day, worktype)
+		self._is_select_work_days = True
+		self._work_days_params = {
+			'work_day': work_day,
+			'worktype': worktype}
 
-	def _update_month_title(self, date: date) -> None:
-		''' Обновить название месяца '''
+		for calendar_day in self._grid_elements:
+			is_work = is_work_day(calendar_day.date, work_day, worktype)
+			calendar_day.select() if is_work else calendar_day.unselect()
 
-		self.month_title = '{month}\n{year}'.format(
-			month=MONTHS[date.month],
-			year=date.year
-		)
-		self.ids.month_title_label.text = self.month_title
+	def unselect_work_days(self) -> None:
+		''' Снять выделения рабочих дней '''
+		self._is_select_work_days = False
+		for calendar_day in self._grid_elements:
+			calendar_day.unselect()
 
-	def _update_information(self) -> None:
-		''' Обновляет область с информацией справа '''
-
-		work_days = list(filter(lambda day: day.is_work_day, self.days))
-		now_date = datetime.now().date()
-		next_work_days = list(filter(lambda day: day.date >= now_date, work_days))[:2]
-		try:
-			self.ids.next_work_day_label.text = str(next_work_days[0].date)
-		except IndexError:
-			pass
-		try:
-			self.ids.next_next_work_day_label.text = str(next_work_days[1].date)
-		except IndexError:
-			pass
-
-	def prev_month(self) -> None:
-		''' Переключение календаря на месяц назад '''
-
-		self.now_date = add_months(self.now_date, -1)
-		self.update(self.now_date)
-
-	def next_month(self) -> None:
-		''' Переключение календаря на месяц вперед '''
-
-		self.now_date = add_months(self.now_date, 1)
-		self.update(self.now_date)
-
-	def update(self, date: date=None) -> None:
+	def update(self) -> None:
 		''' Обновить календарь '''
+		self._fill_grid()
+		self._change_month_title()
 
-		if date is None:
-			return
+	def move_to_prev_month(self) -> None:
+		''' Перевернуть календарь на месяц назад '''
+		self._now_date = add_months(
+			current_date=self._now_date,
+			months_to_add=-1)
+		self.update()
 
-		self._update_month_title(date)
-		self._update_days(date)
-		self._fill_work_days()
-		self._update_information()
-
-		self.now_date = date
+	def move_to_next_month(self) -> None:
+		''' Перевернуть календарь на месяц вперед '''
+		self._now_date = add_months(
+			current_date=self._now_date,
+			months_to_add=1)
+		self.update()
