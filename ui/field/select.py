@@ -47,6 +47,7 @@ class _BaseSelect(MDBoxLayout):
 		super().__init__()
 
 		self.elements: List[FDSelectListElement] = []
+		self.callbacks: List[Callable] = []
 		self.fill_elements()
 
 	def fill_elements(self) -> None:
@@ -61,6 +62,10 @@ class _BaseSelect(MDBoxLayout):
 				entry=entry,
 				info_content=self.dialog_content,
 				group=self.group)
+
+			for callback in self.callbacks:
+				list_elem.ids.checkbox.bind(on_release=lambda *_: callback())
+
 			self.elements.append(list_elem)
 			self.ids.content.add_widget(list_elem)
 
@@ -71,6 +76,8 @@ class _BaseSelect(MDBoxLayout):
 
 	def bind_checkbox(self, callback: Callable) -> None:
 		''' Привязать событие нажатия чекбокса '''
+
+		self.callbacks.append(callback)
 
 		for element in self.elements:
 			element.ids.checkbox.bind(on_release=lambda *_: callback())
