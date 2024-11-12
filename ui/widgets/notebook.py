@@ -77,6 +77,10 @@ class FDNotebook(MDBoxLayout):
 		self.current_tab = None
 		self.__tabs: List[FDTab] = []
 
+	@property
+	def tabs_count(self) -> int:
+		return len(self.__tabs)
+
 	def add_tab(self, tab: FDTab) -> None:
 		''' Добавить вкладку '''
 
