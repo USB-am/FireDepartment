@@ -118,6 +118,13 @@ class Application(MDApp):
 			'theme_style': self.theme_cls.theme_style,
 			'primary_hue': self.theme_cls.primary_hue,
 		})
+		config.setdefaults('call', {
+			'work_day_ignore': '1',
+			'start_text': '[HH:MM dd.mm.yyyy] Начало выезда.',
+			'finish_text': '[HH:MM dd.mm.yyyy] Конец выезда.',
+			'human_success': '[HH:MM dd.mm.yyyy] Вызов {human_name}.',
+			'human_unsuccess': '[HH:MM dd.mm.yyyy] Вызов {human_name} не прошел.',
+		})
 
 	def build(self):
 		config = self.config
