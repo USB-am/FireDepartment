@@ -18,7 +18,8 @@ from ui.field.calendar import FDCalendar
 from ui.layout.dialogs import HumanDialogContent, EmergencyDialogContent, \
 	WorktypeDialogContent, TagDialogContent, RankDialogContent, \
 	PositionDialogContent, ShortDialogContent
-from validators.create_model_validators import UniqueValidator, EmptyValidator
+from validators.create_model_validators import UniqueValidator, EmptyValidator, \
+	ZeroValidator
 
 
 class _BaseCreateModel(BaseScrollScreen):
@@ -566,7 +567,8 @@ class WorktypeCreateModel(_BaseCreateModel):
 			hint_text='Рабочие дни подряд',
 			required=True,
 			helper_text_mode='on_error',
-			helper_text='Поле не может быть пустым')
+			helper_text='Поле не может быть пустым',
+			validators=[ZeroValidator(self.model, 'work_day_range'),])
 		self.week_day_range_field = FDNumberInput(
 			hint_text='Выходные дни подряд',
 			required=True,
@@ -627,6 +629,9 @@ class WorktypeCreateModel(_BaseCreateModel):
 				value=params['finish_work_day']),
 			EmptyValidator(self.model, 'work_day_range')(
 				text='Поле "Рабочие дни подряд" не может быть пустым',
+				value=params['work_day_range']),
+			ZeroValidator(self.model, 'work_day_range')(
+				text='Поле "Рабочие дни подряд" должно быть больше 0',
 				value=params['work_day_range']),
 			EmptyValidator(self.model, 'week_day_range')(
 				text='Поле "Выходные дни подряд" не может быть пустым',

@@ -8,7 +8,8 @@ from . import model_create
 from app.path_manager import PathManager
 from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype, Short
 from data_base.manager import update_entry
-from validators.create_model_validators import EmptyValidator, UniqueExcludingValidator
+from validators.create_model_validators import EmptyValidator, UniqueExcludingValidator, \
+	ZeroValidator
 
 
 class _BaseEditModel(model_create._BaseCreateModel):
@@ -305,6 +306,9 @@ class WorktypeEditModel(_BaseEditModel, model_create.WorktypeCreateModel):
 				value=params['finish_work_day']),
 			EmptyValidator(self.model, 'work_day_range')(
 				text='Поле "Рабочие дни подряд" не может быть пустым',
+				value=params['work_day_range']),
+			ZeroValidator(self.model, 'work_day_range')(
+				text='Поле "Рабочие дни подряд" должно быть больше 0',
 				value=params['work_day_range']),
 			EmptyValidator(self.model, 'week_day_range')(
 				text='Поле "Выходные дни подряд" не может быть пустым',
