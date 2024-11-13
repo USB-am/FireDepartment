@@ -46,6 +46,17 @@ def _check_not_empty(value: Any) -> bool:
 	return bool(value)
 
 
+def _check_not_zero(value: int) -> bool:
+	'''
+	Проверка value > 0
+
+	~params:
+	value: int - целое значение для проверки.
+	'''
+
+	return value > 0
+
+
 @dataclass
 class ValidationResult:
 	text: str
@@ -94,4 +105,15 @@ class EmptyValidator(_BaseValidator):
 	def __call__(self, value: Any,
 	             text: Optional[str]='Поле не может быть пустым') -> ValidationResult:
 		check = _check_not_empty(value)
+		return ValidationResult(text, check)
+
+
+class ZeroValidator(_BaseValidator):
+	''' Валидация на значение >0 '''
+
+	def __call__(self, value: int,
+		         text: Optional[str]='Значение должно быть больше 0') -> ValidationResult:
+		if not value or not value.isdigit():
+			return ValidationResult(text, False)
+		check = _check_not_zero(int(value))
 		return ValidationResult(text, check)
