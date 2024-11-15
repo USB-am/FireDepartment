@@ -5,8 +5,9 @@ from dataclasses import dataclass
 
 from kivy.lang.builder import Builder
 from kivymd.app import MDApp
+from kivymd.uix.dialog import MDDialog
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.button import MDFlatButton
+from kivymd.uix.button import MDRaisedButton, MDFlatButton
 
 from . import BaseScreen
 from data_base import Human, Short, Emergency
@@ -206,10 +207,6 @@ class CallsScreen(BaseScreen):
 			icon='arrow-left',
 			callback=lambda *_: self._path_manager.back()
 		)
-		# self.ids.toolbar.add_right_button(
-		# 	icon='content-save',
-		# 	callback=lambda *_: self._path_manager.forward('history')
-		# )
 
 		self.notebook = FDNotebook()
 		self.add_content(self.notebook)
@@ -219,7 +216,8 @@ class CallsScreen(BaseScreen):
 
 		content = CallTabContent(emergency)
 		new_tab = FDTab(emergency.title, content)
-		new_tab.bind_close(lambda *_: self._rem_toolbar_button())
+		# new_tab.bind_close(lambda *_: self._rem_toolbar_button())
+		new_tab.bind_close(lambda *_, t=new_tab: self._confirm_close_tab(t))
 		self.notebook.add_tab(new_tab)
 
 		toolbar = self.ids.toolbar
@@ -228,6 +226,25 @@ class CallsScreen(BaseScreen):
 				icon='content-save',
 				callback=lambda *_: print(f'{self.notebook.tabs_count} tabs')
 			)
+
+	def _confirm_close_tab(self, tab: FDTab) -> None:
+		''' Вывести всплывающее окно с подтверждением закрытия вызова '''
+
+		save_btn = MDRaisedButton(text='Сохранить')
+		delete_btn = MDRaisedButton(text='Удалить')
+		cancel_btn = MDFlatButton(text='Отмена')
+		dialog = MDDialog(
+			title=f'Закрыть вкладку?',
+			text='После закрытия информация будет безвозвратно удалена.',
+			buttons=[save_btn, delete_btn, cancel_btn]
+		)
+		cancel_btn.bind(on_release=lambda *_: dialog.dismiss())
+		delete_btn.bind(on_release=lambda *_: self._rem_toolbar_button())
+		delete_btn.bind(on_release=lambda *_: dialog.dismiss())
+		delete_btn.bind(on_release=lambda *_, t=tab: self.notebook.close_tab(t))
+		save_btn.bind(on_release=lambda *_: dialog.dismiss())
+
+		dialog.open()
 
 	def _rem_toolbar_button(self) -> None:
 		''' Удалить кнопку на тулбаре, если не осталось вкладок '''
