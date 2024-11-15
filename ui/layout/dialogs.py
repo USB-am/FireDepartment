@@ -55,20 +55,6 @@ class _BaseDialogContent(MDBoxLayout):
 		parent_dialog.dismiss()
 
 
-class ConfirmDialogContent(_BaseDialogContent):
-	'''
-	Представление содержимого диалогового окна с подтверждением.
-	'''
-
-	def __init__(self, entry: db.Model, text: str, **options):
-		self.text = text
-		super().__init__(entry=entry, **options)
-
-		self.ids.content.add_widget(FDVerticalLabel(
-			title='Предупреждение!',
-			value=text))
-
-
 class TagDialogContent(_BaseDialogContent):
 	'''
 	Содержимое всплывающего окна с информацией о записи из модели Tag.
