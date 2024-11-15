@@ -40,19 +40,33 @@ class _BaseDialogContent(MDBoxLayout):
 
 		self.ids.content.add_widget(widget)
 
-	def _move_to_screen(self, page_ref: str, entry: 'DataBase.Entry') -> None:
+	def _move_to_screen(self, page_ref: str, entry: db.Model) -> None:
 		'''
 		Переход на экран.
 
 		~params:
 		page_ref: str - name экрана перехода;
-		pk: DataBase.Entry - запись из БД.
+		entry: db.Model - запись из БД.
 		'''
 
 		screen = PathManager().forward(page_ref)
 		screen.fill_fields(entry)
 		parent_dialog: MDDialog = self.parent.parent.parent
 		parent_dialog.dismiss()
+
+
+class ConfirmDialogContent(_BaseDialogContent):
+	'''
+	Представление содержимого диалогового окна с подтверждением.
+	'''
+
+	def __init__(self, entry: db.Model, text: str, **options):
+		self.text = text
+		super().__init__(entry=entry, **options)
+
+		self.ids.content.add_widget(FDVerticalLabel(
+			title='Предупреждение!',
+			value=text))
 
 
 class TagDialogContent(_BaseDialogContent):
