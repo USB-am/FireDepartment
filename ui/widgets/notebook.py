@@ -87,7 +87,6 @@ class FDNotebook(MDBoxLayout):
 		self.__tabs.append(tab)
 
 		tab.bind_click(lambda inst, t=tab: self.move_to_tab(t))
-		tab.bind_close(lambda inst, t=tab: self.close_tab(t))
 		self.ids.tab_list.add_widget(tab._marker)
 
 		self.move_to_tab(tab)
