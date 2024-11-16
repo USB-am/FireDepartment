@@ -10,7 +10,9 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRaisedButton, MDFlatButton
 
 from . import BaseScreen
-from data_base import Human, Short, Emergency
+from data_base import Human, Short, Emergency, Calls
+from data_base.manager import write_entry
+from exceptions.data_base import DBAddError, DBCommitError
 from app.path_manager import PathManager
 from ui.field.call_human import FDCallHumanField
 from ui.widgets.notebook import FDNotebook, FDTab
@@ -88,6 +90,7 @@ class InfoTabContent(MDBoxLayout):
 	def __init__(self, shorts: List[_FDShortButton]):
 		self.shorts = shorts
 		self._logger = InformationLogger()
+		self.start_datetime = datetime.now()
 
 		super().__init__()
 
@@ -216,7 +219,6 @@ class CallsScreen(BaseScreen):
 
 		content = CallTabContent(emergency)
 		new_tab = FDTab(emergency.title, content)
-		# new_tab.bind_close(lambda *_: self._rem_toolbar_button())
 		new_tab.bind_close(lambda *_, t=new_tab: self._confirm_close_tab(t))
 		self.notebook.add_tab(new_tab)
 
@@ -233,18 +235,61 @@ class CallsScreen(BaseScreen):
 		save_btn = MDRaisedButton(text='Сохранить')
 		delete_btn = MDRaisedButton(text='Удалить')
 		cancel_btn = MDFlatButton(text='Отмена')
+
 		dialog = MDDialog(
 			title=f'Закрыть вкладку?',
 			text='После закрытия информация будет безвозвратно удалена.',
 			buttons=[save_btn, delete_btn, cancel_btn]
 		)
-		cancel_btn.bind(on_release=lambda *_: dialog.dismiss())
+
+		save_btn.bind(on_release=lambda *_, t=tab: self._save_call(t))
+		save_btn.bind(on_release=lambda *_: dialog.dismiss())
+		# save_btn.bind(on_release=lambda *_, t=tab: self.notebook.close_tab(t))
+
 		delete_btn.bind(on_release=lambda *_: self._rem_toolbar_button())
 		delete_btn.bind(on_release=lambda *_: dialog.dismiss())
 		delete_btn.bind(on_release=lambda *_, t=tab: self.notebook.close_tab(t))
-		save_btn.bind(on_release=lambda *_: dialog.dismiss())
+
+		cancel_btn.bind(on_release=lambda *_: dialog.dismiss())
 
 		dialog.open()
+
+	def _save_call(self, tab: FDTab) -> None:
+		''' Сохранить в БД инфоромацию о вызове '''
+
+		info_tab = tab.content.info_tab
+
+		try:
+			saved_call = write_entry(
+				model=Calls,
+				params={
+					'start': info_tab.start_datetime,
+					'finish': datetime.now(),
+					'emergency': tab.content._emergency.id,
+					'info': info_tab.ids.addition_info.text,
+				}
+			)
+			self.notebook.close_tab(tab)
+			self._rem_toolbar_button()
+			return
+		except DBAddError as err:
+			err_text = 'Возникла ошибка при попытке добавить запись о выезде.\n\n' + \
+				f'Текст ошибки:\n{err}'
+		except DBCommitError as err:
+			err_text = 'Возникла ошибка при попытке сохранить запись о выезде.\n\n' + \
+				f'Текст ошибки:\n{err}'
+		except Exception as err:
+			err_text = 'Возникла неизвестная ошибка.\n\n' + \
+				f'Текст ошибки:\n{err}'
+		finally:
+			ok_btn = MDRaisedButton(text='Ок')
+			dialog = MDDialog(
+				title='ОШИБКА',
+				text=err_text,
+				buttons=[ok_btn,]
+			)
+			ok_btn.bind(on_release=lambda *_: dialog.dismiss())
+			dialog.open()
 
 	def _rem_toolbar_button(self) -> None:
 		''' Удалить кнопку на тулбаре, если не осталось вкладок '''
