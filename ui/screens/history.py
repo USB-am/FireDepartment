@@ -36,7 +36,6 @@ class History(BaseScrollScreen):
 
 	name = 'history'
 	toolbar_title = 'История Вызовов'
-	dialog = None
 
 	def __init__(self, path_manager: PathManager):
 		super().__init__(path_manager)
@@ -68,7 +67,7 @@ class History(BaseScrollScreen):
 				history_element = FDHistoryElement(
 					title=f'{ind+1}) {start} {emergency.title}'
 				)
-				history_element.bind_btn(lambda c=call: self.__open_dialog(c))
+				history_element.bind_btn(lambda *_, c=call: self.__open_dialog(c))
 				label_layout.add_content(history_element)
 
 			self.add_content(label_layout)
@@ -81,16 +80,13 @@ class History(BaseScrollScreen):
 		call: Calls - запись из таблицы Calls.
 		'''
 
-		from kivymd.uix.boxlayout import MDBoxLayout
+		ok_btn = MDRaisedButton(text='Ок')
+		dialog = MDDialog(
+			title='Информация',
+			type='custom',
+			content_cls=CallsDialogContent(call),
+			buttons=[ok_btn]
+		)
+		ok_btn.bind(on_release=lambda *_: dialog.dismiss())
 
-		if self.dialog is None:
-			ok_btn = MDRaisedButton(text='Ок')
-			self.dialog = MDDialog(
-				title='Информация',
-				type='custom',
-				content_cls=CallsDialogContent(call),
-				buttons=[ok_btn]
-			)
-			ok_btn.bind(on_release=lambda *_: self.dialog.dismiss())
-
-		self.dialog.open()
+		dialog.open()

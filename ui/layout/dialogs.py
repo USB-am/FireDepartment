@@ -342,9 +342,9 @@ class CallsDialogContent(_BaseDialogContent):
 		))
 		self.add_content(FDDoubleVerticalLabel(
 			title_1='Начало',
-			value_1=entry.start.strftime('%H:%M %d.%m.%Y'),
+			value_1=entry.start.strftime('%H:%M:%S %d.%m.%Y'),
 			title_2='Конец',
-			value_2=entry.finish.strftime('%H:%M %d.%m.%Y')
+			value_2=entry.finish.strftime('%H:%M:%S %d.%m.%Y')
 		))
 		self.add_content(FDTitle(
 			title='Информация:'
