@@ -56,7 +56,7 @@ class OptionsScreen(BaseScrollScreen):
 		''' Сохранить настройки в application.ini '''
 
 		self.__save_to_config()
-		self._path_manager.back()
+		self._path_manager.forward('main')
 
 	def fill_elements(self) -> None:
 		self.clear_content()
@@ -129,6 +129,7 @@ class OptionsScreen(BaseScrollScreen):
 		self.start_call_text_field = FDMultilineInput(hint_text='Начало выезда')
 		self.start_call_text_field.helper_text = 'Будет вставлен при каждом начале выезда'
 		self.start_call_text_field.helper_text_mode = 'persistent'
+		self.start_call_text_field.current_hint_text_color = self.__theme_cls.text_color
 		self.start_call_text_field.set_value(
 			self.__get_config_value(
 				section='call',
@@ -140,6 +141,7 @@ class OptionsScreen(BaseScrollScreen):
 		self.finish_call_text_field = FDMultilineInput(hint_text='Окончание выезда')
 		self.finish_call_text_field.helper_text = 'Будет вставлен при окончании выезда'
 		self.finish_call_text_field.helper_text_mode = 'persistent'
+		self.finish_call_text_field.current_hint_text_color = self.__theme_cls.text_color
 		self.finish_call_text_field.set_value(
 			self.__get_config_value(
 				section='call',
@@ -151,6 +153,7 @@ class OptionsScreen(BaseScrollScreen):
 		self.human_call_success_field = FDMultilineInput(hint_text='Успешный вызов')
 		self.human_call_success_field.helper_text = 'Будет вставлен при успешном вызове человека'
 		self.human_call_success_field.helper_text_mode = 'persistent'
+		self.human_call_success_field.current_hint_text_color = self.__theme_cls.text_color
 		self.human_call_success_field.set_value(
 			self.__get_config_value(
 				section='call',
@@ -162,6 +165,7 @@ class OptionsScreen(BaseScrollScreen):
 		self.human_call_unsuccess_field = FDMultilineInput(hint_text='Безуспешный вызов')
 		self.human_call_unsuccess_field.helper_text = 'Будет вставлен при безуспешном вызове человека'
 		self.human_call_unsuccess_field.helper_text_mode = 'persistent'
+		self.human_call_unsuccess_field.current_hint_text_color = self.__theme_cls.text_color
 		self.human_call_unsuccess_field.set_value(
 			self.__get_config_value(
 				section='call',
