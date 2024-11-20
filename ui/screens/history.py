@@ -46,6 +46,7 @@ class History(BaseScrollScreen):
 		)
 
 		self.ids.content.spacing = dp(30)
+		self.bind(on_pre_enter=lambda *_: self.fill_content())
 		self.fill_content()
 
 	def fill_content(self) -> None:
