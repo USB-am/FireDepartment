@@ -59,7 +59,9 @@ class _BaseCreateModel(BaseScrollScreen):
 		if not confirmed:
 			self.save(model_params)
 			self.clear_form()
-			self._path_manager.back()
+			back_screen = self._path_manager.back()
+			if hasattr(back_screen, 'update_elements'):
+				back_screen.update_elements()
 		else:
 			ok_btn = MDRaisedButton(text='Ок')
 			dialog = MDDialog(
