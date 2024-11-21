@@ -44,3 +44,32 @@
 					height: self.minimum_height
 					do_scroll_x: False
 					padding: [dp(10), dp(20)]
+
+
+<BaseSelectScrollScreen>:
+	MDBoxLayout:
+		orientation: 'vertical'
+		size_hint: (1, 1)
+
+		FDToolbar:
+			id: toolbar
+			title: root.toolbar_title
+
+		MDBoxLayout:
+			id: content_container
+			orientation: 'vertical'
+			size_hint: (1, 1)
+
+			ScrollView:
+				id: scroll_content
+				size_hint: (1, 1)
+
+				on_scroll_y:
+					if args[1] <= 0: root.end_list_event()
+
+				MDSelectionList:
+					id: content
+					overlay_color: app.theme_cls.accent_color
+					on_selected: root.on_selected(*args)
+					on_unselected: root.on_unselected(*args)
+					on_selected_mode: root.set_selection_mode(*args)

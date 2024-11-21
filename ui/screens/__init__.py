@@ -49,4 +49,18 @@ class BaseScrollScreen(_FDScreen):
 	def end_list_event(self) -> None:
 		''' Событие прокрутки до конца страницы '''
 
-		pass
+
+class BaseSelectScrollScreen(_FDScreen):
+	''' Базовое представление страницы (с прокруткой и возможности выбора) '''
+
+	def end_list_event(self) -> None:
+		''' Событие прокрутки до конца страницы '''
+
+	def on_selected(self, instance_selection_list, instance_selection_item) -> None:
+		''' Обработчик события выбора '''
+
+	def on_unselected(self, instance_selection_list, instance_selection_item) -> None:
+		''' Обработчик события снятия выбора '''
+
+	def set_selection_mode(self, instance_selection_list, mode) -> None:
+		''' Определение поведения при выборе '''
