@@ -6,8 +6,9 @@ from kivymd.uix.button import MDRaisedButton
 
 from . import model_create
 from app.path_manager import PathManager
+from ui.field.button import FDRectangleButton
 from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype, Short
-from data_base.manager import update_entry
+from data_base.manager import update_entry, delete_entry
 from validators.create_model_validators import EmptyValidator, UniqueExcludingValidator, \
 	ZeroValidator
 
@@ -23,6 +24,10 @@ class _BaseEditModel(model_create._BaseCreateModel):
 			icon='check',
 			callback=lambda *_: self.update_and_back()
 		)
+
+		delete_btn = FDRectangleButton(title='Удалить')
+		delete_btn.bind_btn(callback=lambda *_: self.delete_and_back())
+		self.add_content(delete_btn)
 
 	def update_and_back(self) -> None:
 		''' Обновить запись и вернуться на страницу назад '''
@@ -48,10 +53,24 @@ class _BaseEditModel(model_create._BaseCreateModel):
 
 			dialog.open()
 
+	def delete_and_back(self) -> None:
+		''' Удалить запись и вернуться на страницу назад '''
+
+		self.delete_()
+		self.clear_form()
+		back_screen = self._path_manager.back()
+		if hasattr(back_screen, 'update_elements'):
+			back_screen.update_elements()
+
 	def save(self, params: Dict[str, Any]) -> None:
 		''' Обновить данные в БД '''
 
 		update_entry(self.entry, params)
+
+	def delete_(self) -> None:
+		''' Удалить запись '''
+
+		delete_entry(self.entry)
 
 
 class TagEditModel(_BaseEditModel, model_create.TagCreateModel):
