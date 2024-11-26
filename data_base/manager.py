@@ -65,6 +65,21 @@ def update_entry(entry: Union[db.Model, None], params: Dict[str, Any]) -> None:
 		setattr(entry, column, value)
 
 
+@commit
+def delete_entry(entry: Union[db.Model, None]) -> None:
+	'''
+	Удалить запись.
+
+	~params:
+	entry: Union[db.Model, None] - запись для удаления.
+	'''
+
+	if entry is None:
+		return
+
+	db.session.delete(entry)
+
+
 def get_by_id(model: Union[db.Model], id: int) -> db.Model:
 	'''
 	Получить значение по id.
