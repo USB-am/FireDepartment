@@ -10,7 +10,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRaisedButton, MDFlatButton
 
 from . import BaseScreen
-from data_base import Human, Short, Emergency, Calls
+from data_base import Human, Short, Emergency, Calls, Rank
 from data_base.manager import write_entry
 from exceptions.data_base import DBAddError, DBCommitError
 from app.path_manager import PathManager
@@ -34,6 +34,14 @@ def _get_config_value(section: str, option: str, fallback: Any='') -> Any:
 
 	app = MDApp.get_running_app()
 	return app.config.get(section, option, fallback=fallback)
+
+
+def sorted_humans_by_rank(humans: List[Human]) -> List[Human]:
+	''' Отсортировать сотрудников по Званию (Rank.priority) '''
+
+	return sorted(humans,
+	              key=lambda h: Rank.query.get(h.rank).priority,
+	              reverse=True)
 
 
 class PhoneTabContent(MDBoxLayout):
@@ -143,10 +151,11 @@ class CallTabContent(MDBoxLayout):
 		self._human_call_logs: Dict[Log] = {}
 		super().__init__()
 
+		sorted_humans = sorted_humans_by_rank(emergency.humans)
 		self.calls_tab = PhoneTabContent(
 			title=emergency.title,
 			description=emergency.description,
-			humans=emergency.humans)
+			humans=sorted_humans)
 		self.info_tab = InfoTabContent(
 			shorts=emergency.shorts)
 
