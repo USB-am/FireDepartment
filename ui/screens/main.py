@@ -17,17 +17,25 @@ def filter_list_elements(text: str) -> List[Emergency]:
 	text: str - текст поиска.
 	'''
 
-	# https://stackoverflow.com/questions/36916072/flask-sqlalchemy-filter-on-many-to-many-relationship-with-parent-model
 	like_text = f'%{text}%'
-	filtered_emergencies = Emergency.query.filter(
+
+	# Filter by Emergency model
+	filtered_emergencies_by_emergency = Emergency.query.filter(
 		or_(
 			Emergency.title.like(like_text),
 			Emergency.description.like(like_text),
-			# Emergency.tags.in_(Tag.title.like(like_text))
 		)
 	).order_by(Emergency.title).all()
 
-	return filtered_emergencies
+	# Filter by Tag model
+	selected_tags = Tag.query.filter(Tag.title.like(like_text)).all()
+	emergencies_id_by_tags = []
+	for tag in selected_tags:
+		for emergency in tag.emergencys:
+			emergencies_id_by_tags.append(emergency.id)
+	filtered_emergencies_by_tag = Emergency.query.filter(Emergency.id.in_(emergencies_id_by_tags)).all()
+
+	return filtered_emergencies_by_emergency + filtered_emergencies_by_tag 
 
 
 class MainScreen(BaseScrollScreen):
