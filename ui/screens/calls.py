@@ -15,6 +15,7 @@ from data_base.manager import write_entry
 from exceptions.data_base import DBAddError, DBCommitError
 from app.path_manager import PathManager
 from ui.field.call_human import FDCallHumanField
+from ui.field.calendar import is_work_day
 from ui.widgets.notebook import FDNotebook, FDTab
 from config import NAVIGATION_WIDGET
 
@@ -42,6 +43,18 @@ def sorted_humans_by_rank(humans: List[Human]) -> List[Human]:
 	return sorted(humans,
 	              key=lambda h: Rank.query.get(h.rank).priority,
 	              reverse=True)
+
+
+def filtered_humans_by_workday(humans: List[Human]) -> List[Human]:
+	''' Отфильтровать по работающим сотрудникам '''
+
+	today = datetime.now()
+	working_humans = filter(lambda h: bool(h.worktype), humans)
+	output = list(filter(
+		lambda h: is_work_day(today, h.work_day, h.worktype),
+		working_humans))
+
+	return output
 
 
 class PhoneTabContent(MDBoxLayout):
@@ -152,6 +165,8 @@ class CallTabContent(MDBoxLayout):
 		super().__init__()
 
 		sorted_humans = sorted_humans_by_rank(emergency.humans)
+		if not _get_config_value('call', 'work_day_ignore'):
+			sorted_humans = filtered_humans_by_workday(sorted_humans)
 		self.calls_tab = PhoneTabContent(
 			title=emergency.title,
 			description=emergency.description,
