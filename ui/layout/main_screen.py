@@ -33,21 +33,34 @@ class _ListElementContent(MDBoxLayout):
 
 		super().__init__(**options)
 
-		self.ids.info_icons.add_widget(_ListElementIcon(
+		self.tags_icon = _ListElementIcon(
 			icon=Tag.icon,
-			value=str(len(self.emergency.tags))
-		))
-		self.ids.info_icons.add_widget(_ListElementIcon(
-			icon=Human.icon,
-			value=str(len(self.emergency.humans))
-		))
-		self.ids.info_icons.add_widget(_ListElementIcon(
-			icon=Short.icon,
-			value=str(len(self.emergency.shorts))
-		))
+			value=str(len(self.emergency.tags)))
+		self.ids.info_icons.add_widget(self.tags_icon)
 
-		if self.emergency.urgent:
-			self.ids.info_icons.add_widget(_ListElementIcon(icon='truck-fast'))
+		self.humans_icon = _ListElementIcon(
+			icon=Human.icon,
+			value=str(len(self.emergency.humans)))
+		self.ids.info_icons.add_widget(self.humans_icon)
+
+		self.shorts_icon = _ListElementIcon(
+			icon=Short.icon,
+			value=str(len(self.emergency.shorts)))
+		self.ids.info_icons.add_widget(self.shorts_icon)
+
+		self.is_urgent_icon = _ListElementIcon(
+			icon=('', 'truck-fast')[self.emergency.urgent])
+		self.ids.info_icons.add_widget(self.is_urgent_icon)
+
+	def update(self) -> None:
+		''' Обновить значения тегов, людей и сокращений '''
+
+		self.tags_icon.value = str(len(self.emergency.tags))
+		self.humans_icon.value = str(len(self.emergency.humans))
+		self.shorts_icon.value = str(len(self.emergency.shorts))
+		self.is_urgent_icon.icon = ('', 'truck-fast')[self.emergency.urgent]
+
+		self.ids.description_lbl.text = self.emergency.description
 
 
 class MainScreenListElement(MDExpansionPanel):
@@ -72,6 +85,12 @@ class MainScreenListElement(MDExpansionPanel):
 		})
 
 		super().__init__(**options)
+
+	def update(self) -> None:
+		''' Обновить отображаемую информацию '''
+
+		self.panel_cls.text = self.emergency.title
+		self.content.update()
 
 	def bind_open_button(self, callback: Callable) -> None:
 		'''
