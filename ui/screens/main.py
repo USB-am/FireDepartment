@@ -68,6 +68,7 @@ class MainScreen(BaseScrollScreen):
 		self.elements: List[MainScreenListElement] = []
 		self.fill_elements()
 		self.bind(on_pre_enter=lambda *_: self.__check_new_elements())
+		self.bind(on_pre_enter=lambda *_: self.__update_elements())
 
 	def fill_elements(self) -> None:
 		''' Заполнить контент Вызовами '''
@@ -77,6 +78,12 @@ class MainScreen(BaseScrollScreen):
 			list_elem.bind_open_button(lambda e=emergency: self.open_call(e))
 			self.elements.append(list_elem)
 			self.add_content(list_elem)
+
+	def __update_elements(self) -> None:
+		''' Обновить отображенные элементы '''
+
+		for element in self.elements:
+			pass
 
 	def __hide_elements(self, filtered_elements: List[Emergency]) -> None:
 		'''
@@ -149,5 +156,4 @@ class MainScreen(BaseScrollScreen):
 		'''
 
 		calls_screen = self._path_manager.forward('calls')
-		# calls_screen.notebook.add_tab(emergency)
 		calls_screen.add_notebook_tab(emergency)
