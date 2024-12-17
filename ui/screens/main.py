@@ -67,8 +67,8 @@ class MainScreen(BaseScrollScreen):
 
 		self.elements: List[MainScreenListElement] = []
 		self.fill_elements()
-		self.bind(on_pre_enter=lambda *_: self.__check_new_elements())
 		self.bind(on_pre_enter=lambda *_: self.__update_elements())
+		self.bind(on_pre_enter=lambda *_: self.__check_new_elements())
 
 	def fill_elements(self) -> None:
 		''' Заполнить контент Вызовами '''
@@ -83,7 +83,7 @@ class MainScreen(BaseScrollScreen):
 		''' Обновить отображенные элементы '''
 
 		for element in self.elements:
-			pass
+			element.update()
 
 	def __hide_elements(self, filtered_elements: List[Emergency]) -> None:
 		'''
