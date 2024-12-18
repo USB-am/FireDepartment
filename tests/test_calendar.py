@@ -15,7 +15,6 @@ class TestFDCalendar(unittest.TestCase):
 
 	@classmethod
 	def setUpClass(cls):
-		# cls.NOW_DATE = datetime.now().date()
 		cls.NOW_DATE = datetime(2024, 12, 10)
 		cls.app = AppTest()
 		cls.date_field = FDDate(
