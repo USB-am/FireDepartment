@@ -8,7 +8,7 @@ from . import model_create
 from app.path_manager import PathManager
 from ui.field.button import FDRectangleButton
 from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype, Short
-from data_base.manager import update_entry, delete_entry
+from data_base.manager import update_entry, delete_entry, get_by_id
 from validators.create_model_validators import EmptyValidator, UniqueExcludingValidator, \
 	ZeroValidator
 
@@ -235,6 +235,10 @@ class HumanEditModel(_BaseEditModel, model_create.HumanCreateModel):
 		self.params['worktype'].set_value(entry.worktype)
 		self.params['position'].set_value(entry.position)
 		self.params['rank'].set_value(entry.rank)
+		self.calendar_field.select_work_days(
+			work_day=self.work_date_field.get_value(),
+			worktype=get_by_id(Worktype, self.worktype_field.get_value())
+		)
 
 	def is_valid(self, params: Dict[str, Widget]) -> tuple:
 		checks = (
