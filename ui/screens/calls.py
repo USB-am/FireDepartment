@@ -10,8 +10,8 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRaisedButton, MDFlatButton
 
 from . import BaseScreen
-from data_base import Human, Short, Emergency, Calls, Rank
-from data_base.manager import write_entry
+from data_base import Human, Short, Emergency, Calls, Rank, Worktype
+from data_base.manager import write_entry, get_by_id
 from exceptions.data_base import DBAddError, DBCommitError
 from app.path_manager import PathManager
 from ui.field.call_human import FDCallHumanField
@@ -40,7 +40,12 @@ def _get_config_value(section: str, option: str, fallback: Any='') -> Any:
 def sorted_humans_by_rank(humans: List[Human]) -> List[Human]:
 	''' Отсортировать сотрудников по Званию (Rank.priority) '''
 
-	return sorted(humans,
+	ranked_humans: List[Human] = []
+	for human in humans:
+		if human.rank is not None:
+			ranked_humans.append(human)
+
+	return sorted(ranked_humans,
 	              key=lambda h: Rank.query.get(h.rank).priority,
 	              reverse=True)
 
@@ -48,10 +53,10 @@ def sorted_humans_by_rank(humans: List[Human]) -> List[Human]:
 def filtered_humans_by_workday(humans: List[Human]) -> List[Human]:
 	''' Отфильтровать по работающим сотрудникам '''
 
-	today = datetime.now()
+	today = datetime.now().date()
 	working_humans = filter(lambda h: bool(h.worktype), humans)
 	output = list(filter(
-		lambda h: is_work_day(today, h.work_day, h.worktype),
+		lambda h: is_work_day(today, h.work_day, get_by_id(Worktype, h.worktype)),
 		working_humans))
 
 	return output

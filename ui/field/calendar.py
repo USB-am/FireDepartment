@@ -8,7 +8,8 @@ from kivymd.uix.label import MDLabel
 from dateutil.relativedelta import relativedelta
 
 from config import CALENDAR_FIELD
-from data_base import Worktype
+from data_base import Worktype, Human
+from data_base.manager import get_by_id
 
 
 Builder.load_file(CALENDAR_FIELD)
@@ -62,6 +63,25 @@ def is_work_day(day: date, work_day: date, worktype: Worktype) -> bool:
 	finish_work_week = start_work_week + timedelta(days=worktype.work_day_range-1)
 
 	return start_work_week <= day <= finish_work_week
+
+
+def is_working(now_datetime: datetime, human: Human) -> bool:
+	'''
+	Является ли now_datetime рабочим временем для human.
+
+	~params:
+	now_datetime: datetime - время, от которого будет идти проверка;
+	human: Human - человек, который будет проверяться.
+	'''
+
+	worktype = get_by_id(Worktype, human.worktype)
+	work_day = human.work_day
+	day = now_datetime.date()
+
+	if not is_work_day(day, work_day, worktype):
+		return False
+
+	
 
 
 class _CalendarGridDay(MDLabel):
