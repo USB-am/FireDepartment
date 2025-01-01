@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+import datetime
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
@@ -92,9 +94,19 @@ class Human(db.Model):
 	phone_2 = db.Column(db.String(255), nullable=True)
 	is_firefigher = db.Column(db.Boolean(), nullable=False)
 	work_day = db.Column(db.Date(), nullable=True)
+	start_vacation = db.Column(db.Date(), nullable=True)
+	finish_vacation = db.Column(db.Date(), nullable=True)
 	worktype = db.Column(db.Integer, db.ForeignKey('Worktype.id'), nullable=True)
 	position = db.Column(db.Integer, db.ForeignKey('Position.id'), nullable=True)
 	rank = db.Column(db.Integer, db.ForeignKey('Rank.id'), nullable=True)
+
+	def is_vacation(self, date: datetime.date) -> bool:
+		''' Сейчас в отпуске? '''
+
+		if None in (self.start_vacation, self.finish_vacation):
+			return False
+
+		return self.start_vacation <= date <= self.finish_vacation
 
 	def __str__(self):
 		return self.title
