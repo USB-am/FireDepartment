@@ -15,7 +15,7 @@ from data_base.manager import write_entry, get_by_id
 from exceptions.data_base import DBAddError, DBCommitError
 from app.path_manager import PathManager
 from ui.field.call_human import FDCallHumanField
-from ui.field.calendar import is_work_day
+from ui.field.calendar import is_working
 from ui.widgets.notebook import FDNotebook, FDTab
 from config import NAVIGATION_WIDGET
 
@@ -56,7 +56,7 @@ def filtered_humans_by_workday(humans: List[Human]) -> List[Human]:
 	today = datetime.now().date()
 	working_humans = filter(lambda h: bool(h.worktype), humans)
 	output = list(filter(
-		lambda h: is_work_day(today, h.work_day, get_by_id(Worktype, h.worktype)),
+		lambda h: is_working(now_datetime=datetime.now(), human=h),
 		working_humans))
 
 	return output

@@ -81,7 +81,11 @@ def is_working(now_datetime: datetime, human: Human) -> bool:
 	if not is_work_day(day, work_day, worktype):
 		return False
 
-	
+	work_duration = worktype.finish_work_day - worktype.start_work_day
+	start_work = datetime.combine(day, worktype.start_work_day.time())
+	finish_work = start_work + work_duration
+
+	return start_work <= now_datetime < finish_work
 
 
 class _CalendarGridDay(MDLabel):
