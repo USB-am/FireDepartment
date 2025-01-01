@@ -74,6 +74,9 @@ def is_working(now_datetime: datetime, human: Human) -> bool:
 	human: Human - человек, который будет проверяться.
 	'''
 
+	if human.is_vacation:
+		return False
+
 	worktype = get_by_id(Worktype, human.worktype)
 	work_day = human.work_day
 	day = now_datetime.date()
