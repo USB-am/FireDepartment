@@ -392,12 +392,24 @@ class HumanCreateModel(_BaseCreateModel):
 		self.position_field.bind_btn(
 			lambda: self._path_manager.forward('create_position')
 		)
+		# start_vacation
+		self.start_vacation_field = FDDate(
+			icon='human-handsup',
+			title='Начало отпуска',
+			btn_text='дд.мм.гггг')
+		# finish_vacation
+		self.finish_vacation_field = FDDate(
+			icon='briefcase',
+			title='Конец отпуска',
+			btn_text='дд.мм.гггг')
 
 		self.add_content(self.title_field)
 		self.add_content(self.phone_1_field)
 		self.add_content(self.phone_2_field)
 		self.add_content(self.is_firefigher_field)
 		self.add_content(self.work_date_field)
+		self.add_content(self.start_vacation_field)
+		self.add_content(self.finish_vacation_field)
 		self.add_content(self.calendar_field)
 		self.add_content(self.worktype_field)
 		self.add_content(self.rank_field)
@@ -411,7 +423,9 @@ class HumanCreateModel(_BaseCreateModel):
 			'work_day': self.work_date_field,
 			'worktype': self.worktype_field,
 			'rank': self.rank_field,
-			'position': self.position_field
+			'position': self.position_field,
+			'start_vacation': self.start_vacation_field,
+			'finish_vacation': self.finish_vacation_field
 		})
 
 	def _pre_open_update(self) -> None:
@@ -432,6 +446,8 @@ class HumanCreateModel(_BaseCreateModel):
 		self.worktype_field.set_value([])
 		self.rank_field.set_value([])
 		self.position_field.set_value([])
+		self.start_vacation_field.set_value(None)
+		self.finish_vacation_field.set_value(None)
 
 	def is_valid(self, params: Dict[str, Widget]) -> tuple:
 		checks = (
