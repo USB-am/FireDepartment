@@ -357,6 +357,16 @@ class HumanCreateModel(_BaseCreateModel):
 			icon='calendar',
 			title='Рабочий день',
 			btn_text='дд.мм.гггг')
+		# start_vacation
+		self.start_vacation_field = FDDate(
+			icon='human-handsup',
+			title='Начало отпуска',
+			btn_text='дд.мм.гггг')
+		# finish_vacation
+		self.finish_vacation_field = FDDate(
+			icon='briefcase',
+			title='Конец отпуска',
+			btn_text='дд.мм.гггг')
 		# worktype
 		self.worktype_field = FDSelect(
 			title='График работы',
@@ -370,10 +380,14 @@ class HumanCreateModel(_BaseCreateModel):
 		self.calendar_field = FDCalendar()
 		self.work_date_field.callback = lambda: self.calendar_field.select_work_days(
 			work_day=self.work_date_field.get_value(),
-			worktype=get_by_id(Worktype, self.worktype_field.get_value()))
+			worktype=get_by_id(Worktype, self.worktype_field.get_value()),
+			vacation=(self.start_vacation_field.get_value(),
+			          self.finish_vacation_field.get_value()))
 		self.worktype_field.bind_checkbox(lambda: self.calendar_field.select_work_days(
 			work_day=self.work_date_field.get_value(),
-			worktype=get_by_id(Worktype, self.worktype_field.get_value())))
+			worktype=get_by_id(Worktype, self.worktype_field.get_value()),
+			vacation=(self.start_vacation_field.get_value(),
+			          self.finish_vacation_field.get_value())))
 		# rank
 		self.rank_field = FDSelect(
 			title='Звание',
@@ -392,16 +406,6 @@ class HumanCreateModel(_BaseCreateModel):
 		self.position_field.bind_btn(
 			lambda: self._path_manager.forward('create_position')
 		)
-		# start_vacation
-		self.start_vacation_field = FDDate(
-			icon='human-handsup',
-			title='Начало отпуска',
-			btn_text='дд.мм.гггг')
-		# finish_vacation
-		self.finish_vacation_field = FDDate(
-			icon='briefcase',
-			title='Конец отпуска',
-			btn_text='дд.мм.гггг')
 
 		self.add_content(self.title_field)
 		self.add_content(self.phone_1_field)
@@ -409,7 +413,7 @@ class HumanCreateModel(_BaseCreateModel):
 		self.add_content(self.is_firefigher_field)
 		self.add_content(self.work_date_field)
 		self.add_content(self.start_vacation_field)
-		self.add_content(self.finish_vacation_field)
+		# self.add_content(self.finish_vacation_field)
 		self.add_content(self.calendar_field)
 		self.add_content(self.worktype_field)
 		self.add_content(self.rank_field)
