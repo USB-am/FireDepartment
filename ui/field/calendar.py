@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import List, Tuple, Union
 from calendar import Calendar
 from datetime import datetime, date, timedelta
 
@@ -125,7 +125,8 @@ class FDCalendar(MDBoxLayout):
 		self._is_select_work_days = False
 		self._work_days_params = {
 			'work_day': None,
-			'worktype': None}
+			'worktype': None,
+			'vacation': None}
 		self.update()
 
 	@property
@@ -157,20 +158,30 @@ class FDCalendar(MDBoxLayout):
 		''' Изменить название месяца '''
 		self.ids.month_title.text = MONTHS[self._now_date.month]
 
-	def select_work_days(self, work_day: date, worktype: Worktype) -> None:
+	def select_work_days(self, work_day: date, worktype: Worktype,
+	                     vacation: Tuple[datetime.date]=None) -> None:
 		''' Выделить рабочие дни '''
 		if work_day is None or worktype is None:
 			self.unselect_work_days()
 			return
 
 		self._is_select_work_days = True
+		if vacation is None:
+			s_vac = date(1, 1, 1)
+			f_vac = date(1, 1, 1)
+		else:
+			s_vac, f_vac, *_ = vacation
 		self._work_days_params = {
 			'work_day': work_day,
-			'worktype': worktype}
+			'worktype': worktype,
+			'vacation': (s_vac, f_vac)}
 
 		for calendar_day in self._grid_elements:
 			is_work = is_work_day(calendar_day.date, work_day, worktype)
-			calendar_day.select() if is_work else calendar_day.unselect()
+			if is_work and not(s_vac <= calendar_day.date < f_vac):
+				calendar_day.select()
+			else:
+				calendar_day.unselect()
 
 	def unselect_work_days(self) -> None:
 		''' Снять выделения рабочих дней '''
