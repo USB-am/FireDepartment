@@ -223,6 +223,14 @@ class HumanDialogContent(_BaseDialogContent):
 			title='График работы',
 			value=worktype_title))
 
+		known_vacation = not None in (entry.start_vacation, entry.finish_vacation)
+		if known_vacation:
+			s_vac = entry.start_vacation.strftime('%d.%m.%Y')
+			f_vac = entry.finish_vacation.strftime('%d.%m.%Y')
+			self.ids.content.add_widget(FDVerticalLabel(
+				title='Отпуск',
+				value=f'{s_vac} - {f_vac}'))
+
 	@property
 	def next_work_day(self) -> str:
 		''' Возвращает следующий рабочий день '''
