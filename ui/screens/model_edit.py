@@ -232,6 +232,8 @@ class HumanEditModel(_BaseEditModel, model_create.HumanCreateModel):
 		self.params['phone_2'].set_value(entry.phone_2)
 		self.params['is_firefigher'].set_value(entry.is_firefigher)
 		self.params['work_day'].set_value(entry.work_day)
+		self.params['start_vacation'].set_value(entry.start_vacation)
+		self.params['finish_vacation'].set_value(entry.finish_vacation)
 		self.params['worktype'].set_value(entry.worktype)
 		self.params['position'].set_value(entry.position)
 		self.params['rank'].set_value(entry.rank)
