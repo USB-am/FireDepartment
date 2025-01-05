@@ -15,6 +15,7 @@ from ui.field.select import FDSelect, FDMultiSelect
 from ui.field.switch import FDSwitch, FDDoubleSwitch
 from ui.field.date import FDDate, FDDateTime
 from ui.field.calendar import FDCalendar
+from ui.field.button import FDButton
 from ui.layout.dialogs import HumanDialogContent, EmergencyDialogContent, \
 	WorktypeDialogContent, TagDialogContent, RankDialogContent, \
 	PositionDialogContent, ShortDialogContent
@@ -367,6 +368,20 @@ class HumanCreateModel(_BaseCreateModel):
 			icon='briefcase',
 			title='Конец отпуска',
 			btn_text='дд.мм.гггг')
+		# vacation dialog widget
+		vacation_dates = (
+			self.start_vacation_field.get_value(),
+			self.finish_vacation_field.get_value())
+		if None in vacation_dates:
+			vacation_text = ''
+		else:
+			dts = map(lambda dt: dt.strftime('%d.%m.%Y'), vacation_dates)
+			vacation_text = '{} - {}'.format(*dts)
+		self.vacation_dialog_btn = FDButton(
+			icon='human-handsup',
+			title=f'Отпуск\n{vacation_text}',
+			btn_text='Изменить')
+		self.vacation_dialog_btn.ids.btn.bind(on_release=self.open_vacation_dialog)
 		# worktype
 		self.worktype_field = FDSelect(
 			title='График работы',
@@ -412,8 +427,9 @@ class HumanCreateModel(_BaseCreateModel):
 		self.add_content(self.phone_2_field)
 		self.add_content(self.is_firefigher_field)
 		self.add_content(self.work_date_field)
-		self.add_content(self.start_vacation_field)
+		# self.add_content(self.start_vacation_field)
 		# self.add_content(self.finish_vacation_field)
+		self.add_content(self.vacation_dialog_btn)
 		self.add_content(self.calendar_field)
 		self.add_content(self.worktype_field)
 		self.add_content(self.rank_field)
@@ -464,6 +480,19 @@ class HumanCreateModel(_BaseCreateModel):
 		)
 
 		return tuple(filter(lambda check: not check.status, checks))
+
+	def open_vacation_dialog(self, *args) -> None:
+		''' Открыть диалог выбора дат отпуска '''
+
+		ok_btn = MDRaisedButton(text='Ок')
+		dialog = MDDialog(
+			title='Отпуск',
+			text='all good!',
+			buttons=[ok_btn,]
+		)
+		ok_btn.bind(on_release=lambda *_: dialog.dismiss())
+
+		dialog.open()
 
 
 class EmergencyCreateModel(_BaseCreateModel):
