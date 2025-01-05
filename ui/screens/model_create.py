@@ -371,17 +371,9 @@ class HumanCreateModel(_BaseCreateModel):
 			title='Конец отпуска',
 			btn_text='дд.мм.гггг')
 		# vacation dialog widget
-		vacation_dates = (
-			self.start_vacation_field.get_value(),
-			self.finish_vacation_field.get_value())
-		if None in vacation_dates:
-			vacation_text = ''
-		else:
-			dts = map(lambda dt: dt.strftime('%d.%m.%Y'), vacation_dates)
-			vacation_text = '{} - {}'.format(*dts)
 		self.vacation_dialog_btn = FDButton(
 			icon='human-handsup',
-			title=f'Отпуск\n{vacation_text}',
+			title=f'Отпуск',
 			btn_text='Изменить')
 		self.vacation_dialog_btn.ids.btn.bind(on_release=self.open_vacation_dialog)
 		# worktype
@@ -405,6 +397,16 @@ class HumanCreateModel(_BaseCreateModel):
 			worktype=get_by_id(Worktype, self.worktype_field.get_value()),
 			vacation=(self.start_vacation_field.get_value(),
 			          self.finish_vacation_field.get_value())))
+		self.start_vacation_field.callback = lambda: self.calendar_field.select_work_days(
+			work_day=self.work_date_field.get_value(),
+			worktype=get_by_id(Worktype, self.worktype_field.get_value()),
+			vacation=(self.start_vacation_field.get_value(),
+			          self.finish_vacation_field.get_value()))
+		self.finish_vacation_field.callback = lambda: self.calendar_field.select_work_days(
+			work_day=self.work_date_field.get_value(),
+			worktype=get_by_id(Worktype, self.worktype_field.get_value()),
+			vacation=(self.start_vacation_field.get_value(),
+			          self.finish_vacation_field.get_value()))
 		# rank
 		self.rank_field = FDSelect(
 			title='Звание',
@@ -429,8 +431,6 @@ class HumanCreateModel(_BaseCreateModel):
 		self.add_content(self.phone_2_field)
 		self.add_content(self.is_firefigher_field)
 		self.add_content(self.work_date_field)
-		# self.add_content(self.start_vacation_field)
-		# self.add_content(self.finish_vacation_field)
 		self.add_content(self.vacation_dialog_btn)
 		self.add_content(self.calendar_field)
 		self.add_content(self.worktype_field)

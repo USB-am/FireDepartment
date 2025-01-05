@@ -239,7 +239,9 @@ class HumanEditModel(_BaseEditModel, model_create.HumanCreateModel):
 		self.params['rank'].set_value(entry.rank)
 		self.calendar_field.select_work_days(
 			work_day=self.work_date_field.get_value(),
-			worktype=get_by_id(Worktype, self.worktype_field.get_value())
+			worktype=get_by_id(Worktype, self.worktype_field.get_value()),
+			vacation=(self.start_vacation_field.get_value(),
+			          self.finish_vacation_field.get_value())
 		)
 
 	def is_valid(self, params: Dict[str, Widget]) -> tuple:

@@ -178,7 +178,7 @@ class FDCalendar(MDBoxLayout):
 
 		for calendar_day in self._grid_elements:
 			is_work = is_work_day(calendar_day.date, work_day, worktype)
-			if is_work and not(s_vac <= calendar_day.date < f_vac):
+			if is_work and not(s_vac <= calendar_day.date <= f_vac):
 				calendar_day.select()
 			else:
 				calendar_day.unselect()
