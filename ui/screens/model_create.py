@@ -1,9 +1,11 @@
 from typing import Dict
 
 from kivy.uix.widget import Widget
+from kivy.metrics import dp
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDRaisedButton
 from kivymd.uix.label import MDLabel
+from kivymd.uix.boxlayout import MDBoxLayout
 
 from . import BaseScrollScreen
 from app.path_manager import PathManager
@@ -484,10 +486,19 @@ class HumanCreateModel(_BaseCreateModel):
 	def open_vacation_dialog(self, *args) -> None:
 		''' Открыть диалог выбора дат отпуска '''
 
+		content = MDBoxLayout(
+			orientation='vertical',
+			size_hint_y=None,
+			height=dp(350))
+		content.add_widget(self.start_vacation_field)
+		content.add_widget(self.finish_vacation_field)
+		content.add_widget(MDBoxLayout())
+
 		ok_btn = MDRaisedButton(text='Ок')
 		dialog = MDDialog(
 			title='Отпуск',
-			text='all good!',
+			type='custom',
+			content_cls=content,
 			buttons=[ok_btn,]
 		)
 		ok_btn.bind(on_release=lambda *_: dialog.dismiss())
