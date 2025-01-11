@@ -149,11 +149,11 @@ class InfoTabContent(MDBoxLayout):
 
 		text = text. \
 			replace('yyyy', str(now_datetime.year)). \
-			replace('mm', str(now_datetime.month)). \
-			replace('dd', str(now_datetime.day)). \
-			replace('HH', str(now_datetime.hour)). \
-			replace('MM', str(now_datetime.minute)). \
-			replace('SS', str(now_datetime.second))
+			replace('mm', str(now_datetime.month).rjust(2, '0')). \
+			replace('dd', str(now_datetime.day).rjust(2, '0')). \
+			replace('HH', str(now_datetime.hour).rjust(2, '0')). \
+			replace('MM', str(now_datetime.minute).rjust(2, '0')). \
+			replace('SS', str(now_datetime.second).rjust(2, '0'))
 
 		if new_line:
 			text_field.text += f'\n{text}\n'
