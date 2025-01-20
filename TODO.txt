@@ -1,8 +1,5 @@
-﻿ui\fields\calendar.FDCalendar:
-	- Сделать более привлекательный UI
+﻿ui\screens\call:
+	- Исправить отображение работающих людей
 
-ui\screens\calls:
-	- Пофиксить отображение выезжающих сотрудников
-
-ui\widgets\notebook\manager.NotebookTab:
-	- Обновлять текстовое поле логов после каждого события
+ui\screens\model_edit:
+	- Исправить зависание из-за количества виджетов
