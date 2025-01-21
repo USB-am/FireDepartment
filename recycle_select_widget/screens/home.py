@@ -4,7 +4,8 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.label import MDLabel
 
 from config import HOME_KV
-from ui.fields.select import FDRecycleSelect, TempModel
+from ui.fields.select import FDRecycleSelect, \
+	FDRecycleMultiSelect, TempModel
 
 
 Builder.load_file(HOME_KV)
@@ -18,10 +19,12 @@ class HomeScreen(Screen):
 		self.ids.content.orientation = 'vertical'
 
 		self.ids.content.add_widget(MDBoxLayout(size_hint=(1, 1), md_bg_color=(1, 1, 1, 1)))
-		select = FDRecycleSelect(
+		select = FDRecycleMultiSelect(
+		# select = FDRecycleSelect(
 			data=[{
 					'text': f'Element #{i+1}',
 					'active': False,
+					'group': ':D',
 				} for i in range(100)],
 			title='Test',
 			dialog_content=MDBoxLayout(),

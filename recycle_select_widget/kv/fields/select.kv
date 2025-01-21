@@ -3,13 +3,11 @@
 	size_hint_y: None
 	height: dp(50)
 	active: checkbox.active
-	# md_bg_color: (.0, 0.9, .1, .3) if self.selected else (0, 0, 0, 0)
 
 	MDCheckbox:
 		id: checkbox
 		active: root.active
 		group: root.group
-		# group: None
 		size_hint: (None, None)
 		size: (dp(50), dp(50))
 		on_release: root.store_checkbox_state()
@@ -33,10 +31,6 @@
 		size_hint_y: None
 		height: self.minimum_height
 		orientation: 'vertical'
-		# multiselect: root.group is not None
-		# touch_multiselect: root.group is not None
-		multiselect: True
-		touch_multiselect: True
 
 
 <_BaseRecycleSelect>:
