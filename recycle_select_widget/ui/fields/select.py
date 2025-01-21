@@ -85,29 +85,41 @@ class FDSelectElement(RecycleDataViewBehavior, MDBoxLayout):
 	group = StringProperty(None)
 	active = BooleanProperty()
 
+	def on(self) -> None:
+		''' Включить чекбокс '''
+		self.active = True
+
+	def off(self) -> None:
+		''' Выключить чекбокс '''
+		self.active = False
+
 	def refresh_view_attrs(self, rv, index, data):
 		self.index = index
 		return super().refresh_view_attrs(rv, index, data)
 
 	def store_checkbox_state(self):
 		rv = self.parent.parent
-		rv.data[self.index]['active'] = self.active
+		# rv.data[self.index]['active'] = self.active
+		rv.update_checkbox_state(index=self.index,
+		                         state=self.active,
+		                         group=self.group)
 
 
-class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior,
-                                 RecycleBoxLayout):
+class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior, RecycleBoxLayout):
 	''' Предстваление области отображения элементов списка '''
 
 
 class _FDSelectRecycleView(RecycleView):
-	'''  '''
-	# def __init__(self, **options):
-	# 	super().__init__(**options)
-	# 	self.data = [{
-	# 		'text': f'Element #{i+1}',
-	# 		'active': False,
-	# 	}
-	# 	for i in range(100)]
+	''' Вьюха списка элементов '''
+
+	def update_checkbox_state(self, index: int, state: bool, group: str) -> None:
+		''' Обновить состояния чекбоксов '''
+
+		if group:
+			for elem in self.data:
+				if elem['active']:
+					elem['active'] = False
+		self.data[index]['active'] = state
 
 
 class _BaseRecycleSelect(_BaseSelect):
@@ -116,6 +128,8 @@ class _BaseRecycleSelect(_BaseSelect):
 	def __init__(self, data: List[Dict], **options):
 		super().__init__(**options)
 		self.ids.recycle_view.data = data
+
+		self.bind_btn(lambda *_: print(self.get_value()))
 
 	@property
 	def data(self) -> List[Dict]:
@@ -137,4 +151,24 @@ class FDRecycleSelect(_BaseRecycleSelect):
 	group: str - группа объектов. Если None, доступен выбор множества элементов.
 	'''
 
+	def get_value(self) -> int:
+		''' Получить id выбранного элемента '''
 
+		try:
+			return next(filter(lambda elem: elem['active'], self.data))
+		except StopIteration:
+			return None
+
+
+class FDRecycleMultiSelect(_BaseRecycleSelect):
+	''' Поле выбора множества элементов '''
+
+	def __init__(self, **kwargs):
+		kwargs.update({'group': None})
+		super().__init__(**kwargs)
+
+	def get_value(self) -> List:
+		''' Получить записи о выбранных элементах '''
+
+		filtered_elems = filter(lambda elem: elem['active'], self.data)
+		return list(map(lambda elem: elem['text'], filtered_elems))
