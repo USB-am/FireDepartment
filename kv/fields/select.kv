@@ -1,4 +1,4 @@
-<_BaseSelect>:
+<_BaseSelectView>:
 	orientation: 'vertical'
 	size_hint_y: None
 	height: dp(400)
@@ -32,41 +32,6 @@
 			padding: [dp(10), dp(15)]
 
 
-<FDSelectElement>:
-	orientation: 'horizontal'
-	size_hint_y: None
-	height: dp(50)
-	active: checkbox.active
-
-	MDCheckbox:
-		id: checkbox
-		active: root.active
-		group: root.group
-		size_hint: (None, None)
-		size: (dp(50), dp(50))
-		on_release: root.store_checkbox_state()
-
-	MDTextButton:
-		id: info_btn
-		size_hint: (1, 1)
-		theme_text_color: 'Custom'
-		text_color: app.theme_cls.text_color
-		halign: 'left'
-		valign: 'center'
-		text: root.text
-
-
-<_FDSelectRecycleView>:
-	viewclass: 'FDSelectElement'
-
-	SelectableRecycleBoxLayout:
-		default_size: None, dp(50)
-		default_size_hint: 1, None
-		size_hint_y: None
-		height: self.minimum_height
-		orientation: 'vertical'
-
-
 <_BaseRecycleSelect>:
 	orientation: 'vertical'
 	size_hint_y: None
@@ -94,3 +59,37 @@
 	_FDSelectRecycleView:
 		id: recycle_view
 
+
+<_FDSelectRecycleView>:
+	viewclass: 'FDSelectElement'
+
+	SelectableRecycleBoxLayout:
+		default_size: None, dp(50)
+		default_size_hint: 1, None
+		size_hint_y: None
+		height: self.minimum_height
+		orientation: 'vertical'
+
+
+<FDSelectElement>:
+	orientation: 'horizontal'
+	size_hint_y: None
+	height: dp(50)
+	active: checkbox.active
+
+	MDCheckbox:
+		id: checkbox
+		active: root.active
+		group: root.group
+		size_hint: (None, None)
+		size: (dp(50), dp(50))
+		on_release: root.store_checkbox_state()
+
+	MDTextButton:
+		id: info_btn
+		size_hint: (1, 1)
+		theme_text_color: 'Custom'
+		text_color: app.theme_cls.text_color
+		halign: 'left'
+		valign: 'center'
+		text: root.text
