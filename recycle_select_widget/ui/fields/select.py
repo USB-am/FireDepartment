@@ -8,7 +8,6 @@ from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.label import MDLabel
 
 from config import SELECT_FIELD
 
@@ -85,21 +84,12 @@ class FDSelectElement(RecycleDataViewBehavior, MDBoxLayout):
 	group = StringProperty(None)
 	active = BooleanProperty()
 
-	def on(self) -> None:
-		''' Включить чекбокс '''
-		self.active = True
-
-	def off(self) -> None:
-		''' Выключить чекбокс '''
-		self.active = False
-
 	def refresh_view_attrs(self, rv, index, data):
 		self.index = index
 		return super().refresh_view_attrs(rv, index, data)
 
 	def store_checkbox_state(self):
 		rv = self.parent.parent
-		# rv.data[self.index]['active'] = self.active
 		rv.update_checkbox_state(index=self.index,
 		                         state=self.active,
 		                         group=self.group)
