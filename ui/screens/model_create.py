@@ -13,7 +13,7 @@ from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype, Short
 from data_base.manager import write_entry, get_by_id
 from ui.field.input import FDInput, FDMultilineInput, FDNumberInput, \
 	FDPhoneInput
-from ui.field.select import FDSelect, FDMultiSelect
+from ui.field.select import FDSelect, FDMultiSelect, FDRecycleSelect, FDRecycleMultiSelect
 from ui.field.switch import FDSwitch, FDDoubleSwitch
 from ui.field.date import FDDate, FDDateTime
 from ui.field.calendar import FDCalendar
@@ -377,7 +377,7 @@ class HumanCreateModel(_BaseCreateModel):
 			btn_text='Изменить')
 		self.vacation_dialog_btn.ids.btn.bind(on_release=self.open_vacation_dialog)
 		# worktype
-		self.worktype_field = FDSelect(
+		self.worktype_field = FDRecycleSelect(
 			title='График работы',
 			dialog_content=WorktypeDialogContent,
 			model=Worktype,
@@ -408,7 +408,7 @@ class HumanCreateModel(_BaseCreateModel):
 			vacation=(self.start_vacation_field.get_value(),
 			          self.finish_vacation_field.get_value()))
 		# rank
-		self.rank_field = FDSelect(
+		self.rank_field = FDRecycleSelect(
 			title='Звание',
 			dialog_content=RankDialogContent,
 			model=Rank,
@@ -417,7 +417,7 @@ class HumanCreateModel(_BaseCreateModel):
 			lambda: self._path_manager.forward('create_rank')
 		)
 		# position
-		self.position_field = FDSelect(
+		self.position_field = FDRecycleSelect(
 			title='Должность',
 			dialog_content=PositionDialogContent,
 			model=Position,

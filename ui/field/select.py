@@ -180,14 +180,35 @@ class _FDSelectRecycleView(RecycleView):
 		self.data[index]['active'] = state
 
 
-class _BaseRecycleSelect(_BaseSelect):
+class _BaseRecycleSelect(MDBoxLayout):
 	''' Оптимизированный FDSelect '''
 
-	def __init__(self, data: List[Dict], **options):
-		super().__init__(**options)
-		self.ids.recycle_view.data = data
+	# def __init__(self, data: List[Dict], **options):
+	# def __init__(self, **options):
+	# 	super().__init__(**options)
+	# 	self.ids.recycle_view.data = data
 
-		self.bind_btn(lambda *_: print(self.get_value()))
+	# 	self.bind_btn(lambda *_: print(self.get_value()))
+	def __init__(self, title: str, dialog_content: MDBoxLayout, model: Type[db.Model], group: str):
+		self.title = title
+		self.dialog_content = dialog_content
+		self.model = model
+		self.group = group
+
+		super().__init__()
+
+		self.ids.recycle_view.data = self._init_data()
+
+	def _init_data(self) -> List[Dict]:
+		''' Инициализация информации для отображения '''
+
+		data = [{'text': entry.title,
+		         'active': False,
+		         'group': self.group} \
+			for entry in self.model.query.all()
+		]
+
+		return data
 
 	@property
 	def data(self) -> List[Dict]:
@@ -197,6 +218,12 @@ class _BaseRecycleSelect(_BaseSelect):
 		''' Заполняет список недостающими элементами из модели '''
 
 		# TODO
+
+	def bind_btn(self, callback: Callable) -> None:
+		pass
+
+	def bind_checkbox(self, callback: Callable) -> None:
+		pass
 
 
 class FDRecycleSelect(_BaseRecycleSelect):
@@ -225,7 +252,7 @@ class FDRecycleMultiSelect(_BaseRecycleSelect):
 		kwargs.update({'group': None})
 		super().__init__(**kwargs)
 
-	def get_value(self) -> List:
+	def get_value(self) -> List[db.Model]:
 		''' Получить записи о выбранных элементах '''
 
 		filtered_elems = filter(lambda elem: elem['active'], self.data)
