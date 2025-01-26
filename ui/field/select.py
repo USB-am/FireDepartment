@@ -1,7 +1,7 @@
 from typing import Callable, List, Union, Type, Set, Dict
 
 from kivy.lang.builder import Builder
-from kivy.properties import BooleanProperty, StringProperty
+from kivy.properties import BooleanProperty, StringProperty, ObjectProperty
 from kivy.uix.recycleview import RecycleView
 from kivy.uix.behaviors import FocusBehavior
 from kivy.uix.recycleboxlayout import RecycleBoxLayout
@@ -151,6 +151,7 @@ class FDSelectElement(RecycleDataViewBehavior, MDBoxLayout):
 	text = StringProperty()
 	group = StringProperty(None)
 	active = BooleanProperty()
+	entry = ObjectProperty()
 
 	def refresh_view_attrs(self, rv, index, data):
 		self.index = index
@@ -179,16 +180,23 @@ class _FDSelectRecycleView(RecycleView):
 					elem['active'] = False
 		self.data[index]['active'] = state
 
+	def select_by_entry(self, entry_id: int) -> None:
+		''' Выбрать элемент '''
+
+		if entry_id is None:
+			return
+
+		for element in self.data:
+			if element['entry'].id == entry_id:
+				break
+
+		elem_index = self.data.index(element)
+		self.data[elem_index]['active'] = True
+
 
 class _BaseRecycleSelect(MDBoxLayout):
 	''' Оптимизированный FDSelect '''
 
-	# def __init__(self, data: List[Dict], **options):
-	# def __init__(self, **options):
-	# 	super().__init__(**options)
-	# 	self.ids.recycle_view.data = data
-
-	# 	self.bind_btn(lambda *_: print(self.get_value()))
 	def __init__(self, title: str, dialog_content: MDBoxLayout, model: Type[db.Model], group: str):
 		self.title = title
 		self.dialog_content = dialog_content
@@ -204,7 +212,8 @@ class _BaseRecycleSelect(MDBoxLayout):
 
 		data = [{'text': entry.title,
 		         'active': False,
-		         'group': self.group} \
+		         'group': self.group,
+		         'entry': entry} \
 			for entry in self.model.query.all()
 		]
 
@@ -220,7 +229,9 @@ class _BaseRecycleSelect(MDBoxLayout):
 		# TODO
 
 	def bind_btn(self, callback: Callable) -> None:
-		pass
+		''' Привязать событие нажатия кнопки на верхней панели '''
+
+		self.ids.add_btn.bind(on_release=lambda *_: callback())
 
 	def bind_checkbox(self, callback: Callable) -> None:
 		pass
@@ -236,13 +247,21 @@ class FDRecycleSelect(_BaseRecycleSelect):
 	group: str - группа объектов. Если None, доступен выбор множества элементов.
 	'''
 
-	def get_value(self) -> int:
+	def get_value(self) -> Union[int, None]:
 		''' Получить id выбранного элемента '''
 
 		try:
-			return next(filter(lambda elem: elem['active'], self.data))
+			selected_elem = next(filter(lambda elem: elem['active'], self.data))
+			if selected_elem:
+				entry = selected_elem.get('entry')
+				if entry:
+					return entry.id
 		except StopIteration:
 			return None
+
+	def set_value(self, entry_id: int) -> None:
+		''' Выбрать элемент '''
+		self.ids.recycle_view.select_by_entry(entry_id)
 
 
 class FDRecycleMultiSelect(_BaseRecycleSelect):
@@ -257,3 +276,9 @@ class FDRecycleMultiSelect(_BaseRecycleSelect):
 
 		filtered_elems = filter(lambda elem: elem['active'], self.data)
 		return list(map(lambda elem: elem['text'], filtered_elems))
+
+	def set_value(self, entries: List[db.Model]) -> None:
+		''' Выбрать элементы '''
+
+		for entry in entries:
+			self.ids.recycle_view.select_by_entry(entry.id)
