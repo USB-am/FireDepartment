@@ -13,7 +13,7 @@ from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype, Short
 from data_base.manager import write_entry, get_by_id
 from ui.field.input import FDInput, FDMultilineInput, FDNumberInput, \
 	FDPhoneInput
-from ui.field.select import FDSelect, FDMultiSelect, FDRecycleSelect, FDRecycleMultiSelect
+from ui.field.select import FDMultiSelect, FDRecycleSelect, FDRecycleMultiSelect
 from ui.field.switch import FDSwitch, FDDoubleSwitch
 from ui.field.date import FDDate, FDDateTime
 from ui.field.calendar import FDCalendar
