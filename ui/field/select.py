@@ -159,9 +159,9 @@ class FDSelectElement(RecycleDataViewBehavior, MDBoxLayout):
 
 	def store_checkbox_state(self):
 		rv = self.parent.parent
-		rv.update_checkbox_state(index=self.index,
-		                         state=self.active,
-		                         group=self.group)
+		rv.select_pressed_checkbox(index=self.index,
+		                           state=self.active,
+		                           group=self.group)
 
 
 class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior, RecycleBoxLayout):
@@ -171,6 +171,11 @@ class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior, Recycle
 class _FDSelectRecycleView(RecycleView):
 	''' Вьюха списка элементов '''
 
+	def __init__(self, callbacks: List[Callable]=[], **options):
+		super().__init__(**options)
+
+		self.callbacks = callbacks
+
 	def update_checkbox_state(self, index: int, state: bool, group: str) -> None:
 		''' Обновить состояния чекбоксов '''
 
@@ -179,6 +184,16 @@ class _FDSelectRecycleView(RecycleView):
 				if elem['active']:
 					elem['active'] = False
 		self.data[index]['active'] = state
+
+	def run_callbacks(self) -> None:
+		''' Запустить связанные методы '''
+		for callback in self.callbacks:
+			callback()
+
+	def select_pressed_checkbox(self, index: int, state: bool, group: str) -> None:
+		''' Изменить состояние выбранного чекбокса '''
+		self.update_checkbox_state(index, state, group)
+		self.run_callbacks()
 
 	def select_by_entry(self, entry_id: int) -> None:
 		''' Выбрать элемент '''
@@ -205,7 +220,7 @@ class _BaseRecycleSelect(MDBoxLayout):
 
 		super().__init__()
 
-		self.ids.recycle_view.data = self._init_data()
+		self.fill_elements()
 
 	def _init_data(self) -> List[Dict]:
 		''' Инициализация информации для отображения '''
@@ -214,7 +229,7 @@ class _BaseRecycleSelect(MDBoxLayout):
 		         'active': False,
 		         'group': self.group,
 		         'entry': entry} \
-			for entry in self.model.query.all()
+			for entry in self.model.query.order_by(self.model.title)
 		]
 
 		return data
@@ -226,7 +241,8 @@ class _BaseRecycleSelect(MDBoxLayout):
 	def fill_elements(self) -> None:
 		''' Заполняет список недостающими элементами из модели '''
 
-		# TODO
+		new_data = self._init_data()
+		self.ids.recycle_view.data = new_data
 
 	def bind_btn(self, callback: Callable) -> None:
 		''' Привязать событие нажатия кнопки на верхней панели '''
@@ -234,7 +250,7 @@ class _BaseRecycleSelect(MDBoxLayout):
 		self.ids.add_btn.bind(on_release=lambda *_: callback())
 
 	def bind_checkbox(self, callback: Callable) -> None:
-		pass
+		self.ids.recycle_view.callbacks.append(callback)
 
 
 class FDRecycleSelect(_BaseRecycleSelect):
