@@ -8,6 +8,8 @@ from kivy.uix.recycleboxlayout import RecycleBoxLayout
 from kivy.uix.recycleview.views import RecycleDataViewBehavior
 from kivy.uix.recycleview.layout import LayoutSelectionBehavior
 from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.button import MDRaisedButton
 
 from data_base import db
 from config import SELECT_FIELD
@@ -152,6 +154,7 @@ class FDSelectElement(RecycleDataViewBehavior, MDBoxLayout):
 	group = StringProperty(None)
 	active = BooleanProperty()
 	entry = ObjectProperty()
+	dialog_content = ObjectProperty()
 
 	def refresh_view_attrs(self, rv, index, data):
 		self.index = index
@@ -162,6 +165,18 @@ class FDSelectElement(RecycleDataViewBehavior, MDBoxLayout):
 		rv.select_pressed_checkbox(index=self.index,
 		                           state=self.active,
 		                           group=self.group)
+
+	def open_dialog(self):
+		ok_btn = MDRaisedButton(text='Ок')
+		dialog = MDDialog(
+			title=f'Информация',
+			type='custom',
+			content_cls=self.dialog_content(self.entry),
+			buttons=[ok_btn]
+		)
+		ok_btn.bind(on_release=lambda *_: dialog.dismiss())
+
+		dialog.open()
 
 
 class SelectableRecycleBoxLayout(FocusBehavior, LayoutSelectionBehavior, RecycleBoxLayout):
@@ -228,7 +243,8 @@ class _BaseRecycleSelect(MDBoxLayout):
 		data = [{'text': entry.title,
 		         'active': False,
 		         'group': self.group,
-		         'entry': entry} \
+		         'entry': entry,
+		         'dialog_content': self.dialog_content} \
 			for entry in self.model.query.order_by(self.model.title)
 		]
 
