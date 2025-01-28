@@ -60,7 +60,10 @@ class _ListElementContent(MDBoxLayout):
 		self.shorts_icon.value = str(len(self.emergency.shorts))
 		self.is_urgent_icon.icon = ('', 'truck-fast')[self.emergency.urgent]
 
-		self.ids.description_lbl.text = self.emergency.description
+		if self.emergency.description is not None:
+			self.ids.description_lbl.text = self.emergency.description
+		else:
+			self.ids.description_lbl.text = ''
 
 
 class MainScreenListElement(MDExpansionPanel):
