@@ -4,7 +4,7 @@ from datetime import datetime, date
 from kivymd.uix.boxlayout import MDBoxLayout
 
 from tests import AppTest
-from data_base import Worktype
+from data_base import Worktype, Human
 from ui.field import calendar as Calendar
 from ui.field.date import FDDate
 from ui.field.select import FDSelect
@@ -17,6 +17,18 @@ class TestFDCalendar(unittest.TestCase):
 	def setUpClass(cls):
 		cls.NOW_DATE = datetime(2024, 12, 10)
 		cls.app = AppTest()
+
+		cls.human = Human(
+			title='TestHuman',
+			is_firefigher=True,
+			work_day=date(2024, 12, 10),
+			worktype=Worktype(
+				title='1/3',
+				start_work_day=datetime(2024, 12, 10, 9),
+				finish_work_day=datetime(2024, 12, 11, 9),
+				work_day_range=1,
+				week_day_range=3)
+			)
 
 		cls.calendar = Calendar.FDCalendar()
 		cls.calendar._now_date = cls.NOW_DATE
@@ -68,6 +80,16 @@ class TestFDCalendar(unittest.TestCase):
 			test_date = date(year=2024, month=12, day=day)
 			result = Calendar.is_work_day(test_date, start_date.date(), wt)
 			self.assertEqual(result, bool(day%2))
+
+	def test_is_working(self):
+		func_output = Calendar.is_working(datetime(2024, 12, 10, 1), self.human)
+		self.assertEqual(func_output, False)
+
+		func_output = Calendar.is_working(datetime(2024, 12, 10, 10), self.human)
+		self.assertEqual(func_output, True)
+
+		func_output = Calendar.is_working(datetime(2024, 12, 11, 1), self.human)
+		self.assertEqual(func_output, True)
 
 
 if __name__ == '__main__':
