@@ -74,11 +74,10 @@ def is_working(now_datetime: datetime, human: Human) -> bool:
 	human: Human - человек, который будет проверяться.
 	'''
 
-	if human.is_vacation(now_datetime):
+	if human.is_vacation(now_datetime.date()):
 		return False
 
-	# worktype = get_by_id(Worktype, human.worktype)
-	worktype = human.worktype
+	worktype = get_by_id(Worktype, human.worktype)
 	work_day = human.work_day
 	day = now_datetime.date()
 
@@ -184,7 +183,11 @@ class FDCalendar(MDBoxLayout):
 			s_vac = date(1, 1, 1)
 			f_vac = date(1, 1, 1)
 		else:
-			s_vac, f_vac, *_ = vacation
+			if None in vacation:
+				s_vac = date(1, 1, 1)
+				f_vac = date(1, 1, 1)
+			else:
+				s_vac, f_vac, *_ = vacation
 		self._work_days_params = {
 			'work_day': work_day,
 			'worktype': worktype,
