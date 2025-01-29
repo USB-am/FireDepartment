@@ -74,21 +74,35 @@ def is_working(now_datetime: datetime, human: Human) -> bool:
 	human: Human - человек, который будет проверяться.
 	'''
 
-	if human.is_vacation:
+	if human.is_vacation(now_datetime):
 		return False
 
-	worktype = get_by_id(Worktype, human.worktype)
+	# worktype = get_by_id(Worktype, human.worktype)
+	worktype = human.worktype
 	work_day = human.work_day
 	day = now_datetime.date()
 
-	if not is_work_day(day, work_day, worktype):
-		return False
+	work_week_length = worktype.work_day_range + worktype.week_day_range
+	work_length = worktype.finish_work_day - worktype.start_work_day
+
+	start_work_day_bias = (day - work_day).days
+	start_work_week = work_day + timedelta(
+		days=start_work_day_bias - (start_work_day_bias % work_week_length)
+	)
+	finish_work_week = start_work_week + timedelta(days=worktype.work_day_range-1)
 
 	work_duration = worktype.finish_work_day - worktype.start_work_day
-	start_work = datetime.combine(day, worktype.start_work_day.time())
-	finish_work = start_work + work_duration
+	for day_bias in range(work_week_length):
+		start_work = datetime.combine(
+				start_work_week,
+				worktype.start_work_day.time()
+			) + timedelta(days=day_bias)
+		finish_work = (start_work + work_duration) + timedelta(days=day_bias)
 
-	return start_work <= now_datetime < finish_work
+		if start_work <= now_datetime < finish_work:
+			return True
+
+	return False
 
 
 class _CalendarGridDay(MDLabel):
