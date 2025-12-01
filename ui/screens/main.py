@@ -4,7 +4,7 @@ from sqlalchemy import or_
 
 from . import BaseScrollScreen
 from app.path_manager import PathManager
-from data_base import db, Tag, Emergency
+from data_base.model import db, Tag, Emergency
 from ui.layout.main_screen import MainScreenListElement
 from ui.widgets.search import FDSearch
 

@@ -10,7 +10,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRaisedButton, MDFlatButton
 
 from . import BaseScreen
-from data_base import Human, Short, Emergency, Calls, Rank, Worktype
+from data_base.model import Human, Short, Emergency, Calls, Rank, Worktype
 from data_base.manager import write_entry, get_by_id
 from exceptions.data_base import DBAddError, DBCommitError
 from app.path_manager import PathManager

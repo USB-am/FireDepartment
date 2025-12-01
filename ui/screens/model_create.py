@@ -9,7 +9,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 
 from . import BaseScrollScreen
 from app.path_manager import PathManager
-from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype, Short
+from data_base.model import db, Tag, Rank, Position, Human, Emergency, Worktype, Short
 from data_base.manager import write_entry, get_by_id
 from ui.field.input import FDInput, FDMultilineInput, FDNumberInput, \
 	FDPhoneInput

@@ -8,7 +8,7 @@ from kivymd.uix.button import MDRaisedButton
 
 from . import BaseScrollScreen
 from app.path_manager import PathManager
-from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype, Short
+from data_base.model import db, Tag, Rank, Position, Human, Emergency, Worktype, Short
 from ui.widgets.search import FDSearch
 from ui.layout.model_list_element import ModelListElement
 from ui.layout.dialogs import TagDialogContent, RankDialogContent, \
