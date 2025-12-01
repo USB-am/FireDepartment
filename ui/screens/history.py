@@ -5,7 +5,7 @@ from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDRaisedButton
 
 from . import BaseScrollScreen
-from data_base import Calls, Emergency
+from data_base.model import Calls, Emergency
 from app.path_manager import PathManager
 from ui.layout.label_layout import FDLabelLayout
 from ui.layout.history import FDHistoryElement

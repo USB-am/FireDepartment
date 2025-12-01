@@ -3,7 +3,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDRaisedButton
 
-from data_base import db
+from data_base.init__ import db
 from config import SELECT_LAYOUTS
 
 

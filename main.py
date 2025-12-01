@@ -1,20 +1,35 @@
 # -*- coding: utf-8 -*-
 
-from kivy.config import Config
-Config.set('graphics', 'width', '360')
-Config.set('graphics', 'height', '650')
+import sys
+
+import uvicorn
+from annotated_types import Annotated
+from fastapi import FastAPI, HTTPException, Request, Depends
+from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy.future import select
+from starlette.authentication import requires
+
+from data_base.session import get_session, create_db_and_tables
 
 
-from data_base import db
-from app import Application
+TSession = Annotated[AsyncSession, Depends(get_session)]
 
 
-def main() -> None:
-	db.create_all()
+app = FastAPI()
 
-	app = Application()
-	app.run()
+
+@app.on_event('startup')
+async def on_startup():
+    await create_db_and_tables()
+
+
+@app.get('/', name='home')
+async def get_root(request: Request):
+    return {'status': 200}
 
 
 if __name__ == '__main__':
-	main()
+    try:
+        uvicorn.run('main:app', reload=True)
+    except KeyboardInterrupt:
+        sys.exit()

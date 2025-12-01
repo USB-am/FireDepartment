@@ -7,7 +7,7 @@ from kivymd.uix.button import MDRaisedButton
 from . import model_create
 from app.path_manager import PathManager
 from ui.field.button import FDRectangleButton
-from data_base import db, Tag, Rank, Position, Human, Emergency, Worktype, Short
+from data_base.model import db, Tag, Rank, Position, Human, Emergency, Worktype, Short
 from data_base.manager import update_entry, delete_entry, get_by_id
 from validators.create_model_validators import EmptyValidator, UniqueExcludingValidator, \
 	ZeroValidator

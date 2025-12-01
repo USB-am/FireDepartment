@@ -1,7 +1,7 @@
 from typing import Any, Optional
 from dataclasses import dataclass
 
-from data_base import db
+from data_base.model import db
 
 
 def _check_unique_column(model: db.Model, column: str, value: Any) -> bool:
