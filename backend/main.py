@@ -35,6 +35,13 @@ async def get_root(request: Request):
     return {'status': 200}
 
 
+@app.post('/login', name='login')
+async def post_login_user(request: Request):
+    print(f'{request.cookies=}')
+    print(f'{request.headers=}')
+    return {'status': 200}
+
+
 @app.post('/create-user', response_model=dict)
 async def create_user(request: CreateUserRequest, session: TSession) -> Dict:
     ''' Создание нового пользователя '''
@@ -161,6 +168,6 @@ async def log_requests(request: Request, call_next):
 
 if __name__ == '__main__':
     try:
-        uvicorn.run('main:app', reload=False)
+        uvicorn.run('main:app', reload=True)
     except KeyboardInterrupt:
         sys.exit()
