@@ -3,7 +3,7 @@ from typing import Any, List
 from kivymd.app import MDApp
 from kivymd.uix.label import MDLabel
 
-from . import BaseScrollScreen
+from .base import BaseScrollScreen
 from app.path_manager import PathManager
 from ui.field.button import FDButtonDropdown
 from ui.field.switch import FDDoubleSwitch

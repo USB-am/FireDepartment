@@ -4,7 +4,7 @@ from kivy.uix.widget import Widget
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDRaisedButton
 
-from . import model_create
+from .base import model_create
 from app.path_manager import PathManager
 from ui.field.button import FDRectangleButton
 from data_base.model import db, Tag, Rank, Position, Human, Emergency, Worktype, Short

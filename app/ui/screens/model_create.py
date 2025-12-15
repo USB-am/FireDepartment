@@ -7,7 +7,7 @@ from kivymd.uix.button import MDRaisedButton
 from kivymd.uix.label import MDLabel
 from kivymd.uix.boxlayout import MDBoxLayout
 
-from . import BaseScrollScreen
+from .base import BaseScrollScreen
 from app.path_manager import PathManager
 from data_base.model import db, Tag, Rank, Position, Human, Emergency, Worktype, Short
 from data_base.manager import write_entry, get_by_id
