@@ -137,10 +137,5 @@ class Application(MDApp):
         return self.ui
 
 
-def main() -> None:
-    app = Application()
-    app.run()
-
-
 if __name__ == '__main__':
-    main()
+    Application().run()
