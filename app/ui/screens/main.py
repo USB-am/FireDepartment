@@ -1,159 +1,128 @@
 from typing import List
 
-from sqlalchemy import or_
-
-from . import BaseScrollScreen
-from app.path_manager import PathManager
-from data_base.model import db, Tag, Emergency
-from ui.layout.main_screen import MainScreenListElement
+from .base import BaseScrollScreen
 from ui.widgets.search import FDSearch
 
 
-def filter_list_elements(text: str) -> List[Emergency]:
-	'''
-	Отфильтровать элементы списка по названию из text.
-
-	~params:
-	text: str - текст поиска.
-	'''
-
-	like_text = f'%{text}%'
-
-	# Filter by Emergency model
-	filtered_emergencies_by_emergency = Emergency.query.filter(
-		or_(
-			Emergency.title.like(like_text),
-			Emergency.description.like(like_text),
-		)
-	).order_by(Emergency.title).all()
-
-	# Filter by Tag model
-	selected_tags = Tag.query.filter(Tag.title.like(like_text)).all()
-	emergencies_id_by_tags = []
-	for tag in selected_tags:
-		for emergency in tag.emergencys:
-			emergencies_id_by_tags.append(emergency.id)
-	filtered_emergencies_by_tag = Emergency.query.filter(Emergency.id.in_(emergencies_id_by_tags)).all()
-
-	return filtered_emergencies_by_emergency + filtered_emergencies_by_tag 
-
-
 class MainScreen(BaseScrollScreen):
-	''' Стартовая страница '''
+    ''' Стартовая страница '''
 
-	name = 'main'
-	toolbar_title = 'Главная'
+    name = 'main'
+    toolbar_title = 'Главная'
 
-	def __init__(self, path_manager: PathManager, **options):
-		super().__init__(path_manager)
+    def __init__(self, path_manager: 'PathManager', **options):
+        super().__init__(path_manager)
 
-		self.ids.toolbar.add_left_button(
-			icon='menu',
-			callback=self.open_menu
-		)
-		self.ids.toolbar.add_right_button(
-			icon='fire-truck',
-			callback=lambda *_: self._path_manager.forward('calls')
-		)
+        self.ids.toolbar.add_left_button(
+            icon='menu',
+            callback=self.open_menu
+        )
+        self.ids.toolbar.add_right_button(
+            icon='fire-truck',
+            callback=lambda *_: self._path_manager.forward('calls')
+        )
 
-		search = FDSearch(hint_text='Поиск...')
-		search.on_press_enter(
-			callback=lambda text: self.__hide_elements(
-				filter_list_elements(text)
-			)
-		)
-		self.ids.content_container.add_widget(search)
-		self.ids.content_container.children = self.ids.content_container.children[::-1]
+        search = FDSearch(hint_text='Поиск...')
+        # search.on_press_enter(
+        #   callback=lambda text: self.__hide_elements(
+        #       filter_list_elements(text)
+        #   )
+        # )
+        self.ids.content_container.add_widget(search)
+        self.ids.content_container.children = self.ids.content_container.children[::-1]
 
-		self.elements: List[MainScreenListElement] = []
-		self.fill_elements()
-		self.bind(on_pre_enter=lambda *_: self.__update_elements())
-		self.bind(on_pre_enter=lambda *_: self.__check_new_elements())
+        self.elements: List['MainScreenListElement'] = []
+        self.fill_elements()
+        # self.bind(on_pre_enter=lambda *_: self.__update_elements())
+        # self.bind(on_pre_enter=lambda *_: self.__check_new_elements())
 
-	def fill_elements(self) -> None:
-		''' Заполнить контент Вызовами '''
+    def fill_elements(self) -> None:
+        pass
 
-		for emergency in Emergency.query.order_by(Emergency.title).all():
-			list_elem = MainScreenListElement(emergency)
-			list_elem.bind_open_button(lambda e=emergency: self.open_call(e))
-			self.elements.append(list_elem)
-			self.add_content(list_elem)
+    # def fill_elements(self) -> None:
+    #   ''' Заполнить контент Вызовами '''
 
-	def __update_elements(self) -> None:
-		''' Обновить отображенные элементы '''
+    #   for emergency in Emergency.query.order_by(Emergency.title).all():
+    #       list_elem = MainScreenListElement(emergency)
+    #       list_elem.bind_open_button(lambda e=emergency: self.open_call(e))
+    #       self.elements.append(list_elem)
+    #       self.add_content(list_elem)
 
-		for element in self.elements:
-			element.update()
+    def __update_elements(self) -> None:
+        ''' Обновить отображенные элементы '''
 
-	def __hide_elements(self, filtered_elements: List[Emergency]) -> None:
-		'''
-		Скрыть элементы списка.
+        for element in self.elements:
+            element.update()
 
-		~params:
-		elements: List[Emergency] - записи БД, элементы которых необходимо скрыть.
-		'''
+    def __hide_elements(self, filtered_elements: List['Emergency']) -> None:
+        '''
+        Скрыть элементы списка.
 
-		layout: List[MainScreenListElement] = self.ids.content
-		layout.clear_widgets()
+        ~params:
+        elements: List[Emergency] - записи БД, элементы которых необходимо скрыть.
+        '''
 
-		for element in self.elements:
-			if element.emergency in filtered_elements:
-				self.add_content(element)
+        layout: List['MainScreenListElement'] = self.ids.content
+        layout.clear_widgets()
 
-	def __check_new_elements(self) -> None:
-		''' Проверка на новые элементы '''
+        for element in self.elements:
+            if element.emergency in filtered_elements:
+                self.add_content(element)
 
-		all_ids = set(entry[0] for entry in \
-			Emergency.query.with_entities(Emergency.id).all())
-		old_ids = set(e.emergency.id for e in self.elements)
+    def __check_new_elements(self) -> None:
+        ''' Проверка на новые элементы '''
 
-		emergencies_for_insert = all_ids - old_ids
-		emergencies_for_delete = old_ids - all_ids
-		self.__delete_elements(emergencies_for_delete)
-		self.__insert_elements(emergencies_for_insert)
+        all_ids = set(entry[0] for entry in \
+            Emergency.query.with_entities(Emergency.id).all())
+        old_ids = set(e.emergency.id for e in self.elements)
 
-	def __delete_elements(self, emergencies_for_delete: set) -> None:
-		'''
-		Удалить элементы списка.
+        emergencies_for_insert = all_ids - old_ids
+        emergencies_for_delete = old_ids - all_ids
+        self.__delete_elements(emergencies_for_delete)
+        self.__insert_elements(emergencies_for_insert)
 
-		~params:
-		emergencies_for_insert: set - множество элементов для удаления.
-		'''
+    def __delete_elements(self, emergencies_for_delete: set) -> None:
+        '''
+        Удалить элементы списка.
 
-		for element in self.elements:
-			if element.emergency.id in emergencies_for_delete:
-				self.ids.content.remove_widget(element)
-				del element
+        ~params:
+        emergencies_for_insert: set - множество элементов для удаления.
+        '''
 
-	def __insert_elements(self, emergencies_for_insert: set) -> None:
-		'''
-		Вставить элементы списка.
+        for element in self.elements:
+            if element.emergency.id in emergencies_for_delete:
+                self.ids.content.remove_widget(element)
+                del element
 
-		~params:
-		emergencies_for_insert: set - множество элементов для вставки.
-		'''
+    def __insert_elements(self, emergencies_for_insert: set) -> None:
+        '''
+        Вставить элементы списка.
 
-		for emergency_id in emergencies_for_insert:
-			emergency = Emergency.query.get(emergency_id)
-			list_elem = MainScreenListElement(emergency)
-			list_elem.bind_open_button(lambda e=emergency: self.open_call(e))
-			self.elements.append(list_elem)
-			self.add_content(list_elem)
+        ~params:
+        emergencies_for_insert: set - множество элементов для вставки.
+        '''
 
-		childs = self.ids.content.children
-		self.ids.content.children = sorted(
-			self.ids.content.children,
-			key=lambda child: child.emergency.title,
-			reverse=True
-		)
+        for emergency_id in emergencies_for_insert:
+            emergency = Emergency.query.get(emergency_id)
+            list_elem = MainScreenListElement(emergency)
+            list_elem.bind_open_button(lambda e=emergency: self.open_call(e))
+            self.elements.append(list_elem)
+            self.add_content(list_elem)
 
-	def open_call(self, emergency: Emergency) -> None:
-		'''
-		Переходит на CallsScreen и добавляет вкладку на основании emergency.
+        childs = self.ids.content.children
+        self.ids.content.children = sorted(
+            self.ids.content.children,
+            key=lambda child: child.emergency.title,
+            reverse=True
+        )
 
-		~params:
-		emergency: Emergency - запись из БД о выезде.
-		'''
+    def open_call(self, emergency: 'Emergency') -> None:
+        '''
+        Переходит на CallsScreen и добавляет вкладку на основании emergency.
 
-		calls_screen = self._path_manager.forward('calls')
-		calls_screen.add_notebook_tab(emergency)
+        ~params:
+        emergency: Emergency - запись из БД о выезде.
+        '''
+
+        calls_screen = self._path_manager.forward('calls')
+        calls_screen.add_notebook_tab(emergency)

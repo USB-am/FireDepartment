@@ -6,7 +6,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDRaisedButton
 
-from . import BaseScrollScreen
+from .base import BaseScrollScreen
 from app.path_manager import PathManager
 from data_base.model import db, Tag, Rank, Position, Human, Emergency, Worktype, Short
 from ui.widgets.search import FDSearch
