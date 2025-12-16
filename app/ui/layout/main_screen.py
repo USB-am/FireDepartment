@@ -5,8 +5,8 @@ from kivy.properties import StringProperty
 from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelOneLine
 from kivymd.uix.boxlayout import MDBoxLayout
 
-from config import MAIN_SCREEN_LAYOUTS
-from data_base import Tag, Short, Human, Emergency
+from config import MAIN_SCREEN_LAYOUTS, ICONS
+# from data_base import Tag, Short, Human, Emergency
 
 
 Builder.load_file(MAIN_SCREEN_LAYOUTS)
@@ -28,23 +28,23 @@ class _ListElementContent(MDBoxLayout):
 	**options - дополнительные аргументы для родительского класса.
 	'''
 
-	def __init__(self, emergency: Emergency, **options):
+	def __init__(self, emergency: 'Emergency', **options): # type: ignore
 		self.emergency = emergency
 
 		super().__init__(**options)
 
 		self.tags_icon = _ListElementIcon(
-			icon=Tag.icon,
+			icon=ICONS['Tag'],
 			value=str(len(self.emergency.tags)))
 		self.ids.info_icons.add_widget(self.tags_icon)
 
 		self.humans_icon = _ListElementIcon(
-			icon=Human.icon,
+			icon=ICONS['Human'],
 			value=str(len(self.emergency.humans)))
 		self.ids.info_icons.add_widget(self.humans_icon)
 
 		self.shorts_icon = _ListElementIcon(
-			icon=Short.icon,
+			icon=ICONS['Short'],
 			value=str(len(self.emergency.shorts)))
 		self.ids.info_icons.add_widget(self.shorts_icon)
 
@@ -75,12 +75,12 @@ class MainScreenListElement(MDExpansionPanel):
 	**options - дополнительные аргументы для родительского класса.
 	'''
 
-	def __init__(self, emergency: Emergency, **options):
+	def __init__(self, emergency: 'Emergency', **options): # type: ignore
 		self.emergency = emergency
 		content = _ListElementContent(emergency)
 
 		options.update({
-			'icon': Emergency.icon,
+			'icon': ICONS['Emergency'],
 			'content': content,
 			'panel_cls': MDExpansionPanelOneLine(
 				text=emergency.title
