@@ -4,6 +4,7 @@ from typing import Dict, Optional
 import requests
 from requests.exceptions import RequestException
 
+from config import PATH_TO_SERVER
 from exceptions import NoSecretKeyError
 
 
@@ -48,6 +49,7 @@ def send_get(url: str, headers: Dict=None) -> requests.Response:
     '''
 
     headers = add_secret_key_to_headers(headers)
+    url = os.path.join(PATH_TO_SERVER, url)
     res = requests.get(url, headers=headers)
     if res.status_code != 200:
         raise RequestException
@@ -64,6 +66,7 @@ def send_post(url: str, headers: Dict=None) -> None:
     '''
 
     headers = add_secret_key_to_headers(headers)
+    url = os.path.join(PATH_TO_SERVER, url)
     res = requests.post(url, headers=headers)
     if res.status_code != 200:
         raise RequestException

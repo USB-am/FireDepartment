@@ -2,6 +2,23 @@ import os
 import configparser
 
 
+PATH_TO_SERVER = 'http://localhost:8000/'
+
+
+ICONS = {
+	'Tag': 'pound',
+	'Short': 'text-short',
+	'Rank': 'chevron-triple-up',
+	'Position': 'crosshairs-gps',
+	'Human': 'account-group',
+	'Emergency': 'fire-alert',
+	'ColorTheme': 'palette',
+	'Worktype': 'timer-sand',
+	'UserSettings': 'account-wrench',
+	'Calls': 'firebase',
+}
+
+
 BASE_DIR = os.getcwd()
 
 

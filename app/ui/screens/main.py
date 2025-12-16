@@ -2,6 +2,8 @@ from typing import List
 
 from .base import BaseScrollScreen
 from ui.widgets.search import FDSearch
+from service.server import send_get
+from ui.layout.main_screen import MainScreenListElement
 
 
 class MainScreen(BaseScrollScreen):
@@ -37,16 +39,14 @@ class MainScreen(BaseScrollScreen):
         # self.bind(on_pre_enter=lambda *_: self.__check_new_elements())
 
     def fill_elements(self) -> None:
-        pass
+        ''' Заполнить контент Вызовами '''
+        emergencies = send_get('/rotate-key', headers={'model': 'Emergency'}).json()
 
-    # def fill_elements(self) -> None:
-    #   ''' Заполнить контент Вызовами '''
-
-    #   for emergency in Emergency.query.order_by(Emergency.title).all():
-    #       list_elem = MainScreenListElement(emergency)
-    #       list_elem.bind_open_button(lambda e=emergency: self.open_call(e))
-    #       self.elements.append(list_elem)
-    #       self.add_content(list_elem)
+        for emergency in emergencies:
+            list_elem = MainScreenListElement(emergency)
+            list_elem.bind_open_button(lambda e=emergency: self.open_call(e))
+            self.elements.append(list_elem)
+            self.add_content(list_elem)
 
     def __update_elements(self) -> None:
         ''' Обновить отображенные элементы '''
@@ -54,7 +54,7 @@ class MainScreen(BaseScrollScreen):
         for element in self.elements:
             element.update()
 
-    def __hide_elements(self, filtered_elements: List['Emergency']) -> None:
+    def __hide_elements(self, filtered_elements: List['Emergency']) -> None: # type: ignore
         '''
         Скрыть элементы списка.
 
@@ -116,7 +116,7 @@ class MainScreen(BaseScrollScreen):
             reverse=True
         )
 
-    def open_call(self, emergency: 'Emergency') -> None:
+    def open_call(self, emergency: 'Emergency') -> None: # type: ignore
         '''
         Переходит на CallsScreen и добавляет вкладку на основании emergency.
 

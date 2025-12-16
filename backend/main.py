@@ -13,6 +13,7 @@ from starlette.authentication import requires
 
 from data_base.session import get_session, create_db_and_tables
 from data_base.schema import CreateUserRequest, InfoResponse
+from data_base import model as DBModel
 from data_base.model import User, SecretKeyUser
 from auth import authenticate_user, generate_secret_key
 
@@ -150,14 +151,32 @@ async def rotate_secret_key(session: TSession, user: User = Depends(authenticate
     }
 
 
-@app.middleware("http")
+@app.get('/list-entries', response_model=list)
+async def get_all_entries(request: Request, session: TSession):
+    ''' Список записей из таблицы (ВАЖНО! В headers должен быть
+    передан аргумент model с названием таблицы для извлечения) '''
+
+    model_name = request.headers.get('model')
+    if model_name is None:
+        raise HTTPException(status_code=400, detail='The \'model\' argument was not passed to headers')
+    if not hasattr(DBModel, model_name):
+        raise HTTPException(status_code=400, detail=f'There is no such thing as a \'{model_name}\' model')
+    model = getattr(DBModel, model_name)
+    limit = request.headers.get('limit', 20)
+    offset = request.headers.get('offset', 0)
+    result = await session.scalars(select(model)\
+        .order_by().offset(offset).limit(limit))
+    return result.all()
+
+
+@app.middleware('http')
 async def log_requests(request: Request, call_next):
     start_time = datetime.now()
 
-    if request.url.path != "/":
-        print(f"\n[{start_time}] {request.method} {request.url.path}")
-        if "SECRET_KEY" in request.headers:
-            print(f"  Auth: Key present (hidden for security)")
+    if request.url.path != '/':
+        print(f'\n[{start_time}] {request.method} {request.url.path}')
+        if 'SECRET_KEY' in request.headers:
+            print(f'  Auth: Key present (hidden for security)')
 
     response = await call_next(request)
 
