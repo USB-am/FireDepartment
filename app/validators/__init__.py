@@ -1,7 +1,7 @@
 from typing import Any
 from dataclasses import dataclass
 
-from data_base.model import db
+# from data_base.model import db
 
 
 @dataclass
@@ -14,12 +14,10 @@ class ValidationResult:
 
 
 class _BaseValidator:
-    def __init__(self, model: db.Model, column: str):
-        self.model = model
-        self.column = column
+    pass
 
 
-def _check_unique_column(model: db.Model, column: str, value: Any) -> bool:
+def _check_unique_column(model: 'db.Model', column: str, value: Any) -> bool:
     '''
     Проверка value на уникальность в колонке.
 
@@ -34,8 +32,8 @@ def _check_unique_column(model: db.Model, column: str, value: Any) -> bool:
     return not bool(entries)
 
 
-def _check_excluding_unique_column(model: db.Model, column: str, value: Any,
-                                     entry: db.Model) -> bool:
+def _check_excluding_unique_column(model: 'db.Model', column: str, value: Any,
+                                   entry: 'db.Model') -> bool:
     '''
     Проверка уникальности нового значения entry.
 
