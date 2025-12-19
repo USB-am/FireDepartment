@@ -4,6 +4,7 @@ from .base import BaseScreen
 from ui.field.input import FDInput, FDNumberInput
 from ui.field.button import FDRectangleButton
 from service.server.auth import register
+from validators import register as RegisterValidator
 
 
 class RegisterScreen(BaseScreen):
@@ -26,22 +27,60 @@ class RegisterScreen(BaseScreen):
         ''' Заполнить контент формой регистрации '''
 
         self._email_field = FDInput(hint_text='E-mail')
+        self._email_field.validators.extend([
+            RegisterValidator.EmptyFieldValidator(
+                self._email_field,
+                message='Поле не может быть пустым'
+            ),
+            RegisterValidator.CorrectedEmailValidator(
+                email_field=self._email_field,
+                message='Email не корректен'
+            ),
+        ])
         self.add_content(self._email_field)
 
         self._username_field = FDInput(hint_text='Имя пользователя')
+        self._username_field.validators.extend([
+            RegisterValidator.EmptyFieldValidator(
+                self._username_field,
+                message='Поле не может быть пустым'
+            ),
+        ])
         self.add_content(self._username_field)
 
         self._password_field = FDInput(hint_text='Пароль')
+        self._password_field.validators.extend([
+            RegisterValidator.EmptyFieldValidator(
+                self._password_field,
+                message='Поле не может быть пустым'
+            ),
+        ])
         self.add_content(self._password_field)
 
         self._password_reentry_field = FDInput(hint_text='Пароль (повтор)')
+        self._password_reentry_field.validators.extend([
+            RegisterValidator.EmptyFieldValidator(
+                self._password_reentry_field,
+                message='Поле не может быть пустым'
+            ),
+            RegisterValidator.FieldEqualsFieldValidator(
+                field_1=self._password_field,
+                field_2=self._password_reentry_field,
+                message='Пароли должны совпадать'),
+        ])
         self.add_content(self._password_reentry_field)
 
-        self._fire_department_number = FDNumberInput(hint_text='Номер пожарной станции')
+        self._fire_department_number = FDNumberInput(hint_text='Номер пожарной части')
+        self._fire_department_number.validators.extend([
+            RegisterValidator.EmptyFieldValidator(
+                self._fire_department_number,
+                message='Поле не может быть пустым'
+            ),
+        ])
         self.add_content(self._fire_department_number)
 
         self._submit = FDRectangleButton(title='Зарегестрироваться')
-        self._submit.bind_btn(callback=validate_data)
+        # self._submit.bind_btn(callback=validate_data)
         self.add_content(self._submit)
 
         self.add_content(MDBoxLayout())
