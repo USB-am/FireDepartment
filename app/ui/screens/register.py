@@ -80,7 +80,7 @@ class RegisterScreen(BaseScreen):
         self.add_content(self._fire_department_number)
 
         self._submit = FDRectangleButton(title='Зарегестрироваться')
-        # self._submit.bind_btn(callback=validate_data)
+        # self._submit.bind_btn(callback=)
         self.add_content(self._submit)
 
         self.add_content(MDBoxLayout())
