@@ -3,6 +3,7 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from .base import BaseScreen
 from ui.field.input import FDInput
 from ui.field.button import FDRectangleButton
+from service.server.auth import auth_user
 
 
 class AuthScreen(BaseScreen):
@@ -29,6 +30,7 @@ class AuthScreen(BaseScreen):
         self.add_content(submit)
 
         register = FDRectangleButton(title='Регистрация')
+        register.bind_btn(callback=lambda: self._path_manager.forward('register'))
         self.add_content(register)
 
         self.add_content(MDBoxLayout())
