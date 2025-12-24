@@ -16,7 +16,7 @@ def register(email: str, username: str, pwd: str, fd_number: int) -> requests.Re
     :param fd_number: номер пожарной станции
     :returns: requests.Response
     '''
-    url = os.path.join(PATH_TO_SERVER, '/create-user')
+    url = os.path.join(PATH_TO_SERVER, 'create-user')
     res = requests.post(url, headers={
     	'email': email,
     	'username': username,
@@ -28,7 +28,7 @@ def register(email: str, username: str, pwd: str, fd_number: int) -> requests.Re
 
 def auth_user(login: str, pwd: str) -> None:
     ''' Авторизация '''
-    url = os.path.join(PATH_TO_SERVER, '/create-user')
+    url = os.path.join(PATH_TO_SERVER, 'create-user')
     res = requests.post(url, headers={
         'username': login,
         'password': pwd
