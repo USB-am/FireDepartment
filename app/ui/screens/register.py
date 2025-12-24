@@ -79,8 +79,27 @@ class RegisterScreen(BaseScreen):
         ])
         self.add_content(self._fire_department_number)
 
-        self._submit = FDRectangleButton(title='Зарегестрироваться')
-        # self._submit.bind_btn(callback=)
-        self.add_content(self._submit)
+        self._submit_btn = FDRectangleButton(title='Зарегестрироваться')
+        self._submit_btn.bind_btn(callback=self.submit)
+        self.add_content(self._submit_btn)
 
         self.add_content(MDBoxLayout())
+
+    def is_valid(self) -> bool:
+        ''' Проверка валидности формы '''
+        form_fields = (self._email_field, self._username_field,
+                       self._password_field, self._password_reentry_field,
+                       self._fire_department_number)
+        return all(map(lambda f: not f.error, form_fields))
+
+    def submit(self) -> None:
+        ''' Проверить и отправить форму на сервер '''
+
+        if not self.is_valid():
+            return
+
+        res = register(email=self._email_field.get_value(),
+                       username=self._username_field.get_value(),
+                       pwd=self._password_field.get_value(),
+                       fd_number=self._fire_department_number.get_value())
+
