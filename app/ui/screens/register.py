@@ -1,3 +1,6 @@
+import json
+
+import requests
 from kivymd.uix.boxlayout import MDBoxLayout
 
 from .base import BaseScreen
@@ -5,6 +8,26 @@ from ui.field.input import FDInput, FDNumberInput
 from ui.field.button import FDRectangleButton
 from service.server.auth import register
 from validators import register as RegisterValidator
+
+
+def send_form(form: BaseScreen) -> requests.Response:
+    ''' Отправить форму на сервер '''
+    res = register(email=form._email_field.get_value(),
+                   username=form._username_field.get_value(),
+                   pwd=form._password_field.get_value(),
+                   fd_number=form._fire_department_number.get_value())
+    return res
+
+
+def save_user_data(register_response: dict) -> None:
+    ''' Сохранить данные пользователя в файл '''
+    user_data = {
+        'user_id': register_response.get('user_id'),
+        'username': register_response.get('username'),
+        'secret_key': register_response.get('secret_key'),
+    }
+    with open('user.json', 'w') as user_file:
+        json.dump(user_data, user_file)
 
 
 class RegisterScreen(BaseScreen):
@@ -98,8 +121,6 @@ class RegisterScreen(BaseScreen):
         if not self.is_valid():
             return
 
-        res = register(email=self._email_field.get_value(),
-                       username=self._username_field.get_value(),
-                       pwd=self._password_field.get_value(),
-                       fd_number=self._fire_department_number.get_value())
+        user_data = send_form(self)
+        save_user_data(user_data)
 
