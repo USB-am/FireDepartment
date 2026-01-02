@@ -1,3 +1,9 @@
+from typing import Dict, Optional
+
+import requests
+from kivy.uix.widget import Widget
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.button import MDFlatButton
 from kivymd.uix.boxlayout import MDBoxLayout
 
 from .base import BaseScreen
@@ -5,6 +11,22 @@ from ui.field.input import FDInput, FDNumberInput
 from ui.field.button import FDRectangleButton
 from service.server.auth import register
 from validators import register as RegisterValidator
+
+
+def send_register_request(form: Dict) -> Optional[requests.Response]:
+    ''' Отправить запрос на регистрацию '''
+    try:
+        response = register(email=form['email'].get_value(),
+                            username=form['username'].get_value(),
+                            pwd=form['password'].get_value(),
+                            fd_number=form['fd_number'].get_value())
+        return response
+    except requests.exceptions.ConnectionError:
+        return None
+
+
+def save_secret_key(secret_key: str) -> None:
+    ''' Сохранить secret_key в файл '''
 
 
 class RegisterScreen(BaseScreen):
@@ -22,6 +44,12 @@ class RegisterScreen(BaseScreen):
         )
 
         self.fill_elements()
+        self._form: Dict[str, Widget] = {
+            'email': self._email_field,
+            'username': self._username_field,
+            'password': self._password_field,
+            'fd_number': self._fire_department_number
+        }
 
     def fill_elements(self) -> None:
         ''' Заполнить контент формой регистрации '''
@@ -92,14 +120,44 @@ class RegisterScreen(BaseScreen):
                        self._fire_department_number)
         return all(map(lambda f: not f.error, form_fields))
 
+    def show_error_mesage(self, msg: str) -> None:
+        '''
+        Отобразить всплывающее окно с ошибкой.
+
+        :param msg: строка, которая будет выведена в сообщении об ошибке
+        :returns None:
+        '''
+        print(msg)
+        dialog_btn = MDFlatButton(text='OK')
+        dialog = MDDialog(
+            text=msg,
+            buttons=[dialog_btn,]
+        )
+        dialog_btn.bind(on_release=lambda e: dialog.dismiss())
+        dialog.open()
+
+    def show_info_message(self, msg: str) -> None:
+        '''
+        Отобразить всплывающее окно с информацией.
+
+        :param msg: строка, которая будет выведена в сообщении
+        :returns None:
+        '''
+
     def submit(self) -> None:
         ''' Проверить и отправить форму на сервер '''
 
         if not self.is_valid():
+            self.show_error_mesage(msg='Для отправки формы необходимо исправить ошибки!')
             return
 
-        res = register(email=self._email_field.get_value(),
-                       username=self._username_field.get_value(),
-                       pwd=self._password_field.get_value(),
-                       fd_number=self._fire_department_number.get_value())
+        res = send_register_request(self._form)
+        if res is None:
+            self.show_error_mesage(msg='Не удалось утановить соединение с сервером!')
+            return
+        if res.status_code != 201:
+            self.show_error_mesage(msg=res.json().get('error', 'В ходе регистрации возникла ошибка!'))
+            return
 
+        secret_key = res.json().get('secret_key')
+        save_secret_key(secret_key)
