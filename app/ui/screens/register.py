@@ -29,6 +29,23 @@ def save_secret_key(secret_key: str) -> None:
     ''' Сохранить secret_key в файл '''
 
 
+def open_dialog(title: str, text: str) -> None:
+    '''
+    Открыть диалоговое окно.
+
+    :param title: заголовок окна
+    :param text: текст с сообщением
+    '''
+    dialog_btn = MDFlatButton(text='OK')
+    dialog = MDDialog(
+        title=title,
+        text=text,
+        buttons=[dialog_btn,]
+    )
+    dialog_btn.bind(on_release=lambda e: dialog.dismiss())
+    dialog.open()
+
+
 class RegisterScreen(BaseScreen):
     ''' Страница регистрации '''
 
@@ -127,14 +144,7 @@ class RegisterScreen(BaseScreen):
         :param msg: строка, которая будет выведена в сообщении об ошибке
         :returns None:
         '''
-        print(msg)
-        dialog_btn = MDFlatButton(text='OK')
-        dialog = MDDialog(
-            text=msg,
-            buttons=[dialog_btn,]
-        )
-        dialog_btn.bind(on_release=lambda e: dialog.dismiss())
-        dialog.open()
+        open_dialog('Ошибка', msg)
 
     def show_info_message(self, msg: str) -> None:
         '''
@@ -143,6 +153,7 @@ class RegisterScreen(BaseScreen):
         :param msg: строка, которая будет выведена в сообщении
         :returns None:
         '''
+        open_dialog('Информация', msg)
 
     def submit(self) -> None:
         ''' Проверить и отправить форму на сервер '''
