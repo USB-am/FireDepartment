@@ -46,6 +46,8 @@ async def post_login_user(request: Request):
 @app.post('/create-user', response_model=dict)
 async def create_user(request: CreateUserRequest, session: TSession) -> Dict:
     ''' Создание нового пользователя '''
+    x = request
+    print(dir(x), x, type(x), sep='\n', end='\n'*3)
     stmt = select(User).filter_by(username=request.username)
     result = await session.execute(stmt)
     user = result.scalars().first()
@@ -74,6 +76,7 @@ async def create_user(request: CreateUserRequest, session: TSession) -> Dict:
     await session.commit()
 
     return {
+        'status_code': 201,
         'message': 'User created successfully',
         'user_id': new_user.id,
         'username': request.username,
@@ -182,6 +185,8 @@ async def log_requests(request: Request, call_next):
 
     process_time = (datetime.now() - start_time).total_seconds() * 1000
     print(f'  Completed in {process_time:.2f}ms - Status: {response.status_code}')
+    x = response.headers.keys()
+    print(dir(x), x, type(x), sep='\n', end='\n'*5)
     return response
 
 

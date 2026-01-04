@@ -1,7 +1,7 @@
 import datetime
 from typing import List, Optional
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, Table, Column
 from sqlalchemy.orm import Mapped, relationship, mapped_column
 
 from .session import Base
@@ -38,6 +38,29 @@ class SecretKeyUser(Base):
 # ======================= #
 # === FRONTEND MODELS === #
 
+
+tags_emergencies = Table(
+    'tags_emergencies',
+    Base.metadata,
+    Column('tag', ForeignKey('Tag.id'), primary_key=True),
+    Column('emergency', ForeignKey('Emergency.id'), primary_key=True),
+)
+
+ranks_humans = Table(
+    'ranks_humans',
+    Base.metadata,
+    Column('rank', ForeignKey('Rank.id'), primary_key=True),
+    Column('human', ForeignKey('Human.id'), primary_key=True),
+)
+
+positions_humans = Table(
+    'positions_humans',
+    Base.metadata,
+    Column('position', ForeignKey('Position.id'), primary_key=True),
+    Column('human', ForeignKey('Human.id'), primary_key=True)
+)
+
+
 class Tag(Base):
     ''' Теги '''
 
@@ -45,7 +68,8 @@ class Tag(Base):
     __tablename__ = 'Tag'
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(unique=True)
-    emergencies: Mapped[List['Emergency']] = relationship(back_populates='tag')
+    emergencies: Mapped[List['Emergency']] = relationship(secondary=tags_emergencies,
+                                                          back_populates='tags')
 
     def __str__(self):
         return self.title
@@ -73,7 +97,8 @@ class Rank(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(unique=True)
     priority: Mapped[int]
-    humans: Mapped[List['Human']] = relationship(back_populates='rank')
+    humans: Mapped[List['Human']] = relationship(secondary=ranks_humans,
+                                                 back_populates='ranks')
 
     def __str__(self):
         return self.title
@@ -86,7 +111,8 @@ class Position(Base):
     __tablename__ = 'Position'
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(unique=True)
-    humans: Mapped[List['Human']] = relationship(back_populates='position')
+    humans: Mapped[List['Human']] = relationship(secondary=positions_humans,
+                                                 back_populates='position')
 
     def __str__(self):
         return self.title
