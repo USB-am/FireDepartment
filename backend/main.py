@@ -6,7 +6,7 @@ from datetime import datetime
 
 import uvicorn
 from annotated_types import Annotated
-from fastapi import FastAPI, HTTPException, Request, Depends, Header
+from fastapi import FastAPI, HTTPException, Request, Depends, Header, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from starlette.authentication import requires
@@ -43,11 +43,9 @@ async def post_login_user(request: Request):
     return {'status': 200}
 
 
-@app.post('/create-user', response_model=dict)
+@app.post('/create-user', response_model=dict, status_code=status.HTTP_201_CREATED)
 async def create_user(request: CreateUserRequest, session: TSession) -> Dict:
     ''' Создание нового пользователя '''
-    x = request
-    print(dir(x), x, type(x), sep='\n', end='\n'*3)
     stmt = select(User).filter_by(username=request.username)
     result = await session.execute(stmt)
     user = result.scalars().first()
@@ -185,8 +183,6 @@ async def log_requests(request: Request, call_next):
 
     process_time = (datetime.now() - start_time).total_seconds() * 1000
     print(f'  Completed in {process_time:.2f}ms - Status: {response.status_code}')
-    x = response.headers.keys()
-    print(dir(x), x, type(x), sep='\n', end='\n'*5)
     return response
 
 
