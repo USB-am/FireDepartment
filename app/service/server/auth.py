@@ -1,4 +1,5 @@
 import os
+import json
 
 import requests
 from requests.exceptions import RequestException
@@ -17,12 +18,13 @@ def register(email: str, username: str, pwd: str, fd_number: int) -> requests.Re
     :returns: requests.Response
     '''
     url = os.path.join(PATH_TO_SERVER, 'create-user')
-    res = requests.post(url, json={
-    	'email': email,
-    	'username': username,
-    	'password': pwd,
-    	'fd_number': fd_number,
-    })
+    data = {
+        'email': email,
+        'username': username,
+        'password': pwd,
+        'fd_number': fd_number,
+    }
+    res = requests.post(url, data=json.dumps(data))
     return res
 
 

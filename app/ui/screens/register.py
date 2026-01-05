@@ -130,6 +130,12 @@ class RegisterScreen(BaseScreen):
 
         self.add_content(MDBoxLayout())
 
+        self._email_field.set_value('user@gmail.com')
+        self._username_field.set_value('user')
+        self._password_field.set_value('123')
+        self._password_reentry_field.set_value('123')
+        self._fire_department_number.set_value('73')
+
     def is_valid(self) -> bool:
         ''' Проверка валидности формы '''
         form_fields = (self._email_field, self._username_field,
@@ -137,7 +143,7 @@ class RegisterScreen(BaseScreen):
                        self._fire_department_number)
         return all(map(lambda f: not f.error, form_fields))
 
-    def show_error_mesage(self, msg: str) -> None:
+    def show_error_message(self, msg: str) -> None:
         '''
         Отобразить всплывающее окно с ошибкой.
 
@@ -159,16 +165,21 @@ class RegisterScreen(BaseScreen):
         ''' Проверить и отправить форму на сервер '''
 
         if not self.is_valid():
-            self.show_error_mesage(msg='Для отправки формы необходимо исправить ошибки!')
+            self.show_error_message(msg='Для отправки формы необходимо исправить ошибки!')
             return
 
         res = send_register_request(self._form)
         if res is None:
-            self.show_error_mesage(msg='Не удалось утановить соединение с сервером!')
-            return
-        if res.status_code != 201:
-            self.show_error_mesage(msg=res.json().get('error', 'В ходе регистрации возникла ошибка!'))
+            self.show_error_message(msg='Не удалось утановить соединение с сервером!')
             return
 
-        secret_key = res.json().get('secret_key')
-        save_secret_key(secret_key)
+        print(res, res.status_code)
+        if res.status_code == 201:
+            secret_key = res.json().get('secret_key')
+            save_secret_key(secret_key)
+            self.show_info_message(msg='Регистрация прошла успешно!')
+        else:
+            try:
+                self.show_error_message(msg=error_message)
+            except:
+                self.show_error_message(msg='Возникла ошибка обработки ответа сервера!')
