@@ -10,6 +10,7 @@ from .base import BaseScreen
 from ui.field.input import FDInput, FDNumberInput
 from ui.field.button import FDRectangleButton
 from service.server.auth import register
+from service.server.secret_key import SecretKey
 from validators import register as RegisterValidator
 
 
@@ -27,6 +28,8 @@ def send_register_request(form: Dict) -> Optional[requests.Response]:
 
 def save_secret_key(secret_key: str) -> None:
     ''' Сохранить secret_key в файл '''
+    secret_key_manager = SecretKey()
+    secret_key_manager.value = secret_key
 
 
 def open_dialog(title: str, text: str) -> None:
@@ -173,13 +176,14 @@ class RegisterScreen(BaseScreen):
             self.show_error_message(msg='Не удалось утановить соединение с сервером!')
             return
 
-        print(res, res.status_code)
         if res.status_code == 201:
             secret_key = res.json().get('secret_key')
             save_secret_key(secret_key)
             self.show_info_message(msg='Регистрация прошла успешно!')
         else:
             try:
+                error_detail = res.json().get('detail')
+                error_message = f'[{res.status_code}] {error_detail}'
                 self.show_error_message(msg=error_message)
             except:
                 self.show_error_message(msg='Возникла ошибка обработки ответа сервера!')

@@ -30,6 +30,10 @@ except (configparser.NoSectionError, ValueError):
 	ITERABLE_COUNT = 10
 
 
+# Path to secret_key
+SECRET_KEY_PATH = os.path.join(BASE_DIR, 'service', 'server', 'secret_key.json')
+
+
 # Paths to .kv files
 KV_DIR = os.path.join(BASE_DIR, 'kv')
 
