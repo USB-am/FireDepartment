@@ -180,10 +180,9 @@ class RegisterScreen(BaseScreen):
             secret_key = res.json().get('secret_key')
             save_secret_key(secret_key)
             self.show_info_message(msg='Регистрация прошла успешно!')
+            self._path_manager.forward('main')
         else:
-            try:
-                error_detail = res.json().get('detail')
-                error_message = f'[{res.status_code}] {error_detail}'
-                self.show_error_message(msg=error_message)
-            except:
-                self.show_error_message(msg='Возникла ошибка обработки ответа сервера!')
+            error_detail = res.json().get('detail') if hasattr(res, 'json') \
+                else 'Возникла ошибка обработки ответа сервера!'
+            error_message = f'[{res.status_code}] {error_detail}'
+            self.show_error_message(msg=error_message)
