@@ -1,4 +1,5 @@
 **/__pycache__
+**/secret_key.json
 venv/
 .venv/
 fire_department.db
