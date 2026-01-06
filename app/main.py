@@ -11,19 +11,10 @@ from kivymd.uix.navigationdrawer import MDNavigationLayout
 
 import config
 from ui import screens as FDScreen
+from service.singleton import _Singleton
 
 
 Builder.load_file(config.APP_SCREEN)
-
-
-class _Singleton(type):
-    _instance = None
-
-    def __call__(cls, *args, **kwargs):
-        if cls._instance is None:
-            cls._instance = super(_Singleton, cls).__call__(*args, **kwargs)
-
-        return cls._instance
 
 
 class PathManager(metaclass=_Singleton):
