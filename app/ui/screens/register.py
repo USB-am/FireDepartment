@@ -2,11 +2,9 @@ from typing import Dict, Optional
 
 import requests
 from kivy.uix.widget import Widget
-from kivymd.uix.dialog import MDDialog
-from kivymd.uix.button import MDFlatButton
 from kivymd.uix.boxlayout import MDBoxLayout
 
-from .base import BaseScreen
+from .base import BaseAuthScreen
 from ui.field.input import FDInput, FDNumberInput
 from ui.field.button import FDRectangleButton
 from service.server.auth import register
@@ -32,24 +30,7 @@ def save_secret_key(secret_key: str) -> None:
     secret_key_manager.value = secret_key
 
 
-def open_dialog(title: str, text: str) -> None:
-    '''
-    Открыть диалоговое окно.
-
-    :param title: заголовок окна
-    :param text: текст с сообщением
-    '''
-    dialog_btn = MDFlatButton(text='OK')
-    dialog = MDDialog(
-        title=title,
-        text=text,
-        buttons=[dialog_btn,]
-    )
-    dialog_btn.bind(on_release=lambda e: dialog.dismiss())
-    dialog.open()
-
-
-class RegisterScreen(BaseScreen):
+class RegisterScreen(BaseAuthScreen):
     ''' Страница регистрации '''
 
     name = 'register'
@@ -133,56 +114,32 @@ class RegisterScreen(BaseScreen):
 
         self.add_content(MDBoxLayout())
 
-        self._email_field.set_value('user@gmail.com')
-        self._username_field.set_value('user')
-        self._password_field.set_value('123')
-        self._password_reentry_field.set_value('123')
-        self._fire_department_number.set_value('73')
-
     def is_valid(self) -> bool:
-        ''' Проверка валидности формы '''
+        ''' Валидация формы '''
         form_fields = (self._email_field, self._username_field,
                        self._password_field, self._password_reentry_field,
                        self._fire_department_number)
         return all(map(lambda f: not f.error, form_fields))
 
-    def show_error_message(self, msg: str) -> None:
-        '''
-        Отобразить всплывающее окно с ошибкой.
-
-        :param msg: строка, которая будет выведена в сообщении об ошибке
-        :returns None:
-        '''
-        open_dialog('Ошибка', msg)
-
-    def show_info_message(self, msg: str) -> None:
-        '''
-        Отобразить всплывающее окно с информацией.
-
-        :param msg: строка, которая будет выведена в сообщении
-        :returns None:
-        '''
-        open_dialog('Информация', msg)
-
     def submit(self) -> None:
         ''' Проверить и отправить форму на сервер '''
 
         if not self.is_valid():
-            self.show_error_message(msg='Для отправки формы необходимо исправить ошибки!')
+            self.show_error_message('Для отправки формы необходимо исправить ошибки!')
             return
 
         res = send_register_request(self._form)
         if res is None:
-            self.show_error_message(msg='Не удалось утановить соединение с сервером!')
+            self.show_error_message('Не удалось утановить соединение с сервером!')
             return
 
         if res.status_code == 201:
             secret_key = res.json().get('secret_key')
             save_secret_key(secret_key)
-            self.show_info_message(msg='Регистрация прошла успешно!')
+            self.show_info_message('Регистрация прошла успешно!')
             self._path_manager.forward('main')
         else:
             error_detail = res.json().get('detail') if hasattr(res, 'json') \
                 else 'Возникла ошибка обработки ответа сервера!'
             error_message = f'[{res.status_code}] {error_detail}'
-            self.show_error_message(msg=error_message)
+            self.show_error_message(error_message)
