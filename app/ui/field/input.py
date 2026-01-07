@@ -32,15 +32,20 @@ class _BaseInput(MDTextField):
 		self.text = '' if text is None else str(text)
 
 	def on_text(self, instance, text):
+		self.on_validators(instance, text)
+
+	def on_validators(self, instance, text):
 		for validator in self.validators:
 			check = validator(text)
 			if not check.status:
 				self.error = True
 				self.helper_text = check.text
+				self.helper_text_mode = 'on_error'
 				break
 		else:
 			self.error = False
 			self.helper_text = ''
+			self.helper_text_mode = 'on_focus'
 
 
 class FDInput(_BaseInput):
