@@ -15,7 +15,14 @@ class User(BaseModel):
 
 # Модель для запроса создания пользователя
 class CreateUserRequest(BaseModel):
+    email: str
     username: str
+    password: str
+    fd_number: int
+
+
+class LoginUserRequest(BaseModel):
+    email: str
     password: str
 
 

@@ -15,8 +15,11 @@ class User(Base):
 
     __tablename__ = 'User'
     id: Mapped[int] = mapped_column(primary_key=True)
+    email: Mapped[str] = mapped_column(unique=True)
     username: Mapped[str] = mapped_column(unique=True)
-    secret_key: Mapped[Optional[str]] = mapped_column(unique=True)
+    password: Mapped[str]
+    fd_number: Mapped[Optional[int]]
+    # secret_key: Mapped[Optional[str]] = mapped_column(unique=True)
     created_at: Mapped[Optional[str]]
     last_used: Mapped[Optional[str]]
 
