@@ -24,17 +24,23 @@ def register(email: str, username: str, pwd: str, fd_number: int) -> requests.Re
         'password': pwd,
         'fd_number': fd_number,
     }
-    res = requests.post(url, data=json.dumps(data))
-    return res
+    response = requests.post(url, data=json.dumps(data))
+    return response
 
 
-def auth_user(login: str, pwd: str) -> None:
-    ''' Авторизация '''
-    url = os.path.join(PATH_TO_SERVER, 'create-user')
-    res = requests.post(url, headers={
-        'username': login,
+def login(login: str, pwd: str) -> requests.Response:
+    '''
+    Авторизация
+
+    :param login: email пользователя
+    :param pwd: пароль пользователя
+    :returns: requests.Response
+    '''
+
+    url = os.path.join(PATH_TO_SERVER, 'login')
+    data = {
+        'email': login,
         'password': pwd
-    })
-
-    if res.status_code != 200:
-        raise RequestException
+    }
+    response = requests.post(url, data=json.dumps(data))
+    return response
