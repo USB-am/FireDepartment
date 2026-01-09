@@ -12,7 +12,7 @@ from sqlalchemy.future import select
 from starlette.authentication import requires
 
 from data_base.session import get_session, create_db_and_tables
-from data_base.schema import CreateUserRequest, InfoResponse
+from data_base.schema import CreateUserRequest, InfoResponse, LoginUserRequest
 from data_base import model as DBModel
 from data_base.model import User, SecretKeyUser
 from auth import authenticate_user, generate_secret_key
@@ -36,11 +36,31 @@ async def get_root(request: Request):
     return {'status': 200}
 
 
-@app.post('/login', name='login')
-async def post_login_user(request: Request):
-    print(f'{request.cookies=}')
-    print(f'{request.headers=}')
-    return {'status': 200}
+@app.post('/login', name='login', status_code=status.HTTP_200_OK)
+async def post_login_user(request: LoginUserRequest, session: TSession):
+    ''' Авторизация '''
+
+    stmt = select(User).filter_by(email=request.email)
+    result = await session.execute(stmt)
+    user = result.scalars().first()
+
+    if user is None:
+        raise HTTPException(
+            status_code=400,
+            detail=f'User with login "{request.email}" is not found!'
+        )
+
+    stmt = select(SecretKeyUser).filter_by(user_id=user.id)
+    result = await session.execute(stmt)
+    secret_key = result.scalars().first().secret_key
+
+    user.last_used = datetime.now().isoformat()
+
+    return {
+        'status_code': 200,
+        'detail': 'User is login',
+        'secret_key': secret_key
+    }
 
 
 @app.post('/create-user', response_model=dict, status_code=status.HTTP_201_CREATED)
@@ -59,8 +79,10 @@ async def create_user(request: CreateUserRequest, session: TSession) -> Dict:
     secret_key = generate_secret_key(request.username)
 
     new_user = User(
+        email=request.email,
         username=request.username,
-        secret_key=secret_key,
+        password=request.password,
+        fd_number=request.fd_number,
         created_at=datetime.now().isoformat()
     )
     session.add(new_user)
