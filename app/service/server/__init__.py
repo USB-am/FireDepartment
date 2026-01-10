@@ -4,19 +4,9 @@ from typing import Dict, Optional
 import requests
 from requests.exceptions import RequestException
 
+from .secret_key import SecretKey
 from config import PATH_TO_SERVER
 from exceptions import NoSecretKeyError
-
-
-def __get_secret_key() -> Optional[str]:
-    ''' Получить secret_key '''
-    path_to_secret_key = os.path.join(os.path.dirname(__file__), 'SECRET_KEY')
-
-    if not os.path.exists(path_to_secret_key):
-        return None
-
-    with open(path_to_secret_key) as file:
-        return file.read()
 
 
 def add_secret_key_to_headers(headers: Optional[Dict]) -> Dict:
@@ -27,7 +17,7 @@ def add_secret_key_to_headers(headers: Optional[Dict]) -> Dict:
     :returns: словарь с добавленным secret_key
     '''
 
-    secret_key = __get_secret_key()
+    secret_key = SecretKey().value
     if secret_key is None:
         raise NoSecretKeyError
 
@@ -56,13 +46,13 @@ def send_get(url: str, headers: Dict=None) -> requests.Response:
     return res
 
 
-def send_post(url: str, headers: Dict=None) -> None:
+def send_post(url: str, headers: Dict=None) -> requests.Response:
     '''
     Отправить POST запрос на сервер.
 
     :param url: url на который будет направлен запрос
     :param headers: словарь с дополнительными аргументами
-    :returns: None
+    :returns: requests.Response
     '''
 
     headers = add_secret_key_to_headers(headers)
@@ -70,3 +60,4 @@ def send_post(url: str, headers: Dict=None) -> None:
     res = requests.post(url, headers=headers)
     if res.status_code != 200:
         raise RequestException
+    return res
