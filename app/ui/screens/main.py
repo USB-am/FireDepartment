@@ -1,9 +1,12 @@
 from typing import List
 
+from requests.exceptions import RequestException
+
 from .base import BaseScrollScreen
 from ui.widgets.search import FDSearch
 from service.server import send_get
 from ui.layout.main_screen import MainScreenListElement
+from exceptions import NoSecretKeyError
 
 
 class MainScreen(BaseScrollScreen):
@@ -40,7 +43,14 @@ class MainScreen(BaseScrollScreen):
 
     def fill_elements(self) -> None:
         ''' Заполнить контент Вызовами '''
-        emergencies = send_get('/rotate-key', headers={'model': 'Emergency'}).json()
+        try:
+            emergencies = send_get('model', headers={'model': 'Emergency'}).json()
+        except NoSecretKeyError:
+            self._path_manager.forward('auth')
+            return
+        except RequestException as err:
+            print(err)
+            return
 
         for emergency in emergencies:
             list_elem = MainScreenListElement(emergency)
