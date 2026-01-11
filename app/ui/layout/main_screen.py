@@ -104,3 +104,14 @@ class MainScreenListElement(MDExpansionPanel):
 		'''
 
 		self.content.ids.open_button.bind(on_release=lambda *_: callback())
+
+
+class MainScreenInfoElement(MDBoxLayout):
+	'''
+	Информационный элемент списка на главной странице.
+	'''
+
+	def __init__(self, title: str, description: str, **options):
+		self.title = title
+		self.description = description
+		super().__init__(**options)
