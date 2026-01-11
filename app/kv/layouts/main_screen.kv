@@ -55,3 +55,21 @@
 		valign: 'top'
 		halign: 'left'
 		text: root.value
+
+
+<MainScreenInfoElement>:
+	orientation: 'vertical'
+	size_hint: (1, None)
+	height: dp(150)
+
+	MDLabel:
+		id: title_lbl
+		valign: 'top'
+		halign: 'left'
+		text: root.title
+
+	MDLabel:
+		id: description_lbl
+		valign: 'top'
+		halign: 'left'
+		text: root.description

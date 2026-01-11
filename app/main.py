@@ -103,7 +103,7 @@ class Application(MDApp):
         self.ui.screen_manager.add_widget(FDScreen.AuthScreen(self.ui.path_manager))
         self.ui.screen_manager.add_widget(FDScreen.RegisterScreen(self.ui.path_manager))
 
-        self.ui.path_manager.move_to_screen('auth')
+        self.ui.path_manager.move_to_screen('main')
 
     def build_config(self, conf):
         conf.setdefaults('options', {

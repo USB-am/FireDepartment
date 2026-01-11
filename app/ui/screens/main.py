@@ -5,7 +5,7 @@ from requests.exceptions import RequestException
 from .base import BaseScrollScreen
 from ui.widgets.search import FDSearch
 from service.server import send_get
-from ui.layout.main_screen import MainScreenListElement
+from ui.layout.main_screen import MainScreenListElement, MainScreenInfoElement
 from exceptions import NoSecretKeyError
 
 
@@ -49,7 +49,11 @@ class MainScreen(BaseScrollScreen):
             self._path_manager.forward('auth')
             return
         except RequestException as err:
-            print(err)
+            err_list_element = MainScreenInfoElement(
+                title='RequestException',
+                description=RequestException.__doc__
+            )
+            self.add_content(err_list_element)
             return
 
         for emergency in emergencies:
