@@ -105,6 +105,33 @@ async def create_user(request: CreateUserRequest, session: TSession) -> Dict:
     }
 
 
+@app.get('/model', response_model=list, status_code=status.HTTP_200_OK)
+async def get_entries_by_model(request: Request, session: TSession) -> List:
+    ''' Получить записи из БД '''
+    if not hasattr(request, 'model'):
+        raise  HTTPException(
+            status_code=400,
+            detail='AttributeError: "model" is not found'
+        )
+
+    model_name = hasattr(DBModel, request.model)
+    if model_name is None:
+        raise HTTPException(
+            status_code=400,
+            detail='The transmitted model was not found.'
+        )
+
+    stmt = select(SecretKeyUser).filter_by(secret_key=request.secret_key)
+    result = await session.execute(stmt)
+    user_secret_key = result.scalars().first()
+
+    if user_secret_key is None:
+        raise HTTPException(
+            status_code=422,
+            detail=f'Unauthorized user.'
+        )
+
+
 @app.get('/user-info', response_model=InfoResponse)
 async def get_user_info(user: User = Depends(authenticate_user)):
     ''' Получение информации о пользователе (требуется SECRET_KEY) '''
@@ -133,8 +160,7 @@ async def get_protected_info(user: User = Depends(authenticate_user)):
 @app.get('/list-users', response_model=dict)
 async def list_users(session: TSession, admin_key: str = Header(None, alias='ADMIN_KEY')):
     ''' Список всех пользователей (только для админа) '''
-    # Простая проверка админского ключа (в реальном приложении используйте более безопасный подход)
-    ADMIN_SECRET = '123'  # В реальном приложении храните в переменных окружения
+    ADMIN_SECRET = '123'
 
     if admin_key != ADMIN_SECRET:
         raise HTTPException(status_code=403, detail='Admin access required')
