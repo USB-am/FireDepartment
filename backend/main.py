@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from typing import Dict
+from typing import Dict, List
 from datetime import datetime
 
 import uvicorn
@@ -106,24 +106,18 @@ async def create_user(request: CreateUserRequest, session: TSession) -> Dict:
 
 
 @app.get('/model', response_model=list, status_code=status.HTTP_200_OK)
-async def get_entries_by_model(request: Request, session: TSession) -> List:
+async def get_entries_by_model(request: Request,
+                               model: str,
+                               session: TSession,
+                               user: User = Depends(authenticate_user)
+    ) -> List:
     ''' Получить записи из БД '''
-    if not hasattr(request, 'model'):
-        raise  HTTPException(
-            status_code=400,
-            detail='AttributeError: "model" is not found'
-        )
-
     model_name = hasattr(DBModel, request.model)
     if model_name is None:
         raise HTTPException(
             status_code=400,
             detail='The transmitted model was not found.'
         )
-
-    stmt = select(SecretKeyUser).filter_by(secret_key=request.secret_key)
-    result = await session.execute(stmt)
-    user_secret_key = result.scalars().first()
 
     if user_secret_key is None:
         raise HTTPException(
