@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from starlette.authentication import requires
 
-from data_base.session import get_session, create_db_and_tables
+from data_base.session import get_session, create_db_and_tables, Base
 from data_base.schema import CreateUserRequest, InfoResponse, LoginUserRequest
 from data_base import model as DBModel
 from data_base.model import User, SecretKeyUser
@@ -105,25 +105,26 @@ async def create_user(request: CreateUserRequest, session: TSession) -> Dict:
     }
 
 
-@app.get('/model', response_model=list, status_code=status.HTTP_200_OK)
+@app.get('/model', response_model=List, status_code=status.HTTP_200_OK)
 async def get_entries_by_model(request: Request,
                                model: str,
                                session: TSession,
+                               offset: int=0,
+                               limit: int=100,
                                user: User = Depends(authenticate_user)
     ) -> List:
     ''' Получить записи из БД '''
-    model_name = hasattr(DBModel, request.model)
-    if model_name is None:
-        raise HTTPException(
-            status_code=400,
-            detail='The transmitted model was not found.'
-        )
-
-    if user_secret_key is None:
-        raise HTTPException(
-            status_code=422,
-            detail=f'Unauthorized user.'
-        )
+    model = getattr(DBModel, model)
+    stmt = (
+        select(model)
+        .order_by(model.id)
+        .limit(limit)
+        .offset(offset)
+    )
+    result = await session.execute(stmt)
+    entries = result.scalars().all()
+    print(entries)
+    return entries
 
 
 @app.get('/user-info', response_model=InfoResponse)
