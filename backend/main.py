@@ -12,7 +12,12 @@ from sqlalchemy.future import select
 from starlette.authentication import requires
 
 from data_base.session import get_session, create_db_and_tables, Base
-from data_base.schema import CreateUserRequest, InfoResponse, LoginUserRequest
+from data_base.schema import (
+    CreateUserRequest,
+    InfoResponse,
+    LoginUserRequest,
+    Emergency
+)
 from data_base import model as DBModel
 from data_base.model import User, SecretKeyUser
 from auth import authenticate_user, generate_secret_key
@@ -105,7 +110,7 @@ async def create_user(request: CreateUserRequest, session: TSession) -> Dict:
     }
 
 
-@app.get('/model', response_model=List, status_code=status.HTTP_200_OK)
+@app.get('/model', response_model=List[Emergency], status_code=status.HTTP_200_OK)
 async def get_entries_by_model(request: Request,
                                model: str,
                                session: TSession,
@@ -123,7 +128,6 @@ async def get_entries_by_model(request: Request,
     )
     result = await session.execute(stmt)
     entries = result.scalars().all()
-    print(entries)
     return entries
 
 
