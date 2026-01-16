@@ -38,7 +38,7 @@ class InfoResponse(BaseModel):
 class Tag(BaseModel):
     id: int
     title: str
-    emergencies: List['Emergency']
+    # emergencies: List['Emergency']
 
 
 class Short(BaseModel):
@@ -46,20 +46,20 @@ class Short(BaseModel):
     title: str
     explanation: Optional[str]
     into_new_line: bool
-    emergencies: List['Emergency']
+    # emergencies: List['Emergency']
 
 
 class Rank(BaseModel):
     id: int
     title: str
     priority: int
-    humans: List['Human']
+    # humans: List['Human']
 
 
 class Position(BaseModel):
     id: int
     title: str
-    humans: List['Human']
+    # humans: List['Human']
 
 
 class Worktype(BaseModel):
@@ -69,7 +69,7 @@ class Worktype(BaseModel):
     finish_work_day: datetime.date
     work_day_range: int
     week_day_range: int
-    humans: List['Human']
+    # humans: List['Human']
 
 
 class Human(BaseModel):
@@ -81,10 +81,10 @@ class Human(BaseModel):
     work_day: datetime.date
     start_vacation: datetime.date
     finish_vacation: datetime.date
-    worktype: 'Worktype'
-    position: 'Position'
-    rank: 'Rank'
-    emergencies: List['Emergency']
+    # worktype: 'Worktype'
+    # position: 'Position'
+    # rank: 'Rank'
+    # emergencies: List['Emergency']
 
 
 class Emergency(BaseModel):
@@ -92,15 +92,15 @@ class Emergency(BaseModel):
     title: str
     description: str
     urgent: bool
-    tags: List['Tag']
-    humans: List['Human']
-    shorts: List['Short']
-    calls: List['Calls']
+    # tags: List['Tag']
+    # humans: List['Human']
+    # shorts: List['Short']
+    # calls: List['Calls']
 
 
 class Calls(BaseModel):
     id: int
     start: datetime.date
     finish: datetime.date
-    emergency: 'Emergency'
+    # emergency: 'Emergency'
     info: Optional[str]
