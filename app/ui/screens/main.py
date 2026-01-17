@@ -1,4 +1,5 @@
 from typing import List
+from dataclasses import dataclass, field
 
 from requests.exceptions import RequestException
 
@@ -7,6 +8,18 @@ from ui.widgets.search import FDSearch
 from service.server import send_get
 from ui.layout.main_screen import MainScreenListElement, MainScreenInfoElement
 from exceptions import NoSecretKeyError
+
+
+@dataclass
+class Emergency:
+    id: int
+    title: str
+    description: str
+    urgent: bool
+    tags: list = field(default_factory=list)
+    humans: list = field(default_factory=list)
+    calls: list = field(default_factory=list)
+    shorts: list = field(default_factory=list)
 
 
 class MainScreen(BaseScrollScreen):
@@ -44,7 +57,7 @@ class MainScreen(BaseScrollScreen):
     def fill_elements(self) -> None:
         ''' Заполнить контент Вызовами '''
         try:
-            emergencies = send_get('model', headers={'model': 'Emergency'}).json()
+            emergencies = send_get('model', params={'model': 'Emergency'}).json()
         except NoSecretKeyError:
             self._path_manager.forward('auth')
             return
@@ -56,7 +69,8 @@ class MainScreen(BaseScrollScreen):
             self.add_content(err_list_element)
             return
 
-        for emergency in emergencies:
+        for emergency_dict in emergencies:
+            emergency = Emergency(**emergency_dict)
             list_elem = MainScreenListElement(emergency)
             list_elem.bind_open_button(lambda e=emergency: self.open_call(e))
             self.elements.append(list_elem)
