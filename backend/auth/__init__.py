@@ -26,19 +26,19 @@ def generate_secret_key(username: str) -> str:
 async def authenticate_user(session: TSession, secret_key: str = Header(..., alias='SECRET_KEY')) -> User:
     ''' Функция для аутентификации пользователя по SECRET_KEY '''
     result = await session.scalars(select(SecretKeyUser)\
-    	.where(SecretKeyUser.secret_key==secret_key))
+        .where(SecretKeyUser.secret_key==secret_key))
     entry = result.first()
     if not entry:
-    	raise HTTPException(
-    		status_code=401,
-    		detail='Invalid SECRET_KEY',
-    		headers={'WWW-Authenticate': 'SecretKey'}
-    	)
+        raise HTTPException(
+            status_code=401,
+            detail='Invalid SECRET_KEY',
+            headers={'WWW-Authenticate': 'SecretKey'}
+        )
     user = await session.get(User, entry.user_id)
     if not user:
-    	raise HTTPException(
-    		status_code=401,
-    		detail='User not found'
-    	)
+        raise HTTPException(
+            status_code=401,
+            detail='User not found'
+        )
     user.last_used = datetime.now().isoformat()
     return user
