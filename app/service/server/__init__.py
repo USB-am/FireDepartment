@@ -1,4 +1,5 @@
 import os
+import json
 from typing import Dict, Optional
 
 import requests
@@ -22,14 +23,14 @@ def add_secret_key_to_headers(headers: Optional[Dict]) -> Dict:
         raise NoSecretKeyError
 
     if headers:
-        headers.update({'secret_key': secret_key})
+        headers.update({'SECRET_KEY': secret_key})
     else:
-        headers = {'secret_key': secret_key}
+        headers = {'SECRET_KEY': secret_key, 'accept': 'application/json'}
 
     return headers
 
 
-def send_get(url: str, headers: Dict=None) -> requests.Response:
+def send_get(url: str, headers: Dict=None, params: Dict=None) -> requests.Response:
     '''
     Отправить GET запрос на сервер.
 
@@ -40,13 +41,13 @@ def send_get(url: str, headers: Dict=None) -> requests.Response:
 
     headers = add_secret_key_to_headers(headers)
     url = os.path.join(PATH_TO_SERVER, url)
-    res = requests.get(url, headers=headers)
+    res = requests.get(url, headers=headers, params=params)
     if res.status_code != 200:
         raise RequestException
     return res
 
 
-def send_post(url: str, headers: Dict=None) -> requests.Response:
+def send_post(url: str, headers: Dict=None, data: Dict=None) -> requests.Response:
     '''
     Отправить POST запрос на сервер.
 
@@ -57,7 +58,7 @@ def send_post(url: str, headers: Dict=None) -> requests.Response:
 
     headers = add_secret_key_to_headers(headers)
     url = os.path.join(PATH_TO_SERVER, url)
-    res = requests.post(url, headers=headers)
+    res = requests.post(url, headers=headers, data=json.dumps(data))
     if res.status_code != 200:
         raise RequestException
     return res
