@@ -114,6 +114,7 @@ async def create_user(request: CreateUserRequest, session: TSession) -> Dict:
 async def get_entries_by_model(request: Request,
                                model: str,
                                session: TSession,
+                               q: str = '',
                                offset: int=0,
                                limit: int=100,
                                user: User = Depends(authenticate_user)
@@ -122,6 +123,7 @@ async def get_entries_by_model(request: Request,
     model = getattr(DBModel, model)
     stmt = (
         select(model)
+        .where(model.title.contains(q))
         .order_by(model.id)
         .limit(limit)
         .offset(offset)
