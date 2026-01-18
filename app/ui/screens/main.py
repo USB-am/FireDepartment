@@ -41,23 +41,19 @@ class MainScreen(BaseScrollScreen):
         )
 
         search = FDSearch(hint_text='Поиск...')
-        # search.on_press_enter(
-        #   callback=lambda text: self.__hide_elements(
-        #       filter_list_elements(text)
-        #   )
-        # )
+        search.on_press_enter(callback=lambda text: self.fill_elements(search_text=text))
         self.ids.content_container.add_widget(search)
         self.ids.content_container.children = self.ids.content_container.children[::-1]
 
         self.elements: List['MainScreenListElement'] = []
         self.fill_elements()
-        # self.bind(on_pre_enter=lambda *_: self.__update_elements())
-        # self.bind(on_pre_enter=lambda *_: self.__check_new_elements())
 
-    def fill_elements(self) -> None:
+    def fill_elements(self, search_text: str='') -> None:
         ''' Заполнить контент Вызовами '''
+        self.clear_content()
+
         try:
-            emergencies = send_get('model', params={'model': 'Emergency'}).json()
+            emergencies = send_get('model', params={'model': 'Emergency', 'q': search_text}).json()
         except NoSecretKeyError:
             self._path_manager.forward('auth')
             return
@@ -78,71 +74,7 @@ class MainScreen(BaseScrollScreen):
 
     def __update_elements(self) -> None:
         ''' Обновить отображенные элементы '''
-
-        for element in self.elements:
-            element.update()
-
-    def __hide_elements(self, filtered_elements: List['Emergency']) -> None: # type: ignore
-        '''
-        Скрыть элементы списка.
-
-        ~params:
-        elements: List[Emergency] - записи БД, элементы которых необходимо скрыть.
-        '''
-
-        layout: List['MainScreenListElement'] = self.ids.content
-        layout.clear_widgets()
-
-        for element in self.elements:
-            if element.emergency in filtered_elements:
-                self.add_content(element)
-
-    def __check_new_elements(self) -> None:
-        ''' Проверка на новые элементы '''
-
-        all_ids = set(entry[0] for entry in \
-            Emergency.query.with_entities(Emergency.id).all())
-        old_ids = set(e.emergency.id for e in self.elements)
-
-        emergencies_for_insert = all_ids - old_ids
-        emergencies_for_delete = old_ids - all_ids
-        self.__delete_elements(emergencies_for_delete)
-        self.__insert_elements(emergencies_for_insert)
-
-    def __delete_elements(self, emergencies_for_delete: set) -> None:
-        '''
-        Удалить элементы списка.
-
-        ~params:
-        emergencies_for_insert: set - множество элементов для удаления.
-        '''
-
-        for element in self.elements:
-            if element.emergency.id in emergencies_for_delete:
-                self.ids.content.remove_widget(element)
-                del element
-
-    def __insert_elements(self, emergencies_for_insert: set) -> None:
-        '''
-        Вставить элементы списка.
-
-        ~params:
-        emergencies_for_insert: set - множество элементов для вставки.
-        '''
-
-        for emergency_id in emergencies_for_insert:
-            emergency = Emergency.query.get(emergency_id)
-            list_elem = MainScreenListElement(emergency)
-            list_elem.bind_open_button(lambda e=emergency: self.open_call(e))
-            self.elements.append(list_elem)
-            self.add_content(list_elem)
-
-        childs = self.ids.content.children
-        self.ids.content.children = sorted(
-            self.ids.content.children,
-            key=lambda child: child.emergency.title,
-            reverse=True
-        )
+        map(lambda e: e.update(), self.elements)
 
     def open_call(self, emergency: 'Emergency') -> None: # type: ignore
         '''
