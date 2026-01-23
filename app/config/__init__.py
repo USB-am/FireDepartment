@@ -16,6 +16,11 @@ ICONS = {
 	'Worktype': 'timer-sand',
 	'UserSettings': 'account-wrench',
 	'Calls': 'firebase',
+
+	'urgent': (
+		'fire',
+		'fire-alert',
+	),
 }
 
 
