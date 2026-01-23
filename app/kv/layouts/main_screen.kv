@@ -1,60 +1,28 @@
-<_ListElementContent>:
-	orientation: 'vertical'
-	adaptive_height: True
-	padding: [dp(10), dp(25)]
-
-	ScrollView:
-		size_hint: (1, None)
-		height: dp(50)
-
-		GridLayout:
-			cols: 1
-			size_hint: (1, None)
-			height: self.minimum_height
-			do_scroll_x: False
-
-			MDLabel:
-				id: description_lbl
-				size_hint_y: None
-				height: self.texture_size[1]
-				valign: 'top'
-				halign: 'left'
-				text: root.emergency.description if root.emergency.description else ''
-
-	MDBoxLayout:
-		orientation: 'horizontal'
-		size_hint: (1, None)
-		height: dp(50)
-
-		MDBoxLayout:
-			id: info_icons
-			size_hint: (1, 1)
-			spacing: dp(20)
-
-		MDIconButton:
-			id: open_button
-			size_hint: (None, None)
-			size: (dp(50), dp(50))
-			icon: 'eye'
-
-
-<_ListElementIcon>:
+<MainScreenListElement>:
 	orientation: 'horizontal'
-	adaptive_width: True
+	size_hint: (1, None)
+	height: dp(50)
 
 	MDIcon:
-		id: icon_elem
-		size_hint: (None, None)
-		size: (dp(25), dp(50))
+		size_hint: (None, 1)
+		width: dp(50)
 		icon: root.icon
 
-	MDLabel:
-		id: value_elem
-		size_hint: (None, 1)
-		width: self.texture_size[1]
-		valign: 'top'
-		halign: 'left'
-		text: root.value
+	MDBoxLayout:
+		orientation: 'vertical'
+		size_hint: (1, None)
+		height: dp(50)
+
+		MDLabel:
+			size_hint: (1, None)
+			height: dp(25)
+			bold: True
+			text: root.emergency.title
+
+		MDLabel:
+			size_hint: (1, None)
+			height: dp(25)
+			text: root.emergency.description if root.emergency.description else ''
 
 
 <MainScreenInfoElement>:
