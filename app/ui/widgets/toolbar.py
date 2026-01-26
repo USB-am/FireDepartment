@@ -1,6 +1,14 @@
 from typing import Callable
 
+from kivy.lang.builder import Builder
 from kivymd.uix.toolbar import MDTopAppBar
+
+
+Builder.load_string('''
+<FDToolbar>:
+	anchor_title: 'left'
+	type_height: 'small'
+''')
 
 
 class FDToolbar(MDTopAppBar):
