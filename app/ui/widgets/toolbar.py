@@ -1,16 +1,9 @@
 from typing import Callable
 
-from kivy.lang.builder import Builder
-from kivymd.uix.toolbar import MDToolbar
+from kivymd.uix.toolbar import MDTopAppBar
 
 
-Builder.load_string('''
-<FDToolbar>:
-	# md_bg_color: app.theme_cls.accent_color
-''')
-
-
-class FDToolbar(MDToolbar):
+class FDToolbar(MDTopAppBar):
 	''' Верхняя полоска '''
 
 	def add_left_button(self, icon: str, callback: Callable) -> None:
