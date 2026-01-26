@@ -10,6 +10,7 @@ class NavigationButton(MDRectangleFlatIconButton):
 		self.__theme_cls = MDApp.get_running_app().theme_cls
 		kwargs.update({
 			'icon_color': self.__theme_cls.accent_color,
+			'halign': 'left',
 			'theme_text_color': 'Custom',
 			'text_color': self.__theme_cls.accent_color,
 			'height': dp(80),

@@ -54,6 +54,10 @@ class BaseScrollScreen(_FDScreen):
 class BaseAuthScreen(BaseScreen):
     ''' Базовое представление страницы для авторизации/регистрации '''
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ids.toolbar.title = self.toolbar_title
+
     def _open_dialog(self, title: str, text: str) -> None:
         '''
         Открыть диалоговое окно.

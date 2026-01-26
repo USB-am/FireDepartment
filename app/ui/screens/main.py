@@ -63,6 +63,7 @@ class MainScreen(BaseScrollScreen):
                 description=RequestException.__doc__
             )
             self.add_content(err_list_element)
+            self._path_manager.forward('auth')
             return
 
         for emergency_dict in emergencies:
