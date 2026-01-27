@@ -1,37 +1,20 @@
 <MainScreenListElement>:
-	orientation: 'horizontal'
+	style: 'elevated'
+	padding: dp(5)
 	size_hint: (1, None)
-	height: dp(50)
+	height: dp(100)
 
-	MDButton:
-		style: 'elevated'
-
-		MDButtonIcon:
-			icon: 'bus'
-
-		MDButtonText:
-			text: 'hello'
-
-	MDIcon:
-		size_hint: (None, 1)
-		width: dp(50)
-		icon: root.icon
-
-	MDBoxLayout:
-		orientation: 'vertical'
-		size_hint: (1, None)
-		height: dp(50)
+	MDRelativeLayout:
+		MDIconButton:
+			icon: 'dots-vertical'
+			pos_hint: {'top': 1, 'right': 1}
 
 		MDLabel:
-			size_hint: (1, None)
-			height: dp(25)
+			text: root.text
+			adaptive_size: True
+			color: 'grey'
 			bold: True
-			text: root.emergency.title
-
-		MDLabel:
-			size_hint: (1, None)
-			height: dp(25)
-			text: root.emergency.description if root.emergency.description else ''
+			pos: (dp(12), dp(12))
 
 
 <MainScreenInfoElement>:
