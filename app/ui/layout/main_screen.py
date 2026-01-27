@@ -2,6 +2,7 @@ from typing import Callable
 
 from kivy.lang.builder import Builder
 from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.card import MDCard
 
 from config import MAIN_SCREEN_LAYOUTS, ICONS
 
@@ -20,11 +21,12 @@ class MainScreenInfoElement(MDBoxLayout):
 		super().__init__(**options)
 
 
-class MainScreenListElement(MDBoxLayout):
+class MainScreenListElement(MDCard):
 	''' Элемент списка на Главной странице '''
 
 	def __init__(self, emergency: 'Emergency', **options):
 		self.emergency = emergency
+		self.text = emergency.title
 		self.icon = ICONS['urgent'][emergency.urgent]
 		super().__init__(**options)
 
