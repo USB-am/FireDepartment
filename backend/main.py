@@ -7,6 +7,7 @@ from datetime import datetime
 import uvicorn
 from annotated_types import Annotated
 from fastapi import FastAPI, HTTPException, Request, Depends, Header, status
+from sqlalchemy import func
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from starlette.authentication import requires
@@ -123,7 +124,7 @@ async def get_entries_by_model(request: Request,
     model = getattr(DBModel, model)
     stmt = (
         select(model)
-        .where(model.title.contains(q))
+        .where(func.lower(model.title).contains(func.lower(q)))
         .order_by(model.id)
         .limit(limit)
         .offset(offset)
