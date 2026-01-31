@@ -4,17 +4,24 @@
 	size_hint: (1, None)
 	height: dp(100)
 
-	MDRelativeLayout:
-		MDIconButton:
-			icon: 'dots-vertical'
-			pos_hint: {'top': 1, 'right': 1}
+	MDBoxLayout:
+		orientation: 'vertical'
+		padding: [0, dp(15)]
 
 		MDLabel:
-			text: root.text
-			adaptive_size: True
+			id: title_lbl
+			size_hint: (1, None)
+			height: dp(15)
+			text: root.title
 			color: 'grey'
 			bold: True
-			pos: (dp(12), dp(12))
+
+		MDLabel:
+			id: description_lbl
+			size_hint: (1, None)
+			height: dp(55)
+			text: root.description
+			color: 'grey'
 
 
 <MainScreenInfoElement>:
