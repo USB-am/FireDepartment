@@ -26,12 +26,19 @@ class MainScreenListElement(MDCard):
 
 	def __init__(self, emergency: 'Emergency', **options):
 		self.emergency = emergency
-		self.text = emergency.title
+		self.title = emergency.title.upper()
+		self.description = emergency.description
 		self.icon = ICONS['urgent'][emergency.urgent]
 		super().__init__(**options)
 
 	def update(self) -> None:
 		pass
 
-	def bind_open_button(self, *args, **kwargs):
-		pass
+	def bind_open_button(self, callback: Callable) -> None:
+		'''
+		Назначить функцию при нажатии ЛКМ по карточке.
+
+		:param callback: функция, которая будет исполнена при нажатии ЛКМ по карточке
+		:returns: None
+		'''
+		self.bind(on_release=lambda *_: callback())
