@@ -1,27 +1,40 @@
+#:import NUMBER_FONT config.NUMBER_FONT
+
+
 <MainScreenListElement>:
 	style: 'elevated'
 	padding: dp(5)
 	size_hint: (1, None)
 	height: dp(100)
 
-	MDBoxLayout:
-		orientation: 'vertical'
-		padding: [0, dp(15)]
+	MDRelativeLayout:
+		MDLabel:
+			id: fd_number
+			size_hint: (1, 1)
+			pos_hint: {'right': 1, 'center_y': .5}
+			text: str(root.fd_number)
+			halign: 'right'
+			valign: 'center'
+			color: '#dedede'
+			font_name: str(NUMBER_FONT)
+			font_size: dp(100)
 
 		MDLabel:
 			id: title_lbl
-			size_hint: (1, None)
-			height: dp(15)
+			size_hint: (.7, .15)
+			pos_hint: {'x': .025, 'top': .975}
 			text: root.title
 			color: 'grey'
 			bold: True
 
 		MDLabel:
 			id: description_lbl
-			size_hint: (1, None)
-			height: dp(55)
+			size_hint: (.7, .75)
+			pos_hint: {'x': .025, 'top': .8}
 			text: root.description
+			valign: 'top'
 			color: 'grey'
+			text_size: self.size
 
 
 <MainScreenInfoElement>:

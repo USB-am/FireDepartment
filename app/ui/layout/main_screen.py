@@ -28,6 +28,7 @@ class MainScreenListElement(MDCard):
 		self.emergency = emergency
 		self.title = emergency.title.upper()
 		self.description = emergency.description
+		self.fd_number = 73
 		self.icon = ICONS['urgent'][emergency.urgent]
 		super().__init__(**options)
 
