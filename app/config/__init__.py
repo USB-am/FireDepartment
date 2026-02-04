@@ -45,8 +45,18 @@ KV_DIR = os.path.join(BASE_DIR, 'kv')
 
 # Static
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
-APP_ICON = os.path.join(STATIC_DIR, 'icon.png')
-LOGO_IMG = os.path.join(STATIC_DIR, 'logo.png')
+
+# Icons
+ICONS_DIR = os.path.join(STATIC_DIR, 'icons')
+APP_ICON = os.path.join(ICONS_DIR, 'icon.png')
+
+# Images
+IMAGES_DIR = os.path.join(STATIC_DIR, 'images')
+LOGO_IMG = os.path.join(IMAGES_DIR, 'logo.png')
+
+# Fonts
+FONTS_DIR = os.path.join(STATIC_DIR, 'fonts')
+NUMBER_FONT = os.path.join(FONTS_DIR, 'NumbersFont.ttf')
 
 # Config
 APP_DIR = os.path.join(BASE_DIR, 'app')
