@@ -10,12 +10,8 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRaisedButton, MDFlatButton
 
 from .base import BaseScreen
-from data_base.model import Human, Short, Emergency, Calls, Rank, Worktype
-from data_base.manager import write_entry, get_by_id
-from exceptions.data_base import DBAddError, DBCommitError
-from app.path_manager import PathManager
-from ui.field.call_human import FDCallHumanField
-from ui.field.calendar import is_working
+# from ui.field.call_human import FDCallHumanField
+# from ui.field.calendar import is_working
 from ui.widgets.notebook import FDNotebook, FDTab
 from config import NAVIGATION_WIDGET
 
@@ -37,46 +33,49 @@ def _get_config_value(section: str, option: str, fallback: Any='') -> Any:
 	return app.config.get(section, option, fallback=fallback)
 
 
-def sorted_humans_by_rank(humans: List[Human]) -> List[Human]:
+def sorted_humans_by_rank(humans: List['Human']) -> List['Human']:
 	''' Отсортировать сотрудников по Званию (Rank.priority) '''
 
-	ranked_humans: List[Human] = []
+	ranked_humans: List['Human'] = []
 	for human in humans:
 		if human.rank is not None:
 			ranked_humans.append(human)
+	return ranked_humans
 
-	return sorted(ranked_humans,
-	              key=lambda h: Rank.query.get(h.rank).priority,
-	              reverse=True)
+	# return sorted(ranked_humans,
+	#               key=lambda h: Rank.query.get(h.rank).priority,
+	#               reverse=True)
 
 
-def filtered_humans_by_workday(humans: List[Human]) -> List[Human]:
+def filtered_humans_by_workday(humans: List['Human']) -> List['Human']:
 	''' Отфильтровать по работающим сотрудникам '''
 
 	today = datetime.now().date()
 	working_humans = filter(lambda h: bool(h.worktype), humans)
-	output = list(filter(
-		lambda h: is_working(now_datetime=datetime.now(), human=h),
-		working_humans))
+	# output = list(filter(
+	# 	lambda h: is_working(now_datetime=datetime.now(), human=h),
+	# 	working_humans))
 
-	return output
+	# return output
+	return working_humans
 
 
 class PhoneTabContent(MDBoxLayout):
 	''' Контент вкладки о звонках '''
 
-	def __init__(self, title: str, description: str, humans: List[Human]):
+	def __init__(self, title: str, description: str, humans: List['Human']):
 		self.title = title
 		self.description = description
 		self.humans = humans
-		self.human_fields: List[FDCallHumanField] = []
+		self.human_fields: List['FDCallHumanField'] = []
 
 		super().__init__()
 
 		for human in humans:
-			human_field = FDCallHumanField(human=human)
-			self.ids.content.add_widget(human_field)
-			self.human_fields.append(human_field)
+			# human_field = FDCallHumanField(human=human)
+			# self.ids.content.add_widget(human_field)
+			# self.human_fields.append(human_field)
+			pass
 
 
 @dataclass
@@ -104,7 +103,7 @@ class InformationLogger(list):
 class _FDShortButton(MDFlatButton):
 	''' Кнопка сокращения '''
 
-	def __init__(self, short: Short):
+	def __init__(self, short: 'Short'):
 		self.short = short
 
 		super().__init__(text=short.title)
@@ -137,7 +136,7 @@ class InfoTabContent(MDBoxLayout):
 		start_text = _get_config_value(section='call', option='start_text')
 		self.insert_text(f'{start_text}\n', new_line=False)
 
-	def _insert_short(self, short: Short) -> None:
+	def _insert_short(self, short: 'Short') -> None:
 		''' Вставить текст сокращения в текстовое поле "Дополнительная информация" '''
 		self.insert_text(text=short.explanation, new_line=short.into_new_line)
 
@@ -164,7 +163,7 @@ class InfoTabContent(MDBoxLayout):
 class CallTabContent(MDBoxLayout):
 	''' Контент вкладки '''
 
-	def __init__(self, emergency: Emergency):
+	def __init__(self, emergency: 'Emergency'):
 		self._emergency = emergency
 		self._human_call_logs: Dict[Log] = {}
 		super().__init__()
@@ -187,13 +186,13 @@ class CallTabContent(MDBoxLayout):
 		self.ids.calls.add_widget(self.calls_tab)
 		self.ids.info.add_widget(self.info_tab)
 
-	def update_info_textfield(self, human_field: FDCallHumanField) -> None:
+	def update_info_textfield(self, human_field: 'FDCallHumanField') -> None:
 		''' Обновить текстовое поле с дополнительной информацией '''
 		log = self._add_human_call_log(human_field)
 		if log:
 			self.info_tab.insert_text(f'{log.description}', new_line=True)
 
-	def _add_human_call_log(self, human_field: FDCallHumanField) -> Union[Log, None]:
+	def _add_human_call_log(self, human_field: 'FDCallHumanField') -> Union[Log, None]:
 		''' Добавить лог при нажатии чекбокса на поле звонка человеку '''
 
 		cbox = human_field.checkbox
@@ -232,7 +231,7 @@ class CallsScreen(BaseScreen):
 	name = 'calls'
 	toolbar_title = 'Вызовы'
 
-	def __init__(self, path_manager: PathManager, **options):
+	def __init__(self, path_manager: 'PathManager', **options):
 		super().__init__(path_manager)
 
 		self.ids.toolbar.add_left_button(
@@ -243,7 +242,7 @@ class CallsScreen(BaseScreen):
 		self.notebook = FDNotebook()
 		self.add_content(self.notebook)
 
-	def add_notebook_tab(self, emergency: Emergency) -> None:
+	def add_notebook_tab(self, emergency: 'Emergency') -> None:
 		''' Добавить вкладку '''
 
 		content = CallTabContent(emergency)
@@ -288,15 +287,15 @@ class CallsScreen(BaseScreen):
 		info_tab = tab.content.info_tab
 		info_tab.insert_text(_get_config_value(section='call', option='finish_text'), new_line=True)
 
-		saved_call = write_entry(
-			model=Calls,
-			params={
-				'start': info_tab.start_datetime,
-				'finish': datetime.now(),
-				'emergency': tab.content._emergency.id,
-				'info': info_tab.ids.addition_info.text,
-			}
-		)
+		# saved_call = write_entry(
+		# 	model=Calls,
+		# 	params={
+		# 		'start': info_tab.start_datetime,
+		# 		'finish': datetime.now(),
+		# 		'emergency': tab.content._emergency.id,
+		# 		'info': info_tab.ids.addition_info.text,
+		# 	}
+		# )
 		self.notebook.close_tab(tab)
 		self._rem_toolbar_button()
 
