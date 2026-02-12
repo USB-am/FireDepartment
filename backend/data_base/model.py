@@ -10,6 +10,27 @@ from .session import Base
 # ============ #
 # === USER === #
 
+firedepartment_users = Table(
+    'firedepartment_users',
+    Base.metadata,
+    Column('firedepartment', ForeignKey('FireDepartment.id')),
+    Column('user', ForeignKey('User.id')),
+)
+
+class FireDepartment(Base):
+    ''' Запись о пожарной части '''
+
+    __tablename__ = 'FireDepartment'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    title: Mapped[str] = mapped_column(unique=True)
+    address: Mapped[str]
+    users: Mapped[List['User']] = relationship(secondary=firedepartment_users,
+                                               back_populates='firedepartment')
+
+    def __str__(self):
+        return self.title
+
+
 class User(Base):
     ''' Пользователи '''
 
@@ -18,8 +39,8 @@ class User(Base):
     email: Mapped[str] = mapped_column(unique=True)
     username: Mapped[str] = mapped_column(unique=True)
     password: Mapped[str]
-    fd_number: Mapped[Optional[int]]
-    # secret_key: Mapped[Optional[str]] = mapped_column(unique=True)
+    firedepartment: Mapped['FireDepartment'] = relationship(secondary=firedepartment_users,
+                                                            back_populates='users')
     created_at: Mapped[Optional[str]]
     last_used: Mapped[Optional[str]]
 
@@ -38,9 +59,9 @@ class SecretKeyUser(Base):
 # === USER === #
 # ============ #
 
+
 # ======================= #
 # === FRONTEND MODELS === #
-
 
 tags_emergencies = Table(
     'tags_emergencies',
