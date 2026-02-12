@@ -17,7 +17,8 @@ from data_base.schema import (
     CreateUserRequest,
     InfoResponse,
     LoginUserRequest,
-    Emergency
+    Emergency,
+    CallResponse
 )
 from data_base import model as DBModel
 from data_base.model import User, SecretKeyUser
@@ -132,6 +133,25 @@ async def get_entries_by_model(request: Request,
     result = await session.execute(stmt)
     entries = result.scalars().all()
     return entries
+
+
+@app.get('/call', response_model=CallResponse, status_code=status.HTTP_200_OK)
+async def get_call_by_emergency_id(request: Request,
+                                   id_: int,
+                                   session: TSession,
+                                   user: User = Depends(authenticate_user)
+    ) -> CallResponse:
+    ''' Получить данные о вызове по Emergency.id '''
+    stmt = select(Emergency).filter_by(id=id_)
+    result = await session.execute(stmt)
+    emergency = result.scalars().first()
+
+    return CallResponse(
+        title=emergency.title,
+        description=emergency.description,
+        humans=emergency.humans,
+        shorts=emergency.shorts
+    )
 
 
 @app.get('/user-info', response_model=InfoResponse)

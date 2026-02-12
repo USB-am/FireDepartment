@@ -78,12 +78,12 @@ class Human(BaseModel):
     phone_1: Optional[str]
     phone_2: Optional[str]
     is_firefigher: bool
-    work_day: datetime.date
-    start_vacation: datetime.date
-    finish_vacation: datetime.date
+    # work_day: datetime.date
+    # start_vacation: datetime.date
+    # finish_vacation: datetime.date
     # worktype: 'Worktype'
-    # position: 'Position'
-    # rank: 'Rank'
+    position: 'Position'
+    rank: 'Rank'
     # emergencies: List['Emergency']
 
 
@@ -104,3 +104,11 @@ class Calls(BaseModel):
     finish: datetime.date
     # emergency: 'Emergency'
     info: Optional[str]
+
+
+class CallResponse(BaseModel):
+    id: int
+    title: str
+    description: str
+    humans: List[Human]
+    shorts: List[Short]
