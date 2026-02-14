@@ -107,8 +107,7 @@ class Calls(BaseModel):
 
 
 class CallResponse(BaseModel):
-    id: int
     title: str
-    description: str
-    humans: List[Human]
-    shorts: List[Short]
+    description: Optional[str]
+    humans: Optional[List[Human]]
+    shorts: Optional[List[Short]]
