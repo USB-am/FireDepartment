@@ -8,6 +8,7 @@ import uvicorn
 from annotated_types import Annotated
 from fastapi import FastAPI, HTTPException, Request, Depends, Header, status
 from sqlalchemy import func
+from sqlalchemy.orm import selectinload
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from starlette.authentication import requires
@@ -142,7 +143,12 @@ async def get_call_by_emergency_id(request: Request,
                                    user: User = Depends(authenticate_user)
     ) -> CallResponse:
     ''' Получить данные о вызове по Emergency.id '''
-    stmt = select(Emergency).filter_by(id=id_)
+    stmt = (
+        select(DBModel.Emergency)
+        .filter_by(id=id_)
+        .options(selectinload(DBModel.Emergency.humans))
+        .options(selectinload(DBModel.Emergency.shorts))
+    )
     result = await session.execute(stmt)
     emergency = result.scalars().first()
 
