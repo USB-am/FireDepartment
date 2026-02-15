@@ -152,6 +152,12 @@ async def get_call_by_emergency_id(request: Request,
     result = await session.execute(stmt)
     emergency = result.scalars().first()
 
+    if emergency is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f'Emergency with id "{id_}" already exists!'
+        )
+
     return CallResponse(
         title=emergency.title,
         description=emergency.description,
