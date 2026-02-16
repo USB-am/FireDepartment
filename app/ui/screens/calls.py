@@ -1,5 +1,5 @@
 import time
-from typing import Any, List, Dict, Union
+from typing import Any, List, Dict, Union, Optional
 from datetime import datetime
 from dataclasses import dataclass
 
@@ -14,6 +14,7 @@ from .base import BaseScreen
 # from ui.field.calendar import is_working
 from ui.widgets.notebook import FDNotebook, FDTab
 from config import NAVIGATION_WIDGET
+from service.server import send_get
 
 
 Builder.load_file(NAVIGATION_WIDGET)
@@ -83,6 +84,40 @@ class Log:
 	timestamp: float
 	title: str
 	description: str
+
+
+@dataclass
+class Human:
+	id: int
+	title: str
+	position: str
+	rank: str
+	phone_1: str
+	phone_2: str
+	is_firefigher: bool
+
+	def __str__(self):
+		return self.title
+
+
+@dataclass
+class Short:
+	id: int
+	title: str
+	explanation: Optional[str]
+	into_new_line: bool
+
+
+@dataclass
+class Emergency:
+	id: int
+	title: str
+	description: str
+	humans: List[Human]
+	shorts: List[Short]
+
+	def __str__(self):
+		return f'Emergency "{self.title}"'
 
 
 class InformationLogger(list):
@@ -165,6 +200,12 @@ class CallTabContent(MDBoxLayout):
 
 	def __init__(self, emergency: 'Emergency'):
 		self._emergency = emergency
+		self.call_entry = send_get(
+			url='call',
+			params={
+				'id_': self._emergency.id,
+			}).json()
+		print(self.call_entry)
 		self._human_call_logs: Dict[Log] = {}
 		super().__init__()
 
@@ -234,6 +275,7 @@ class CallsScreen(BaseScreen):
 	def __init__(self, path_manager: 'PathManager', **options):
 		super().__init__(path_manager)
 
+		self.ids.toolbar.title = self.toolbar_title
 		self.ids.toolbar.add_left_button(
 			icon='arrow-left',
 			callback=lambda *_: self._path_manager.back()
