@@ -55,22 +55,22 @@ class FDNavigation(MDNavigationLayout):
 
         self.ids.main_nav_btn.bind(on_release=lambda *_:
             self.move_screen_and_close_menu('main'))
-        # self.ids.options_nav_btn.bind(on_release=lambda *_:
-        #     self.move_screen_and_close_menu('options'))
-        # self.ids.tags_nav_btn.bind(on_release=lambda *_:
-        #     self.move_screen_and_close_menu('tags_list'))
-        # self.ids.shorts_nav_btn.bind(on_release=lambda *_:
-        #     self.move_screen_and_close_menu('shorts_list'))
-        # self.ids.ranks_nav_btn.bind(on_release=lambda *_:
-        #     self.move_screen_and_close_menu('ranks_list'))
-        # self.ids.positions_nav_btn.bind(on_release=lambda *_:
-        #     self.move_screen_and_close_menu('positions_list'))
-        # self.ids.humans_nav_btn.bind(on_release=lambda *_:
-        #     self.move_screen_and_close_menu('humans_list'))
-        # self.ids.emergencies_nav_btn.bind(on_release=lambda *_:
-        #     self.move_screen_and_close_menu('emergencies_list'))
-        # self.ids.worktype_nav_btn.bind(on_release=lambda *_:
-        #     self.move_screen_and_close_menu('worktypes_list'))
+        self.ids.options_nav_btn.bind(on_release=lambda *_:
+            self.move_screen_and_close_menu('options'))
+        self.ids.tags_nav_btn.bind(on_release=lambda *_:
+            self.move_screen_and_close_menu('tags_list'))
+        self.ids.shorts_nav_btn.bind(on_release=lambda *_:
+            self.move_screen_and_close_menu('shorts_list'))
+        self.ids.ranks_nav_btn.bind(on_release=lambda *_:
+            self.move_screen_and_close_menu('ranks_list'))
+        self.ids.positions_nav_btn.bind(on_release=lambda *_:
+            self.move_screen_and_close_menu('positions_list'))
+        self.ids.humans_nav_btn.bind(on_release=lambda *_:
+            self.move_screen_and_close_menu('humans_list'))
+        self.ids.emergencies_nav_btn.bind(on_release=lambda *_:
+            self.move_screen_and_close_menu('emergencies_list'))
+        self.ids.worktype_nav_btn.bind(on_release=lambda *_:
+            self.move_screen_and_close_menu('worktypes_list'))
         # self.ids.history_nav_btn.bind(on_release=lambda *_:
         #     self.move_screen_and_close_menu('history'))
 
@@ -102,6 +102,13 @@ class Application(MDApp):
         self.ui.screen_manager.add_widget(FDScreen.AuthScreen(self.ui.path_manager))
         self.ui.screen_manager.add_widget(FDScreen.MainScreen(self.ui.path_manager))
         self.ui.screen_manager.add_widget(FDScreen.RegisterScreen(self.ui.path_manager))
+        self.ui.screen_manager.add_widget(FDScreen.TagsList(self.ui.path_manager))
+        self.ui.screen_manager.add_widget(FDScreen.ShortsList(self.ui.path_manager))
+        self.ui.screen_manager.add_widget(FDScreen.RanksList(self.ui.path_manager))
+        self.ui.screen_manager.add_widget(FDScreen.PositionsList(self.ui.path_manager))
+        self.ui.screen_manager.add_widget(FDScreen.HumansList(self.ui.path_manager))
+        self.ui.screen_manager.add_widget(FDScreen.EmergenciesList(self.ui.path_manager))
+        self.ui.screen_manager.add_widget(FDScreen.WorktypesList(self.ui.path_manager))
         self.ui.screen_manager.add_widget(FDScreen.CallsScreen(self.ui.path_manager))
 
         self.ui.path_manager.move_to_screen('main')

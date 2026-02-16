@@ -5,11 +5,16 @@ from kivy.properties import ObjectProperty
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelOneLine
 
-from data_base import db
+# from data_base import db
 from config import MODEL_LIST_LAYOUTS
 
 
 Builder.load_file(MODEL_LIST_LAYOUTS)
+
+
+# Temp class
+class db:
+	Model = None
 
 
 class _ModelListElementContent(MDBoxLayout):
