@@ -1,7 +1,7 @@
 import datetime
 from typing import Optional, List
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class User(BaseModel):
@@ -38,7 +38,8 @@ class InfoResponse(BaseModel):
 class Tag(BaseModel):
     id: int
     title: str
-    # emergencies: List['Emergency']
+    
+    model_config = ConfigDict(from_attributes=True)
 
 
 class Short(BaseModel):
@@ -46,30 +47,34 @@ class Short(BaseModel):
     title: str
     explanation: Optional[str]
     into_new_line: bool
-    # emergencies: List['Emergency']
+    
+    model_config = ConfigDict(from_attributes=True)
 
 
 class Rank(BaseModel):
     id: int
     title: str
     priority: int
-    # humans: List['Human']
+    
+    model_config = ConfigDict(from_attributes=True)
 
 
 class Position(BaseModel):
     id: int
     title: str
-    # humans: List['Human']
+    
+    model_config = ConfigDict(from_attributes=True)
 
 
 class Worktype(BaseModel):
     id: int
     title: str
-    start_work_day: datetime.date
-    finish_work_day: datetime.date
+    start_work_day: datetime.datetime
+    finish_work_day: datetime.datetime
     work_day_range: int
     week_day_range: int
-    # humans: List['Human']
+    
+    model_config = ConfigDict(from_attributes=True)
 
 
 class Human(BaseModel):
@@ -82,9 +87,10 @@ class Human(BaseModel):
     # start_vacation: datetime.date
     # finish_vacation: datetime.date
     # worktype: 'Worktype'
-    position: 'Position'
-    rank: 'Rank'
-    # emergencies: List['Emergency']
+    # position: 'Position'
+    # rank: 'Rank'
+    
+    model_config = ConfigDict(from_attributes=True)
 
 
 class Emergency(BaseModel):
@@ -92,18 +98,17 @@ class Emergency(BaseModel):
     title: str
     description: str
     urgent: bool
-    # tags: List['Tag']
-    # humans: List['Human']
-    # shorts: List['Short']
-    # calls: List['Calls']
+    
+    model_config = ConfigDict(from_attributes=True)
 
 
 class Calls(BaseModel):
     id: int
     start: datetime.date
     finish: datetime.date
-    # emergency: 'Emergency'
     info: Optional[str]
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class CallResponse(BaseModel):
