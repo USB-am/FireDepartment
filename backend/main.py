@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import sys
-from typing import Dict, List
+from typing import Union, Dict, List
 from datetime import datetime
 
 import uvicorn
@@ -19,7 +19,14 @@ from data_base.schema import (
     InfoResponse,
     LoginUserRequest,
     Emergency,
-    CallResponse
+    Tag,
+    Short,
+    Rank,
+    Position,
+    Worktype,
+    Human,
+    Calls,
+    CallResponse,
 )
 from data_base import model as DBModel
 from data_base.model import User, SecretKeyUser
@@ -30,6 +37,30 @@ TSession = Annotated[AsyncSession, Depends(get_session)]
 
 
 app = FastAPI()
+
+
+MODEL_TO_SCHEMA = {
+    'Emergency': Emergency,
+    'Tag': Tag,
+    'Short': Short,
+    'Rank': Rank,
+    'Position': Position,
+    'Worktype': Worktype,
+    'Human': Human,
+    'Calls': Calls
+}
+def get_schema_by_model_name(model_name: str) -> Union[
+    None,
+    Emergency,
+    Tag,
+    Short,
+    Rank,
+    Position,
+    Worktype,
+    Human,
+    Calls]:
+    ''' Получить схему ответа по названию таблицы в БД '''
+    return MODEL_TO_SCHEMA.get(model_name)
 
 
 @app.on_event('startup')
@@ -113,7 +144,18 @@ async def create_user(request: CreateUserRequest, session: TSession) -> Dict:
     }
 
 
-@app.get('/model', response_model=List[Emergency], status_code=status.HTTP_200_OK)
+@app.get(
+    '/model',
+    response_model=List[Union[
+        Emergency,
+        Tag,
+        Short,
+        Rank,
+        Position,
+        Worktype,
+        Human,
+        Calls]],
+    status_code=status.HTTP_200_OK)
 async def get_entries_by_model(request: Request,
                                model: str,
                                session: TSession,
@@ -123,7 +165,15 @@ async def get_entries_by_model(request: Request,
                                user: User = Depends(authenticate_user)
     ) -> List:
     ''' Получить записи из БД '''
-    model = getattr(DBModel, model)
+    model_name = model
+    try:
+        model = getattr(DBModel, model_name)
+    except AttributeError:
+        raise HTTPException(
+            status_code=400,
+            detail=f'Model {model} already exists!'
+        )
+
     stmt = (
         select(model)
         .where(func.lower(model.title).contains(func.lower(q)))
@@ -133,7 +183,12 @@ async def get_entries_by_model(request: Request,
     )
     result = await session.execute(stmt)
     entries = result.scalars().all()
-    return entries
+
+    schema = get_schema_by_model_name(model_name)
+    # x = entries[0]
+    # print(dir(x), x, type(x), sep='\n', end='\n'*5)
+    response = [schema.model_validate(entry) for entry in entries]
+    return response
 
 
 @app.get('/call', response_model=CallResponse, status_code=status.HTTP_200_OK)
