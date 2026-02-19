@@ -5,7 +5,7 @@ from typing import AsyncGenerator
 
 DATABASE_URL = 'sqlite+aiosqlite:///./firedepartment.db'
 
-engine = create_async_engine(DATABASE_URL, echo=True)
+engine = create_async_engine(DATABASE_URL, echo=False)
 AsyncSessionLocal = async_sessionmaker(
     bind=engine, 
     class_=AsyncSession, 
