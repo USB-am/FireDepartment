@@ -77,6 +77,31 @@ async def get_entry_by_id(tablename: str, entry_id: int, session: TSession):
     return getattr(Schema, tablename).model_validate(entry)
 
 
+@app.get('/call/{emergency_id}',
+         response_model=Schema.CallResponse,
+         dependencies=[Depends(auth.access_token_required)])
+async def get_call(emergency_id: int, session: TSession):
+    stmt = select(Emergency)
+        .filter_by(id=emergency_id)
+        .options(selectinload(Emergency.humans))
+        .options(selectinload(Emergency.shorts))
+    result = await session.execute(stmt)
+    emergency = result.scalars().first()
+
+    if emergency is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f'Emergency.id={emergency_id} is not already exists!'
+        )
+
+    return Schema.CallResponse(
+        title=emergency.title,
+        description=emergency.description,
+        humans=emergency.humans,
+        shorts=emergency.shorts
+    )
+
+
 @app.get('/protected', dependencies=[Depends(auth.access_token_required)])
 def protected():
     return {'message': 'Hello, World!'}
