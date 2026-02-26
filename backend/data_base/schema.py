@@ -14,6 +14,13 @@ class User(BaseModel):
     last_used: Optional[str] = None
 
 
+class UserResponse(BaseModel):
+    id: int
+    email: str
+    username: str
+    last_used: str
+
+
 # Модель для запроса создания пользователя
 class CreateUser(BaseModel):
     email: str

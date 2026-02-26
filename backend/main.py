@@ -16,6 +16,9 @@ from data_base.session import get_session, create_db_and_tables
 from data_base import schema as Schema
 from data_base import models
 
+# Routes
+from routes.base_router import base_router_v1 as BaseRouter
+
 
 TSession = Annotated[AsyncSession, Depends(get_session)]
 
@@ -35,6 +38,7 @@ config = AuthXConfig(
 
 auth = AuthX(config=config)
 auth.handle_errors(app)
+app.include_router(BaseRouter)
 
 
 @app.post('/login', status_code=status.HTTP_201_CREATED)
@@ -81,10 +85,11 @@ async def get_entry_by_id(tablename: str, entry_id: int, session: TSession):
          response_model=Schema.CallResponse,
          dependencies=[Depends(auth.access_token_required)])
 async def get_call(emergency_id: int, session: TSession):
-    stmt = select(Emergency)
+    stmt = (select(Emergency)
         .filter_by(id=emergency_id)
         .options(selectinload(Emergency.humans))
         .options(selectinload(Emergency.shorts))
+    )
     result = await session.execute(stmt)
     emergency = result.scalars().first()
 
