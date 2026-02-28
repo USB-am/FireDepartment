@@ -18,7 +18,10 @@ class UserResponse(BaseModel):
     id: int
     email: str
     username: str
-    last_used: str
+
+
+class UserAuthResponse(UserResponse):
+    token: str
 
 
 # Модель для запроса создания пользователя

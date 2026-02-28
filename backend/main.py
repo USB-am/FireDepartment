@@ -17,7 +17,7 @@ from data_base import schema as Schema
 from data_base import models
 
 # Routes
-from routes.base_router import base_router_v1 as BaseRouter
+from routes import api_router
 
 
 TSession = Annotated[AsyncSession, Depends(get_session)]
@@ -38,7 +38,7 @@ config = AuthXConfig(
 
 auth = AuthX(config=config)
 auth.handle_errors(app)
-app.include_router(BaseRouter)
+app.include_router(api_router)
 
 
 @app.post('/login', status_code=status.HTTP_201_CREATED)
