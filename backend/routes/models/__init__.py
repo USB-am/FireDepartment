@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from routes.base_route import main_router_v1 as base_router
+from .users import users_router
 
 
-model_router = APIRouter(prefix='/model')
-base_router.include_router(model_router)
+model_router = APIRouter(prefix='/models')
+model_router.include_router(users_router)
