@@ -24,6 +24,12 @@ class UserAuthResponse(UserResponse):
     token: str
 
 
+class FireDepartmentResponse(BaseModel):
+    id: int
+    title: str
+    address: str
+
+
 # Модель для запроса создания пользователя
 class CreateUser(BaseModel):
     email: str
@@ -50,6 +56,11 @@ class Tag(BaseModel):
     title: str
     
     model_config = ConfigDict(from_attributes=True)
+
+
+class TagResponse(BaseModel):
+    id: int
+    title: str
 
 
 class Short(BaseModel):
