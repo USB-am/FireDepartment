@@ -54,10 +54,10 @@ async def login(login_form: Schema.LoginUser, session: TSession):
 
 @app.get('/model/{tablename}/{entry_id}',
          response_model=Union[
-            Schema.Tag,
-            Schema.Rank,
-            Schema.Position,
-            Schema.Emergency,
+            Schema.TagResponse,
+            Schema.RankResponse,
+            Schema.PositionResponse,
+            Schema.EmergencyResponse,
          ],
          dependencies=[Depends(auth.access_token_required)])
 async def get_entry_by_id(tablename: str, entry_id: int, session: TSession):

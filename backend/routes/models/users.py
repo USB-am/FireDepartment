@@ -20,6 +20,12 @@ async def get_user(user_id: int, session: TSession) -> UserResponse:
     result = await session.execute(stmt)
     user = result.scalars().first()
 
+    if user is None:
+        raise HTTPException(
+            status_code=404,
+            detail=f'User.id={user_id} is not already exists!'
+        )
+
     return UserResponse(
         id=user.id,
         email=user.email,

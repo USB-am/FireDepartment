@@ -43,62 +43,39 @@ class LoginUser(BaseModel):
     password: str
 
 
-# Модель для ответа с информацией
-class InfoResponse(BaseModel):
-    message: str
-    user_id: int
-    username: str
-    timestamp: str
-
-
-class Tag(BaseModel):
-    id: int
-    title: str
-    
-    model_config = ConfigDict(from_attributes=True)
-
-
 class TagResponse(BaseModel):
     id: int
     title: str
 
 
-class Short(BaseModel):
+class ShortResponse(BaseModel):
     id: int
     title: str
     explanation: Optional[str]
     into_new_line: bool
-    
-    model_config = ConfigDict(from_attributes=True)
 
 
-class Rank(BaseModel):
+class RankResponse(BaseModel):
     id: int
     title: str
     priority: int
-    
-    model_config = ConfigDict(from_attributes=True)
 
 
-class Position(BaseModel):
+class PositionResponse(BaseModel):
     id: int
     title: str
-    
-    model_config = ConfigDict(from_attributes=True)
 
 
-class Worktype(BaseModel):
+class WorktypeResponse(BaseModel):
     id: int
     title: str
     start_work_day: datetime.datetime
     finish_work_day: datetime.datetime
     work_day_range: int
     week_day_range: int
-    
-    model_config = ConfigDict(from_attributes=True)
 
 
-class Human(BaseModel):
+class HumanResponse(BaseModel):
     id: int
     title: str
     phone_1: Optional[str]
@@ -114,16 +91,14 @@ class Human(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
 
-class Emergency(BaseModel):
+class EmergencyResponse(BaseModel):
     id: int
     title: str
     description: str
     urgent: bool
-    
-    model_config = ConfigDict(from_attributes=True)
 
 
-class Calls(BaseModel):
+class CallResponse(BaseModel):
     id: int
     start: datetime.date
     finish: datetime.date
@@ -135,5 +110,5 @@ class Calls(BaseModel):
 class CallResponse(BaseModel):
     title: str
     description: Optional[str]
-    humans: Optional[List[Human]]
-    shorts: Optional[List[Short]]
+    # humans: Optional[List[Human]]
+    # shorts: Optional[List[Short]]
