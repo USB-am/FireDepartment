@@ -24,6 +24,13 @@ class UserAuthResponse(UserResponse):
     token: str
 
 
+class UserRegisterRequest(BaseModel):
+    email: str
+    username: str
+    password: str
+    firedepartment_id: Optional[int]
+
+
 class FireDepartmentResponse(BaseModel):
     id: int
     title: str

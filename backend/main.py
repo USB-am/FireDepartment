@@ -7,7 +7,6 @@ from contextlib import asynccontextmanager
 
 import uvicorn
 from annotated_types import Annotated
-from authx import AuthX, AuthXConfig
 from fastapi import FastAPI, Request, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
@@ -31,14 +30,10 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
-config = AuthXConfig(
-    JWT_SECRET_KEY='my_secret_key',
-    JWT_TOKEN_LOCATION=['headers']
-)
-
-auth = AuthX(config=config)
-auth.handle_errors(app)
 app.include_router(api_router)
+
+from auth import auth
+auth.handle_errors(app)
 
 
 @app.post('/login', status_code=status.HTTP_201_CREATED)
@@ -50,66 +45,6 @@ async def login(login_form: Schema.LoginUser, session: TSession):
         status_code=401,
         detail='Invalid email or password!'
     )
-
-
-@app.get('/model/{tablename}/{entry_id}',
-         response_model=Union[
-            Schema.TagResponse,
-            Schema.RankResponse,
-            Schema.PositionResponse,
-            Schema.EmergencyResponse,
-         ],
-         dependencies=[Depends(auth.access_token_required)])
-async def get_entry_by_id(tablename: str, entry_id: int, session: TSession):
-
-    if (model:=getattr(models, tablename, None)) is None:
-        raise HTTPException(
-            status_code=404,
-            detail=f'Tablename "{tablename}" not already exists!'
-        )
-
-    stmt = select(model).filter_by(id=entry_id)
-    result = await session.execute(stmt)
-    entry = result.scalars().first()
-
-    if entry is None:
-        raise HTTPException(
-            status_code=404,
-            detail=f'{tablename}.id={entry_id} is not already exists!'
-        )
-
-    return getattr(Schema, tablename).model_validate(entry)
-
-
-@app.get('/call/{emergency_id}',
-         response_model=Schema.CallResponse,
-         dependencies=[Depends(auth.access_token_required)])
-async def get_call(emergency_id: int, session: TSession):
-    stmt = (select(Emergency)
-        .filter_by(id=emergency_id)
-        .options(selectinload(Emergency.humans))
-        .options(selectinload(Emergency.shorts))
-    )
-    result = await session.execute(stmt)
-    emergency = result.scalars().first()
-
-    if emergency is None:
-        raise HTTPException(
-            status_code=404,
-            detail=f'Emergency.id={emergency_id} is not already exists!'
-        )
-
-    return Schema.CallResponse(
-        title=emergency.title,
-        description=emergency.description,
-        humans=emergency.humans,
-        shorts=emergency.shorts
-    )
-
-
-@app.get('/protected', dependencies=[Depends(auth.access_token_required)])
-def protected():
-    return {'message': 'Hello, World!'}
 
 
 @app.middleware('http')

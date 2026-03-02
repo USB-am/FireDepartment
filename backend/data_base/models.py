@@ -7,6 +7,15 @@ from sqlalchemy.orm import Mapped, relationship, mapped_column
 from .session import Base
 
 
+class HashedPassword(Base):
+    ''' Хешированные пароли Пользователей '''
+
+    __tablename__ = 'hashed_passwords'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    user_id: Mapped[int] = mapped_column(ForeignKey('User.id'))
+    password_hash: Mapped[bytes]
+
+
 # ============ #
 # === USER === #
 
@@ -37,8 +46,8 @@ class User(Base):
     __tablename__ = 'User'
     id: Mapped[int] = mapped_column(primary_key=True)
     email: Mapped[str] = mapped_column(unique=True)
-    username: Mapped[str] = mapped_column(unique=True)
-    password: Mapped[str]
+    username: Mapped[str]
+    role: Mapped[str]
     firedepartment: Mapped['FireDepartment'] = relationship(secondary=firedepartment_users,
                                                             back_populates='users')
     created_at: Mapped[Optional[str]]
