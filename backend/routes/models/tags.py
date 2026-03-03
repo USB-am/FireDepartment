@@ -3,15 +3,44 @@ from annotated_types import Annotated
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from data_base.schema import TagResponse
+from auth import TSession
+from data_base.schema import TagResponse, CreateTagRequest
 from data_base.session import get_session
-from data_base.models import Tag
+from data_base.models import Tag, Emergency
 
 
 tags_router = APIRouter(prefix='/tags', tags=['Tags',])
 
 
-TSession = Annotated[AsyncSession, Depends(get_session)]
+@tags_router.post('/create', response_model=TagResponse)
+async def create_tag(form: CreateTagRequest, session: TSession) -> TagResponse:
+	title = form.title
+	stmt = select(Tag).filter_by(title=title)
+	result = await session.execute(stmt)
+	tag = result.scalars().first()
+
+	if tag is not None:
+		raise HTTPException(
+			status_code=409,
+			detail=f'Tag.title=`{title}` is already exists.'
+		)
+
+	emergencies_ids = form.emergencies_ids
+	stmt = select(Emergency).where(Emergency.id.in_(emergencies_ids))
+	result = await session.execute(stmt)
+	emergencies = result.scalars().all()
+
+	new_tag = Tag(
+		title=title,
+		emergencies=emergencies
+	)
+	session.add(new_tag)
+	await session.commit()
+
+	return TagResponse(
+		id=new_tag.id,
+		title=new_tag.title
+	)
 
 
 @tags_router.get('/{tag_id}', response_model=TagResponse)
