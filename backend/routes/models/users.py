@@ -48,7 +48,7 @@ async def get_user(user_id: int, session: TSession) -> UserResponse:
 @users_router.post('/auth', response_model=UserAuthResponse)
 async def auth_user(form: LoginUser, session: TSession) -> UserAuthResponse:
     email = form.email
-    password = form.password
+    password = form.password.encode('utf-8')
 
     stmt = select(User).filter_by(email=email)
     result = await session.execute(stmt)
@@ -57,7 +57,17 @@ async def auth_user(form: LoginUser, session: TSession) -> UserAuthResponse:
     if user is None:
         raise HTTPException(
             status_code=422,
-            detail='Invalid `email` or `password` fields.'
+            detail='Invalid `email` field.'
+        )
+
+    stmt = select(HashedPassword).filter_by(user_id=user.id)
+    result = await session.execute(stmt)
+    pwd_hashed = result.scalars().first()
+
+    if not bcrypt.checkpw(password, pwd_hashed.password_hash):
+        raise HTTPException(
+            status_code=422,
+            detail='Invalid `password` field.'
         )
 
     stmt = select(SecretKeyUser).filter_by(user_id=user.id)
