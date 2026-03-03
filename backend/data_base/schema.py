@@ -55,6 +55,11 @@ class TagResponse(BaseModel):
     title: str
 
 
+class CreateTagRequest(BaseModel):
+    title: str
+    emergencies_ids: Optional[List[int]]
+
+
 class ShortResponse(BaseModel):
     id: int
     title: str
@@ -71,6 +76,11 @@ class RankResponse(BaseModel):
 class PositionResponse(BaseModel):
     id: int
     title: str
+
+
+class CreatePositionRequest(BaseModel):
+    title: str
+    humans_ids: Optional[List[int]]
 
 
 class WorktypeResponse(BaseModel):
