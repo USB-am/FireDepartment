@@ -1,5 +1,5 @@
 import datetime
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 
 from pydantic import BaseModel, ConfigDict
 
@@ -58,6 +58,11 @@ class TagResponse(BaseModel):
 class CreateTagRequest(BaseModel):
     title: str
     emergencies_ids: Optional[List[int]]
+
+
+class UpdateTagRequest(BaseModel):
+    tag_id: int
+    fields: Dict[str, Any]
 
 
 class ShortResponse(BaseModel):
