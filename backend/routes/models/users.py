@@ -2,13 +2,10 @@ from datetime import datetime
 
 import bcrypt
 from fastapi import APIRouter, Depends, HTTPException
-from annotated_types import Annotated
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
 from auth import Role, RoleChecker, auth, TSession
 from data_base.schema import UserResponse, UserAuthResponse, LoginUser, UserRegisterRequest
-from data_base.session import get_session
 from data_base.models import User, SecretKeyUser, HashedPassword
 
 

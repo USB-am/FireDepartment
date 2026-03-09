@@ -1,12 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from annotated_types import Annotated
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter, HTTPException, status
 from sqlalchemy.future import select
 from sqlalchemy import update, delete
 
 from auth import TSession
 from data_base.schema import RankResponse, CreateRankRequest, UpdateRankRequest
-from data_base.session import get_session
 from data_base.models import Rank, Human
 
 
