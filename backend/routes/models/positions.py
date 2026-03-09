@@ -1,18 +1,13 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from annotated_types import Annotated
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter, HTTPException, status
 from sqlalchemy.future import select
 from sqlalchemy import update, delete
 
+from auth import TSession
 from data_base.schema import PositionResponse, CreatePositionRequest, UpdatePositionRequest
-from data_base.session import get_session
 from data_base.models import Position, Human
 
 
 positions_router = APIRouter(prefix='/positions', tags=['Positions',])
-
-
-TSession = Annotated[AsyncSession, Depends(get_session)]
 
 
 @positions_router.post('/create', response_model=PositionResponse, status_code=status.HTTP_201_CREATED)

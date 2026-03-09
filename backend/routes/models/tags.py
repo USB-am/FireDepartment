@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, HTTPException, status
 from sqlalchemy.future import select
 from sqlalchemy import update, delete
 
@@ -7,7 +7,6 @@ from data_base.schema import (
     TagResponse,
     CreateTagRequest,
     UpdateTagRequest)
-from data_base.session import get_session
 from data_base.models import Tag, Emergency
 
 

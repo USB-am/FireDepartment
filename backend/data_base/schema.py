@@ -37,6 +37,17 @@ class FireDepartmentResponse(BaseModel):
     address: str
 
 
+class CreateFireDepartmentRequest(BaseModel):
+    title: str
+    address: str
+    users_ids: Optional[List[int]]
+
+
+class UpdateFireDepartmentRequest(BaseModel):
+    firedepartment_id: int
+    fields: Dict[str, Any]
+
+
 # Модель для запроса создания пользователя
 class CreateUser(BaseModel):
     email: str
@@ -125,6 +136,20 @@ class WorktypeResponse(BaseModel):
     week_day_range: int
 
 
+class CreateWorktypeRequest(BaseModel):
+    title: str
+    start_work_day: datetime.datetime
+    finish_work_day: datetime.datetime
+    work_day_range: int
+    week_day_range: int
+    humans_ids: Optional[List[int]]
+
+
+class UpdateWorktypeRequest(BaseModel):
+    worktype_id: int
+    fields: Dict[str, Any]
+
+
 class HumanResponse(BaseModel):
     id: int
     title: str
@@ -137,8 +162,25 @@ class HumanResponse(BaseModel):
     # worktype: 'Worktype'
     # position: 'Position'
     # rank: 'Rank'
-    
-    model_config = ConfigDict(from_attributes=True)
+
+
+class CreateHumanRequest(BaseModel):
+    title: str
+    phone_1: Optional[str]
+    phone_2: Optional[str]
+    is_firefigher: bool
+    work_day: str
+    start_vacation: str
+    finish_vacation: str
+    rank_id: int
+    position_id: int
+    worktype_id: int
+    emergencies_ids: Optional[List[int]]
+
+
+class UpdateHumanRequest(BaseModel):
+    human_id: int
+    fields: Dict[str, Any]
 
 
 class EmergencyResponse(BaseModel):
@@ -148,17 +190,35 @@ class EmergencyResponse(BaseModel):
     urgent: bool
 
 
+class CreateEmergencyRequest(BaseModel):
+    title: str
+    description: str
+    urgent: bool
+    tags_ids: Optional[List[int]]
+    humans_ids: Optional[List[int]]
+    shorts_ids: Optional[List[int]]
+    calls_ids: Optional[List[int]]
+
+
+class UpdateEmergencyRequest(BaseModel):
+    emergency_id: int
+    fields: Dict[str, Any]
+
+
 class CallResponse(BaseModel):
     id: int
-    start: datetime.date
-    finish: datetime.date
+    start: datetime.datetime
+    finish: datetime.datetime
     info: Optional[str]
 
-    model_config = ConfigDict(from_attributes=True)
+
+class CreateCallRequest(BaseModel):
+    start: datetime.datetime
+    finish: datetime.datetime
+    emergency_id: int
+    info: Optional[str]
 
 
-class CallResponse(BaseModel):
-    title: str
-    description: Optional[str]
-    # humans: Optional[List[Human]]
-    # shorts: Optional[List[Short]]
+class UpdateCallRequest(BaseModel):
+    call_id: int
+    fields: Dict[str, Any]
