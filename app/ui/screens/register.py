@@ -1,15 +1,27 @@
-from typing import Dict, Optional
+from typing import List, Dict, Optional, Callable
 
 import requests
+from kivy.clock import Clock
+from kivy.lang import Builder
 from kivy.uix.widget import Widget
 from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.textfield import MDTextField
 
 from .base import BaseAuthScreen
 from ui.field.input import FDInput, FDNumberInput
 from ui.field.button import FDRectangleButton
+from ui.field.choice import ChoiceFilterSelectField
+from service.server import send_get
 from service.server.auth import register
 from service.server.secret_key import SecretKey
 from validators import register as RegisterValidator
+
+
+Builder.load_string('''
+<_FiredepartmentContent>:
+    size_hint: (1, None)
+    height: dp(50)
+''')
 
 
 def send_register_request(form: Dict) -> Optional[requests.Response]:
@@ -28,6 +40,22 @@ def save_secret_key(secret_key: str) -> None:
     ''' Сохранить secret_key в файл '''
     secret_key_manager = SecretKey()
     secret_key_manager.value = secret_key
+
+
+def get_firedepartments(callback: Callable) -> List[Dict]:
+    ''' Получить список Пожарных частей '''
+    url = 'models/firedepartments/all'
+    try:
+        res = send_get(url)
+    except:
+        return []
+
+    return [{
+            'text': fd.get('title', ''),
+            'viewclass': 'OneLineListItem',
+            'on_release': lambda choice=fd.get('title', None): callback(choice)
+        } for fd in res.json()
+    ]
 
 
 class RegisterScreen(BaseAuthScreen):
@@ -49,7 +77,7 @@ class RegisterScreen(BaseAuthScreen):
             'email': self._email_field,
             'username': self._username_field,
             'password': self._password_field,
-            'fd_number': self._fire_department_number
+            'firedepartment_id': self._fire_department
         }
 
     def fill_elements(self) -> None:
@@ -99,14 +127,11 @@ class RegisterScreen(BaseAuthScreen):
         ])
         self.add_content(self._password_reentry_field)
 
-        self._fire_department_number = FDNumberInput(hint_text='Номер пожарной части')
-        self._fire_department_number.validators.extend([
-            RegisterValidator.EmptyFieldValidator(
-                self._fire_department_number,
-                message='Поле не может быть пустым'
-            ),
-        ])
-        self.add_content(self._fire_department_number)
+        fd_items = get_firedepartments(callback=lambda choice: print(choice))
+        self._fire_department = ChoiceFilterSelectField(
+            title='Номер пожарной части',
+            items=fd_items)
+        self.add_content(self._fire_department)
 
         self._submit_btn = FDRectangleButton(title='Зарегестрироваться')
         self._submit_btn.bind_btn(callback=self.submit)
@@ -118,7 +143,7 @@ class RegisterScreen(BaseAuthScreen):
         ''' Валидация формы '''
         form_fields = (self._email_field, self._username_field,
                        self._password_field, self._password_reentry_field,
-                       self._fire_department_number)
+                       self._fire_department)
         return all(map(lambda f: not f.error, form_fields))
 
     def submit(self) -> None:
