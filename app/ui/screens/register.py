@@ -77,7 +77,7 @@ class RegisterScreen(BaseAuthScreen):
             'email': self._email_field,
             'username': self._username_field,
             'password': self._password_field,
-            'firedepartment_id': self._fire_department
+            'fd_number': self._fire_department
         }
 
     def fill_elements(self) -> None:
