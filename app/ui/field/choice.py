@@ -1,6 +1,7 @@
 from typing import Any, List, Dict, Callable, Optional
 
 from kivy.lang.builder import Builder
+from kivy.properties import ListProperty
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.boxlayout import MDBoxLayout
 
@@ -28,9 +29,12 @@ Builder.load_string('''
 
 
 class _BaseChoiceField(MDBoxLayout):
+    validators = ListProperty([])
+
     def __init__(self, title: str, items: List[Dict[str, Any]], *args, **kwargs):
         self.title = title
         super().__init__(*args, **kwargs)
+        self.error = False
         self.is_open = False
         self.all_menu_items = items
         self.menu_items = items.copy()
@@ -72,10 +76,10 @@ class _BaseChoiceField(MDBoxLayout):
         )
         self.menu.bind(on_open=self.on_menu_open, on_dismiss=self.on_menu_dismiss)
 
-    def on_menu_open(self, *_):
+    def on_menu_open(self, *_) -> None:
         self.is_open = True
 
-    def on_menu_dismiss(self, *_):
+    def on_menu_dismiss(self, *_) -> None:
         self.is_open = False
 
     def add_menu_items(self, items: List[Dict[str, Any]]) -> None:
@@ -136,6 +140,25 @@ class _BaseChoiceField(MDBoxLayout):
                 if not self._external_callbacks[text]:
                     del self._external_callbacks[text]
         self._create_menu()
+    
+    def on_text(self, instance, text) -> None:
+        self.on_validators(instance, text)
+
+    def on_validators(self, instance, text) -> None:
+        for validator in self.validators:
+            check = validator(text)
+            if not check.status:
+                self.error = True
+                self.helper_text = check.text
+                self.helper_text_mode = 'on_error'
+                break
+        else:
+            self.error = False
+            self.helper_text = ''
+            self.helper_text_mode = 'on_focus'
+    
+    def get_value(self) -> str:
+        return self.ids.txt_field.text
 
 
 class ChoiceSelectField(_BaseChoiceField):
