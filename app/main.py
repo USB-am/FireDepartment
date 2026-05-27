@@ -1,48 +1,22 @@
 # -*- coding: utf-8 -*-
 
-from kivy.config import Config
-Config.set('graphics', 'width', '360')
-Config.set('graphics', 'height', '650')
+import config
 
-from kivymd.app import MDApp
+if config.DEBUG:
+    from kivy.config import Config
+    Config.set('graphics', 'width', '360')
+    Config.set('graphics', 'height', '650')
+
 from kivy.lang.builder import Builder
-from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.screenmanager import ScreenManager
+from kivymd.app import MDApp
 from kivymd.uix.navigationdrawer import MDNavigationLayout
 
-import config
-from ui import screens as FDScreen
-from service.singleton import _Singleton
+from path_manager import PathManager
+from ui import screen as FDScreen
 
 
-Builder.load_file(config.APP_SCREEN)
-
-
-class PathManager(metaclass=_Singleton):
-    ''' Менеджер путей '''
-
-    def __init__(self, screen_manager: ScreenManager):
-        self.__screen_manager = screen_manager
-        self._path = ['main',]
-
-    def forward(self, screen_name: str) -> Screen:
-        self.__screen_manager.current = screen_name
-        self._path.append(screen_name)
-        print(self._path)
-
-        return self.__screen_manager.current_screen
-
-    def back(self) -> Screen:
-        if len(self._path) > 1:
-            self._path.pop(-1)
-
-        self.__screen_manager.current = self._path[-1]
-        print(self._path)
-
-        return self.__screen_manager.current_screen
-
-    def move_to_screen(self, screen_name: str) -> Screen:
-        self._path = []
-        return self.forward(screen_name)
+Builder.load_file(config.KV_APP)
 
 
 class FDNavigation(MDNavigationLayout):
@@ -71,8 +45,8 @@ class FDNavigation(MDNavigationLayout):
             self.move_screen_and_close_menu('emergencies_list'))
         self.ids.worktype_nav_btn.bind(on_release=lambda *_:
             self.move_screen_and_close_menu('worktypes_list'))
-        # self.ids.history_nav_btn.bind(on_release=lambda *_:
-        #     self.move_screen_and_close_menu('history'))
+        self.ids.history_nav_btn.bind(on_release=lambda *_:
+            self.move_screen_and_close_menu('history'))
 
     def move_screen_and_close_menu(self, screen_name: str) -> None:
         '''
@@ -90,26 +64,19 @@ class FDNavigation(MDNavigationLayout):
         return self.ids.screen_manager
 
 
-class Application(MDApp):
+class MDApplication(MDApp):
+    ''' Главный класс приложения '''
+
     icon = config.APP_ICON
     title = 'Fire Department'
 
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
+    def __init__(self):
+        super().__init__()
 
         self.ui = FDNavigation()
 
-        self.ui.screen_manager.add_widget(FDScreen.AuthScreen(self.ui.path_manager))
-        self.ui.screen_manager.add_widget(FDScreen.MainScreen(self.ui.path_manager))
-        self.ui.screen_manager.add_widget(FDScreen.RegisterScreen(self.ui.path_manager))
-        # self.ui.screen_manager.add_widget(FDScreen.TagsList(self.ui.path_manager))
-        # self.ui.screen_manager.add_widget(FDScreen.ShortsList(self.ui.path_manager))
-        # self.ui.screen_manager.add_widget(FDScreen.RanksList(self.ui.path_manager))
-        # self.ui.screen_manager.add_widget(FDScreen.PositionsList(self.ui.path_manager))
-        # self.ui.screen_manager.add_widget(FDScreen.HumansList(self.ui.path_manager))
-        # self.ui.screen_manager.add_widget(FDScreen.EmergenciesList(self.ui.path_manager))
-        # self.ui.screen_manager.add_widget(FDScreen.WorktypesList(self.ui.path_manager))
-        # self.ui.screen_manager.add_widget(FDScreen.CallsScreen(self.ui.path_manager))
+        self.ui.screen_manager.add_widget(FDScreen.FDAuthScreen(self.ui.path_manager))
+        self.ui.screen_manager.add_widget(FDScreen.FDRegisterScreen(self.ui.path_manager))
 
         self.ui.path_manager.move_to_screen('auth')
 
@@ -119,13 +86,6 @@ class Application(MDApp):
             'accent_palette': self.theme_cls.accent_palette,
             'theme_style': self.theme_cls.theme_style,
             'primary_hue': self.theme_cls.primary_hue,
-        })
-        conf.setdefaults('call', {
-            'work_day_ignore': '1',
-            'start_text': '[HH:MM dd.mm.yyyy] Начало выезда.',
-            'finish_text': '[HH:MM dd.mm.yyyy] Конец выезда.',
-            'human_success': '[HH:MM dd.mm.yyyy] Вызов {human_name}.',
-            'human_unsuccess': '[HH:MM dd.mm.yyyy] Вызов {human_name} не прошел.',
         })
 
     def build(self):
@@ -138,5 +98,9 @@ class Application(MDApp):
         return self.ui
 
 
+def main():
+    MDApplication().run()
+
+
 if __name__ == '__main__':
-    Application().run()
+    main()
