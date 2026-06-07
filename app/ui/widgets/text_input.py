@@ -5,7 +5,7 @@ from kivy.properties import StringProperty, ListProperty
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.relativelayout import MDRelativeLayout
 
-from validators import BaseValidator
+from validators.widgets import BaseValidator
 
 
 Builder.load_string('''
@@ -55,7 +55,6 @@ class FDTextInput(MDTextField):
     hint_text = StringProperty()
     helper_text = StringProperty('')
     validators = ListProperty([])
-    validator = StringProperty('')
 
     def custom_validate(self, instance: MDTextField, value: str) -> None:
         return _validate(instance, value, self.validators)

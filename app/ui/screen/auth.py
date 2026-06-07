@@ -7,7 +7,7 @@ from .based_screen import BaseScreen
 from ui.widgets.label import FDLabel
 from ui.widgets.text_input import FDTextInput, FDPasswordInput
 from ui.widgets.button import FDRectangleFillButton
-from validators import EmptyValidator
+from validators.widgets import EmptyValidator
 
 
 class FDAuthScreen(BaseScreen):
