@@ -74,16 +74,21 @@ class FDRegisterScreen(BaseScreen):
         self.add_content(self.submit_btn)
 
         self.add_content(MDBoxLayout())
-
-    def submit(self, *_) -> None:
+    
+    def is_valid(self) -> bool:
+        # form_validator = RegisterFormValidator(error_msg='Register form is invalid')
         form_validator = RegisterFormValidator(
+            error_msg='Register form is invalid!',
             email_field=self.email_field,
             username_field=self.username_field,
             password_field=self.pwd_field,
             password_again_field=self.pwd_again_field,
             fire_department_field=self.fire_department_field)
 
-        if form_validator.is_valid():
-            print(f'Form is valid')
+        return form_validator.is_valid()
+
+    def submit(self, *_) -> None:
+        if self.is_valid():
+            print(f'Register form is valid')
         else:
-            print(f'Form is not valid')
+            print(f'Register form is invalid')
