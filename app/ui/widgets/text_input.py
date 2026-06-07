@@ -56,6 +56,9 @@ class FDTextInput(MDTextField):
     helper_text = StringProperty('')
     validators = ListProperty([])
 
+    def get_value(self) -> str:
+        return self.text
+
     def custom_validate(self, instance: MDTextField, value: str) -> None:
         return _validate(instance, value, self.validators)
 
