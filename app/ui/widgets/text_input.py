@@ -40,7 +40,6 @@ Builder.load_string('''
 def _validate(instance: MDTextField, value: str, validators: List[BaseValidator]) -> None:
     for validator in validators:
         result = validator(value)
-        print(f'{instance=}="{value}" in the {validator} has {result.status} status.')
 
         if not result.status:
             instance.error = True
@@ -73,5 +72,4 @@ class FDPasswordInput(MDRelativeLayout, _BaseWidget):
         return self.ids.text_field.text
 
     def custom_validate(self, instance: MDTextField, value: str) -> None:
-        # print(f'FDPasswordInput is start\n{instance=}\n{self.error=}')
         return _validate(instance, value, self.validators)
