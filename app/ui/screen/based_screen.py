@@ -3,6 +3,7 @@ from typing import Callable
 from kivy.lang.builder import Builder
 from kivy.uix.widget import Widget
 from kivy.uix.screenmanager import Screen
+from kivymd.app import MDApp
 
 from path_manager import PathManager
 from config import BASE_SCREEN_KV
@@ -14,6 +15,7 @@ Builder.load_file(BASE_SCREEN_KV)
 class _Base(Screen):
     def __init__(self, path_manager: PathManager):
         self.path_manager = path_manager
+        self.api_client = MDApp.get_running_app().api_client
         super().__init__()
 
     def add_left_toolbar_items(self, icon: str, callback: Callable) -> None:

@@ -14,6 +14,7 @@ from kivymd.uix.navigationdrawer import MDNavigationLayout
 
 from path_manager import PathManager
 from ui import screen as FDScreen
+from service.api_client import APIClient
 
 
 Builder.load_file(config.KV_APP)
@@ -72,6 +73,8 @@ class MDApplication(MDApp):
 
     def __init__(self):
         super().__init__()
+
+        self.api_client = APIClient(base_url='http://127.0.0.1:8000/api/v1')
 
         self.ui = FDNavigation()
 
