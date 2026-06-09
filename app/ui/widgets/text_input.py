@@ -1,10 +1,11 @@
 from typing import List
 
 from kivy.lang.builder import Builder
-from kivy.properties import StringProperty, ListProperty
+from kivy.properties import StringProperty, ListProperty, BooleanProperty
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.relativelayout import MDRelativeLayout
 
+from . import _BaseWidget
 from validators.widgets import BaseValidator
 
 
@@ -39,22 +40,22 @@ Builder.load_string('''
 def _validate(instance: MDTextField, value: str, validators: List[BaseValidator]) -> None:
     for validator in validators:
         result = validator(value)
+        print(f'{instance=}="{value}" in the {validator} has {result.status} status.')
 
         if not result.status:
             instance.error = True
             instance.helper_text = result.message
             return
 
-    instance.error = False
-    instance.helper_text = ''
+    else:
+        instance.error = False
+        instance.helper_text = ''
 
 
-class FDTextInput(MDTextField):
+class FDTextInput(MDTextField, _BaseWidget):
     ''' Текстовое поле '''
-
     hint_text = StringProperty()
     helper_text = StringProperty('')
-    validators = ListProperty([])
 
     def get_value(self) -> str:
         return self.text
@@ -63,12 +64,14 @@ class FDTextInput(MDTextField):
         return _validate(instance, value, self.validators)
 
 
-class FDPasswordInput(MDRelativeLayout):
+class FDPasswordInput(MDRelativeLayout, _BaseWidget):
     ''' Текстовое поле ввода пароля '''
-
     hint_text = StringProperty()
     helper_text = StringProperty('')
-    validators = ListProperty([])
+
+    def get_value(self) -> str:
+        return self.ids.text_field.text
 
     def custom_validate(self, instance: MDTextField, value: str) -> None:
+        # print(f'FDPasswordInput is start\n{instance=}\n{self.error=}')
         return _validate(instance, value, self.validators)
