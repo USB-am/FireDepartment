@@ -6,7 +6,7 @@ from .based_screen import BaseScreen
 from ui.widgets.text_input import FDTextInput, FDPasswordInput
 from ui.widgets.choice import FDChoice
 from ui.widgets.button import FDRectangleFillButton
-from validators.widgets import EmptyValidator, EmailValidator
+from validators.widgets import EmptyValidator, EmailValidator, IdenticalPasswords
 from validators.register_form import RegisterFormValidator
 
 
@@ -53,7 +53,10 @@ class FDRegisterScreen(BaseScreen):
         self.pwd_again_field = FDPasswordInput(
             hint_text='Пароль (повтор)',
             validators=[
-                EmptyValidator(error_msg='Поле не может быть пустым!')
+                EmptyValidator(error_msg='Поле не может быть пустым!'),
+                IdenticalPasswords(
+                    other_widget=self.pwd_field,
+                    error_msg='Пароли не совпадают!')
             ]
         )
         self.add_content(self.pwd_again_field)
@@ -76,7 +79,6 @@ class FDRegisterScreen(BaseScreen):
         self.add_content(MDBoxLayout())
     
     def is_valid(self) -> bool:
-        # form_validator = RegisterFormValidator(error_msg='Register form is invalid')
         form_validator = RegisterFormValidator(
             error_msg='Register form is invalid!',
             email_field=self.email_field,

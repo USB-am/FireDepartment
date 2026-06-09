@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from typing import Optional
 
+from kivy.uix.widget import Widget
+
 from . import BaseValidator, ValidatorResult
 from email_validator import validate_email, EmailNotValidError
 
@@ -28,8 +30,12 @@ class EmailValidator(BaseValidator):
 
 
 class IdenticalPasswords(BaseValidator):
-	def __call__(self, value_1: str, value_2: str, message: Optional[str]=None) -> ValidatorResult:
-		status = value_1 == value_2
+	def __init__(self, other_widget: Widget, *args, **kwargs):
+		super().__init__(*args, **kwargs)
+		self.other_widget = other_widget
+
+	def __call__(self, value: str, message: Optional[str]=None) -> ValidatorResult:
+		status = value == self.other_widget.get_value()
 
 		return ValidatorResult(
 			status=status,

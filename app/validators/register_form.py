@@ -13,11 +13,10 @@ class FDTypedFieldDescriptor:
         self.expected_type = expected_type
         self.name = None
 
-    def __set_name__(self, owner, name: str) -> None:
-        print(f'{owner=}')
+    def __set_name__(self, owner: Any, name: str) -> None:
         self.name = name
 
-    def __get__(self, instance: 'FDFieldDescriptor', owner) -> Optional[Union['FDFieldDescriptor', str]]:
+    def __get__(self, instance: 'FDFieldDescriptor', owner: Any) -> Optional[Union['FDFieldDescriptor', str]]:
         if instance is None:
             return self
         return instance.__dict__.get(self.name)
@@ -60,8 +59,13 @@ class RegisterFormValidator(BaseValidator):
         self.password_field = password_field
         self.password_again_field = password_again_field
         self.fire_department_field = fire_department_field
-
-        print(self.email_field.get_value())
+        self._all_fields = [
+            email_field,
+            username_field,
+            password_field,
+            password_again_field,
+            fire_department_field,
+        ]
 
     def is_valid(self) -> bool:
-        return False
+        return all(map(lambda field: not field.error, self._all_fields))

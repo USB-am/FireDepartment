@@ -5,6 +5,8 @@ from kivy.properties import StringProperty, ListProperty
 from kivymd.uix.menu import MDDropdownMenu
 from kivymd.uix.boxlayout import MDBoxLayout
 
+from . import _BaseWidget
+
 
 Builder.load_string('''
 <FDChoice>:
@@ -20,7 +22,7 @@ Builder.load_string('''
 ''')
 
 
-class FDChoice(MDBoxLayout):
+class FDChoice(MDBoxLayout, _BaseWidget):
     ''' Текстовое поле с выпадающим списком для выбора '''
 
     hint_text = StringProperty()
