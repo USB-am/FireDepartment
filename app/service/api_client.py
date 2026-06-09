@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Dict
 
 import requests
 
@@ -35,8 +35,8 @@ class APIClient:
                 use_auth: bool=True,
                 extra_headers: Optional[Dict[str, str]]=None,
                 timeout: int=10
-    ) -> request.Response:
-        url = f'{self.url}/{endpoint.lstrip("/")}/'
+    ) -> requests.Response:
+        url = f'{self.base_url}/{endpoint.lstrip("/")}/'
         headers = self._build_headers(use_auth, extra_headers)
 
         response = self._session.request(
