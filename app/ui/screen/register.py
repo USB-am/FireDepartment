@@ -1,7 +1,9 @@
-from typing import List
+from typing import List, Dict
 
 import requests
 from kivy.lang.builder import Builder
+from kivymd.uix.dialog import MDDialog
+from kivymd.uix.button import MDFlatButton
 from kivymd.uix.boxlayout import MDBoxLayout
 
 from path_manager import PathManager
@@ -23,6 +25,7 @@ class FDRegisterScreen(BaseScreen):
         self.add_left_toolbar_items('arrow-left', lambda *_: self.path_manager.back())
 
         self.form_validator = None
+        self.dialog = None
 
     def on_pre_enter(self, *args) -> None:
         self.clear_content()
@@ -71,6 +74,14 @@ class FDRegisterScreen(BaseScreen):
 
         self.add_content(MDBoxLayout())
 
+        self.test_filled_fields()
+
+    def test_filled_fields(self):
+        self.email_field.set_value('qwe@qwe.com')
+        self.username_field.set_value('qwe')
+        self.pwd_field.set_value('qwe')
+        self.pwd_again_field.set_value('qwe')
+
     def is_valid(self) -> bool:
         fields = {
             'email_field': self.email_field,
@@ -89,8 +100,51 @@ class FDRegisterScreen(BaseScreen):
 
         return form_validator.is_valid()
 
+    def open_error_dialog(self, title: str, message: str) -> None:
+        if self.dialog is not None:
+            self.dialog.dismiss()
+            self.dialog = None
+
+        ok_btn = MDFlatButton(text='Ок')
+
+        self.dialog = MDDialog(
+            title=title,
+            text=message,
+            buttons=[ok_btn,]
+        )
+        ok_btn.bind(on_release=lambda *_: self.dialog.dismiss())
+
+        self.dialog.open()
+
     def submit(self, *_) -> None:
         if self.is_valid():
             print(f'Register form is valid')
+            self._send_registration()
+
         else:
-            print(f'Register form is invalid')
+            self.open_error_dialog(
+                title='Ошибка',
+                message='В форма регистрации заполнена неправильно!'
+            )
+
+    def _send_registration(self) -> None:
+        data = {
+            'email': self.email_field.get_value(),
+            'username': self.username_field.get_value(),
+            'password': self.pwd_field.get_value(),
+        }
+
+        response = self.api_client.post(
+            endpoint='models/users/register',
+            data=data,
+            on_success=lambda *_: print('SUCCESS'),
+            on_failure=lambda *_: print('FAILURE')
+        )
+
+        print(f'{dir(response)=}')
+
+    def __success_register(self, req: 'UrlRequest', result: Dict[str, str]) -> None:
+        print(f'SUCCESS [{req.resp_status=}] {result}')
+
+    def __failure_register(self, req: 'UrlRequest', result: Dict[str, str]) -> None:
+        print(f'FAILURE [{req.resp_status=}] {result}')
