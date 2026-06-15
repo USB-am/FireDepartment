@@ -41,7 +41,7 @@ class APIClient:
         timeout: int = 10
     ) -> UrlRequest:
 
-        url = f'{self.base_url}/{endpoint.lstrip("/")}/'
+        url = f'{self.base_url}/{endpoint.lstrip("/")}'
 
         if params:
             from urllib.parse import urlencode
