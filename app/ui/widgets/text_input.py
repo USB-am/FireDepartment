@@ -12,8 +12,8 @@ from validators.widgets import BaseValidator
 Builder.load_string('''
 <FDTextInput>:
     helper_text_mode: 'persistent'
-    on_text: root.custom_validate(self, self.text)
-    on_focus: root.custom_validate(self, self.text)
+    on_text: root._custom_validate(self, self.text)
+    on_focus: root._custom_validate(self, self.text)
 
 
 <FDPasswordInput>:
@@ -23,9 +23,10 @@ Builder.load_string('''
     MDTextField:
         id: text_field
         hint_text: root.hint_text
+        helper_text_mode: 'persistent'
         password: True
-        on_text: root.custom_validate(self, self.text)
-        on_focus: root.custom_validate(self, self.text)
+        on_text: root._custom_validate(self, self.text)
+        on_focus: root._custom_validate(self, self.text)
 
     MDIconButton:
         icon: 'eye-off'
@@ -59,8 +60,11 @@ class FDTextInput(MDTextField, _BaseWidget):
     def get_value(self) -> str:
         return self.text
 
-    def custom_validate(self, instance: MDTextField, value: str) -> None:
+    def _custom_validate(self, instance: MDTextField, value: str) -> None:
         return _validate(instance, value, self.validators)
+
+    def validate(self) -> None:
+        return _validate(self, self.text, self.validators)
 
 
 class FDPasswordInput(MDRelativeLayout, _BaseWidget):
@@ -71,5 +75,9 @@ class FDPasswordInput(MDRelativeLayout, _BaseWidget):
     def get_value(self) -> str:
         return self.ids.text_field.text
 
-    def custom_validate(self, instance: MDTextField, value: str) -> None:
+    def _custom_validate(self, instance: MDTextField, value: str) -> None:
         return _validate(instance, value, self.validators)
+
+    def validate(self) -> None:
+        instance = self.ids.text_field
+        return _validate(instance, instance.text, self.validators)

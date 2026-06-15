@@ -72,12 +72,20 @@ class FDRegisterScreen(BaseScreen):
         self.add_content(MDBoxLayout())
 
     def is_valid(self) -> bool:
+        fields = {
+            'email_field': self.email_field,
+            'username_field': self.username_field,
+            'password_field': self.pwd_field,
+            'password_again_field': self.pwd_again_field,
+        }
+
+        for field in fields.values():
+            field.validate()
+
         form_validator = RegisterFormValidator(
             error_msg='Register form is invalid!',
-            email_field=self.email_field,
-            username_field=self.username_field,
-            password_field=self.pwd_field,
-            password_again_field=self.pwd_again_field)
+            **fields
+        )
 
         return form_validator.is_valid()
 
