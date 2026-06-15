@@ -60,6 +60,9 @@ class FDTextInput(MDTextField, _BaseWidget):
     def get_value(self) -> str:
         return self.text
 
+    def set_value(self, text: str) -> None:
+        self.text = text
+
     def _custom_validate(self, instance: MDTextField, value: str) -> None:
         return _validate(instance, value, self.validators)
 
@@ -74,6 +77,9 @@ class FDPasswordInput(MDRelativeLayout, _BaseWidget):
 
     def get_value(self) -> str:
         return self.ids.text_field.text
+
+    def set_value(self, text: str) -> None:
+        self.ids.text_field.text = text
 
     def _custom_validate(self, instance: MDTextField, value: str) -> None:
         return _validate(instance, value, self.validators)
