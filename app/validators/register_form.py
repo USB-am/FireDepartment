@@ -44,27 +44,23 @@ class RegisterFormValidator(BaseValidator):
     username_field = FDTypedFieldDescriptor(FDTextInput)
     password_field = FDTypedFieldDescriptor(FDPasswordInput)
     password_again_field = FDTypedFieldDescriptor(FDPasswordInput)
-    fire_department_field = FDTypedFieldDescriptor(FDChoice)
 
     def __init__(self,
                  email_field,
                  username_field,
                  password_field,
                  password_again_field,
-                 fire_department_field,
                  **kwargs):
         super().__init__(**kwargs)
         self.email_field = email_field
         self.username_field = username_field
         self.password_field = password_field
         self.password_again_field = password_again_field
-        self.fire_department_field = fire_department_field
         self._all_fields = [
             email_field,
             username_field,
             password_field,
             password_again_field,
-            fire_department_field,
         ]
 
     def is_valid(self) -> bool:
