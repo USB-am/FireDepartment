@@ -8,8 +8,8 @@ class User(BaseModel):
     id: int
     email: str
     username: str
-    fd_number: str
-    secret_key: str
+    fd_number: Optional[str]
+    password_hash: str
     created_at: str
     last_used: Optional[str] = None
 
@@ -28,7 +28,6 @@ class UserRegisterRequest(BaseModel):
     email: str
     username: str
     password: str
-    firedepartment_id: Optional[int]
 
 
 class FireDepartmentResponse(BaseModel):

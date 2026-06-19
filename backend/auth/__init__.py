@@ -10,7 +10,7 @@ from fastapi import HTTPException, Header, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from data_base.models import User, SecretKeyUser
+from data_base.models import User
 from data_base.session import get_session
 
 
@@ -35,9 +35,10 @@ def generate_secret_key(username: str) -> str:
 
 async def authenticate_user(session: TSession, secret_key: str = Header(..., alias='SECRET_KEY')) -> User:
     ''' Функция для аутентификации пользователя по SECRET_KEY '''
-    result = await session.scalars(select(SecretKeyUser)\
-        .where(SecretKeyUser.secret_key==secret_key))
-    entry = result.first()
+    # result = await session.scalars(select(SecretKeyUser)\
+    #     .where(SecretKeyUser.secret_key==secret_key))
+    # entry = result.first()
+    entry = False
     if not entry:
         raise HTTPException(
             status_code=401,
