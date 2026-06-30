@@ -17,6 +17,8 @@ from ui import screen as FDScreen
 # from ui.screen.register.register_view import FDRegisterScreen
 # from ui.screen.register.register_controller import RegisterController
 from service.api_client import APIClient
+from service.token import AccessTokenManager
+from exceptions import AccessError
 
 
 Builder.load_file(config.KV_APP)
@@ -80,13 +82,28 @@ class MDApplication(MDApp):
 
         self.ui = FDNavigation()
 
+        # Login screen
         self.ui.screen_manager.add_widget(FDScreen.FDAuthScreen(self.ui.path_manager))
 
+        # Register screen
         register_screen = FDScreen.FDRegisterScreen(self.ui.path_manager)
         self.ui.screen_manager.add_widget(register_screen)
         register_controller = FDScreen.RegisterController(register_screen, self.api_client)
 
-        self.ui.path_manager.move_to_screen('auth')
+        # Main screen
+        main_screen = FDScreen.FDMainScreen(self.ui.path_manager)
+        self.ui.screen_manager.add_widget(main_screen)
+
+        # Options screen
+        options_screen = FDScreen.FDOptionsScreen(self.ui.path_manager)
+        self.ui.screen_manager.add_widget(options_screen)
+        options_controller = FDScreen.OptionsController(options_screen, self.api_client)
+
+        try:
+            self.api_client.set_token(AccessTokenManager().get_token())
+            self.ui.path_manager.move_to_screen('options')
+        except AccessError:
+            self.ui.path_manager.move_to_screen('auth')
 
     def build_config(self, conf):
         conf.setdefaults('options', {

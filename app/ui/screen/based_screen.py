@@ -30,6 +30,13 @@ class _Base(Screen):
     def clear_content(self) -> None:
         self.ids.content.clear_widgets()
 
+    def open_menu(self, *events) -> None:
+        self.parent.parent.ids.menu.set_state('open')
+
 
 class BaseScreen(_Base):
+    pass
+
+
+class BaseScrollScreen(_Base):
     pass
