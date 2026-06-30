@@ -1,15 +1,46 @@
-<_Base>:
-	MDBoxLayout:
-		orientation: 'vertical'
-		size_hint: (1, 1)
+<BaseScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        size_hint: (1, 1)
 
-		MDTopAppBar:
-			id: toolbar
-			title: root.title
-			anchor_title: 'left'
+        MDTopAppBar:
+            id: toolbar
+            title: root.title
+            anchor_title: 'center'
 
-		MDBoxLayout:
-			id: content
-			padding: dp(8)
-			spacing: dp(8)
-			orientation: 'vertical'
+        MDBoxLayout:
+            id: content
+            padding: dp(8)
+            spacing: dp(8)
+            orientation: 'vertical'
+
+
+<BaseScrollScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        size_hint: (1, 1)
+
+        MDTopAppBar:
+            id: toolbar
+            title: root.title
+            anchor_title: 'center'
+
+        MDBoxLayout:
+            id: content_container
+            orientation: 'vertical'
+            size_hint: (1, 1)
+
+            ScrollView:
+                id: scroll_content
+                size_hint: (1, 1)
+
+                on_scroll_y:
+                    if args[1] <= 0: root.end_list_event()
+
+                GridLayout:
+                    id: content
+                    cols: 1
+                    size_hint: 1, None
+                    height: self.minimum_height
+                    do_scroll_x: False
+                    padding: [dp(10), dp(20)]

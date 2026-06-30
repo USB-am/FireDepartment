@@ -1,8 +1,7 @@
 from typing import Optional
 
-from kivymd.app import MDApp
-
 from .register_model import RegisterModel
+from service.token import AccessTokenManager
 
 
 class RegisterController:
@@ -36,24 +35,29 @@ class RegisterController:
     def _on_registration_success(self, response, message: Optional[str]=None) -> None:
         self.view.show_loading(False)
 
-        self.view.open_dialog(title='All good!', message='Registration is complited!' if message is None else message)
+        from rich import inspect
+        inspect(response, all=True)
+
+        token = response.result['token']
+
+        token_manager = AccessTokenManager()
+        token_manager.save_token(token)
+        self.api_client.set_token(token)
+
+        self.view.path_manager.move_to_screen('main')
 
     def _on_registration_failure(self, response, message: str) -> None:
         self.view.show_loading(False)
-
-        self.view.open_dialog(title='Failure', message=str(message))
+        self.view.open_dialog(title='Failure', message=message['detail'])
 
     def _on_registration_redirect(self, response, message: str) -> None:
         self.view.show_loading(False)
-
         self.view.open_dialog(title='Redirect', message=str(message))
 
     def _on_registration_cancel(self, response, message: str) -> None:
         self.view.show_loading(False)
-
         self.view.open_dialog(title='Cancel', message=str(message))
 
     def _on_registration_error(self, response, message: str) -> None:
         self.view.show_loading(False)
-
         self.view.open_dialog(title='Error', message=str(message))

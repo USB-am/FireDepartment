@@ -41,6 +41,9 @@ LOGO_IMG = os.path.join(IMAGES_DIR, "logo.png")
 # Paths to .kv files
 KV_DIR = os.path.join(BASE_DIR, "kv")
 
-KV_SCREEN = os.path.join(KV_DIR, 'screen')
+KV_SCREEN = os.path.join(KV_DIR, "screen")
 KV_APP = os.path.join(KV_SCREEN, "app.kv")
 BASE_SCREEN_KV = os.path.join(KV_SCREEN, "based_screen.kv")
+
+KV_LAYOUTS = os.path.join(KV_DIR, "layout")
+KV_PROFILE = os.path.join(KV_LAYOUTS, "profile.kv")

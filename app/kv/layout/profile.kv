@@ -1,0 +1,74 @@
+<FDProfileLayout>:
+    orientation: 'vertical'
+    size_hint: (1, None)
+    height: dp(200)
+    md_bg_color: (.8, .8, .8, .5)
+    padding: dp(10)
+
+    MDLabel:
+        text: root.title
+        size_hint_y: None
+        height: dp(30)
+        halign: 'left'
+        font_style: 'H6'
+
+    MDBoxLayout:
+        orientation: 'horizontal'
+        size_hint: (1, 1)
+        spacing: dp(10)
+
+        MDRelativeLayout:
+            id: avatar_container
+            size_hint: (.25, 1)
+
+            MDCard:
+                id: avatar_card
+                size_hint: (None, None)
+                size: (avatar_container.width, avatar_container.width)
+                pos_hint: {'center_y': .5}
+                radius: (avatar_container.width, avatar_container.width)
+                clip_children: True
+                AsyncImage:
+                    id: avatar_image
+                    source: ''
+                    allow_stretch: True
+                    keep_ratio: True
+
+        MDBoxLayout:
+            id: fields_container
+            orientation: 'vertical'
+            size_hint: (.75, 1)
+            padding: 0
+            spacing: 0
+
+            MDLabel:
+                id: username_field
+                size_hint: (1, None)
+                height: fields_container.height // 3
+                # hint_text: 'username_field'
+                font_size: dp(12)
+
+            MDLabel:
+                id: email_field
+                size_hint: (1, None)
+                height: fields_container.height // 3
+                # hint_text: 'email_field'
+                font_size: dp(12)
+
+            MDLabel:
+                id: firedepartment_field
+                size_hint: (1, None)
+                height: fields_container.height // 3
+                # hint_text: 'firedepartment_field'
+                font_size: dp(12)
+
+    # MDIconButton:
+    #     id: avatar_icon
+
+    # MDLabel:
+    #     id: bg_label
+
+    MDFlatButton:
+        size_hint: (1, None)
+        height: dp(30)
+        text: 'Редактировать'
