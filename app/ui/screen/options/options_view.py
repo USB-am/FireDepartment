@@ -34,9 +34,9 @@ class FDOptionsScreen(BaseScrollScreen):
     def _create_profile_layout(self) -> None:
         self.profile_layout = FDProfileLayout(title='Профиль')
         user_data = UserProfileData(
-            username='Test user',
-            email='user@user.com',
-            firedepartment='МЧС РОССИИ ПО Г. МОСКВА',
+            username='ДлиннаяФамилия ДлинноеИмя ДлинноеОтчество',
+            email='ДлинныйEmail@ДлинныйEmail.inbox',
+            firedepartment='МЧС РОССИИ ПО Г. МОСКВА (какой-нибудь отчел МЧС по работче с чем-нибудь)',
             fd_number='73',
             avatar=None)
         self.profile_layout.update(user_data)
