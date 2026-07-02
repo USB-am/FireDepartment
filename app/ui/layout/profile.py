@@ -22,7 +22,7 @@ class FDProfileLayout(MDBoxLayout):
     def update(self, user: 'UserProfileData') -> None:
         self.ids.username_field.text = user.username
         self.ids.email_field.text = user.email
-        self.ids.firedepartment_field.text = user.firedepartment
+        # self.ids.firedepartment_field.text = user.firedepartment
 
         # self.ids.bg_label.text = user.fd_number
 
