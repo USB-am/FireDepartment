@@ -1,3 +1,4 @@
+import hashlib
 from datetime import datetime, timedelta
 
 import bcrypt
@@ -101,7 +102,8 @@ async def create_user(form: UserRegisterRequest, session: TSession) -> UserAuthR
     await session.flush()
 
     refresh_token_value = auth.create_refresh_token(uid=new_user.email)
-    token_hash = bcrypt.hashpw(refresh_token_value.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
+    sha_hash = hashlib.sha256(refresh_token_value.encode('utf-8')).digest()
+    token_hash = bcrypt.hashpw(sha_hash, bcrypt.gensalt()).decode('utf-8')
     refresh_token = RefreshToken(
         user_id=new_user.id,
         token_hash=token_hash,

@@ -36,17 +36,6 @@ from auth import auth
 auth.handle_errors(app)
 
 
-@app.post('/login', status_code=status.HTTP_201_CREATED)
-async def login(login_form: Schema.LoginUser, session: TSession):
-    if login_form.email == 'test' and login_form.password == 'test':
-        token = auth.create_access_token(uid=login_form.email)
-        return {'access_token': token}
-    raise HTTPException(
-        status_code=401,
-        detail='Invalid email or password!'
-    )
-
-
 @app.middleware('http')
 async def log_requests(request: Request, call_next: Callable):
     start_time = datetime.now()
