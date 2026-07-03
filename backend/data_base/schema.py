@@ -1,7 +1,20 @@
-import datetime
+from datetime import datetime
 from typing import Optional, List, Dict, Any
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel
+
+
+class ErrorDetail(BaseModel):
+    field: Optional[str] = None
+    message: str
+
+
+class ErrorResponse(BaseModel):
+    error: str
+    message: str
+    details: Optional[List[ErrorDetail]] = None
+    timestamp: datetime
+    path: str
 
 
 class User(BaseModel):
@@ -129,16 +142,16 @@ class UpdatePositionRequest(BaseModel):
 class WorktypeResponse(BaseModel):
     id: int
     title: str
-    start_work_day: datetime.datetime
-    finish_work_day: datetime.datetime
+    start_work_day: datetime
+    finish_work_day: datetime
     work_day_range: int
     week_day_range: int
 
 
 class CreateWorktypeRequest(BaseModel):
     title: str
-    start_work_day: datetime.datetime
-    finish_work_day: datetime.datetime
+    start_work_day: datetime
+    finish_work_day: datetime
     work_day_range: int
     week_day_range: int
     humans_ids: Optional[List[int]]
@@ -206,14 +219,14 @@ class UpdateEmergencyRequest(BaseModel):
 
 class CallResponse(BaseModel):
     id: int
-    start: datetime.datetime
-    finish: datetime.datetime
+    start: datetime
+    finish: datetime
     info: Optional[str]
 
 
 class CreateCallRequest(BaseModel):
-    start: datetime.datetime
-    finish: datetime.datetime
+    start: datetime
+    finish: datetime
     emergency_id: int
     info: Optional[str]
 
