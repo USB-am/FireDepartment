@@ -2,9 +2,9 @@ from fastapi import APIRouter, HTTPException, status
 from sqlalchemy.future import select
 from sqlalchemy import update, delete
 
-from auth import TSession
-from data_base.schema import RankResponse, CreateRankRequest, UpdateRankRequest
-from data_base.models import Rank, Human
+from core.database import TSession
+from schemas.firedepartment import RankResponse, CreateRankRequest, UpdateRankRequest
+from models.firedepartment import Rank, Human
 
 
 ranks_router = APIRouter(prefix='/ranks', tags=['Ranks',])

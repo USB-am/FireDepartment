@@ -2,19 +2,19 @@ from fastapi import APIRouter, HTTPException, status
 from sqlalchemy.future import select
 from sqlalchemy import update, delete
 
-from auth import TSession
-from data_base.models import FireDepartment, User
-from data_base.schema import (
+from core.database import TSession
+from models.user import User, FireDepartment
+from schemas.user import (
     FireDepartmentResponse,
     CreateFireDepartmentRequest,
     UpdateFireDepartmentRequest
 )
 
 
-fd_router = APIRouter(prefix='/firedepartments', tags=['Fire departments',])
+firedepartments_router = APIRouter(prefix='/firedepartments', tags=['Fire departments',])
 
 
-@fd_router.post('/create', response_model=FireDepartmentResponse, status_code=status.HTTP_201_CREATED)
+@firedepartments_router.post('/create', response_model=FireDepartmentResponse, status_code=status.HTTP_201_CREATED)
 async def create_fire_department(form: CreateFireDepartmentRequest, session: TSession) -> FireDepartmentResponse:
     title = form.title
     stmt = select(FireDepartment).filter_by(title=title)
@@ -47,7 +47,7 @@ async def create_fire_department(form: CreateFireDepartmentRequest, session: TSe
     )
 
 
-@fd_router.put('/update/{firedepartment_id}', status_code=status.HTTP_201_CREATED)
+@firedepartments_router.put('/update/{firedepartment_id}', status_code=status.HTTP_201_CREATED)
 async def update_firedepartment(form: UpdateFireDepartmentRequest, session: TSession) -> None:
     firedepartment_id = form.firedepartment_id
     fields = form.fields
@@ -57,14 +57,14 @@ async def update_firedepartment(form: UpdateFireDepartmentRequest, session: TSes
     await session.commit()
 
 
-@fd_router.delete('/delete/{firedepartment_id}', status_code=status.HTTP_200_OK)
+@firedepartments_router.delete('/delete/{firedepartment_id}', status_code=status.HTTP_200_OK)
 async def delete_firedepartment(firedepartment_id: int, session: TSession) -> None:
     stmt = delete(FireDepartment).where(FireDepartment.id==firedepartment_id)
     await session.execute(stmt)
     await session.commit()
 
 
-@fd_router.get('/{firedepartment_id}', response_model=FireDepartmentResponse)
+@firedepartments_router.get('/{firedepartment_id}', response_model=FireDepartmentResponse)
 async def get_firedepartment(firedepartment_id: int, session: TSession) -> FireDepartmentResponse:
     stmt = select(FireDepartment).filter_by(id=firedepartment_id)
     result = await session.execute(stmt)

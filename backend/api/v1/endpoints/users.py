@@ -1,12 +1,14 @@
-from datetime import datetime, timedelta
+from datetime import datetime
 
 import bcrypt
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.future import select
 
-from auth import Role, RoleChecker, auth, TSession
-from data_base.schema import UserResponse, UserAuthResponse, LoginUser, UserRegisterRequest
-from data_base.models import User, RefreshToken, UserProfile
+from core.database import TSession
+from core.config import auth
+from core.security import Role, RoleChecker
+from schemas.user import UserResponse, UserAuthResponse, LoginUser, UserRegisterRequest
+from models.user import User, SecretKeyUser, HashedPassword
 
 
 users_router = APIRouter(prefix='/users', tags=['Users',])
@@ -84,42 +86,42 @@ async def create_user(form: UserRegisterRequest, session: TSession) -> UserAuthR
 
     stmt = select(User).filter_by(email=email)
     result = await session.execute(stmt)
-    if result.scalars().first():
+    found_user = result.scalars().first()
+
+    if found_user:
         raise HTTPException(
             status_code=409,
-            detail=f'User.email="{email}" is already exists!'
+            detail=f'User.email={email} is already exists!'
         )
 
-    hashed = bcrypt.hashpw(form.password.encode('utf-8'), bcrypt.gensalt())
+    username = form.username
+    pwd = form.password
+
+    created_at = datetime.now().isoformat()
 
     new_user = User(
         email=email,
-        username=form.username,
-        password_hash=hashed.decode('utf-8'),
-        role=Role.dispatch.value)
+        username=username,
+        role=Role.dispatch.value,
+        created_at=created_at,
+        last_used=created_at)
     session.add(new_user)
-    await session.flush()
-
-    refresh_token_value = auth.create_refresh_token(uid=new_user.email)
-    token_hash = bcrypt.hashpw(refresh_token_value.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
-    refresh_token = RefreshToken(
-        user_id=new_user.id,
-        token_hash=token_hash,
-        expires_at=datetime.utcnow() + timedelta(days=7),
-        created_at=datetime.utcnow(),
-        revoked=False)
-    session.add(refresh_token)
-
-    profile = UserProfile(user_id=new_user.id)
-    session.add(profile)
-
     await session.commit()
 
-    access_token = auth.create_access_token(uid=new_user.email)
+    session.add(HashedPassword(
+        user_id=new_user.id,
+        password_hash=bcrypt.hashpw(pwd.encode('utf-8'), bcrypt.gensalt())
+    ))
+    secret_key = SecretKeyUser(
+        user_id=new_user.id,
+        secret_key=auth.create_access_token(uid=email)
+    )
+    session.add(secret_key)
+    await session.commit()
 
     return UserAuthResponse(
         id=new_user.id,
         email=new_user.email,
         username=new_user.username,
-        token=access_token
+        token=secret_key.secret_key
     )

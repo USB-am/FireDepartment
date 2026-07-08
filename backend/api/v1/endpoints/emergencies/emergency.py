@@ -4,12 +4,12 @@ from fastapi import APIRouter, HTTPException, status
 from sqlalchemy.future import select
 from sqlalchemy import update, delete
 
-from auth import TSession
-from data_base.schema import EmergencyResponse, CreateEmergencyRequest, UpdateEmergencyRequest
-from data_base.models import Base, Emergency, Tag, Human, Short, Calls
+from core.database import TSession
+from schemas.firedepartment import EmergencyResponse, CreateEmergencyRequest, UpdateEmergencyRequest
+from models.firedepartment import Base, Emergency, Tag, Human, Short, Calls
 
 
-emergencies_router = APIRouter(prefix='/emergencies', tags=['Emergency',])
+emergencies_router = APIRouter(prefix='/emergency', tags=['Emergency',])
 
 
 async def get_entries_by_ids(model: Base, ids: List[int], session: TSession) -> List[Base]:
