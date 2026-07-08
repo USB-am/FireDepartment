@@ -2,9 +2,9 @@ from fastapi import APIRouter, HTTPException, status
 from sqlalchemy.future import select
 from sqlalchemy import update, delete
 
-from auth import TSession
-from data_base.schema import WorktypeResponse, CreateWorktypeRequest, UpdateWorktypeRequest
-from data_base.models import Worktype, Human
+from core.database import TSession
+from schemas.firedepartment import WorktypeResponse, CreateWorktypeRequest, UpdateWorktypeRequest
+from models.firedepartment import Worktype, Human
 
 
 worktypes_router = APIRouter(prefix='/worktypes', tags=['Worktypes',])

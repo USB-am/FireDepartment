@@ -2,12 +2,12 @@ from fastapi import APIRouter, HTTPException, status
 from sqlalchemy.future import select
 from sqlalchemy import update, delete
 
-from auth import TSession
-from data_base.schema import (
+from core.database import TSession
+from schemas.firedepartment import (
     TagResponse,
     CreateTagRequest,
     UpdateTagRequest)
-from data_base.models import Tag, Emergency
+from models.firedepartment import Tag, Emergency
 
 
 tags_router = APIRouter(prefix='/tags', tags=['Tags',])

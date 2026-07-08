@@ -2,12 +2,12 @@ from fastapi import APIRouter, HTTPException, status
 from sqlalchemy.future import select
 from sqlalchemy import update, delete
 
-from auth import TSession
-from data_base.schema import (
+from core.database import TSession
+from schemas.firedepartment import (
     ShortResponse,
     CreateShortRequest,
     UpdateShortRequest)
-from data_base.models import Short, Emergency
+from models.firedepartment import Short, Emergency
 
 
 shorts_router = APIRouter(prefix='/shorts', tags=['Shorts',])

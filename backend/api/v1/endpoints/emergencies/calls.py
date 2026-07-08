@@ -2,9 +2,9 @@ from fastapi import APIRouter, HTTPException, status
 from sqlalchemy.future import select
 from sqlalchemy import update, delete
 
-from auth import TSession
-from data_base.schema import CallResponse, CreateCallRequest, UpdateCallRequest
-from data_base.models import Calls, Emergency
+from core.database import TSession
+from schemas.firedepartment import CallResponse, CreateCallRequest, UpdateCallRequest
+from models.firedepartment import Calls, Emergency
 
 
 calls_router = APIRouter(prefix='/calls', tags=['Calls',])

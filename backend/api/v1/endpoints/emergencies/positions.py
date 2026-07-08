@@ -2,9 +2,9 @@ from fastapi import APIRouter, HTTPException, status
 from sqlalchemy.future import select
 from sqlalchemy import update, delete
 
-from auth import TSession
-from data_base.schema import PositionResponse, CreatePositionRequest, UpdatePositionRequest
-from data_base.models import Position, Human
+from core.database import TSession
+from schemas.firedepartment import PositionResponse, CreatePositionRequest, UpdatePositionRequest
+from models.firedepartment import Position, Human
 
 
 positions_router = APIRouter(prefix='/positions', tags=['Positions',])

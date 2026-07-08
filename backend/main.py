@@ -2,24 +2,14 @@
 
 import sys
 from datetime import datetime
-from typing import Union, List, Dict, Callable
+from typing import Callable
 from contextlib import asynccontextmanager
 
 import uvicorn
-from annotated_types import Annotated
-from fastapi import FastAPI, Request, Depends, HTTPException, status
-from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
+from fastapi import FastAPI, Request
 
-from data_base.session import get_session, create_db_and_tables
-from data_base import schema as Schema
-from data_base import models
-
-# Routes
-from routes import api_router
-
-
-TSession = Annotated[AsyncSession, Depends(get_session)]
+from api.v1.router import api_router
+from core.database import create_db_and_tables
 
 
 @asynccontextmanager
@@ -32,19 +22,8 @@ async def lifespan(app: FastAPI):
 app = FastAPI(lifespan=lifespan)
 app.include_router(api_router)
 
-from auth import auth
+from core.config import auth
 auth.handle_errors(app)
-
-
-@app.post('/login', status_code=status.HTTP_201_CREATED)
-async def login(login_form: Schema.LoginUser, session: TSession):
-    if login_form.email == 'test' and login_form.password == 'test':
-        token = auth.create_access_token(uid=login_form.email)
-        return {'access_token': token}
-    raise HTTPException(
-        status_code=401,
-        detail='Invalid email or password!'
-    )
 
 
 @app.middleware('http')

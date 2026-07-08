@@ -4,9 +4,9 @@ from fastapi import APIRouter, HTTPException, status
 from sqlalchemy.future import select
 from sqlalchemy import update, delete
 
-from auth import TSession
-from data_base.schema import HumanResponse, CreateHumanRequest, UpdateHumanRequest
-from data_base.models import (
+from core.database import TSession
+from schemas.firedepartment import HumanResponse, CreateHumanRequest, UpdateHumanRequest
+from models.firedepartment import (
     Base,
     Human,
     Rank,
