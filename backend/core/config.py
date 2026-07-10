@@ -8,3 +8,5 @@ config = AuthXConfig(
     JWT_TOKEN_LOCATION=['headers']
 )
 auth = AuthX(config=config)
+
+SECURE = False  # Set True for production
