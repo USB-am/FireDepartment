@@ -7,8 +7,8 @@ from datetime import datetime
 from fastapi import HTTPException, Header, Depends
 from sqlalchemy.future import select
 
-from .models.user import User
-from .database import get_session
+from models.user import User
+from .database import get_session, TSession
 
 
 def generate_secret_key(username: str) -> str:

@@ -1,12 +1,12 @@
 import datetime
 from typing import Optional, List, Dict, Any
 
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 
 class User(BaseModel):
     id: int
-    email: str
+    email: EmailStr
     username: str
     fd_number: Optional[str]
     password_hash: str
@@ -16,7 +16,7 @@ class User(BaseModel):
 
 class UserResponse(BaseModel):
     id: int
-    email: str
+    email: EmailStr
     username: str
 
 
@@ -24,8 +24,13 @@ class UserAuthResponse(UserResponse):
     token: str
 
 
+class UserLoginRequest(BaseModel):
+    email: EmailStr
+    password: str
+
+
 class UserRegisterRequest(BaseModel):
-    email: str
+    email: EmailStr
     username: str
     password: str
 
@@ -48,12 +53,12 @@ class UpdateFireDepartmentRequest(BaseModel):
 
 
 class CreateUser(BaseModel):
-    email: str
+    email: EmailStr
     username: str
     password: str
     fd_number: int
 
 
 class LoginUser(BaseModel):
-    email: str
+    email: EmailStr
     password: str

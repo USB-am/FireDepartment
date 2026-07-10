@@ -1,127 +1,142 @@
-from datetime import datetime
+import hashlib
+from datetime import datetime, timedelta
 
 import bcrypt
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, HTTPException, Request, Response
 from sqlalchemy.future import select
+from sqlalchemy.orm import selectinload
 
 from core.database import TSession
-from core.config import auth
+from core.config import auth, SECURE
 from core.security import Role, RoleChecker
-from schemas.user import UserResponse, UserAuthResponse, LoginUser, UserRegisterRequest
-from models.user import User, SecretKeyUser, HashedPassword
+from schemas.user import UserRegisterRequest, UserLoginRequest, UserResponse
+from models.user import User, RefreshToken, UserProfile
 
 
 users_router = APIRouter(prefix='/users', tags=['Users',])
 
 
-@users_router.get(
-    '/{user_id}',
-    response_model=UserResponse,
-    dependencies=[Depends(
-        RoleChecker([
-            Role.admin,
-            Role.manager,
-            Role.dispatch,
-            Role.reader
-        ]))
-    ])
-async def get_user(user_id: int, session: TSession) -> UserResponse:
-    stmt = select(User).filter_by(id=user_id)
+@users_router.post('/login', response_model=UserResponse)
+async def login_user(form: UserLoginRequest, session: TSession, response: Response) -> UserResponse:
+    stmt = select(User).filter_by(email=form.email)
     result = await session.execute(stmt)
     user = result.scalars().first()
 
     if user is None:
         raise HTTPException(
             status_code=404,
-            detail=f'User.id={user_id} is not already exists!'
+            detail=f'User.email="{email}" is not already exists!'
         )
 
-    return UserResponse(
-        id=user.id,
-        email=user.email,
-        username=user.username
-    )
+
+@users_router.post('/refresh')
+async def refresh_access(request: Request, session: TSession, response: Response) -> dict:
+    user_refresh_token = request.cookies.get('refresh_token')
+    if user_refresh_token is None:
+        raise HTTPException(
+            status_code=401,
+            detail=f'refresh_token is not found!'
+        )
+
+    incoming_hash = hashlib.sha256(user_refresh_token.encode('utf-8')).hexdigest()
+    stmt = select(RefreshToken).options(selectinload(RefreshToken.user)).filter(
+        RefreshToken.token_hash==incoming_hash,
+        RefreshToken.revoked==False,
+        RefreshToken.expires_at>datetime.utcnow())
+    result = await session.execute(stmt)
+    refresh_token = result.scalars().first()
+
+    user = refresh_token.user
+
+    access_token = auth.create_access_token(uid=user.email)
+    response.set_cookie(
+        key='access_token',
+        value=access_token,
+        httponly=True,
+        secure=SECURE,
+        samesite='lax',
+        max_age=15*60)
+
+    refresh_token_value = auth.create_refresh_token(uid=user.email)
+    sha_hash = hashlib.sha256(refresh_token_value.encode('utf-8')).hexdigest()
+    refresh_token = RefreshToken(
+        user_id=user.id,
+        token_hash=sha_hash,
+        expires_at=datetime.utcnow() + timedelta(days=7),
+        created_at=datetime.utcnow(),
+        revoked=False)
+    session.add(refresh_token)
+    await session.commit()
+
+    response.set_cookie(
+        key='refresh_token',
+        value=refresh_token,
+        httponly=True,
+        secure=SECURE,
+        samesite='lax',
+        max_age=7*24*60*60)
+
+    return {'status_code': 200, 'detail': 'Access-token is updated.'}
 
 
-@users_router.post('/auth', response_model=UserAuthResponse)
-async def auth_user(form: LoginUser, session: TSession) -> UserAuthResponse:
+@users_router.post('/register', response_model=UserResponse)
+async def create_user(form: UserRegisterRequest, session: TSession, response: Response) -> UserResponse:
     email = form.email
-    password = form.password.encode('utf-8')
 
     stmt = select(User).filter_by(email=email)
     result = await session.execute(stmt)
-    user = result.scalars().first()
-
-    if user is None:
-        raise HTTPException(
-            status_code=422,
-            detail='Invalid `email` field.'
-        )
-
-    stmt = select(HashedPassword).filter_by(user_id=user.id)
-    result = await session.execute(stmt)
-    pwd_hashed = result.scalars().first()
-
-    if not bcrypt.checkpw(password, pwd_hashed.password_hash):
-        raise HTTPException(
-            status_code=422,
-            detail='Invalid `password` field.'
-        )
-
-    stmt = select(SecretKeyUser).filter_by(user_id=user.id)
-    result = await session.execute(stmt)
-    secret_key = result.scalars().first()
-
-    return UserAuthResponse(
-        id=user.id,
-        email=user.email,
-        username=user.username,
-        token=secret_key.secret_key
-    )
-
-
-@users_router.post('/register', response_model=UserAuthResponse)
-async def create_user(form: UserRegisterRequest, session: TSession) -> UserAuthResponse:
-    email = form.email
-
-    stmt = select(User).filter_by(email=email)
-    result = await session.execute(stmt)
-    found_user = result.scalars().first()
-
-    if found_user:
+    if result.scalars().first():
         raise HTTPException(
             status_code=409,
-            detail=f'User.email={email} is already exists!'
+            detail=f'User.email="{email}" is already exists!'
         )
 
-    username = form.username
-    pwd = form.password
-
-    created_at = datetime.now().isoformat()
+    hashed = bcrypt.hashpw(form.password.encode('utf-8'), bcrypt.gensalt())
 
     new_user = User(
         email=email,
-        username=username,
-        role=Role.dispatch.value,
-        created_at=created_at,
-        last_used=created_at)
+        username=form.username,
+        password_hash=hashed.decode('utf-8'),
+        role=Role.dispatch.value)
     session.add(new_user)
+    await session.flush()
+
+    refresh_token_value = auth.create_refresh_token(uid=new_user.email)
+    # sha_hash = hashlib.sha256(refresh_token_value.encode('utf-8')).digest()
+    sha_hash = hashlib.sha256(refresh_token_value.encode('utf-8')).hexdigest()
+    # token_hash = bcrypt.hashpw(sha_hash, bcrypt.gensalt()).decode('utf-8')
+    refresh_token = RefreshToken(
+        user_id=new_user.id,
+        token_hash=sha_hash,
+        expires_at=datetime.utcnow() + timedelta(days=7),
+        created_at=datetime.utcnow(),
+        revoked=False)
+    session.add(refresh_token)
+
+    profile = UserProfile(user_id=new_user.id)
+    session.add(profile)
+
     await session.commit()
 
-    session.add(HashedPassword(
-        user_id=new_user.id,
-        password_hash=bcrypt.hashpw(pwd.encode('utf-8'), bcrypt.gensalt())
-    ))
-    secret_key = SecretKeyUser(
-        user_id=new_user.id,
-        secret_key=auth.create_access_token(uid=email)
-    )
-    session.add(secret_key)
-    await session.commit()
+    access_token = auth.create_access_token(uid=new_user.email)
 
-    return UserAuthResponse(
+    response.set_cookie(
+        key='access_token',
+        value=access_token,
+        httponly=True,
+        secure=SECURE,
+        samesite='lax',
+        max_age=15*60)  # TODO: сделать не магические цифры
+    response.set_cookie(
+        key='refresh_token',
+        value=refresh_token_value,
+        httponly=True,
+        secure=SECURE,
+        samesite='lax',
+        max_age=7*24*60*60)  # TODO: сделать не магические цифры
+
+    return UserResponse(
         id=new_user.id,
         email=new_user.email,
-        username=new_user.username,
-        token=secret_key.secret_key
+        username=new_user.username
     )
