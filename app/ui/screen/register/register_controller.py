@@ -38,11 +38,12 @@ class RegisterController:
         from rich import inspect
         inspect(response, all=True)
 
-        token = response.result['token']
+        access_token = response.result['access_token']
+        refresh_token = response.result['refresh_token']
 
         token_manager = AccessTokenManager()
-        token_manager.save_token(token)
-        self.api_client.set_token(token)
+        token_manager.save_token(access_token, refresh_token)
+        self.api_client.set_token(access_token)
 
         self.view.path_manager.move_to_screen('main')
 

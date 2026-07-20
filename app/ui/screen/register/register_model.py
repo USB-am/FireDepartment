@@ -47,8 +47,8 @@ class RegisterModel:
             return
 
         self.api_client.post(
-            endpoint='models/users/register',
-            data=data.dict(),
+            endpoint='users/register',
+            data=data.model_dump(),
             on_success=on_success,
             on_failure=on_failure,
             on_redirect=on_redirect,
