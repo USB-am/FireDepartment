@@ -5,3 +5,6 @@ venv/
 fire_department.db
 .idea/
 app/application.ini
+**/fire_department.egg-info/
+**/temp_token.json
+**.db
