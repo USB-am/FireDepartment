@@ -1,1 +1,1 @@
-pytest
+pytest --run-server
