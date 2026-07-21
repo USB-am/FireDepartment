@@ -8,7 +8,7 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
 
 from core.database import TSession
-from core.config import auth, SECURE
+from core.config import auth, SECURE, HTTP_ONLY
 from core.security import Role, RoleChecker
 from schemas.user import UserRegisterRequest, UserLoginRequest, UserResponse
 from models.user import User, RefreshToken, UserProfile
@@ -25,14 +25,14 @@ def set_token_cookies_to_response(access_token: str, refresh_token: str, respons
     response.set_cookie(
         key='access_token',
         value=access_token,
-        httponly=True,
+        httponly=HTTP_ONLY,
         secure=SECURE,
         samesite='lax',
         max_age=ACCESS_TOKEN_MAX_AGE)
     response.set_cookie(
         key='refresh_token',
         value=refresh_token,
-        httponly=True,
+        httponly=HTTP_ONLY,
         secure=SECURE,
         samesite='lax',
         max_age=REFRESH_TOKEN_MAX_AGE)

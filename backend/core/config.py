@@ -9,4 +9,5 @@ config = AuthXConfig(
 )
 auth = AuthX(config=config)
 
-SECURE = False  # Set True for production
+SECURE = False      # Set True for production
+HTTP_ONLY = True    # Set True for production
