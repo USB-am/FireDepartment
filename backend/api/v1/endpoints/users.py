@@ -10,15 +10,14 @@ from sqlalchemy.orm import selectinload
 from core.database import TSession
 from core.config import auth, SECURE, HTTP_ONLY
 from core.security import Role, RoleChecker
-from schemas.user import UserRegisterRequest, UserLoginRequest, UserResponse
+from schemas.user import UserRegisterRequest, UserLoginRequest, UserResponse, Tokens
 from models.user import User, RefreshToken, UserProfile
 
 
 users_router = APIRouter(prefix='/users', tags=['Users',])
 
-# TODO: сделать не магические цифры
-ACCESS_TOKEN_MAX_AGE = 15*60
-REFRESH_TOKEN_MAX_AGE = 7*24*60*60
+ACCESS_TOKEN_MAX_AGE = timedelta(minutes=15).total_seconds()
+REFRESH_TOKEN_MAX_AGE = timedelta(days=7).total_seconds()
 
 
 def set_token_cookies_to_response(access_token: str, refresh_token: str, response: Response) -> Response:
@@ -84,11 +83,14 @@ async def login_user(form: UserLoginRequest, session: TSession, response: Respon
     return UserResponse(
         id=user.id,
         email=user.email,
-        username=user.username)
+        username=user.username,
+        access_token=access_token,
+        refresh_token=plain_refresh
+    )
 
 
-@users_router.post('/refresh')
-async def refresh_access(request: Request, session: TSession, response: Response) -> dict:
+@users_router.post('/refresh', response_model=Tokens)
+async def refresh_access(request: Request, session: TSession, response: Response) -> Tokens:
     user_refresh_token = request.cookies.get('refresh_token')
     if user_refresh_token is None:
         raise HTTPException(
@@ -119,7 +121,7 @@ async def refresh_access(request: Request, session: TSession, response: Response
     await session.commit()
 
     response = set_token_cookies_to_response(access_token, plain_refresh, response)
-    return {'status_code': 200, 'detail': 'Access-token is updated.'}
+    return Tokens(access_token=access_token, refresh_token=plain_refresh)
 
 
 @users_router.post('/register', response_model=UserResponse)
@@ -157,5 +159,7 @@ async def create_user(form: UserRegisterRequest, session: TSession, response: Re
     return UserResponse(
         id=new_user.id,
         email=new_user.email,
-        username=new_user.username
+        username=new_user.username,
+        access_token=access_token,
+        refresh_token=plain_refresh
     )
