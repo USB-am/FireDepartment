@@ -4,6 +4,11 @@ from typing import Optional, List, Dict, Any
 from pydantic import BaseModel, EmailStr
 
 
+class Tokens(BaseModel):
+    access_token: str
+    refresh_token: str
+
+
 class User(BaseModel):
     id: int
     email: EmailStr
@@ -14,14 +19,10 @@ class User(BaseModel):
     last_used: Optional[str] = None
 
 
-class UserResponse(BaseModel):
+class UserResponse(Tokens):
     id: int
     email: EmailStr
     username: str
-
-
-class UserAuthResponse(UserResponse):
-    token: str
 
 
 class UserLoginRequest(BaseModel):
