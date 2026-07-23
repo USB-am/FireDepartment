@@ -5,9 +5,9 @@ class AccessError(FDException):
 	pass
 
 
-class NoAccessTokenFileError(AccessError):
+class NotFoundTokenFileError(AccessError):
 	''' Нет файла с сохраненным токеном '''
 
 
-class NoAccessTokenError(AccessError):
+class NoTokenError(AccessError):
 	''' Нет токена доступа '''

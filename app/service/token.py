@@ -2,7 +2,7 @@ import os
 import json
 from typing import Optional
 
-from exceptions import NoAccessTokenError, NoAccessTokenFileError
+from exceptions import NoTokenError, NotFoundTokenFileError
 
 
 class AccessTokenManager:
@@ -15,7 +15,7 @@ class AccessTokenManager:
     def save_token(self, access_token: str, refresh_token: str) -> None:
         with open(self._path_to_token, mode='w') as tmp_token_file:
             json_data = {'access_token': access_token, 'refresh_token': refresh_token}
-            json.dump(json_data, tmp_token_file)
+            json.dump(json_data, tmp_token_file, indent=2)
 
     def get_token(self, key: str='access_token') -> str:
         try:
@@ -25,7 +25,7 @@ class AccessTokenManager:
                 try:
                     return json_data[key]
                 except KeyError:
-                    raise NoAccessTokenError('User access-token not found error!')
+                    raise NoTokenError('User access-token not found error!')
 
         except FileNotFoundError:
-            raise NoAccessTokenFileError('Token file not found error!')
+            raise NotFoundTokenFileError('Token file not found error!')

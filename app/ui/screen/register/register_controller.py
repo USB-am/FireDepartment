@@ -1,7 +1,10 @@
+import os
 from typing import Optional
 
 from .register_model import RegisterModel
-from service.token import AccessTokenManager
+# from service.token import AccessTokenManager
+from service.user_data import UserData
+from service.current_user import CurrentUser
 
 
 class RegisterController:
@@ -35,17 +38,25 @@ class RegisterController:
     def _on_registration_success(self, response, message: Optional[str]=None) -> None:
         self.view.show_loading(False)
 
-        from rich import inspect
-        inspect(response, all=True)
+        # from rich import inspect
+        # inspect(response, all=True)
 
-        access_token = response.result['access_token']
-        refresh_token = response.result['refresh_token']
+        base_dir = os.getcwd()
+        new_user = CurrentUser(base_dir, base_dir)
 
-        token_manager = AccessTokenManager()
-        token_manager.save_token(access_token, refresh_token)
-        self.api_client.set_token(access_token)
+        result = response.result
 
-        self.view.path_manager.move_to_screen('main')
+        new_user.save_user_data(UserData(
+            id=result['id'],
+            email=result['email'],
+            username=result['username']))
+        new_user.save_token(
+            result['access_token'],
+            result['refresh_token'])
+
+        self.api_client.set_token(result['access_token'])
+
+        self.view.path_manager.move_to_screen('options')
 
     def _on_registration_failure(self, response, message: str) -> None:
         self.view.show_loading(False)
