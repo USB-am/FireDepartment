@@ -5,10 +5,10 @@ from fastapi import Depends
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.orm import declarative_base
 
-from .config import DATABASE_URL
+from .config import settings
 
 
-engine = create_async_engine(DATABASE_URL, echo=False)
+engine = create_async_engine(settings.DATABASE_URL, echo=False)
 AsyncSessionLocal = async_sessionmaker(
     bind=engine, 
     class_=AsyncSession, 

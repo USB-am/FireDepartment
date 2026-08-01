@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
 
-import sys
-from datetime import datetime
-from typing import Callable
+import time
 from contextlib import asynccontextmanager
 
-import uvicorn
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.types import ASGIApp, Receive, Scope, Send
 
 from api.v1.router import api_router
 from core.database import create_db_and_tables
@@ -39,19 +37,25 @@ from core.config import auth
 auth.handle_errors(app)
 
 
-@app.middleware('http')
-async def log_requests(request: Request, call_next: Callable):
-    start_time = datetime.now()
+class LogRequestsMiddleware:
+    def __init__(self, app: ASGIApp):
+        self.app = app
 
-    response = await call_next(request)
+    async def __call__(self, scope: Scope, receive: Receive, send: Send):
+        if scope["type"] != "http":
+            await self.app(scope, receive, send)
+            return
 
-    process_time = (datetime.now() - start_time).total_seconds() * 1000
-    print(f'Completed in {process_time:.2f}ms - Status: {response.status_code}')
-    return response
+        request = Request(scope, receive=receive)
+        start_time = time.perf_counter()
+
+        async def send_wrapper(message):
+            if message["type"] == "http.response.start":
+                status_code = message["status"]
+                process_time = (time.perf_counter() - start_time) * 1000
+                print(f'Completed in {process_time:.2f}ms - Status: {status_code}')
+            await send(message)
+        await self.app(scope, receive, send_wrapper)
 
 
-if __name__ == '__main__':
-    try:
-        uvicorn.run('main:app', reload=True)
-    except KeyboardInterrupt:
-        sys.exit()
+app.add_middleware(LogRequestsMiddleware)
