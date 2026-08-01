@@ -1,10 +1,108 @@
-**/__pycache__
-**/secret_key.json
-venv/
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
 .venv/
-fire_department.db
+venv/
+ENV/
+env/
+.env.local
+.env.*.local
+
+# ===== Environment & Secrets =====
+.env
+.env.local
+.env.production
+*.pem
+*.key
+
+# ===== Database =====
+*.db
+*.sqlite
+*.sqlite3
+backend/data/
+backend/firedepartment.db
+
+# ===== Docker =====
+# (обычно ничего дополнительно не нужно, но на всякий случай)
+docker-compose.override.yml
+
+# ===== IDE & Editors =====
 .idea/
-app/application.ini
-**/fire_department.egg-info/
-**/temp_token.json
-**.db
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+*.sublime-project
+*.sublime-workspace
+
+# ===== OS =====
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# ===== Kivy / Buildozer (на будущее) =====
+.bin/
+.kivy/
+.buildozer/
+bin/
+*.apk
+*.aab
+*.spec.bak
+
+# ===== Tests & Coverage =====
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.pytest_cache/
+.cache/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# ===== Logs & Temporary =====
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+*.bak
+*.orig
+
+# ===== Jupyter =====
+.ipynb_checkpoints/
+
+# ===== Other =====
+*.local
+.python-version
