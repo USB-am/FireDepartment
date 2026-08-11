@@ -13,10 +13,6 @@ class User(BaseModel):
     id: int
     email: EmailStr
     username: str
-    fd_number: Optional[str]
-    password_hash: str
-    created_at: str
-    last_used: Optional[str] = None
 
 
 class UserResponse(Tokens):

@@ -11,6 +11,7 @@ from core.database import TSession
 from core.config import auth, settings
 from core.security import Role, RoleChecker
 from schemas.user import UserRegisterRequest, UserLoginRequest, UserResponse, Tokens
+from schemas.user import User as UserSchema
 from models.user import User, RefreshToken, UserProfile
 
 
@@ -163,3 +164,17 @@ async def create_user(form: UserRegisterRequest, session: TSession, response: Re
         access_token=access_token,
         refresh_token=plain_refresh
     )
+
+
+@users_router.get('/all_users')
+async def get_all_users(session: TSession) -> list[UserSchema]:
+    stmt = select(User)
+    result = await session.execute(stmt)
+    all_users = result.scalars().all()
+
+    response = [UserSchema(id=u.id,
+                             email=u.email,
+                             username=u.username)
+        for u in all_users]
+
+    return response
