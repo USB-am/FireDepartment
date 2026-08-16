@@ -17,9 +17,6 @@ from models.user import User, RefreshToken, UserProfile
 
 users_router = APIRouter(prefix='/users', tags=['Users',])
 
-ACCESS_TOKEN_MAX_AGE = timedelta(minutes=15).total_seconds()
-REFRESH_TOKEN_MAX_AGE = timedelta(days=7).total_seconds()
-
 
 def set_token_cookies_to_response(access_token: str, refresh_token: str, response: Response) -> Response:
     response.set_cookie(
@@ -28,14 +25,14 @@ def set_token_cookies_to_response(access_token: str, refresh_token: str, respons
         httponly=settings.HTTP_ONLY,
         secure=settings.SECURE,
         samesite='lax',
-        max_age=ACCESS_TOKEN_MAX_AGE)
+        max_age=settings.ACCESS_TOKEN_MAX_AGE)
     response.set_cookie(
         key='refresh_token',
         value=refresh_token,
         httponly=settings.HTTP_ONLY,
         secure=settings.SECURE,
         samesite='lax',
-        max_age=REFRESH_TOKEN_MAX_AGE)
+        max_age=settings.REFRESH_TOKEN_MAX_AGE)
     return response
 
 

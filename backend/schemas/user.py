@@ -1,7 +1,7 @@
 import datetime
 from typing import Optional, List, Dict, Any
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr,ConfigDict
 
 
 class Tokens(BaseModel):
@@ -19,6 +19,8 @@ class UserResponse(Tokens):
     id: int
     email: EmailStr
     username: str
+
+    model_config = ConfigDict(from_attributes=True)
 
 
 class UserLoginRequest(BaseModel):

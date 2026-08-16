@@ -1,4 +1,4 @@
-from .v1.router import api_router
+from .v2.router import api_router
 
 
 __all__ = ('api_router',)

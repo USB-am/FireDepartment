@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from authx import AuthX, AuthXConfig
 
@@ -6,6 +8,9 @@ class Settings(BaseSettings):
     DATABASE_URL: str = 'sqlite+aiosqlite:///./data/firedepartment.db'
     JWT_SECRET_KEY: str = 'my_secret_key'
     JWT_TOKEN_LOCATION: list[str] = ['headers']
+
+    ACCESS_TOKEN_MAX_AGE: int = int(timedelta(minutes=15).total_seconds())
+    REFRESH_TOKEN_MAX_AGE: int = int(timedelta(days=7).total_seconds())
 
     # Set True for production
     SECURE: bool = False
