@@ -1,10 +1,12 @@
-import datetime
+import uuid
+from datetime import datetime
 from typing import List, Optional
 
-from sqlalchemy import ForeignKey, Table, Column
-from sqlalchemy.orm import Mapped, relationship, mapped_column
+from sqlalchemy import ForeignKey, UUID
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from core.database import Base
+from core.utils import dt_utcnow
 
 
 class FireDepartment(Base):
@@ -24,21 +26,23 @@ class User(Base):
     ''' Пользователи '''
 
     __tablename__ = 'user'
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4)
     email: Mapped[str] = mapped_column(unique=True, nullable=False)
     username: Mapped[str] = mapped_column(nullable=False)
     password_hash: Mapped[str] = mapped_column(nullable=False)
     role: Mapped[str]
-    created_at: Mapped[datetime.datetime] = mapped_column(default=datetime.datetime.utcnow)
-    updated_at: Mapped[Optional[datetime.datetime]] = mapped_column(
-        default=datetime.datetime.utcnow,
-        onupdate=datetime.datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(default=dt_utcnow)
+    updated_at: Mapped[Optional[datetime]] = mapped_column(
+        default=dt_utcnow,
+        onupdate=dt_utcnow)
     refresh_tokens: Mapped[List['RefreshToken']] = relationship(
         back_populates='user',
         cascade='all, delete-orphan')
-    profile: Mapped['UserProfile'] = relationship(
+    profile: Mapped[Optional['UserProfile']] = relationship(
         back_populates='user',
-        uselist=False,
         cascade='all, delete-orphan')
 
     def __str__(self):
@@ -50,12 +54,12 @@ class RefreshToken(Base):
 
     __tablename__ = 'refresh_token'
     id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey('user.id', ondelete='CASCADE'))
+    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('user.id', ondelete='CASCADE'))
     token_hash: Mapped[str] = mapped_column(unique=True, nullable=False)
-    expires_at: Mapped[datetime.datetime] = mapped_column(nullable=False)
-    created_at: Mapped[datetime.datetime] = mapped_column(nullable=False)
+    expires_at: Mapped[datetime] = mapped_column(nullable=False)
+    created_at: Mapped[datetime] = mapped_column(nullable=False, default=dt_utcnow)
     revoked: Mapped[bool] = mapped_column(default=False)
-    revoked_at: Mapped[Optional[datetime.datetime]]
+    revoked_at: Mapped[Optional[datetime]]
 
     user: Mapped['User'] = relationship(back_populates='refresh_tokens')
 
@@ -67,8 +71,11 @@ class UserProfile(Base):
     ''' Профиль Пользователя '''
 
     __tablename__ = 'user_profile'
-    id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[int] = mapped_column(
+    id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4)
+    user_id: Mapped[uuid.UUID] = mapped_column(
         ForeignKey('user.id', ondelete='CASCADE'),
         unique=True,
         nullable=False)
@@ -81,6 +88,4 @@ class UserProfile(Base):
 
 
 from sqlalchemy import Index
-Index('idx_user_email', User.email)
-Index('idx_refresh_token_hash', RefreshToken.token_hash)
 Index('idx_refresh_user_id', RefreshToken.user_id)
