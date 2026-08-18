@@ -18,15 +18,16 @@ class UserService:
         user = await self.repository.get_user_by_email(email)
         if user is None:
             raise HTTPException(
-                status_code=409,
-                detail=f'User.email={email} is not found!'
+                status_code=401,
+                detail='Invalid email or password!'
             )
 
-        pwd_is_correct = bcrypt.checkpw(password.encode('utf-8'), user.password_hash)
+        pwd_hash = password.encode('utf-8')
+        pwd_is_correct = bcrypt.checkpw(pwd_hash, user.password_hash.encode('utf-8'))
         if not pwd_is_correct:
             raise HTTPException(
                 status_code=401,
-                detail='Invalid password!'
+                detail='Invalid email or password!'
             )
 
         return user
