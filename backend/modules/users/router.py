@@ -14,7 +14,21 @@ users_router = APIRouter(prefix='/users', tags=['Users',])
 @users_router.get('/all', response_model=list[UserResponse])
 async def get_all_users(session: TSession):
     result = await session.scalars(select(User))
-    return result.all()
+    _response: list[UserResponse] = []
+    for user in result.all():
+        refresh_tokens = user.refresh_tokens
+        filtered_r_tokens = list(filter(lambda t: t.revoked==False, refresh_tokens))
+        refresh_token = filtered_r_tokens[0]
+        _response.append(
+            UserResponse(
+                id=user.id,
+                email=user.email,
+                username=user.username,
+                access_token='wqe',
+                refresh_token=refresh_token
+            )
+        )
+    return _response
 
 
 @users_router.get('/{user_id}', response_model=UserResponse)

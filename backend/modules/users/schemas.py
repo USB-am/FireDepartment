@@ -9,10 +9,10 @@ class User(BaseModel):
     username: str
 
 
-class Tokens(BaseModel):
+class TokensResponse(BaseModel):
     access_token: str
     refresh_token: str
 
 
-class UserResponse(User, Tokens):
+class UserResponse(User, TokensResponse):
     model_config = ConfigDict(from_attributes=True)

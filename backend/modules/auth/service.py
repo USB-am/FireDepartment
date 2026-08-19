@@ -1,6 +1,5 @@
 import hashlib
-from datetime import timedelta
-from typing import Optional
+from datetime import timedelta, timezone
 
 from sqlalchemy import select
 
@@ -13,14 +12,21 @@ from modules.users.models import User, RefreshToken
 class AuthService:
     def __init__(self, session: TSession):
         self._session = session
-    
+
+    async def get_refresh_token_by_token_hash(self, token_hash: str) -> RefreshToken:
+        sha_hash = hashlib.sha256(token_hash.encode('utf-8')).hexdigest()
+        stmt = select(RefreshToken).where(RefreshToken.token_hash==sha_hash)
+        return await self._session.scalar(stmt)
+
+    async def is_actual_refresh_token(self, refresh_token: RefreshToken) -> bool:
+        return dt_utcnow() <= refresh_token.expires_at.replace(tzinfo=timezone.utc) \
+            and refresh_token.revoked == False
+
     async def create_access_token(self, user: User) -> str:
-        return auth.create_access_token(uid=user.id)
+        return auth.create_access_token(uid=str(user.id))
 
     async def create_refresh_token(self, user: User) -> tuple[str, RefreshToken]:
-        await self.revoked_refresh_token(user)
-
-        refresh_token_value = auth.create_refresh_token(user.id)
+        refresh_token_value = auth.create_refresh_token(uid=str(user.id))
         sha_hash = hashlib.sha256(refresh_token_value.encode('utf-8')).hexdigest()
         refresh_token = RefreshToken(
             user_id=user.id,
@@ -31,16 +37,6 @@ class AuthService:
         self._session.add(refresh_token)
         return (refresh_token_value, refresh_token)
 
-    async def get_active_refresh_token(self, user: User) -> Optional[RefreshToken]:
-        stmt = select(RefreshToken).where(
-            RefreshToken.user_id==user.id,
-            RefreshToken.revoked==False
-        ).limit(1)
-        return await self._session.scalar(stmt)
-
-    async def revoked_refresh_token(self, user: User) -> None:
-        refresh_token = await self.get_active_refresh_token(user)
-
-        if refresh_token is not None:
-            refresh_token.revoked = True
-            refresh_token.revoked_at = dt_utcnow()
+    async def revoked_refresh_token(self, refresh_token: RefreshToken) -> None:
+        refresh_token.revoked = True
+        refresh_token.revoked_at = dt_utcnow()
