@@ -4,26 +4,28 @@ from core.database import TSession
 from modules.users.schemas import UserResponse, TokensResponse
 from modules.users.service import UserService
 from modules.auth.service import AuthService
-from modules.auth.schemas import UserLoginRequest, UserRegisterRequest
+from modules.auth.schemas import UserLoginRequest, UserRegisterRequest, RefreshTokenRequest
 
 
 auth_router = APIRouter(prefix='/auth', tags=['Auth',])
 
 
 @auth_router.post('/refresh', response_model=TokensResponse)
-async def refresh_tokens(refresh_token_hash: str, session: TSession):
+async def refresh_tokens(refresh_request: RefreshTokenRequest, session: TSession):
+    refresh_token_hash = refresh_request.refresh_token
+
     auth_service = AuthService(session)
     refresh_token = await auth_service.get_refresh_token_by_token_hash(refresh_token_hash)
     if refresh_token is None:
         raise HTTPException(
             status_code=401,
-            detail='Unauthorized error!'
+            detail='Unauthorized error! 1'
         )
 
     if not await auth_service.is_actual_refresh_token(refresh_token):
         raise HTTPException(
             status_code=401,
-            detail='Unauthorized error!'
+            detail='Unauthorized error! 2'
         )
     await auth_service.revoked_refresh_token(refresh_token)
 
@@ -35,6 +37,7 @@ async def refresh_tokens(refresh_token_hash: str, session: TSession):
         access_token=access_token_value,
         refresh_token=refresh_token_value
     )
+
 
 @auth_router.post('/login', response_model=UserResponse)
 async def login_user(login_form: UserLoginRequest, session: TSession):

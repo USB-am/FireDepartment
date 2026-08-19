@@ -2,6 +2,7 @@ import hashlib
 from datetime import timedelta, timezone
 
 from sqlalchemy import select
+from sqlalchemy.orm import joinedload
 
 from core.config import settings, auth
 from core.database import TSession
@@ -15,7 +16,11 @@ class AuthService:
 
     async def get_refresh_token_by_token_hash(self, token_hash: str) -> RefreshToken:
         sha_hash = hashlib.sha256(token_hash.encode('utf-8')).hexdigest()
-        stmt = select(RefreshToken).where(RefreshToken.token_hash==sha_hash)
+        stmt = (
+            select(RefreshToken)
+            .where(RefreshToken.token_hash==sha_hash)
+            .options(joinedload(RefreshToken.user))
+        )
         return await self._session.scalar(stmt)
 
     async def is_actual_refresh_token(self, refresh_token: RefreshToken) -> bool:

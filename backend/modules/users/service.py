@@ -38,16 +38,16 @@ class UserService:
         return user
 
     async def create_user(self, email: EmailStr, username: str, password: str) -> User:
-            pwd_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-            user = User(
-                email=email,
-                username=username,
-                password_hash=pwd_hash.decode('utf-8'),
-                role=Role.dispatch.value
-            )
-            self._session.add(user)
-    
-            return user
+        pwd_hash = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        user = User(
+            email=email,
+            username=username,
+            password_hash=pwd_hash.decode('utf-8'),
+            role=Role.dispatch.value
+        )
+        self._session.add(user)
+
+        return user
 
     async def create_user_profile(self, user: User) -> UserProfile:
         return UserProfile(
