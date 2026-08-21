@@ -14,5 +14,9 @@ class UserRegisterRequest(BaseModel):
     password: str
 
 
+class AccessTokenRequest(BaseModel):
+    access_token: str
+
+
 class RefreshTokenRequest(BaseModel):
     refresh_token: str

@@ -19,13 +19,13 @@ async def refresh_tokens(refresh_request: RefreshTokenRequest, session: TSession
     if refresh_token is None:
         raise HTTPException(
             status_code=401,
-            detail='Unauthorized error! 1'
+            detail='Unauthorized error!'
         )
 
     if not await auth_service.is_actual_refresh_token(refresh_token):
         raise HTTPException(
             status_code=401,
-            detail='Unauthorized error! 2'
+            detail='Unauthorized error!'
         )
     await auth_service.revoked_refresh_token(refresh_token)
 

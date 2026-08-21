@@ -4,11 +4,23 @@ from fastapi import APIRouter, HTTPException
 from sqlalchemy import select
 
 from core.database import TSession
-from .models import User
-from .schemas import UserResponse
+from core.dependencies import TCurrentUser
+from modules.users.models import User
+from modules.users.schemas import UserResponse
 
 
 users_router = APIRouter(prefix='/users', tags=['Users',])
+
+
+@users_router.get('/me', response_model=UserResponse)
+async def get_me(user: TCurrentUser):
+    return UserResponse(
+        id=user.id,
+        email=user.email,
+        username=user.username,
+        access_token='qwe',
+        refresh_token='asd'
+    )
 
 
 @users_router.get('/all', response_model=list[UserResponse])

@@ -1,6 +1,5 @@
-from typing import AsyncGenerator
+from typing import AsyncGenerator, Annotated
 
-from annotated_types import Annotated
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy.orm import declarative_base
