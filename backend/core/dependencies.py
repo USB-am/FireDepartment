@@ -2,6 +2,7 @@ import uuid
 from typing import Annotated
 
 from fastapi import Depends, HTTPException
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from authx import RequestToken
 
 from core.database import TSession
@@ -9,11 +10,18 @@ from core.config import auth
 from modules.users.service import UserService
 from modules.users.models import User
 
-auth.get_access_token_from_request
 
-async def get_current_user(token: RequestToken, session: TSession) -> User:
+security = HTTPBearer()
+
+
+async def get_current_user(
+        session: TSession,
+        credentials: HTTPAuthorizationCredentials=Depends(security)
+) -> User:
     try:
-        payload = auth.verify_token(token)
+        token_string = credentials.credentials
+        token = RequestToken(token=token_string, location='headers')
+        payload = auth.verify_token(token, verify_csrf=False)
         user_id = payload.sub
     except Exception:
         raise HTTPException(

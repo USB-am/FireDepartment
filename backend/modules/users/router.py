@@ -6,20 +6,18 @@ from sqlalchemy import select
 from core.database import TSession
 from core.dependencies import TCurrentUser
 from modules.users.models import User
-from modules.users.schemas import UserResponse
+from modules.users.schemas import ShortUserResponse, UserResponse
 
 
 users_router = APIRouter(prefix='/users', tags=['Users',])
 
 
-@users_router.get('/me', response_model=UserResponse)
+@users_router.get('/me', response_model=ShortUserResponse)
 async def get_me(user: TCurrentUser):
-    return UserResponse(
+    return ShortUserResponse(
         id=user.id,
         email=user.email,
-        username=user.username,
-        access_token='qwe',
-        refresh_token='asd'
+        username=user.username
     )
 
 

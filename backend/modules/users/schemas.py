@@ -3,7 +3,7 @@ import uuid
 from pydantic import BaseModel, EmailStr, ConfigDict
 
 
-class User(BaseModel):
+class ShortUserResponse(BaseModel):
     id: uuid.UUID
     email: EmailStr
     username: str
@@ -14,5 +14,5 @@ class TokensResponse(BaseModel):
     refresh_token: str
 
 
-class UserResponse(User, TokensResponse):
+class UserResponse(ShortUserResponse, TokensResponse):
     model_config = ConfigDict(from_attributes=True)
