@@ -7,7 +7,8 @@ from sqlalchemy.orm import joinedload
 from core.config import settings, auth
 from core.database import TSession
 from core.utils import dt_utcnow
-from modules.users.models import User, RefreshToken
+from modules.users.models import User
+from modules.auth.models import RefreshToken
 
 
 class AuthService:
