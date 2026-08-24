@@ -1,6 +1,6 @@
 import uuid
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, TYPE_CHECKING
 
 from sqlalchemy import ForeignKey, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
@@ -9,17 +9,9 @@ from core.database import Base
 from core.utils import dt_utcnow
 
 
-class FireDepartment(Base):
-    ''' Запись о пожарной части '''
-
-    __tablename__ = 'fire_department'
-    id: Mapped[int] = mapped_column(primary_key=True)
-    title: Mapped[str] = mapped_column(unique=True)
-    address: Mapped[str] = mapped_column(nullable=False)
-    profiles: Mapped[List['UserProfile']] = relationship(back_populates='firedepartment')
-
-    def __str__(self):
-        return self.title
+if TYPE_CHECKING:
+    from modules.auth.models import RefreshToken
+    from modules.firedepartment.models import FireDepartment
 
 
 class User(Base):
@@ -49,24 +41,6 @@ class User(Base):
         return self.username
 
 
-class RefreshToken(Base):
-    ''' Refresh-токены для обновления access-токенов '''
-
-    __tablename__ = 'refresh_token'
-    id: Mapped[int] = mapped_column(primary_key=True)
-    user_id: Mapped[uuid.UUID] = mapped_column(ForeignKey('user.id', ondelete='CASCADE'))
-    token_hash: Mapped[str] = mapped_column(unique=True, nullable=False)
-    expires_at: Mapped[datetime] = mapped_column(nullable=False)
-    created_at: Mapped[datetime] = mapped_column(nullable=False, default=dt_utcnow)
-    revoked: Mapped[bool] = mapped_column(default=False)
-    revoked_at: Mapped[Optional[datetime]]
-
-    user: Mapped['User'] = relationship(back_populates='refresh_tokens')
-
-    def __str__(self):
-        return f'RefreshToken(user={self.user_id}, expires={self.expires_at})'
-
-
 class UserProfile(Base):
     ''' Профиль Пользователя '''
 
@@ -85,7 +59,3 @@ class UserProfile(Base):
 
     firedepartment: Mapped[Optional['FireDepartment']] = relationship(back_populates='profiles')
     user: Mapped['User'] = relationship(back_populates='profile')
-
-
-from sqlalchemy import Index
-Index('idx_refresh_user_id', RefreshToken.user_id)
