@@ -19,6 +19,8 @@ class FireDepartmentService:
 
         new_firedepartment = await self.repository.create(**schema.model_dump())
         self._session.add(new_firedepartment)
+        await self._session.flush()
+
         return new_firedepartment
 
     async def update_firedepartment(self, schema: UpdateFireDepartmentRequest) -> FireDepartment | None:

@@ -1,11 +1,13 @@
 from fastapi import APIRouter, HTTPException
 
 from core.database import TSession
-from core.dependencies import TCurrentUser
+from core.dependencies import TCurrentUser, RequireRole
+from core.security import Role
 from modules.firedepartment.schemas import (
     FireDepartmentResponse, CreateFireDepartmentRequest,
     UpdateFireDepartmentRequest)
 from modules.firedepartment.service import FireDepartmentService
+from modules.users.models import User
 from modules.utils.exceptions import DBPrimaryKeyError
 
 
@@ -15,8 +17,9 @@ fd_router = APIRouter(prefix='/firedepartment', tags=['Fire department',])
 @fd_router.get('/{firedepartment_id}', response_model=FireDepartmentResponse)
 async def get_firedepartment(
     firedepartment_id: int,
-    user: TCurrentUser,
-    session: TSession
+    # user: TCurrentUser,
+    session: TSession,
+    user: User = RequireRole(Role.dispatch, Role.manager, Role.admin)
 ):
 
     service = FireDepartmentService(session)
@@ -46,7 +49,6 @@ async def create_firedepartment(
             status_code=409,
             detail=f'FireDepartment.title="{payload.title}" is already exists!'
         )
-    await session.flush()
 
     return FireDepartmentResponse.model_validate(new_firedepartment)
 

@@ -16,3 +16,11 @@ class TokensResponse(BaseModel):
 
 class UserResponse(ShortUserResponse, TokensResponse):
     model_config = ConfigDict(from_attributes=True)
+
+
+class UserProfileResponse(BaseModel):
+    id: uuid.UUID
+    user_id: uuid.UUID
+    call_sign: str
+
+    model_config = ConfigDict(from_attributes=True)
