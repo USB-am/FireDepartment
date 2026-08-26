@@ -1,5 +1,3 @@
-from sqlalchemy import select
-
 from modules.utils.repository import BaseRepository
 from modules.firedepartment.models import FireDepartment
 

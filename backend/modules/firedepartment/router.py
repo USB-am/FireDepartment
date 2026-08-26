@@ -1,15 +1,24 @@
 from fastapi import APIRouter, HTTPException
 
 from core.database import TSession
-from modules.firedepartment.schemas import FireDepartmentResponse
+from core.dependencies import TCurrentUser
+from modules.firedepartment.schemas import (
+    FireDepartmentResponse, CreateFireDepartmentRequest,
+    UpdateFireDepartmentRequest)
 from modules.firedepartment.service import FireDepartmentService
+from modules.utils.exceptions import DBPrimaryKeyError
 
 
 fd_router = APIRouter(prefix='/firedepartment', tags=['Fire department',])
 
 
 @fd_router.get('/{firedepartment_id}', response_model=FireDepartmentResponse)
-async def get_firedepartment(firedepartment_id: int, session: TSession):
+async def get_firedepartment(
+    firedepartment_id: int,
+    user: TCurrentUser,
+    session: TSession
+):
+
     service = FireDepartmentService(session)
     firedepartment = await service.get_firedepartment(firedepartment_id)
 
@@ -20,3 +29,35 @@ async def get_firedepartment(firedepartment_id: int, session: TSession):
         )
 
     return FireDepartmentResponse.model_validate(firedepartment)
+
+
+@fd_router.post('/create', response_model=FireDepartmentResponse)
+async def create_firedepartment(
+    payload: CreateFireDepartmentRequest,
+    user: TCurrentUser,
+    session: TSession
+):
+
+    service = FireDepartmentService(session)
+    try:
+        new_firedepartment = await service.create_firedepartment(payload)
+    except DBPrimaryKeyError:
+        raise HTTPException(
+            status_code=409,
+            detail=f'FireDepartment.title="{payload.title}" is already exists!'
+        )
+    await session.flush()
+
+    return FireDepartmentResponse.model_validate(new_firedepartment)
+
+
+@fd_router.patch('/update', response_model=FireDepartmentResponse)
+async def update_firedepartment(
+    payload: UpdateFireDepartmentRequest,
+    user: TCurrentUser,
+    session: TSession
+):
+
+    service = FireDepartmentService(session)
+    updated_firedepartment = await service.update_firedepartment(payload)
+    return FireDepartmentResponse.model_validate(updated_firedepartment)
