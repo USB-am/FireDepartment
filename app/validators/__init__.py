@@ -1,12 +1,17 @@
 from dataclasses import dataclass
-
-
-@dataclass
-class BaseValidator:
-	error_msg: str = ''
+from abc import ABC, abstractmethod
 
 
 @dataclass
 class ValidatorResult:
-	status: bool
-	message: str
+    status: bool
+    message: str
+
+
+@dataclass
+class BaseValidator(ABC):
+    error_msg: str = ''
+
+    @abstractmethod
+    def __call__(self, value: str, message: str | None=None) -> ValidatorResult:
+        pass

@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import config
-
-if config.DEBUG:
+from core.config import DEBUG
+if DEBUG:
     from kivy.config import Config
     Config.set('graphics', 'width', '360')
     Config.set('graphics', 'height', '650')
@@ -12,16 +11,12 @@ from kivy.uix.screenmanager import ScreenManager
 from kivymd.app import MDApp
 from kivymd.uix.navigationdrawer import MDNavigationLayout
 
-from path_manager import PathManager
+from core.config import KV_PATH, APP_ICON
 from ui import screen as FDScreen
-# from ui.screen.register.register_view import FDRegisterScreen
-# from ui.screen.register.register_controller import RegisterController
-from service.api_client import APIClient
-from service.token import AccessTokenManager
-from exceptions import AccessError
+from utils.path_manager import PathManager
 
 
-Builder.load_file(config.KV_APP)
+Builder.load_file(KV_PATH.KV_APP)
 
 
 class FDNavigation(MDNavigationLayout):
@@ -72,39 +67,26 @@ class FDNavigation(MDNavigationLayout):
 class MDApplication(MDApp):
     ''' Главный класс приложения '''
 
-    icon = config.APP_ICON
+    icon = APP_ICON
     title = 'Fire Department'
 
     def __init__(self):
         super().__init__()
 
-        self.api_client = APIClient(base_url='http://127.0.0.1:8000/api/v1')
+        # self.api_client = APIClient(base_url='http://127.0.0.1:8000/api/v1')
 
         self.ui = FDNavigation()
 
         # Login screen
-        self.ui.screen_manager.add_widget(FDScreen.FDAuthScreen(self.ui.path_manager))
+        # self.ui.screen_manager.add_widget(FDScreen.FDAuthScreen(self.ui.path_manager))
 
         # Register screen
         register_screen = FDScreen.FDRegisterScreen(self.ui.path_manager)
+        register_screen.set_controller(FDScreen.FDRegisterController(register_screen))
         self.ui.screen_manager.add_widget(register_screen)
-        register_controller = FDScreen.RegisterController(register_screen, self.api_client)
 
-        # Main screen
-        main_screen = FDScreen.FDMainScreen(self.ui.path_manager)
-        self.ui.screen_manager.add_widget(main_screen)
-
-        # Options screen
-        options_screen = FDScreen.FDOptionsScreen(self.ui.path_manager)
-        self.ui.screen_manager.add_widget(options_screen)
-        options_controller = FDScreen.OptionsController(options_screen, self.api_client)
-
-        try:
-            self.api_client.set_token(AccessTokenManager().get_token())
-            self.ui.path_manager.move_to_screen('options')
-        except AccessError:
-            self.ui.path_manager.move_to_screen('auth')
-
+        self.ui.path_manager.move_to_screen('register')
+    
     def build_config(self, conf):
         conf.setdefaults('options', {
             'primary_palette': self.theme_cls.primary_palette,
@@ -115,17 +97,14 @@ class MDApplication(MDApp):
 
     def build(self):
         conf = self.config
-        self.theme_cls.primary_palette = conf.get('options', 'primary_palette')
-        self.theme_cls.accent_palette = conf.get('options', 'accent_palette')
-        self.theme_cls.theme_style = conf.get('options', 'theme_style')
-        self.theme_cls.primary_hue = conf.get('options', 'primary_hue')
+        if conf is not None:
+            self.theme_cls.primary_palette = conf.get('options', 'primary_palette')
+            self.theme_cls.accent_palette = conf.get('options', 'accent_palette')
+            self.theme_cls.theme_style = conf.get('options', 'theme_style')
+            self.theme_cls.primary_hue = conf.get('options', 'primary_hue')
 
         return self.ui
 
 
-def main():
-    MDApplication().run()
-
-
 if __name__ == '__main__':
-    main()
+    MDApplication().run()

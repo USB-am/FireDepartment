@@ -1,5 +1,5 @@
 #:import NavigationButton ui.widgets.navigation_button
-#:import LOGO_IMG config.LOGO_IMG
+#:import APP_ICON core.config.APP_ICON
 
 
 <FDNavigation>:
@@ -22,7 +22,7 @@
                     id: logo
                     size_hint: (None, None)
                     size: (dp(100), dp(100))
-                    source: str(LOGO_IMG)
+                    source: str(APP_ICON)
 
             MDLabel:
                 text: 'FireDepartment'

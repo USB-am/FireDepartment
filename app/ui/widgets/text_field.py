@@ -1,11 +1,11 @@
-from typing import List
+from abc import ABC, abstractmethod
 
 from kivy.lang.builder import Builder
 from kivy.properties import StringProperty, ListProperty, BooleanProperty
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.relativelayout import MDRelativeLayout
 
-from . import _BaseWidget
+from ui.widgets.base import _BaseWidget
 from validators.widgets import BaseValidator
 
 
@@ -38,7 +38,7 @@ Builder.load_string('''
 ''')
 
 
-def _validate(instance: MDTextField, value: str, validators: List[BaseValidator]) -> None:
+def _validate(instance: MDTextField, value: str, validators: list[BaseValidator]) -> None:
     for validator in validators:
         result = validator(value)
 
@@ -52,7 +52,14 @@ def _validate(instance: MDTextField, value: str, validators: List[BaseValidator]
         instance.helper_text = ''
 
 
-class FDTextInput(MDTextField, _BaseWidget):
+class _BaseTextField(_BaseWidget):
+    validators: list[BaseValidator]
+
+    def get_value(self) -> str:
+        raise NotImplementedError('Subclasses must implement get_value')
+
+
+class FDTextInput(MDTextField, _BaseTextField):
     ''' Текстовое поле '''
     hint_text = StringProperty()
     helper_text = StringProperty('')
@@ -70,7 +77,7 @@ class FDTextInput(MDTextField, _BaseWidget):
         return _validate(self, self.text, self.validators)
 
 
-class FDPasswordInput(MDRelativeLayout, _BaseWidget):
+class FDPasswordInput(MDRelativeLayout, _BaseTextField):
     ''' Текстовое поле ввода пароля '''
     hint_text = StringProperty()
     helper_text = StringProperty('')

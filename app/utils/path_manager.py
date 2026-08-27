@@ -1,3 +1,5 @@
+from core.config import DEBUG
+
 from kivy.uix.screenmanager import ScreenManager, Screen
 
 
@@ -18,22 +20,26 @@ class PathManager(metaclass=_Singleton):
         self.__screen_manager = screen_manager
         self._path = ['main',]
 
-    def forward(self, screen_name: str) -> Screen:
+    def forward(self, screen_name: str) -> Screen | None:
         self.__screen_manager.current = screen_name
         self._path.append(screen_name)
-        print(self._path)
+
+        if DEBUG:
+            print(self._path)
 
         return self.__screen_manager.current_screen
 
-    def back(self) -> Screen:
+    def back(self) -> Screen | None:
         if len(self._path) > 1:
             self._path.pop(-1)
 
         self.__screen_manager.current = self._path[-1]
-        print(self._path)
+
+        if DEBUG:
+            print(self._path)
 
         return self.__screen_manager.current_screen
 
-    def move_to_screen(self, screen_name: str) -> Screen:
+    def move_to_screen(self, screen_name: str) -> Screen | None:
         self._path = []
         return self.forward(screen_name)

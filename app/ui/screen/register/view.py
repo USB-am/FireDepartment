@@ -1,28 +1,30 @@
-from kivymd.uix.dialog import MDDialog
-from kivymd.uix.button import MDFlatButton
-from kivymd.uix.boxlayout import MDBoxLayout
+from typing import TYPE_CHECKING
 
-from ui.screen.based_screen import BaseScreen
-from ui.widgets.text_input import FDTextInput, FDPasswordInput
+from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.uix.button import MDFlatButton
+from kivymd.uix.dialog import MDDialog
+
+from utils.path_manager import PathManager
+from ui.screen.base import BaseScreen
+from ui.screen.utils.decorators import lazy_create
+from ui.widgets.text_field import FDTextInput, FDPasswordInput
 from ui.widgets.button import FDRectangleFillButton
-from ui.utils.decorators import lazy_create
 from validators.widgets import EmptyValidator, EmailValidator, IdenticalPasswords
 from validators.register_form import RegisterFormValidator
+
+
+if TYPE_CHECKING:
+    from .controller import FDRegisterController
 
 
 class FDRegisterScreen(BaseScreen):
     name = 'register'
     title = 'Регистрация'
 
-    controller = None
-
-    def __init__(self, path_manager: 'PathManager'):
+    def __init__(self, path_manager: PathManager):
         super().__init__(path_manager)
 
-        self.ids.toolbar.anchor_title = 'center'
         self.add_left_toolbar_items('arrow-left', lambda *_: self.path_manager.back())
-
-        self.dialog = None
 
     def on_pre_enter(self, *args) -> None:
         self._create_email_field()
@@ -116,14 +118,14 @@ class FDRegisterScreen(BaseScreen):
             text=message,
             buttons=[ok_btn,]
         )
-        ok_btn.bind(on_release=lambda *_: self.dialog.dismiss())
+        ok_btn.bind(on_release=lambda *_: self.dialog.dismiss()) # type: ignore
 
         self.dialog.open()
 
-    def set_controller(self, controller: 'RegisterController') -> None:
+    def set_controller(self, controller: 'FDRegisterController') -> None:
         self.controller = controller
 
-    def _on_submit(self, *args) -> None:
+    def _on_submit(self, *_) -> None:
         if not self.controller:
             raise AttributeError('FDRegisterScreen hasn\'t controller attribute!')
 

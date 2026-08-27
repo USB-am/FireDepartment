@@ -4,11 +4,11 @@ from kivy.lang.builder import Builder
 from kivy.uix.widget import Widget
 from kivy.uix.screenmanager import Screen
 
-from path_manager import PathManager
-from config import BASE_SCREEN_KV
+from utils.path_manager import PathManager
+from core.config import KV_PATH
 
 
-Builder.load_file(BASE_SCREEN_KV)
+Builder.load_file(KV_PATH.KV_BASE_SCREEN)
 
 
 class _Base(Screen):
