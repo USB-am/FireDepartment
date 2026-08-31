@@ -136,6 +136,10 @@ class FDRegisterScreen(BaseScreen):
                 password=self.pwd_field.get_value()
             )
 
+    def show_field_error(self, field: str, message: str) -> None:
+        # TODO: сделать проброс ошибки для переданного виджета
+        pass
+
     def show_loading(self, active: bool) -> None:
         self.submit_btn.text = 'Отправка...' if active else 'Зарегистрироваться'
         self.submit_btn.disabled = active

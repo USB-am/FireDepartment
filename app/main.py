@@ -12,6 +12,7 @@ from kivymd.app import MDApp
 from kivymd.uix.navigationdrawer import MDNavigationLayout
 
 from core.config import KV_PATH, APP_ICON
+from service.requests.client import APIClient
 from ui import screen as FDScreen
 from utils.path_manager import PathManager
 
@@ -73,7 +74,7 @@ class MDApplication(MDApp):
     def __init__(self):
         super().__init__()
 
-        # self.api_client = APIClient(base_url='http://127.0.0.1:8000/api/v1')
+        self.api_client = APIClient(base_url='http://127.0.0.1:8000/api/v1')
 
         self.ui = FDNavigation()
 
@@ -82,7 +83,7 @@ class MDApplication(MDApp):
 
         # Register screen
         register_screen = FDScreen.FDRegisterScreen(self.ui.path_manager)
-        register_screen.set_controller(FDScreen.FDRegisterController(register_screen))
+        register_screen.set_controller(FDScreen.FDRegisterController(register_screen, self.api_client))
         self.ui.screen_manager.add_widget(register_screen)
 
         self.ui.path_manager.move_to_screen('register')

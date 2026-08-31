@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from kivy.lang.builder import Builder
-from kivy.properties import StringProperty, ListProperty, BooleanProperty
+from kivy.properties import StringProperty
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.relativelayout import MDRelativeLayout
 
