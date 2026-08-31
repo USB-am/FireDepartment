@@ -3,5 +3,13 @@
     "failure": "Failure!",
     "error": "Error!",
     "ok": "OK",
-    "register": "Registration"
+    "sending": "Sending...",
+    "email": "E-mail",
+    "email_failure": "The email address is incorrect!",
+    "password": "Password",
+    "login": "Log in",
+    "registration": "Registration",
+    "not_empty": "The field cannot be empty!",
+    "register": "Registration",
+    "auth": "Authentication"
 }

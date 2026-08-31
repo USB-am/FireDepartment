@@ -81,14 +81,16 @@ class FDApplication(MDApp):
         self.ui = FDNavigation()
 
         # Login screen
-        # self.ui.screen_manager.add_widget(FDScreen.FDAuthScreen(self.ui.path_manager))
+        auth_screen = FDScreen.FDAuthScreen(self.ui.path_manager)
+        auth_screen.set_controller(FDScreen.FDAuthController(auth_screen, self.api_client))
+        self.ui.screen_manager.add_widget(auth_screen)
 
         # Register screen
         register_screen = FDScreen.FDRegisterScreen(self.ui.path_manager)
         register_screen.set_controller(FDScreen.FDRegisterController(register_screen, self.api_client))
         self.ui.screen_manager.add_widget(register_screen)
 
-        self.ui.path_manager.move_to_screen('register')
+        self.ui.path_manager.move_to_screen('auth')
 
     @property
     def lang_manager(self) -> LangManager:
