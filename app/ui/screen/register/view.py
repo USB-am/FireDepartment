@@ -1,5 +1,6 @@
 from typing import TYPE_CHECKING
 
+from kivymd.app import MDApp
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDFlatButton
 from kivymd.uix.dialog import MDDialog
@@ -19,12 +20,13 @@ if TYPE_CHECKING:
 
 class FDRegisterScreen(BaseScreen):
     name = 'register'
-    title = 'Регистрация'
 
     def __init__(self, path_manager: PathManager):
         super().__init__(path_manager)
 
         self.add_left_toolbar_items('arrow-left', lambda *_: self.path_manager.back())
+
+        self.dialog: MDDialog | None = None
 
     def on_pre_enter(self, *args) -> None:
         self._create_email_field()
@@ -135,10 +137,6 @@ class FDRegisterScreen(BaseScreen):
                 username=self.username_field.get_value(),
                 password=self.pwd_field.get_value()
             )
-
-    def show_field_error(self, field: str, message: str) -> None:
-        # TODO: сделать проброс ошибки для переданного виджета
-        pass
 
     def show_loading(self, active: bool) -> None:
         self.submit_btn.text = 'Отправка...' if active else 'Зарегистрироваться'

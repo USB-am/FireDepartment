@@ -1,6 +1,7 @@
 from __future__ import annotations
 from typing import Any, Callable, TYPE_CHECKING
 
+
 if TYPE_CHECKING:
     class UrlRequest:
         def __init__(self, *args, **kwargs):
