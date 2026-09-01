@@ -2,7 +2,7 @@ from typing import Callable, Any, TYPE_CHECKING
 
 
 if TYPE_CHECKING:
-    from kivy.network.urlrequest import UrlRequest
+    from kivy.network.urlrequest import UrlRequestUrllib
 
 
-TKivyCallback = Callable[['UrlRequest', Any], None]
+TKivyCallback = Callable[['UrlRequestUrllib', Any], None]

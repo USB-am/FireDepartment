@@ -1,8 +1,14 @@
+from typing import TYPE_CHECKING, Any
+
 from pydantic import EmailStr
 
 from schemas import AuthFormModel
 from ui.screen.base.controller import BaseAuthController
 from ui.screen.auth.model import FDAuthModel
+
+
+if TYPE_CHECKING:
+    from kivy.network.urlrequest import UrlRequestUrllib
 
 
 class FDAuthController(BaseAuthController):
@@ -17,19 +23,23 @@ class FDAuthController(BaseAuthController):
             on_failure=self._on_failure,
             on_error=self._on_error)
 
-    def _on_success(self, response, message: str) -> None:
-        print(f'this _on_success method\n{message=}')
+    def _on_success(self, response: 'UrlRequestUrllib', message: dict[str, Any]) -> None:
+        # print(f'this _on_success method\n{message=}')
+        print(f'{response=}\n{type(response)=}')
+        print(f'{message=}\n{type(message)=}')
+
         self.view.show_loading(False)
         self.view.open_dialog(self.lang_manager.get_text('complete'), str(message))
+        self.path_manager.move_to_screen('main')
 
-    def _on_failure(self, response, message: dict[str, str]) -> None:
+    def _on_failure(self, response: 'UrlRequestUrllib', message: dict[str, Any]) -> None:
         print(f'this _on_failure method')
         self.view.show_loading(False)
         self.view.open_dialog(
             title=self.lang_manager.get_text('failure'),
             message=message.get('detail', 'Произошла ошибка!'))
 
-    def _on_error(self, response, message: str) -> None:
+    def _on_error(self, response: 'UrlRequestUrllib', message: dict[str, Any]) -> None:
         print(f'this _on_error method')
         self.view.show_loading(False)
         self.view.open_dialog(self.lang_manager.get_text('error'), str(message))

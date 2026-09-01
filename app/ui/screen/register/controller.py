@@ -23,6 +23,7 @@ class FDRegisterController(BaseAuthController):
         print(f'this _on_success method\n{message=}')
         self.view.show_loading(False)
         self.view.open_dialog(self.lang_manager.get_text('complete'), str(message))
+        self.path_manager.move_to_screen('options')
 
     def _on_failure(self, response, message: dict[str, str]) -> None:
         print(f'this _on_failure method')

@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from service.requests.client import APIClient
     from main import FDApplication
     from service.lang_manager import LangManager
+    from utils.path_manager import PathManager
 
 
 class BController[TView: BScreen | BaseAuthModel, TModel: BModel | BaseAuthModel]:
@@ -23,6 +24,7 @@ class BController[TView: BScreen | BaseAuthModel, TModel: BModel | BaseAuthModel
 
         current_app = cast('FDApplication', MDApp.get_running_app())
         self.lang_manager: 'LangManager' = current_app.lang_manager
+        self.path_manager: 'PathManager' = current_app.ui.path_manager
 
 
 class BaseAuthController[TView: BaseAuthModel, TModel: BaseAuthModel](BController):
