@@ -1,10 +1,12 @@
-from typing import TYPE_CHECKING, Callable, Any
+from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, ValidationError
 
+from ui.screen.base.utils import TKivyCallback
+
+
 if TYPE_CHECKING:
     from service.requests.client import APIClient
-    from kivy.network.urlrequest import UrlRequest
 
 
 class BModel:
@@ -12,18 +14,13 @@ class BModel:
         self.api_client = api_client
 
 
-TKivyCallback = Callable[['UrlRequest', Any], None]
-
 class BaseAuthModel[TValidationModel: BaseModel](BModel):
-    model: type[TValidationModel]
+    schema: type[TValidationModel]
     endpoint: str
-
-    def __init__(self, api_client: 'APIClient'):
-        self.api_client = api_client
 
     def validate(self, **fields) -> tuple[bool, dict[str, str] | None]:
         try:
-            self.model(**fields)
+            self.schema(**fields)
             return True, None
 
         except ValidationError as validation_errors:
@@ -35,8 +32,7 @@ class BaseAuthModel[TValidationModel: BaseModel](BModel):
             return False, errors
 
     def send_request(self, form_data: TValidationModel, on_success: TKivyCallback,
-                     on_failure: TKivyCallback,
-                     on_cancel: TKivyCallback | None = None,
+                     on_failure: TKivyCallback, on_cancel: TKivyCallback | None = None,
                      on_error: TKivyCallback | None = None
     ) -> None:
 
@@ -48,4 +44,3 @@ class BaseAuthModel[TValidationModel: BaseModel](BModel):
             on_cancel=on_cancel,
             on_error=on_error
         )
-

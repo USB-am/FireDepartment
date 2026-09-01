@@ -1,39 +1,19 @@
-from typing import TYPE_CHECKING, cast
+from pydantic import EmailStr
 
-from kivymd.app import MDApp
-
-from .model import FDRegisterModel
 from schemas import RegisterFormModel
+from ui.screen.base.controller import BaseAuthController
+from ui.screen.register.model import FDRegisterModel
 
 
-if TYPE_CHECKING:
-    from .view import FDRegisterScreen
-    from service.requests.client import APIClient
-    from service.lang_manager import LangManager
-    from main import FDApplication
+class FDRegisterController(BaseAuthController):
+    model_type = FDRegisterModel
+    schema = RegisterFormModel
 
-
-class FDRegisterController:
-    def __init__(self, view: 'FDRegisterScreen', api_client: 'APIClient'):
-        self.view = view
-        self.model = FDRegisterModel(api_client)
-
-        current_app = cast('FDApplication', MDApp.get_running_app())
-        self.lang_manager: 'LangManager' = current_app.lang_manager
-
-    def handle_submit(self, email: str, username: str, password: str) -> None:
-        is_valid, errors = self.model.validate(email=email, username=username, password=password)
-        if not is_valid and errors is not None:
-            return
-
-        self.view.show_loading(True)
-
-        self.model.send_request(
-            form_data=RegisterFormModel(
-                email=email,
-                username=username,
-                password=password
-            ),
+    def handle_submit(self, email: EmailStr, username: str, password: str) -> None:
+        super().handle_submit(
+            email=email,
+            username=username,
+            password=password,
             on_success=self._on_success,
             on_failure=self._on_failure,
             on_error=self._on_error

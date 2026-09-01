@@ -4,4 +4,4 @@ from schemas import RegisterFormModel
 
 class FDRegisterModel(BaseAuthModel[RegisterFormModel]):
     endpoint = 'auth/register'
-    model = RegisterFormModel
+    schema = RegisterFormModel

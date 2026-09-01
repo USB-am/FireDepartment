@@ -4,4 +4,4 @@ from schemas import AuthFormModel
 
 class FDAuthModel(BaseAuthModel[AuthFormModel]):
     endpoint = 'auth/login'
-    model = AuthFormModel
+    schema = AuthFormModel
