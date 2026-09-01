@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 Builder.load_file(KV_PATH.KV_BASE_SCREEN)
 
 
-class _Base(Screen):
+class BScreen(Screen):
     def __init__(self, path_manager: PathManager):
         self.path_manager = path_manager
 
@@ -45,9 +45,9 @@ class _Base(Screen):
         self.parent.parent.ids.menu.set_state('open')
 
 
-class BaseScreen(_Base):
+class BaseScreen(BScreen):
     pass
 
 
-class BaseScrollScreen(_Base):
+class BaseScrollScreen(BScreen):
     pass

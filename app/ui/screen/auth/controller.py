@@ -1,9 +1,10 @@
 from typing import TYPE_CHECKING, cast
 
 from kivymd.app import MDApp
-from pydantic import BaseModel, EmailStr, ValidationError
+from pydantic import EmailStr
 
 from .model import FDAuthModel
+from schemas import AuthFormModel
 
 
 if TYPE_CHECKING:
@@ -22,15 +23,17 @@ class FDAuthController:
         self.lang_manager: 'LangManager' = current_app.lang_manager
 
     def handle_submit(self, email: EmailStr, password: str) -> None:
-        is_valid, errors = self.model.validate(email, password)
+        is_valid, errors = self.model.validate(email=email, password=password)
         if not is_valid and errors is not None:
             return
 
         self.view.show_loading(True)
 
-        self.model.send_register_request(
-            email=email,
-            password=password,
+        self.model.send_request(
+            form_data=AuthFormModel(
+                email=email,
+                password=password
+            ),
             on_success=self._on_success,
             on_failure=self._on_failure,
             on_error=self._on_error

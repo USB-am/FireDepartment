@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, cast
 from kivymd.app import MDApp
 
 from .model import FDRegisterModel
+from schemas import RegisterFormModel
 
 
 if TYPE_CHECKING:
@@ -21,16 +22,18 @@ class FDRegisterController:
         self.lang_manager: 'LangManager' = current_app.lang_manager
 
     def handle_submit(self, email: str, username: str, password: str) -> None:
-        is_valid, errors = self.model.validate(email, username, password)
+        is_valid, errors = self.model.validate(email=email, username=username, password=password)
         if not is_valid and errors is not None:
             return
 
         self.view.show_loading(True)
 
-        self.model.send_register_request(
-            email=email,
-            username=username,
-            password=password,
+        self.model.send_request(
+            form_data=RegisterFormModel(
+                email=email,
+                username=username,
+                password=password
+            ),
             on_success=self._on_success,
             on_failure=self._on_failure,
             on_error=self._on_error
