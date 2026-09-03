@@ -13,6 +13,7 @@ from kivymd.uix.navigationdrawer import MDNavigationLayout
 
 from core.config import KV_PATH, APP_ICON
 from service.requests.client import APIClient
+from service.requests.storage import AppStorage
 from service.lang_manager import LangManager
 from ui import screen as FDScreen
 from utils.path_manager import PathManager
@@ -79,6 +80,7 @@ class FDApplication(MDApp):
         self.api_client = APIClient(base_url='http://127.0.0.1:8000/api/v1')
 
         self.ui = FDNavigation()
+        self.store = AppStorage()
 
         # Login screen
         auth_screen = FDScreen.FDAuthScreen(self.ui.path_manager)

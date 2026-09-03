@@ -1,3 +1,4 @@
+import uuid
 from typing import TYPE_CHECKING, Any
 
 from pydantic import EmailStr
@@ -5,6 +6,7 @@ from pydantic import EmailStr
 from schemas import AuthFormModel
 from ui.screen.base.controller import BaseAuthController
 from ui.screen.auth.model import FDAuthModel
+from service.requests.storage import UserProfile, TokenData
 
 
 if TYPE_CHECKING:
@@ -21,15 +23,19 @@ class FDAuthController(BaseAuthController):
             password=password,
             on_success=self._on_success,
             on_failure=self._on_failure,
-            on_error=self._on_error)
+            on_error=self._on_error
+        )
 
     def _on_success(self, response: 'UrlRequestUrllib', message: dict[str, Any]) -> None:
-        # print(f'this _on_success method\n{message=}')
-        print(f'{response=}\n{type(response)=}')
-        print(f'{message=}\n{type(message)=}')
-
         self.view.show_loading(False)
         self.view.open_dialog(self.lang_manager.get_text('complete'), str(message))
+
+        self.store.save_profile(UserProfile(id=uuid.UUID(message['id']),
+                                            email=message['email'],
+                                            username=message['username']))
+        self.store.save_token(TokenData(access_token=message['access_token'],
+                                        refresh_token=message['refresh_token']))
+
         self.path_manager.move_to_screen('main')
 
     def _on_failure(self, response: 'UrlRequestUrllib', message: dict[str, Any]) -> None:
