@@ -11,5 +11,6 @@
     "registration": "Registration",
     "not_empty": "The field cannot be empty!",
     "register": "Registration",
-    "auth": "Authentication"
+    "auth": "Authentication",
+    "main": "Fire Department"
 }

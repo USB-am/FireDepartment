@@ -78,7 +78,6 @@ class FDApplication(MDApp):
 
         self._lang_manager = LangManager()
         self.api_client = APIClient(base_url='http://127.0.0.1:8000/api/v1')
-
         self.ui = FDNavigation()
         self.store = AppStorage()
 
@@ -92,7 +91,14 @@ class FDApplication(MDApp):
         register_screen.set_controller(FDScreen.FDRegisterController(register_screen, self.api_client))
         self.ui.screen_manager.add_widget(register_screen)
 
-        self.ui.path_manager.move_to_screen('auth')
+        # Main screen
+        main_screen = FDScreen.FDMainScreen(self.ui.path_manager)
+        self.ui.screen_manager.add_widget(main_screen)
+
+        if (tokens := self.store.get_tokens()) is not None:
+            self.ui.path_manager.move_to_screen('main')
+        else:
+            self.ui.path_manager.move_to_screen('auth')
 
     @property
     def lang_manager(self) -> LangManager:
