@@ -14,6 +14,7 @@ from kivymd.uix.navigationdrawer import MDNavigationLayout
 from core.config import KV_PATH, APP_ICON
 from service.requests.client import APIClient
 from service.requests.storage import AppStorage
+from service.requests.utils import refresh_tokens
 from service.lang_manager import LangManager
 from ui import screen as FDScreen
 from utils.path_manager import PathManager
@@ -96,7 +97,11 @@ class FDApplication(MDApp):
         self.ui.screen_manager.add_widget(main_screen)
 
         if (tokens := self.store.get_tokens()) is not None:
-            self.ui.path_manager.move_to_screen('main')
+            try:
+                refresh_tokens(client=self.api_client, storage=self.store)
+                self.ui.path_manager.move_to_screen('main')
+            except AttributeError:
+                self.ui.path_manager.move_to_screen('auth')
         else:
             self.ui.path_manager.move_to_screen('auth')
 
