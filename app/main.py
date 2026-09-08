@@ -97,11 +97,10 @@ class FDApplication(MDApp):
         self.ui.screen_manager.add_widget(main_screen)
 
         if (tokens := self.store.get_tokens()) is not None:
-            try:
-                refresh_tokens(client=self.api_client, storage=self.store)
-                self.ui.path_manager.move_to_screen('main')
-            except AttributeError:
-                self.ui.path_manager.move_to_screen('auth')
+            refresh_tokens(client=self.api_client,
+                           storage=self.store,
+                           on_success=lambda *_: self.ui.path_manager.move_to_screen('main'), # type: ignore
+                           on_failure=lambda *_: self.ui.path_manager.move_to_screen('auth')) # type: ignore
         else:
             self.ui.path_manager.move_to_screen('auth')
 

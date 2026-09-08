@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, cast, Callable
 
 from service.requests.storage import TokenData
 
@@ -16,15 +16,14 @@ def _update_tokens(storage: 'AppStorage', message: dict[str, str]) -> None:
     storage.save_token(token_data)
 
 
-def _raise_exception(exception: type[Exception], message: dict[str, str]) -> None:
-    raise exception(str(message))
-
-
-def refresh_tokens(client: 'APIClient', storage: 'AppStorage') -> None:
+def refresh_tokens(client: 'APIClient',
+                   storage: 'AppStorage',
+                   on_success: Callable[[], None] | None = None,
+                   on_failure: Callable[[dict[str, str]], None] | None = None) -> None:
     token_data = cast(TokenData, storage.get_tokens())
     client.post(
         endpoint='auth/refresh',
         data={'refresh_token': token_data.refresh_token},
-        on_success=lambda _, message: _update_tokens(storage, message),
-        on_failure=lambda _, message: _raise_exception(AttributeError, message)
+        on_success=lambda _, message: (_update_tokens(storage, message), on_success and on_success()), # type: ignore
+        on_failure=lambda _, message: on_failure(message) if on_failure is not None else None
     )
