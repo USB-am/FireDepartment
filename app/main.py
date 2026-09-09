@@ -14,7 +14,7 @@ from kivymd.uix.navigationdrawer import MDNavigationLayout
 from core.config import KV_PATH, APP_ICON
 from service.requests.client import APIClient
 from service.requests.storage import AppStorage
-from service.requests.utils import refresh_tokens
+from service.requests.post import refresh_tokens
 from service.lang_manager import LangManager
 from ui import screen as FDScreen
 from utils.path_manager import PathManager
