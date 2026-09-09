@@ -3,6 +3,7 @@ from typing import Any, Callable, TYPE_CHECKING
 
 
 if TYPE_CHECKING:
+    from kivy.network.urlrequest import UrlRequestUrllib
     class UrlRequest:
         def __init__(self, *args, **kwargs):
             ...
@@ -10,7 +11,7 @@ else:
     from kivy.network.urlrequest import UrlRequest
 
 
-TKivyCallback = Callable[[UrlRequest, Any], None]
+TKivyCallback = Callable[['UrlRequestUrllib', Any], None]
 
 
 class APIClient:
@@ -80,19 +81,19 @@ class APIClient:
         return req
 
     @staticmethod
-    def _default_failure(req: 'UrlRequest', error: Any):
+    def _default_failure(req: 'UrlRequestUrllib', error: Any):
         print(f'Request failed: {error}')
 
     @staticmethod
-    def _default_redirect(req: 'UrlRequest', error: Any):
+    def _default_redirect(req: 'UrlRequestUrllib', error: Any):
         print(f'Request redirected: {error}')
 
     @staticmethod
-    def _default_cancel(req: 'UrlRequest', error: Any):
+    def _default_cancel(req: 'UrlRequestUrllib', error: Any):
         print(f'Request cancel: {error}')
 
     @staticmethod
-    def _default_error(req: 'UrlRequest', error: Any):
+    def _default_error(req: 'UrlRequestUrllib', error: Any):
         print(f'Request error: {error}')
 
     def post(self, endpoint: str, data: dict[str, Any], on_success: TKivyCallback, on_failure: TKivyCallback | None=None, **kwargs):
