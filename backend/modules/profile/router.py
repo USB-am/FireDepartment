@@ -5,7 +5,7 @@ from fastapi import APIRouter, HTTPException
 from core.database import TSession
 from core.dependencies import TCurrentUser
 from modules.profile.schemas import UserProfileResponse
-from modules.users.repository import UserRepository
+from modules.profile.service import UserProfileSerice
 
 
 profile_router = APIRouter(prefix='/profile', tags=['Profiles',])
@@ -13,21 +13,8 @@ profile_router = APIRouter(prefix='/profile', tags=['Profiles',])
 
 @profile_router.get('/me', response_model=UserProfileResponse)
 async def get_user_profile(user: TCurrentUser, session: TSession):
-    repo = UserRepository(session)
-    eagerly_user = await repo.eagerly_get_user(user.id)
-    if eagerly_user is None:
-        raise HTTPException(
-            status_code=401,
-            detail='Not found profile!'
-        )
-
-    profile = eagerly_user.profile
-
-    if profile is None:
-        raise HTTPException(
-            status_code=401,
-            detail='Not found profile!'
-        )
+    service = UserProfileSerice(session)
+    profile = await service.get_userprofile(user.id)
 
     return UserProfileResponse(
         id=profile.id,
