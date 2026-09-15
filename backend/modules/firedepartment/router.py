@@ -17,7 +17,6 @@ fd_router = APIRouter(prefix='/firedepartment', tags=['Fire department',])
 @fd_router.get('/{firedepartment_id}', response_model=FireDepartmentResponse)
 async def get_firedepartment(
     firedepartment_id: int,
-    # user: TCurrentUser,
     session: TSession,
     user: User = RequireRole(Role.dispatch, Role.manager, Role.admin)
 ):

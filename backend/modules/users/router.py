@@ -35,7 +35,7 @@ async def get_all_users(session: TSession):
                 email=user.email,
                 username=user.username,
                 access_token='wqe',
-                refresh_token=refresh_token
+                refresh_token=refresh_token # type: ignore
             )
         )
     return _response

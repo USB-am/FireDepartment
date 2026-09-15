@@ -50,7 +50,9 @@ class UserService:
         return user
 
     async def create_user_profile(self, user: User) -> UserProfile:
-        return UserProfile(
+        profile = UserProfile(
             user_id=user.id,
             user=user
         )
+        self._session.add(profile)
+        return profile
