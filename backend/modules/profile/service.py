@@ -3,12 +3,12 @@ import uuid
 from fastapi import HTTPException
 
 from core.database import TSession
-from modules.users.models import UserProfile
 from modules.users.repository import UserRepository
+from modules.profile.models import UserProfile
 from modules.profile.repository import UserProfileRepository
 
 
-class UserProfileSerice:
+class UserProfileService:
     def __init__(self, session: TSession):
         self._session = session
         self.repository = UserProfileRepository(session)

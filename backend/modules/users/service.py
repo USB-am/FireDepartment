@@ -7,7 +7,8 @@ from pydantic import EmailStr
 from core.database import TSession
 from core.security import Role
 from modules.users.repository import UserRepository
-from modules.users.models import User, UserProfile
+from modules.users.models import User
+from modules.profile.models import UserProfile
 
 
 class UserService:

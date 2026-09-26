@@ -1,7 +1,7 @@
 import uuid
 
 from modules.utils.repository import BaseRepository
-from modules.users.models import UserProfile
+from modules.profile.models import UserProfile
 
 
 class UserProfileRepository(BaseRepository[UserProfile, uuid.UUID]):
