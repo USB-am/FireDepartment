@@ -96,10 +96,14 @@ class FDApplication(MDApp):
         main_screen = FDScreen.FDMainScreen(self.ui.path_manager)
         self.ui.screen_manager.add_widget(main_screen)
 
+        # Options screen
+        options_screen = FDScreen.FDOptionsScreen(self.ui.path_manager)
+        self.ui.screen_manager.add_widget(options_screen)
+
         if (tokens := self.store.get_tokens()) is not None:
             refresh_tokens(client=self.api_client,
                            storage=self.store,
-                           on_success=lambda *_: self.ui.path_manager.move_to_screen('main'), # type: ignore
+                           on_success=lambda *_: self.ui.path_manager.move_to_screen('options'), # type: ignore
                            on_failure=lambda *_: self.ui.path_manager.move_to_screen('auth')) # type: ignore
         else:
             self.ui.path_manager.move_to_screen('auth')
