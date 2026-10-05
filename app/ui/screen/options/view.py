@@ -39,7 +39,7 @@ class FDOptionsScreen(BaseScrollScreen):
 
         self.user_profile_preview.add_button(icon='bus', text='Button #1', callback=lambda *_: print('Button #1'))
         self.user_profile_preview.add_button(icon='bus', text='Button #2', callback=lambda *_: print('Button #2'))
-        self.user_profile_preview.add_button(icon='cog', text='Settings', callback=lambda *_: print('Button #3'))
+        self.user_profile_preview.add_button(icon='cog', text='Settings', callback=lambda *_: self.path_manager.forward('profile'))
 
         self.add_content(self.user_profile_preview)
 

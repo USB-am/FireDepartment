@@ -6,6 +6,8 @@ from .main.view import FDMainScreen
 from .main.controller import FDMainController
 from .options.view import FDOptionsScreen
 from .options.controller import FDOptionsController
+from .profile.view import FDProfileScreen
+from .profile.controller import FDProfileController
 
 
 __all__ = [
@@ -13,4 +15,5 @@ __all__ = [
     'FDRegisterScreen', 'FDRegisterController',
     'FDMainScreen', 'FDMainController',
     'FDOptionsScreen', 'FDOptionsController',
+    'FDProfileScreen', 'FDProfileController',
 ]

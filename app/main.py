@@ -100,6 +100,10 @@ class FDApplication(MDApp):
         options_screen = FDScreen.FDOptionsScreen(self.ui.path_manager)
         self.ui.screen_manager.add_widget(options_screen)
 
+        # Profile screen
+        profile_screen = FDScreen.FDProfileScreen(self.ui.path_manager)
+        self.ui.screen_manager.add_widget(profile_screen)
+
         if (tokens := self.store.get_tokens()) is not None:
             refresh_tokens(client=self.api_client,
                            storage=self.store,
