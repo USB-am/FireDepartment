@@ -51,7 +51,7 @@ Builder.load_string('''
 
         MDLabel:
             id: part_number_lbl
-            text: '73'
+            text: ''
             halign: 'right'
             size_hint: None, None
             width: self.parent.width - dp(32) if self.parent else root.width - dp(32)
@@ -152,6 +152,9 @@ class FDUserProfilePreview(MDBoxLayout):
 
     def set_sign_call(self, sign_call: str) -> None:
         self.ids.sign_call_lbl.text = sign_call
+
+    def set_part_number(self, part_number: str | int) -> None:
+        self.ids.part_number_lbl.text = str(part_number)
 
     def add_button(self, icon: str, text: str, callback: Callable) -> None:
         layout = self.ids.button_layout
