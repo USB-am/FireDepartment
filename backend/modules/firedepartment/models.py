@@ -5,6 +5,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
 if TYPE_CHECKING:
+    from modules.employee.models import Employee
     from modules.users.models import UserProfile
 
 
@@ -15,7 +16,10 @@ class FireDepartment(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     title: Mapped[str] = mapped_column(unique=True)
     address: Mapped[str] = mapped_column(nullable=False)
+    number_shifts: Mapped[int] = mapped_column(nullable=False)
+
     profiles: Mapped[List['UserProfile']] = relationship(back_populates='firedepartment')
+    employees: Mapped[List['Employee']] = relationship(back_populates='firedepartment')
 
     def __str__(self):
         return self.title
